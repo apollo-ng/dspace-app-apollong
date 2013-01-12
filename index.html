@@ -28,6 +28,41 @@ var dspace_tactical =
 };
 
 $.domReady(function () {
+
+    //get packages from ender
+    var Backbone = require('backbone');
+    var _ = require('underscore')
+
+    //set up a view
+	var FeatureListView = Backbone.View.extend({
+		el: $('#layer-items'),
+		keel: $('#keel'),
+
+		events: {
+			'click button#add': 'addItem'
+		},
+
+		initialize: function(){
+			_.bindAll(this, 'render', 'addItem');
+			this.render();
+			console.log("FOO");
+			$(this.el).append("<button id='add'>Add list item</button>");
+		},
+
+		render: function(){
+			$(this.el).append("FOO");
+			//$(this.el).append("<button id='add'>Add list item</button>");
+		},
+
+		addItem: function(){
+			$(this.el).append("BAR");
+			console.log("BAR");
+		}
+	});
+
+	var featureListView = new FeatureListView();
+
+    //down here is the old stuff
 	mm 	  			= com.modestmaps;
 
 	geolat  			= 48.115293;
@@ -104,7 +139,7 @@ function onLoadMarkers(collection)
                 // add a class
                 marker.setAttribute("class", "report");
                 // set the href to link to crimespotting's crime page
-                marker.setAttribute("href", "http://sanfrancisco.crimespotting.org/crime/" + [
+                marker.setAttribute("href", "http://www.youtube.com/watch?v=oHg5SJYRHA0" + [
                     feature.properties.date_time.substr(0, 10),
                     feature.properties.type.replace(/ /g, "_"),
                     feature.id
@@ -205,6 +240,7 @@ function changeMap(z)
   </div>
 
   <div id='keel'>
+
       <div id='info'></div>
   </div>
 </body>

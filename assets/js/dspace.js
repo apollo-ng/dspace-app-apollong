@@ -1,26 +1,28 @@
 $.domReady(function () {
 
-
   /*
    * Display basemap with UI
    */
 
-  var map, mm, markers, geolat, geolon;
+  var options = {
 
-  var dspace_tactical =
-    {
-      tilejson: '1.0.0',
-      scheme: 'zxy',
-      tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
-    };
+    tileSet: {
+        tilejson: '1.0.0',
+        scheme: 'zxy',
+        tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+    },
 
-  mm = com.modestmaps;
+    geolat:  48.115293,
+    geolon:  11.60218,
+    minZoom: 13,
+    maxZoom: 18,
+    defaultZoom: 12
+  };
 
-  geolat = 48.115293;
-  geolon = 11.60218;
-
-  var modestmap = new com.modestmaps.Map(document.getElementById('map'),
-                               new wax.mm.connector(dspace_tactical), null, [
+  var weaveModestMap = function(){
+  var mm = com.modestmaps;
+  var modestmap = new mm.Map(document.getElementById('map'),
+                               new wax.mm.connector(options.tileSet), null, [
                                  easey_handlers.DragHandler(),
                                  easey_handlers.TouchHandler(),
                                  easey_handlers.MouseWheelHandler(),
@@ -28,25 +30,40 @@ $.domReady(function () {
                                ]);
 
                                // setup boundaries
-                               modestmap.setZoomRange(13, 18);
+                               modestmap.setZoomRange(options.minZoom, options.maxZoom);
 
                                // enable zoom control buttons
-                               wax.mm.zoomer (modestmap, dspace_tactical).appendTo(modestmap.parent);
+                               wax.mm.zoomer (modestmap, options.tileSet).appendTo(modestmap.parent);
 
                                // show and zoom map
-                               modestmap.setCenterZoom(new mm.Location(geolat, geolon), 12);
+                               modestmap.setCenterZoom(new mm.Location(options.geolat, options.geolon), options.defaultZoom);
 
                                modestmap.addCallback('drawn', function(m)
                                                {
                                                  $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
                                                });
-
-  var Map = { modestmap: modestmap };
-  window.map = Map;
+                                               return modestmap;
+};
 
   //get packages from ender
   var Backbone = require('backbone');
   var _ = require('underscore');
+
+  var Map = Backbone.Model.extend({
+
+    initialize: function(){
+      this.modestmap = weaveModestMap();
+    }
+  });
+
+
+  /*
+   * creating single instance of Map model for global logic
+   * for now attaching it to window
+   */
+  var map = new Map();
+  window.map = map;
+
 
   /*
    * single geografical featue of interest
@@ -146,7 +163,6 @@ $.domReady(function () {
       templateData.markerLetter = this.options.markerLetter;
 
       $(this.el).html(this.template(templateData));
-      console.log('featureListItemView rendered');
       return this.el
     },
 
@@ -195,8 +211,6 @@ $.domReady(function () {
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
       });
-
-      console.log('featureListView rendered');
     }
 
   });
@@ -217,31 +231,47 @@ $.domReady(function () {
       // temporary userData simulation, should come from user model in backbone
       var userDataJSON = this.model.toJSON();
 
-      // add fake mapcenter to test
-      console.log(window.map);
+      // add map center
       userDataJSON.mapCenter = window.map.modestmap.getCenter();
 
       $(this.el).html(this.template(userDataJSON));
-      console.log('userView rendered');
 
       return this.el
     }
 
   });
 
-  // Add Overlay-Feature-List
-  window.featureCollection = new FeatureCollection();
-  featureCollection.setGeoJson(window.data);
-  window.featureListView = new FeatureListView({collection: featureCollection});
+  /*
+   * main UI logic for globa viewport
+   */
+  var MapView = Backbone.View.extend({
+    initialize: function(){
+      this.model = window.map;
+    },
 
-  // Add User View
-  window.user = new User();
-  window.userView = new UserView({model: user});
-  var renderedTemplate = userView.render();
-  $('#keel').append(renderedTemplate);
+    render: function(){
 
-  // render all
-  featureListView.render();
+      // Add Overlay-Feature-List
+      var featureCollection = new FeatureCollection();
+      featureCollection.setGeoJson(window.data);
+      var featureListView = new FeatureListView({collection: featureCollection});
+
+      // Add User View
+      var user = new User();
+      var userView = new UserView({model: user});
+      var renderedTemplate = userView.render();
+      $('#keel').append(renderedTemplate);
+
+      // render all
+      featureListView.render();
+    }
+  });
+
+  /*
+   * acctual initialization and rendering of a mapView
+   */
+  var mapView = new MapView();
+  mapView.render();
 
 });
 

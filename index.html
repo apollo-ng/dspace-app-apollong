@@ -172,7 +172,7 @@ function onLoadMarkers(collection)
 
 function addLayerItem(t,d,c,i,l)
 {
-    var container = $('#layer-items');
+    var container = $('#overlay-feature-list');
     var feature = document.createElement("div");
 
     var lat = map.getCenter().toString().substring(1,7);
@@ -180,7 +180,7 @@ function addLayerItem(t,d,c,i,l)
     var cc = c.toString().split(",");
 	var dist = 0;//;distance(geolat, geolon, cc[1], cc[0], 'K');
 
-    feature.innerHTML = '<div class="layer-item" onclick="gototest(' + cc[1] + ',' + cc[0]+ ')"><div class="' + i + '-' + l +'" ><h3>' + t + '</h3></div><div class="item-info"><div class="item-description">' + d + '</div><div class="item-dynamic"><div class="item-distance" id="item-distance-' + l + '">' + dist[0] + '<br />' + dist[1] + '</div><div class="item-position">' + c + '</div></div></div>';
+    feature.innerHTML = '<div class="overlay-feature" onclick="gototest(' + cc[1] + ',' + cc[0]+ ')"><div class="' + i + '-' + l +'" ><h3>' + t + '</h3></div><div class="overlay-feature-info"><div class="overlay-feature-description">' + d + '</div><div class="item-dynamic"><div class="overlay-feature-distance" id="overlay-feature-distance-' + l + '">' + dist[0] + '<br />' + dist[1] + '</div><div class="overlay-feature-position">' + c + '</div></div></div>';
     container.append(feature);
 }
 
@@ -229,8 +229,8 @@ function changeMap(z)
 
   <div id='zoom-indicator'></div>
 
-  <div id='layer-items'>
-   <h2 id='layer-name'></h2>
+  <div id='overlay-feature-list'>
+   <h2 id='overlay-name'></h2>
   </div>
 
   <div id='map'></div>

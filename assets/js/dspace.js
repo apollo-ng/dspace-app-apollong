@@ -251,7 +251,7 @@ $.domReady(function () {
       this.model = window.map;
       this.markerOptions = {
         className: 'marker-image',
-        iconPath: '/assets/icons/black-shield-a.png'
+        iconPath: 'assets/icons/black-shield-a.png'
       };
     },
 

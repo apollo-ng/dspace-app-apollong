@@ -249,14 +249,38 @@ $.domReady(function () {
   var MapView = Backbone.View.extend({
     initialize: function(){
       this.model = window.map;
+      this.markerOptions = {
+        className: 'marker-image',
+        iconPath: '/assets/icons/black-shield-a.png'
+      };
     },
 
+
+    /*
+     * renders main map
+     * FIXME: add support for multiple overlays
+     */
     render: function(){
 
+      var that = this;
       // Add Overlay-Feature-List
       var featureCollection = new FeatureCollection();
       featureCollection.setGeoJson(window.data);
       var featureListView = new FeatureListView({collection: featureCollection});
+
+      /*
+       * Display markers
+       */
+      var markerLayer = mapbox.markers.layer();
+
+      markerLayer.factory(function(feature){
+        var img = document.createElement('img');
+        img.className = that.markerOptions.className;
+        img.setAttribute('src', that.markerOptions.iconPath);
+        return img;
+      });
+      markerLayer.features(featureCollection.geoJson.features);
+      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
 
       // Add User View
       var user = new User();
@@ -275,21 +299,6 @@ $.domReady(function () {
   var mapView = new MapView();
   mapView.render();
 
-  /*
-   * Display markers
-   */
-  window.markerLayer = mapbox.markers.layer();
-
-  markerLayer.factory(function(feature){
-    var img = document.createElement('img');
-    img.className = 'marker-image';
-    img.setAttribute('src', '/assets/icons/black-shield-a.png');
-    return img;
-    console.log('factory called');
-  });
-  markerLayer.features(window.featureCollection.geoJson.features);
-  console.log(markerLayer.features());
-  map.addLayer(markerLayer).setExtent(markerLayer.extent());
 
 });
 

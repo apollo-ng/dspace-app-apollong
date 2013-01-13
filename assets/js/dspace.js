@@ -57,9 +57,6 @@ $.domReady(function () {
 
                                map.addCallback('drawn', function(m)
                                                {
-                                                 var lat = map.getCenter().toString().substring(1,7);
-                                                 var lon = map.getCenter().toString().substring(8,15);
-                                                 $('#info').html("N: " + lat + " E: " + lon);
                                                  $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
                                                  mmap.setCenter(new mm.Location(lat,lon));
                                                });
@@ -67,16 +64,3 @@ $.domReady(function () {
 
 });
 
-function addLayerItem(t,d,c,i,l)
-{
-  var container = $('#overlay-feature-list');
-  var feature = document.createElement("div");
-
-  var lat = map.getCenter().toString().substring(1,7);
-  var lon = map.getCenter().toString().substring(8,15);
-  var cc = c.toString().split(",");
-  var dist = 0;//;distance(geolat, geolon, cc[1], cc[0], 'K');
-
-  feature.innerHTML = '<div class="overlay-feature" onclick="gototest(' + cc[1] + ',' + cc[0]+ ')"><div class="' + i + '-' + l +'" ><h3>' + t + '</h3></div><div class="overlay-feature-info"><div class="overlay-feature-description">' + d + '</div><div class="item-dynamic"><div class="overlay-feature-distance" id="overlay-feature-distance-' + l + '">' + dist[0] + '<br />' + dist[1] + '</div><div class="overlay-feature-position">' + c + '</div></div></div>';
-  container.append(feature);
-}

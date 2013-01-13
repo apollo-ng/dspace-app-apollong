@@ -168,7 +168,7 @@ font-size: 12px;
 height: 14px; width: 230px; text-align: left; padding-left: 46px;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
 }
 
-.overlay-feature-info {
+.overlay-feature-details {
 height: 40px; width: 230px; text-align: right;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
 }
 
@@ -187,7 +187,9 @@ padding-right: 5px;
 clear: after;
 }
 
-
+.clear-after {
+clear: after;
+}
 
 #keel {
   position:absolute;

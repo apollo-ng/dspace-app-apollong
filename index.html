@@ -45,9 +45,18 @@
   </div>
 
   <script id="overlay-feature-info-template" type="text/x-handlebars-template">
-    <h3>{{properties.title}}</h3>
-    <div class="overlay-feature-position">lng: {{lng}} lat: {{lat}}</div>
+   <div class="overlay-feature">
+    <div class="black-shield-{{marker-letter}}" ><h3>{{properties.title}}</h3></div>
+    <div class="overlay-feature-details">
+     <div class="overlay-feature-description">{{properties.description}}</div>
+     <div class="clear-after">
+      <div class="overlay-feature-distance">5<br />km</div>
+      <div class="overlay-feature-position">LAT: {{lat}} LON: {{lng}}</div>
+     </div>
+    </div>
+   </div>
   </script>
+
 
 </body>
 </html>

@@ -14,5 +14,6 @@
     , "ender": "0.8.x"
     , "qwery-mobile": "1.0.x"
     , "qwery": "3.4.x"
+    , "reqwest": "0.6.x"
     }
 }

@@ -36,7 +36,17 @@ $.domReady(function () {
 
   });
 
+
   /*
+   * Add basic user modell
+   */
+  var User = Backbone.Model.extend({
+
+
+  });
+
+
+   /*
    * collection of geografical featues
    * with option to set from geoJSON FeatureCollection
    */
@@ -138,6 +148,8 @@ $.domReady(function () {
         var markerLetter = String.fromCharCode(letter+i);
         var featureListItemView = new FeatureListItemView({model: model, markerLetter: markerLetter });
         var renderedTemplate = featureListItemView.render();
+
+        // here it gets added to DOM
         $(that.el).append(renderedTemplate);
       });
 
@@ -146,12 +158,53 @@ $.domReady(function () {
 
   });
 
+   /*
+   * UI element to show current position in botttom left
+   */
+  var UserView = Backbone.View.extend({
+    id: 'userView',
+
+    initialize: function(){
+		console.log(this.model);
+      _.bindAll(this, 'render');
+      this.template = Handlebars.compile($('#userData-template').html());
+    },
+
+    render: function(){
+
+      // temporary userData simulation, should come from user model in backbone
+      var userDataJSON = this.model.toJSON();
+
+      // add fake mapcenter to test
+      userDataJSON.lat = 1;
+      console.log(userDataJSON);
+
+      $(this.el).html(this.template(userDataJSON));
+      console.log('userView rendered');
+
+      return this.el
+    }
+
+  });
+
+  // Add Overlay-Feature-List
   window.featureCollection = new FeatureCollection();
   featureCollection.setGeoJson(window.data);
   window.featureListView = new FeatureListView({collection: featureCollection});
 
-  // render list of features
+  // Add User View
+  window.user = new User();
+  user.set('coordinates', [48,11]);
+  window.userView = new UserView({model: user});
+  //$(this.el).html(this.template(userData));
+  var renderedTemplate = userView.render();
+  $('#keel').append(renderedTemplate);
+
+  // render all
   featureListView.render();
+
+
+
 
   /*
    * Display basemap with UI

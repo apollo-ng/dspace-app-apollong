@@ -1,12 +1,3 @@
-var map, mm, markers, geolat, geolon;
-
-var dspace_tactical =
-  {
-    tilejson: '1.0.0',
-    scheme: 'zxy',
-    tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
-  };
-
 $.domReady(function () {
 
   //get packages from ender
@@ -115,6 +106,15 @@ $.domReady(function () {
   /*
    * Display basemap with UI
    */
+
+  var map, mm, markers, geolat, geolon;
+
+  var dspace_tactical =
+    {
+      tilejson: '1.0.0',
+      scheme: 'zxy',
+      tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+    };
 
   mm = com.modestmaps;
 

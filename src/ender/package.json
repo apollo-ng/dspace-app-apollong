@@ -1,0 +1,18 @@
+{
+    "name": "dspace-client"
+  , "version": "0.0.1"
+  , "keywords": ["maps"]
+  , "engines": {
+      "node": "0.8.x"
+    }
+  , "dependencies": {
+      "backbone": "0.9.x"
+    , "bean": "1.0.x"
+    , "bonzo": "1.3.x"
+    , "domready": "0.2.x"
+    , "ender-js": "0.4.x"
+    , "ender": "0.8.x"
+    , "qwery-mobile": "1.0.x"
+    , "qwery": "3.4.x"
+    }
+}

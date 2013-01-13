@@ -13,10 +13,10 @@ $.domReady(function () {
     /*
      * helper method for setting lat: lon: attributes from coordinates array
      */
-    setLatLng: function(){
+    setLatLon: function(){
       this.set({
         lat: this.get('coordinates')[1],
-        lng: this.get('coordinates')[0]
+        lon: this.get('coordinates')[0]
       });
     },
 
@@ -25,13 +25,13 @@ $.domReady(function () {
      */
     setGeoJsonFeature: function(geoJsonFeature){
       this.set({
-        // array [lng, lon] from geoJSON Point
+        // array [lon, lon] from geoJSON Point
         coordinates: geoJsonFeature.geometry.coordinates,
         // object from geoJSON Feature
         properties: geoJsonFeature.properties
       });
 
-      this.setLatLng();
+      this.setLatLon();
     }
 
   });

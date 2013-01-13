@@ -13,6 +13,14 @@ $.domReady(function () {
   var Backbone = require('backbone');
   var _ = require('underscore');
 
+  var Feature= Backbone.Model.extend({
+
+  });
+
+  var FeatureCollection = Backbone.Collection.extend({
+    model: Feature
+  });
+
   //set up a view
   var FeatureListView = Backbone.View.extend({
     el: $('#overlay-feature-list'),

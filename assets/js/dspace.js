@@ -85,6 +85,7 @@ $.domReady(function () {
      * receives feature lement of geoJSON and set attributes from it
      */
     setGeoJsonFeature: function(geoJsonFeature){
+      this.geoJsonFeature = geoJsonFeature;
       this.set({
         // array [lon, lon] from geoJSON Point
         coordinates: geoJsonFeature.geometry.coordinates,
@@ -116,8 +117,9 @@ $.domReady(function () {
     /*
      * gets geoJSON and add features from i to collection
      */
-    setGeoJson: function(geoJSON){
-      var features = geoJSON.features;
+    setGeoJson: function(geoJson){
+      this.geoJson = geoJson;
+      var features = geoJson.features;
       for(var i=0; i < features.length; i++) {
         feature = new Feature();
         feature.setGeoJsonFeature(features[i]);
@@ -272,6 +274,22 @@ $.domReady(function () {
    */
   var mapView = new MapView();
   mapView.render();
+
+  /*
+   * Display markers
+   */
+  window.markerLayer = mapbox.markers.layer();
+
+  markerLayer.factory(function(feature){
+    var img = document.createElement('img');
+    img.className = 'marker-image';
+    img.setAttribute('src', '/assets/icons/black-shield-a.png');
+    return img;
+    console.log('factory called');
+  });
+  markerLayer.features(window.featureCollection.geoJson.features);
+  console.log(markerLayer.features());
+  map.addLayer(markerLayer).setExtent(markerLayer.extent());
 
 });
 

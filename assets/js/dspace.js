@@ -19,6 +19,14 @@ $.domReady(function () {
    */
   var Feature = Backbone.Model.extend({
 
+
+    setLatLng: function(){
+      this.set({
+        lat: this.get('coordinates')[1],
+        lng: this.get('coordinates')[0]
+      });
+    },
+
     /*
      * receives feature lement of geoJSON and set attributes from it
      */
@@ -29,6 +37,8 @@ $.domReady(function () {
         // object from geoJSON Feature
         properties: geoJsonFeature.properties
       });
+
+      this.setLatLng();
     }
 
   });
@@ -61,7 +71,7 @@ $.domReady(function () {
 
     initialize: function(){
       _.bindAll(this, 'render');
-      this.template = Handlebars.compile($('#overlay-feature-template').html());
+      this.template = Handlebars.compile($('#overlay-feature-info-template').html());
     },
 
     render: function(){

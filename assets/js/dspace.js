@@ -19,7 +19,9 @@ $.domReady(function () {
    */
   var Feature = Backbone.Model.extend({
 
-
+    /*
+     * helper method for setting lat: lon: attributes from coordinates array
+     */
     setLatLng: function(){
       this.set({
         lat: this.get('coordinates')[1],

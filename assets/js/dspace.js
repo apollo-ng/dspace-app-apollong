@@ -1,5 +1,49 @@
 $.domReady(function () {
 
+
+  /*
+   * Display basemap with UI
+   */
+
+  var map, mm, markers, geolat, geolon;
+
+  var dspace_tactical =
+    {
+      tilejson: '1.0.0',
+      scheme: 'zxy',
+      tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+    };
+
+  mm = com.modestmaps;
+
+  geolat = 48.115293;
+  geolon = 11.60218;
+
+  var modestmap = new com.modestmaps.Map(document.getElementById('map'),
+                               new wax.mm.connector(dspace_tactical), null, [
+                                 easey_handlers.DragHandler(),
+                                 easey_handlers.TouchHandler(),
+                                 easey_handlers.MouseWheelHandler(),
+                                 easey_handlers.DoubleClickHandler()
+                               ]);
+
+                               // setup boundaries
+                               modestmap.setZoomRange(13, 18);
+
+                               // enable zoom control buttons
+                               wax.mm.zoomer (modestmap, dspace_tactical).appendTo(modestmap.parent);
+
+                               // show and zoom map
+                               modestmap.setCenterZoom(new mm.Location(geolat, geolon), 12);
+
+                               modestmap.addCallback('drawn', function(m)
+                                               {
+                                                 $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
+                                               });
+
+  var Map = { modestmap: modestmap };
+  window.map = Map;
+
   //get packages from ender
   var Backbone = require('backbone');
   var _ = require('underscore');
@@ -42,7 +86,6 @@ $.domReady(function () {
    */
   var User = Backbone.Model.extend({
 
-
   });
 
 
@@ -77,7 +120,7 @@ $.domReady(function () {
     jumpToCoordinate: function(coordinate){
 
       // easey interaction library for modestmaps
-      easey().map(map)
+      easey().map(window.map.modestmap)
       .to(coordinate)
       .zoom(this.maxZoomTo).optimal();
     }
@@ -113,7 +156,7 @@ $.domReady(function () {
 
     // function for above click event to jump to a marker on the map
     jumpToMarker: function (event) {
-      var coordinate = map.locationCoordinate({
+      var coordinate = window.map.modestmap.locationCoordinate({
           lat: this.model.get('coordinates')[1]
         , lon: this.model.get('coordinates')[0]
       });
@@ -165,7 +208,6 @@ $.domReady(function () {
     id: 'userView',
 
     initialize: function(){
-		console.log(this.model);
       _.bindAll(this, 'render');
       this.template = Handlebars.compile($('#userData-template').html());
     },
@@ -176,8 +218,8 @@ $.domReady(function () {
       var userDataJSON = this.model.toJSON();
 
       // add fake mapcenter to test
-      userDataJSON.lat = 1;
-      console.log(userDataJSON);
+      console.log(window.map);
+      userDataJSON.mapCenter = window.map.modestmap.getCenter();
 
       $(this.el).html(this.template(userDataJSON));
       console.log('userView rendered');
@@ -194,59 +236,12 @@ $.domReady(function () {
 
   // Add User View
   window.user = new User();
-  user.set('coordinates', [48,11]);
   window.userView = new UserView({model: user});
-  //$(this.el).html(this.template(userData));
   var renderedTemplate = userView.render();
   $('#keel').append(renderedTemplate);
 
   // render all
   featureListView.render();
-
-
-
-
-  /*
-   * Display basemap with UI
-   */
-
-  var map, mm, markers, geolat, geolon;
-
-  var dspace_tactical =
-    {
-      tilejson: '1.0.0',
-      scheme: 'zxy',
-      tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
-    };
-
-  mm = com.modestmaps;
-
-  geolat = 48.115293;
-  geolon = 11.60218;
-
-  var map = new com.modestmaps.Map(document.getElementById('map'),
-                               new wax.mm.connector(dspace_tactical), null, [
-                                 easey_handlers.DragHandler(),
-                                 easey_handlers.TouchHandler(),
-                                 easey_handlers.MouseWheelHandler(),
-                                 easey_handlers.DoubleClickHandler()
-                               ]);
-
-                               // setup boundaries
-                               map.setZoomRange(13, 18);
-
-                               // enable zoom control buttons
-                               wax.mm.zoomer (map, dspace_tactical).appendTo(map.parent);
-
-                               // show and zoom map
-                               map.setCenterZoom(new mm.Location(geolat, geolon), 12);
-
-                               map.addCallback('drawn', function(m)
-                                               {
-                                                 $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
-                                               });
-
-  window.map = map;
 
 });
 

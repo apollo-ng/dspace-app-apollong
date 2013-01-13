@@ -56,6 +56,23 @@ $.domReady(function () {
     }
   });
 
+  var Navigator = {
+
+    maxZoomTo: 18,
+
+    /*
+     * moves vieport to given coordinate
+     * expects map.locationCoordinate
+     */
+    jumpToCoordinate: function(coordinate){
+
+      // easey interaction library for modestmaps
+      easey().map(map)
+      .to(coordinate)
+      .zoom(this.maxZoomTo).optimal();
+    }
+  };
+
   /*
    * UI element with information about feature
    */
@@ -86,9 +103,12 @@ $.domReady(function () {
 
     // function for above click event to jump to a marker on the map
     jumpToMarker: function (event) {
-      easey().map(map)
-      .to(map.locationCoordinate({ lat: this.model.attributes.coordinates[1],  lon: this.model.attributes.coordinates[0] }))
-      .zoom(18).optimal();
+      var coordinate = map.locationCoordinate({
+          lat: this.model.get('coordinates')[1]
+        , lon: this.model.get('coordinates')[0]
+      });
+
+      Navigator.jumpToCoordinate(coordinate);
     }
   });
 
@@ -115,7 +135,8 @@ $.domReady(function () {
        * the FeatureListItemView as options.markerLetter.
        */
       _(this.collection.models).each(function(model, i){
-        var featureListItemView = new FeatureListItemView({model: model, markerLetter: String.fromCharCode(letter+i)});
+        var markerLetter = String.fromCharCode(letter+i);
+        var featureListItemView = new FeatureListItemView({model: model, markerLetter: markerLetter });
         var renderedTemplate = featureListItemView.render();
         $(that.el).append(renderedTemplate);
       });
@@ -150,7 +171,7 @@ $.domReady(function () {
   geolat = 48.115293;
   geolon = 11.60218;
 
-  map = new com.modestmaps.Map(document.getElementById('map'),
+  var map = new com.modestmaps.Map(document.getElementById('map'),
                                new wax.mm.connector(dspace_tactical), null, [
                                  easey_handlers.DragHandler(),
                                  easey_handlers.TouchHandler(),
@@ -172,6 +193,7 @@ $.domReady(function () {
                                                  $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
                                                });
 
+  window.map = map;
 
 });
 

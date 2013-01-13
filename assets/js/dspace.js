@@ -68,11 +68,19 @@ $.domReady(function () {
     },
 
     render: function(){
-      $(this.el).html(this.template(this.model.toJSON()));
+
+      // get template data from model
+      var templateData = this.model.toJSON();
+
+      // add markerLetter passed from options
+      templateData.markerLetter = this.options.markerLetter;
+
+      $(this.el).html(this.template(templateData));
       console.log('featureListItemView rendered');
       return this.el
     }
   });
+
 
   /*
    * UI element with list of features
@@ -86,11 +94,21 @@ $.domReady(function () {
 
     render: function(){
       var that = this;
-      _(this.collection.models).each(function(model){
-        var featureListItemView = new FeatureListItemView({model: model});
+      var letter = 97; // DEC value of ascii "a" for marker lettering
+
+      /* Loop through each feature in the model
+       * using underscore each. Also a good exanple
+       * how to add more data to the view:
+       *
+       * The additionally passend markerLetter ends up in
+       * the FeatureListItemView as options.markerLetter.
+       */
+      _(this.collection.models).each(function(model, i){
+        var featureListItemView = new FeatureListItemView({model: model, markerLetter: String.fromCharCode(letter+i)});
         var renderedTemplate = featureListItemView.render();
         $(that.el).append(renderedTemplate);
       });
+
       console.log('featureListView rendered');
     }
 

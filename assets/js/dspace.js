@@ -78,6 +78,17 @@ $.domReady(function () {
       $(this.el).html(this.template(templateData));
       console.log('featureListItemView rendered');
       return this.el
+    },
+
+    events: {
+            "click": "jumpToMarker"
+    },
+
+    // function for above click event to jump to a marker on the map
+    jumpToMarker: function (event) {
+      easey().map(map)
+      .to(map.locationCoordinate({ lat: this.model.attributes.coordinates[1],  lon: this.model.attributes.coordinates[0] }))
+      .zoom(18).optimal();
     }
   });
 

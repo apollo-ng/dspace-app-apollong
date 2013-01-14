@@ -15,6 +15,9 @@ shell.cp('test/dev-data.js', 'build/');
 console.log('copying assets');
 shell.cp('-rf', 'assets', 'build/');
 
+console.log('copying pkgs');
+shell.cp('-rf', 'pkgs', 'build/');
+
 console.log('building ender');
 shell.exec('ender build -o build/assets/js/ender.js');
 

@@ -4,18 +4,18 @@ $.domReady(function () {
    * Display basemap with UI
    */
 
-  var options = {
+  var globalOptions = {
 
     tileSet: {
         tilejson: '1.0.0',
         scheme: 'zxy',
+        tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
     baseMap: {
-      viewurl: 'http://localhost:3333/dev-data.js',
+      viewurl: 'http://localhost:3333/dev-data.json',
       //viewurl: '/places/_design/gc-utils/_list/geojson/all',
       //viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
-      tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
     geolat:  48.115293,
@@ -25,12 +25,12 @@ $.domReady(function () {
     defaultZoom: 12
   };
 
-  window.options = options;
+  window.globalOptions = globalOptions;
 
   var weaveModestMap = function(){
   var mm = com.modestmaps;
   var modestmap = new mm.Map(document.getElementById('map'),
-                               new wax.mm.connector(options.tileSet), null, [
+                               new wax.mm.connector(globalOptions.tileSet), null, [
                                  easey_handlers.DragHandler(),
                                  easey_handlers.TouchHandler(),
                                  easey_handlers.MouseWheelHandler(),
@@ -38,13 +38,13 @@ $.domReady(function () {
                                ]);
 
                                // setup boundaries
-                               modestmap.setZoomRange(options.minZoom, options.maxZoom);
+                               modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
 
                                // enable zoom control buttons
-                               wax.mm.zoomer (modestmap, options.tileSet).appendTo(modestmap.parent);
+                               wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
 
                                // show and zoom map
-                               modestmap.setCenterZoom(new mm.Location(options.geolat, options.geolon), options.defaultZoom);
+                               modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
 
                                modestmap.addCallback('drawn', function(m)
                                                {
@@ -198,7 +198,7 @@ $.domReady(function () {
        * how to add more data to the view:
        *
        * The additionally passend markerLetter ends up in
-       * the FeatureListItemView as options.markerLetter.
+       * the FeatureListItemView as Options.markerLetter.
        */
       _(this.collection.models).each(function(model, i){
         var markerLetter = String.fromCharCode(letter+i);
@@ -247,7 +247,7 @@ $.domReady(function () {
       this.featureCollection = new FeatureCollection();
       var that = this;
       reqwest({
-        url: window.options.baseMap.viewurl,
+        url: window.globalOptions.baseMap.viewurl,
         type: 'json',
         method: 'get',
         success: function( response ) {

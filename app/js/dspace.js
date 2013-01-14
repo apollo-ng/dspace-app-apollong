@@ -27,31 +27,6 @@ $.domReady(function () {
 
   window.globalOptions = globalOptions;
 
-  var weaveModestMap = function(){
-  var mm = com.modestmaps;
-  var modestmap = new mm.Map(document.getElementById('map'),
-                               new wax.mm.connector(globalOptions.tileSet), null, [
-                                 easey_handlers.DragHandler(),
-                                 easey_handlers.TouchHandler(),
-                                 easey_handlers.MouseWheelHandler(),
-                                 easey_handlers.DoubleClickHandler()
-                               ]);
-
-                               // setup boundaries
-                               modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
-
-                               // enable zoom control buttons
-                               wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
-
-                               // show and zoom map
-                               modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
-
-                               modestmap.addCallback('drawn', function(m)
-                                               {
-                                                 $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
-                                               });
-                                               return modestmap;
-};
 
   //get packages from ender
   var Backbone = require('backbone');
@@ -241,7 +216,6 @@ $.domReady(function () {
   var Map = Backbone.Model.extend({
 
     initialize: function(){
-      this.modestmap = weaveModestMap();
 
       // request collection from the local tracker
       this.featureCollection = new FeatureCollection();
@@ -278,6 +252,7 @@ $.domReady(function () {
   var MapView = Backbone.View.extend({
     initialize: function(){
       this.model = window.map;
+      this.model.modestmap = this.renderBaseMap();
       this.markerOptions = {
         className: 'marker-image',
         iconPath: 'icons/black-shield-a.png'
@@ -298,6 +273,32 @@ $.domReady(function () {
       $('#keel').append(renderedTemplate);
 
     },
+    renderBaseMap: function(){
+      var mm = com.modestmaps;
+      var modestmap = new mm.Map(document.getElementById('map'),
+                                 new wax.mm.connector(globalOptions.tileSet), null, [
+                                   easey_handlers.DragHandler(),
+                                   easey_handlers.TouchHandler(),
+                                   easey_handlers.MouseWheelHandler(),
+                                   easey_handlers.DoubleClickHandler()
+                                 ]);
+
+                                 // setup boundaries
+                                 modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
+
+                                 // enable zoom control buttons
+                                 wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
+
+                                 // show and zoom map
+                                 modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
+
+                                 modestmap.addCallback('drawn', function(m)
+                                                       {
+                                                         $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
+                                                       });
+      return modestmap;
+  },
+
     renderOverlays: function(){
       // Add Overlay-Feature-List
       var markerLayer = mapbox.markers.layer();

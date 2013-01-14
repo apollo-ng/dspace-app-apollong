@@ -49,21 +49,6 @@ $.domReady(function () {
   var Backbone = require('backbone');
   var _ = require('underscore');
 
-  var Map = Backbone.Model.extend({
-
-    initialize: function(){
-      this.modestmap = weaveModestMap();
-    }
-  });
-
-
-  /*
-   * creating single instance of Map model for global logic
-   * for now attaching it to window
-   */
-  var map = new Map();
-  window.map = map;
-
 
   /*
    * single geografical featue of interest
@@ -118,6 +103,8 @@ $.domReady(function () {
      * gets geoJSON and add features from i to collection
      */
     setGeoJson: function(geoJson){
+console.log( 'geoJson' );
+console.log( geoJson );
       this.geoJson = geoJson;
       var features = geoJson.features;
       for(var i=0; i < features.length; i++) {
@@ -243,6 +230,40 @@ $.domReady(function () {
 
   });
 
+  var Map = Backbone.Model.extend({
+
+    initialize: function(){
+      this.modestmap = weaveModestMap();
+
+      // request collection from the local tracker
+      this.featureCollection = new FeatureCollection();
+      var that = this;
+      reqwest({
+        url: 'http://localhost:3333/', 
+        type: 'json',
+        method: 'get',
+        success: function( response ) {
+          that.featureCollection.setGeoJson( response );
+          that.view.renderOverlays( );
+         
+        },
+        failure: function( e ) {
+          alert( e );
+        }
+      });
+
+    }
+  });
+
+
+  /*
+   * creating single instance of Map model for global logic
+   * for now attaching it to window
+   */
+  var map = new Map();
+  window.map = map;
+
+
   /*
    * main UI logic for globa viewport
    */
@@ -262,34 +283,34 @@ $.domReady(function () {
      */
     render: function(){
 
-      var that = this;
-      // Add Overlay-Feature-List
-      var featureCollection = new FeatureCollection();
-      featureCollection.setGeoJson(window.data);
-      var featureListView = new FeatureListView({collection: featureCollection});
-
-      /*
-       * Display markers
-       */
-      var markerLayer = mapbox.markers.layer();
-
-      markerLayer.factory(function(feature){
-        var img = document.createElement('img');
-        img.className = that.markerOptions.className;
-        img.setAttribute('src', that.markerOptions.iconPath);
-        return img;
-      });
-      markerLayer.features(featureCollection.geoJson.features);
-      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
-
       // Add User View
       var user = new User();
       var userView = new UserView({model: user});
       var renderedTemplate = userView.render();
       $('#keel').append(renderedTemplate);
 
+    },
+    renderOverlays: function(){
+      // Add Overlay-Feature-List
+      var markerLayer = mapbox.markers.layer();
+
+      var that = this;
+      markerLayer.factory(function(feature){
+        var img = document.createElement('img');
+        img.className = that.markerOptions.className;
+        img.setAttribute('src', that.markerOptions.iconPath);
+        return img;
+      });
+
+
       // render all
+      var featureListView = new FeatureListView({collection: map.featureCollection});
       featureListView.render();
+
+      //Display markers
+      markerLayer.features(map.featureCollection.geoJson.features);
+      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
+
     }
   });
 
@@ -297,6 +318,7 @@ $.domReady(function () {
    * acctual initialization and rendering of a mapView
    */
   var mapView = new MapView();
+  window.map.view = mapView;
   mapView.render();
 
 

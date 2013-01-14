@@ -42,9 +42,18 @@ var path = require('path');
 
 // changes to app
 watch('./app', function(filename) {
+  if( filename.match(/\/\./, '')) { 
+    console.log('lock file '+ filename);
+    return; }
   console.log(filename);
   exec("cp -rf app/* build");
-
+});
+watch('./test', function(filename) {
+  if( filename.match(/\/\./, '')) { 
+    console.log('lock file '+ filename);
+    return; }
+  console.log(filename);
+  shell.cp( '-f', 'test/*', 'build/');
 });
 
 

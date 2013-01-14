@@ -9,7 +9,7 @@ $.domReady(function () {
     tileSet: {
         tilejson: '1.0.0',
         scheme: 'zxy',
-        tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+        tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
     geolat:  48.115293,

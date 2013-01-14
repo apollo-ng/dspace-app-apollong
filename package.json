@@ -15,4 +15,7 @@
     , "qwery-mobile": "1.0.x"
     , "qwery": "3.4.x"
     }
+  , "devDependencies": {
+      "shelljs": "0.1.x"
+  }
 }

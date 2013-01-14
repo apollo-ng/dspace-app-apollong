@@ -9,10 +9,12 @@ $.domReady(function () {
     tileSet: {
         tilejson: '1.0.0',
         scheme: 'zxy',
+    },
+
     baseMap: {
-      //viewurl: 'http://localhost:3333/', 
-      //viewurl: '/places/_design/gc-utils/_list/geojson/all', 
-      viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+      viewurl: 'http://localhost:3333/dev-data.js',
+      //viewurl: '/places/_design/gc-utils/_list/geojson/all',
+      //viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
       tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
@@ -21,7 +23,9 @@ $.domReady(function () {
     minZoom: 13,
     maxZoom: 18,
     defaultZoom: 12
-  }};
+  };
+
+  window.options = options;
 
   var weaveModestMap = function(){
   var mm = com.modestmaps;
@@ -107,8 +111,6 @@ $.domReady(function () {
      * gets geoJSON and add features from i to collection
      */
     setGeoJson: function(geoJson){
-console.log( 'geoJson' );
-console.log( geoJson );
       this.geoJson = geoJson;
       var features = geoJson.features;
       for(var i=0; i < features.length; i++) {
@@ -245,7 +247,7 @@ console.log( geoJson );
       this.featureCollection = new FeatureCollection();
       var that = this;
       reqwest({
-        url: options.baseMap.viewurl,
+        url: window.options.baseMap.viewurl,
         type: 'json',
         method: 'get',
         success: function( response ) {

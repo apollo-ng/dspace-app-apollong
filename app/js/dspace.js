@@ -59,7 +59,7 @@ $.domReady(function () {
 
 
   /*
-   * single geografical featue of interest
+   * single geographical featue of interest
    * with option to set from geoJSON feature object
    */
   var Feature = Backbone.Model.extend({
@@ -75,7 +75,7 @@ $.domReady(function () {
     },
 
     /*
-     * receives feature lement of geoJSON and set attributes from it
+     * receives feature element of geoJSON and set attributes from it
      */
     setGeoJsonFeature: function(geoJsonFeature){
       this.geoJsonFeature = geoJsonFeature;
@@ -93,7 +93,7 @@ $.domReady(function () {
 
 
   /*
-   * Add basic user modell
+   * Add basic user model
    */
   var User = Backbone.Model.extend({
 
@@ -101,14 +101,14 @@ $.domReady(function () {
 
 
    /*
-   * collection of geografical featues
+   * collection of geographical featues
    * with option to set from geoJSON FeatureCollection
    */
   var FeatureCollection = Backbone.Collection.extend({
     model: Feature,
 
     /*
-     * gets geoJSON and add features from i to collection
+     * gets geoJSON and add features from it to collection
      */
     setGeoJson: function(geoJson){
       this.geoJson = geoJson;
@@ -273,7 +273,7 @@ $.domReady(function () {
 
 
   /*
-   * main UI logic for globa viewport
+   * main UI logic for global viewport
    */
   var MapView = Backbone.View.extend({
     initialize: function(){
@@ -315,7 +315,7 @@ $.domReady(function () {
       var featureListView = new FeatureListView({collection: map.featureCollection});
       featureListView.render();
 
-      //Display markers
+      // display markers
       markerLayer.features(map.featureCollection.geoJson.features);
       this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
 
@@ -323,7 +323,7 @@ $.domReady(function () {
   });
 
   /*
-   * acctual initialization and rendering of a mapView
+   * actual initialization and rendering of a mapView
    */
   var mapView = new MapView();
   window.map.view = mapView;

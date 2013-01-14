@@ -6,9 +6,6 @@ shell.rm('-rf', 'build');
 console.log('creating ***TEMPORARY*** build dir');
 shell.mkdir('build');
 
-console.log('copying index.html');
-shell.cp('app/index.html', 'build/');
-
 console.log('copying dev data');
 shell.cp('test/dev-data.js', 'build/');
 
@@ -18,8 +15,11 @@ shell.cp('-rf', 'assets', 'build/');
 console.log('copying pkgs');
 shell.cp('-rf', 'pkgs', 'build/');
 
+console.log('copying app');
+shell.cp('-rf', 'app/*', 'build/');
+
 console.log('building ender');
-shell.exec('ender build -o build/assets/js/ender.js');
+shell.exec('ender build -o build/js/ender.js');
 
 process.on('SIGINT', function() {
 

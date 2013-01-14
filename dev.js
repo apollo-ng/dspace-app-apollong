@@ -19,7 +19,7 @@ console.log('copying app');
 shell.cp('-rf', 'app/*', 'build/');
 
 console.log('building ender');
-shell.exec('ender build -o build/js/ender.js');
+shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
 
 process.on('SIGINT', function() {
 

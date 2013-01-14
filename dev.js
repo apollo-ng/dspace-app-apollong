@@ -18,8 +18,8 @@ shell.cp('-rf', 'pkgs', 'build/');
 console.log('copying app');
 shell.cp('-rf', 'app/*', 'build/');
 
-console.log('building ender');
-shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
+//console.log('building ender');
+//shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
 
 process.on('SIGINT', function() {
 
@@ -30,6 +30,23 @@ process.on('SIGINT', function() {
             process.exit();
 
 });
+
+
+/*
+ * Watch files for changes
+ */
+var watch = require('node-watch');
+var exec = require('child_process').exec;
+var path = require('path');
+
+
+// changes to app
+watch('./app', function(filename) {
+  console.log(filename);
+  exec("cp -rf app/* build");
+
+});
+
 
 /**Static file server for serving data and UI
  *

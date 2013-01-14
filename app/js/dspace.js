@@ -116,6 +116,83 @@ $.domReady(function () {
   };
 
   /*
+   * main UI logic for global viewport
+   */
+  var MapView = Backbone.View.extend({
+    initialize: function(){
+      this.model = window.map;
+      this.model.modestmap = this.renderBaseMap();
+      this.markerOptions = {
+        className: 'marker-image',
+        iconPath: 'icons/black-shield-a.png'
+      };
+    },
+
+
+    /*
+     * renders main map
+     * FIXME: add support for multiple overlays
+     */
+    render: function(){
+
+      // Add User View
+      var user = new User();
+      var userView = new UserView({model: user});
+      var renderedTemplate = userView.render();
+      $('#keel').append(renderedTemplate);
+
+    },
+    renderBaseMap: function(){
+      var mm = com.modestmaps;
+      var modestmap = new mm.Map(document.getElementById('map'),
+                                 new wax.mm.connector(globalOptions.tileSet), null, [
+                                   easey_handlers.DragHandler(),
+                                   easey_handlers.TouchHandler(),
+                                   easey_handlers.MouseWheelHandler(),
+                                   easey_handlers.DoubleClickHandler()
+                                 ]);
+
+                                 // setup boundaries
+                                 modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
+
+                                 // enable zoom control buttons
+                                 wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
+
+                                 // show and zoom map
+                                 modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
+
+                                 modestmap.addCallback('drawn', function(m)
+                                                       {
+                                                         $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
+                                                       });
+      return modestmap;
+  },
+
+    renderOverlays: function(){
+      // Add Overlay-Feature-List
+      var markerLayer = mapbox.markers.layer();
+
+      var that = this;
+      markerLayer.factory(function(feature){
+        var img = document.createElement('img');
+        img.className = that.markerOptions.className;
+        img.setAttribute('src', that.markerOptions.iconPath);
+        return img;
+      });
+
+
+      // render all
+      var featureListView = new FeatureListView({collection: map.featureCollection});
+      featureListView.render();
+
+      // display markers
+      markerLayer.features(map.featureCollection.geoJson.features);
+      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
+
+    }
+  });
+
+  /*
    * UI element with information about feature
    */
   var FeatureListItemView = Backbone.View.extend({
@@ -216,17 +293,37 @@ $.domReady(function () {
   var Map = Backbone.Model.extend({
 
     initialize: function(){
+      /*
+       * actual initialization and rendering of a mapView
+       */
+      this.view = new MapView();
+      this.view.render( );
+      this.setGeoJson( );
+    },
 
-      // request collection from the local tracker
-      this.featureCollection = new FeatureCollection();
+    /*
+     * gets geoJSON and add features from it to collection
+     */
+    setGeoJson: function( ){
       var that = this;
+      // request collection
       reqwest({
         url: window.globalOptions.baseMap.viewurl,
         type: 'json',
         method: 'get',
         success: function( response ) {
+            
 console.log( response );
-          that.featureCollection.setGeoJson( response );
+
+          //this.geoJson = response;
+          that.featureCollection = new FeatureCollection( );
+          var features = response.features;
+          for(var i=0; i < features.length; i++) {
+            feature = new Feature();
+            feature.setGeoJsonFeature( features[i]); 
+            that.featureCollection.add(feature);
+          };
+
           that.view.renderOverlays( );
 
         },
@@ -247,89 +344,7 @@ console.log( response );
   window.map = map;
 
 
-  /*
-   * main UI logic for global viewport
-   */
-  var MapView = Backbone.View.extend({
-    initialize: function(){
-      this.model = window.map;
-      this.model.modestmap = this.renderBaseMap();
-      this.markerOptions = {
-        className: 'marker-image',
-        iconPath: 'icons/black-shield-a.png'
-      };
-    },
 
-
-    /*
-     * renders main map
-     * FIXME: add support for multiple overlays
-     */
-    render: function(){
-
-      // Add User View
-      var user = new User();
-      var userView = new UserView({model: user});
-      var renderedTemplate = userView.render();
-      $('#keel').append(renderedTemplate);
-
-    },
-    renderBaseMap: function(){
-      var mm = com.modestmaps;
-      var modestmap = new mm.Map(document.getElementById('map'),
-                                 new wax.mm.connector(globalOptions.tileSet), null, [
-                                   easey_handlers.DragHandler(),
-                                   easey_handlers.TouchHandler(),
-                                   easey_handlers.MouseWheelHandler(),
-                                   easey_handlers.DoubleClickHandler()
-                                 ]);
-
-                                 // setup boundaries
-                                 modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
-
-                                 // enable zoom control buttons
-                                 wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
-
-                                 // show and zoom map
-                                 modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
-
-                                 modestmap.addCallback('drawn', function(m)
-                                                       {
-                                                         $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
-                                                       });
-      return modestmap;
-  },
-
-    renderOverlays: function(){
-      // Add Overlay-Feature-List
-      var markerLayer = mapbox.markers.layer();
-
-      var that = this;
-      markerLayer.factory(function(feature){
-        var img = document.createElement('img');
-        img.className = that.markerOptions.className;
-        img.setAttribute('src', that.markerOptions.iconPath);
-        return img;
-      });
-
-
-      // render all
-      var featureListView = new FeatureListView({collection: map.featureCollection});
-      featureListView.render();
-
-      // display markers
-      markerLayer.features(map.featureCollection.geoJson.features);
-      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
-
-    }
-  });
-
-  /*
-   * actual initialization and rendering of a mapView
-   */
-  var mapView = new MapView();
-  window.map.view = mapView;
-  mapView.render();
 
 
 });

@@ -13,9 +13,9 @@ $.domReady(function () {
     },
 
     baseMap: {
-      //viewurl: 'http://localhost:3333/dev-data.json',
+      viewurl: 'http://localhost:3333/dev-data.json',
       //viewurl: '/places/_design/gc-utils/_list/geojson/all',
-      viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+      //viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
     },
 
     geolat:  48.115293,

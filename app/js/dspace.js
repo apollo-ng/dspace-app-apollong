@@ -9,7 +9,7 @@ $.domReady(function () {
     tileSet: {
         tilejson: '1.0.0',
         scheme: 'zxy',
-        tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+        tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
     geolat:  48.115293,
@@ -251,7 +251,7 @@ $.domReady(function () {
       this.model = window.map;
       this.markerOptions = {
         className: 'marker-image',
-        iconPath: 'assets/icons/black-shield-a.png'
+        iconPath: 'icons/black-shield-a.png'
       };
     },
 

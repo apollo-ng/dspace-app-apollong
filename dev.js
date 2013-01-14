@@ -18,8 +18,8 @@ shell.cp('-rf', 'pkgs', 'build/');
 console.log('copying app');
 shell.cp('-rf', 'app/*', 'build/');
 
-//console.log('building ender');
-//shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
+console.log('building ender');
+shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
 
 process.on('SIGINT', function() {
 

@@ -9,7 +9,13 @@ $.domReady(function () {
     tileSet: {
         tilejson: '1.0.0',
         scheme: 'zxy',
-        tiles: ['http://192.168.1.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+        //tiles: ['http://10.34.0.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+        tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+    },
+    baseMap: {
+      //viewurl: 'http://localhost:3333/', 
+      //viewurl: '/places/_design/gc-utils/_list/geojson/all', 
+      viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all', 
     },
 
     geolat:  48.115293,
@@ -109,8 +115,11 @@ console.log( geoJson );
       var features = geoJson.features;
       for(var i=0; i < features.length; i++) {
         feature = new Feature();
-        feature.setGeoJsonFeature(features[i]);
-        this.add(feature);
+console.log({ feature: features[i] });
+        // check if its worth showing 
+        if( 'properties' in features[i] ) {
+            feature.setGeoJsonFeature(features[i]); 
+            this.add(feature); }
       };
     }
   });
@@ -239,7 +248,7 @@ console.log( geoJson );
       this.featureCollection = new FeatureCollection();
       var that = this;
       reqwest({
-        url: 'http://localhost:3333/', 
+        url: options.baseMap.viewurl,
         type: 'json',
         method: 'get',
         success: function( response ) {

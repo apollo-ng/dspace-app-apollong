@@ -9,6 +9,9 @@ shell.mkdir('build');
 console.log('copying index.html');
 shell.cp('app/index.html', 'build/');
 
+console.log('copying dev data');
+shell.cp('test/dev-data.js', 'build/');
+
 console.log('copying assets');
 shell.cp('-rf', 'assets', 'build/');
 

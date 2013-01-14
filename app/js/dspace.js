@@ -9,13 +9,11 @@ $.domReady(function () {
     tileSet: {
         tilejson: '1.0.0',
         scheme: 'zxy',
-        //tiles: ['http://10.34.0.1:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
-        tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
-    },
     baseMap: {
       //viewurl: 'http://localhost:3333/', 
       //viewurl: '/places/_design/gc-utils/_list/geojson/all', 
-      viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all', 
+      viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+      tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
     geolat:  48.115293,
@@ -23,7 +21,7 @@ $.domReady(function () {
     minZoom: 13,
     maxZoom: 18,
     defaultZoom: 12
-  };
+  }};
 
   var weaveModestMap = function(){
   var mm = com.modestmaps;
@@ -115,8 +113,7 @@ console.log( geoJson );
       var features = geoJson.features;
       for(var i=0; i < features.length; i++) {
         feature = new Feature();
-console.log({ feature: features[i] });
-        // check if its worth showing 
+        // check if its worth showing
         if( 'properties' in features[i] ) {
             feature.setGeoJsonFeature(features[i]); 
             this.add(feature); }
@@ -254,7 +251,7 @@ console.log({ feature: features[i] });
         success: function( response ) {
           that.featureCollection.setGeoJson( response );
           that.view.renderOverlays( );
-         
+
         },
         failure: function( e ) {
           alert( e );
@@ -281,7 +278,7 @@ console.log({ feature: features[i] });
       this.model = window.map;
       this.markerOptions = {
         className: 'marker-image',
-        iconPath: 'assets/icons/black-shield-a.png'
+        iconPath: 'icons/black-shield-a.png'
       };
     },
 

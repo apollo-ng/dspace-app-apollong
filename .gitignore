@@ -1,1 +1,2 @@
-src/ender/node_modules
+node_modules
+build

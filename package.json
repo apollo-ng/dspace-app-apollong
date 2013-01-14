@@ -16,4 +16,7 @@
     , "qwery": "3.4.x"
     , "reqwest": "0.6.x"
     }
+  , "devDependencies": {
+      "shelljs": "0.1.x"
+  }
 }

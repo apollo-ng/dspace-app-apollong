@@ -21,7 +21,7 @@ $.domReady(function () {
     geolat:  48.115293,
     geolon:  11.60218,
     minZoom: 13,
-    maxZoom: 18,
+    maxZoom: 17,
     defaultZoom: 12
   };
 
@@ -100,7 +100,7 @@ $.domReady(function () {
 
   var Navigator = {
 
-    maxZoomTo: 18,
+    maxZoomTo: window.globalOptions.maxZoom,
 
     /*
      * moves vieport to given coordinate

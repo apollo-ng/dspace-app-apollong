@@ -140,6 +140,8 @@ $.domReady(function () {
 
     initialize: function(){
       _.bindAll(this, 'render');
+
+      this.map = this.options.map;
       this.template = Handlebars.compile($('#featureBoxItem-template').html());
     },
 
@@ -163,7 +165,7 @@ $.domReady(function () {
      * calls map to jump to its Feature
      */
     jumpMap: function( event ){
-      window.world.map.jumpToFeature(this.model); //FIXME !!!
+      this.map.jumpToFeature(this.model); //FIXME !!!
     }
   });
 
@@ -173,11 +175,15 @@ $.domReady(function () {
    */
   var FeatureBox = Backbone.View.extend({
     el: $('#featureBox'),
+
+    initialize: function(){
+      this.map = this.options.map;
+    },
+
     render: function( collection ){
       var that = this;
       var lastletter = 122;  // DEC value of ascii "a" to "z" for marker lettering
       var letter = 97;
-
 
       /* Loop through each feature in the model
        * example how to add more data to the view:
@@ -188,7 +194,7 @@ $.domReady(function () {
       _(collection.models).each(function(feature, i){
 
         var markerLetter = String.fromCharCode(letter+i);
-        var featureBoxItem= new FeatureBoxItem({model: collection.models[i], markerLetter: markerLetter });
+        var featureBoxItem= new FeatureBoxItem({model: collection.models[i], map: that.map, markerLetter: markerLetter });
         var renderedTemplate = featureBoxItem.render();
 
         // here it gets added to DOM
@@ -342,9 +348,11 @@ $.domReady(function () {
   var world = new World();
 
   /**
-   * for ease of debugging sticking it to window
+   * for ease of debugging
+   *
+   * !!! NEVER COMMIT UNCOMMENTED !!!
    */
-  window.world = world; //FIXME: unbind!!
+  //window.world = world;
 
 
 });

@@ -117,9 +117,10 @@ $.domReady(function () {
         lat: feature.get('lat'),
         lon: feature.get('lon')
       });
+
       easey().map(self.frame)
       .to(mmCoordinate)
-      .zoom(this.options.maxZoom).optimal();
+      .zoom(self.config.maxZoom).optimal();
     },
 
     /**
@@ -139,8 +140,6 @@ $.domReady(function () {
 
     initialize: function(){
       _.bindAll(this, 'render');
-      this.map = this.options.map;
-      console.log(this.map);
       this.template = Handlebars.compile($('#featureBoxItem-template').html());
     },
 
@@ -164,8 +163,7 @@ $.domReady(function () {
      * calls map to jump to its Feature
      */
     jumpMap: function( event ){
-      console.log(this.map);
-      this.map.jumpToFeature(this.model); //FIXME !!!
+      window.world.map.jumpToFeature(this.model); //FIXME !!!
     }
   });
 
@@ -294,7 +292,7 @@ $.domReady(function () {
       this.collections = [];
 
       // FIXME proper way for setting initial set of overlays
-      _(this.globalOptions.geoFeeds).each(function(geoFeed){
+      _(this.geoFeeds).each(function(geoFeed){
         self.addFeatureCollection(geoFeed);
       });
 
@@ -318,21 +316,11 @@ $.domReady(function () {
       return featureCollection;
     },
 
-    globalOptions: {
 
-      geoFeeds: [
-
-        //local files with dev eerver
+    geoFeeds: [
       { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
       { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json'}
-
-        //local proxy
-        //hackerspacesMunich: '/places/_design/gc-utils/_list/geojson/all',
-
-        //public couchdb
-        //hackerspacesMunich: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
-      ],
-    },
+    ],
 
     mapConfig: {
 

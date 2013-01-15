@@ -117,24 +117,23 @@ $.domReady(function () {
     },
 
     renderOverlay: function(){
+      //
       // Add Overlay-Feature-List
+      // mapbox lib NOT same as mm (modestmap)
       var markerLayer = mapbox.markers.layer();
 
-      var markerOptions = {
-        className: 'marker-image',
-        iconPath: 'icons/black-shield-a.png'
-      };
-      var that = this;
       markerLayer.factory(function(feature){
         var img = document.createElement('img');
-        img.className = that.markerOptions.className;
-        img.setAttribute('src', that.markerOptions.iconPath);
+        img.className = 'marker-image';
+        img.setAttribute('src', 'icons/black-shield-a.png');
         return img;
       });
 
-//      // display markers
-//      markerLayer.features(map.featureCollection.features);
-//      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
+      console.log(this.world.collection.toJSON());
+      // display markers
+      // .extent() called to redraw map!
+      markerLayer.features(this.world.collection.toJSON());
+      this.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
   });

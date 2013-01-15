@@ -39,16 +39,14 @@ $.domReady(function () {
    */
   var Feature = Backbone.Model.extend({
     initialize: function() {
-        if( this.attributes.length ) {
-console.log( 'helo' );
             this.setLatLon( );
-        }
     },
     /*
      * helper method for setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
       var g = this.get('geometry');
+console.log( this.toJSON );
       if( 'coordinates' in g && g.coordinates.length == 2 ) {
           this.set({ lat: g[1], lon: g[0] }); }
     },
@@ -110,7 +108,6 @@ console.log( 'helo' );
   var MapView = Backbone.View.extend({
 
     initialize: function(){
-      this.model = window.map;
       this.model.modestmap = this.renderBaseMap();
       this.markerOptions = {
         className: 'marker-image',
@@ -126,7 +123,7 @@ console.log( 'helo' );
 
       // Add User View
       var user = new User();
-      var userView = new UserView({model: user});
+      var userView = new UserView({model: this.model });
       var renderedTemplate = userView.render();
       $('#keel').append(renderedTemplate);
 
@@ -292,7 +289,7 @@ console.log( 'helo' );
       var userDataJSON = this.model.toJSON();
 
       // add map center
-      userDataJSON.mapCenter = window.map.modestmap.getCenter();
+      userDataJSON.mapCenter = this.model.modestmap.getCenter();
 
       $(this.el).html(this.template(userDataJSON));
 
@@ -301,13 +298,14 @@ console.log( 'helo' );
 
   });
 
-  var Map = Backbone.Model.extend({
+  var World = Backbone.Model.extend({
 
     initialize: function(){
       /*
        * actual initialization and rendering of a mapView
        */
-      this.view = new MapView();
+
+      this.view = new MapView({model: this});
       // start rendering early maybe it works
       this.view.render( ); 
       // asyncronous request to sync featurcollection

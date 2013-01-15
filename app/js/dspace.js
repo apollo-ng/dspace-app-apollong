@@ -12,7 +12,7 @@ $.domReady(function () {
         tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
-    featureCollections: [
+    geoFeeds: [
 
       //local files with dev eerver
     { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
@@ -294,20 +294,25 @@ $.domReady(function () {
       this.collections = [];
 
       // FIXME proper way for setting initial set of overlays
-      _(globalOptions.featureCollections).each(function(featureCollection){
-        self.addFeatureCollection({ url: featureCollection.url });
+      _(globalOptions.geoFeeds).each(function(geoFeed){
+        self.addFeatureCollection(geoFeed);
       });
 
       this.map = new Map({world: this});
       this.map.render();
     },
-    addFeatureCollection: function( opts ){
-      var features = new FeatureCollection( );
-      features.url = opts.url;
-      features.sync( );
 
-      this.collections.push( features );
-      return features;
+    /** expects GeoFeed and returns FeatureCollection
+     *
+     */
+    addFeatureCollection: function( geoFeed ){
+      var featureCollection = new FeatureCollection( );
+      featureCollection.url = geoFeed.url; //FIXME create setGeoFeed()
+      featureCollection.sync( );
+
+      // add to world collections to keep track on!
+      this.collections.push( featureCollection );
+      return featureCollection;
     },
   });
 

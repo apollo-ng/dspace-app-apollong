@@ -208,9 +208,12 @@ $.domReady(function () {
   var FeatureBoxView = Backbone.View.extend({
     el: $('#overlay-feature-list'),
     initialize: function(){
-      // FIXME: this would be the way to go
-      this.collection.url = window.globalOptions.baseMap.viewurl;
-      //_.bindAll(this, 'render');
+      var self = this;
+      this.collection.on( 'reset', function( event, data ){
+console.log( {event: event, data: data });
+        self.render( );
+      });
+      //
       //var self = this;
       //reqwest({
       //  url: window.globalOptions.baseMap.viewurl,
@@ -229,6 +232,7 @@ $.domReady(function () {
     },
 
     render: function(){//{{{
+console.log( 'onall' );
       var that = this;
       var letter = 97; // DEC value of ascii "a" for marker lettering
 
@@ -291,7 +295,8 @@ $.domReady(function () {
         reqwest({
           url: window.globalOptions.baseMap.viewurl,
           success: function( response ) {
-            self.add( response.features ); },
+console.log({ features: response });
+            self.reset( response.features ); },
           failure: function( e ) {
             alert( e ); }
         });

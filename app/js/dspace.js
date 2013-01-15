@@ -12,7 +12,6 @@ $.domReady(function () {
   var Feature = Backbone.Model.extend({
     initialize: function() {
       this.setLatLon();
-      this.coordinate = { lat: this.get('lat'), lon: this.get('lon') };
     },
 
     /*
@@ -107,8 +106,6 @@ $.domReady(function () {
      */
     jumpToFeature: function( feature ) {
 
-      //var coordinate = this.mm.locationCoordinate({lat: lat, lon: lon});
-
       // easey interaction library for modestmaps
       var self = this;
       var mmCoordinate = this.mm.locationCoordinate({
@@ -158,10 +155,9 @@ $.domReady(function () {
     },
 
     /**
-     * calls map to jump to given coordinate
+     * calls map to jump to its Feature
      */
     jumpMap: function( event ){
-      console.log('jumpMap called');
       window.world.map.jumpToFeature(this.model);
     }
   });

@@ -84,14 +84,17 @@ $.domReady(function () {
     render: function(){
 
       this.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
+
+      // create FeatureBox
       this.box = new FeatureBoxView( );
-      // Add User View
-      //var user = new User();
-      //var userView = new UserView({model: this.model });
-      //var renderedTemplate = userView.render();
+
+      // create control panel
+      //this.user = new User();
+      //var statusPanel = new StatusView({model: this.user });
+      //var renderedTemplate = statusPanel.render();
       //$('#keel').append(renderedTemplate);
-      new Overlay({ collection: this.world.collections[0], map: this });
-      new Overlay({ collection: this.world.collections[1], map: this });
+      var hackerspacesMunich = new Overlay({ collection: this.world.collections[0], map: this });
+      var openwifiMunich = new Overlay({ collection: this.world.collections[1], map: this });
     },
 
     renderBaseMap: function( opts ){
@@ -232,8 +235,8 @@ $.domReady(function () {
    /*
    * UI element to show current position in botttom left
    */
-  var UserView = Backbone.View.extend({
-    id: 'userView',
+  var StatusPanel = Backbone.View.extend({
+    id: 'statusPanel',
 
     initialize: function(){
       _.bindAll(this, 'render');

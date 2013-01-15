@@ -12,6 +12,7 @@ $.domReady(function () {
   var Feature = Backbone.Model.extend({
     initialize: function() {
       this.setLatLon();
+      this.coordinate = { lat: this.get('lat'), lon: this.get('lon') };
     },
 
     /*
@@ -58,7 +59,7 @@ $.domReady(function () {
       this.mm = this.renderBaseMap( {tileSet: this.world.globalOptions.tileSet });
 
       // create FeatureBox
-      this.featureBox = new FeatureBox( );
+      this.featureBox = new FeatureBox({ map: this });
 
       // create StatusPanel
       // set statusPanel model to user
@@ -102,6 +103,24 @@ $.domReady(function () {
     },
 
     /**
+     * animates map to focus on given feature
+     */
+    jumpToFeature: function( feature ) {
+
+      //var coordinate = this.mm.locationCoordinate({lat: lat, lon: lon});
+
+      // easey interaction library for modestmaps
+      var self = this;
+      var mmCoordinate = this.mm.locationCoordinate({
+        lat: feature.get('lat'),
+        lon: feature.get('lon')
+      });
+      easey().map(self.mm)
+      .to(mmCoordinate)
+      .zoom(this.world.globalOptions.maxZoom).optimal(); //FIXME globalOptions sage
+    },
+
+    /**
      * delegats to modest map and returns MM.Location of center
      */
     getCenter: function( ){
@@ -118,6 +137,7 @@ $.domReady(function () {
 
     initialize: function(){
       _.bindAll(this, 'render');
+      this.map = this.options.map;
       this.template = Handlebars.compile($('#featureBoxItem-template').html());
     },
 
@@ -134,22 +154,15 @@ $.domReady(function () {
     },
 
     events: {
-            "click": "jumpToMarker"
+            "click": "jumpMap"
     },
 
-    // function for above click event to jump to a marker on the map
-    jumpToMarker: function (event) {
-
-      var lat = this.model.get('geometry').coordinates[1];
-      var lon = this.model.get('geometry').coordinates[0];
-
-      var mm = world.map.mm;
-      var coordinate = mm.locationCoordinate({lat: lat, lon: lon});
-
-      // easey interaction library for modestmaps
-      easey().map(mm)
-      .to(coordinate)
-      .zoom(17).optimal(); //FIXME globalOptions sage
+    /**
+     * calls map to jump to given coordinate
+     */
+    jumpMap: function( event ){
+      console.log('jumpMap called');
+      window.world.map.jumpToFeature(this.model);
     }
   });
 

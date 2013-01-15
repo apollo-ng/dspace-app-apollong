@@ -30,6 +30,8 @@ $.domReady(function () {
 
   //get packages from ender
   var Backbone = require('backbone');
+  Backbone.emulateHTTP = true;
+
   var _ = require('underscore');
 
 
@@ -101,7 +103,7 @@ $.domReady(function () {
       //var userView = new UserView({model: this.model });
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
-      var featureBoxView = new FeatureBoxView({collection: this.world.featureCollection});
+      var featureBoxView = new FeatureBoxView({collection: this.world.collection});
     },
     renderBaseMap: function( opts ){//{{{
       var mm = com.modestmaps;
@@ -161,7 +163,7 @@ $.domReady(function () {
   /*
    * UI element with information about feature
    */
-  var FeatureListItemView = Backbone.View.extend({
+  var FeatuerBoxItemView = Backbone.View.extend({
     className: 'overlay-feature-info',
 
     initialize: function(){
@@ -205,24 +207,22 @@ $.domReady(function () {
    */
   var FeatureBoxView = Backbone.View.extend({
     el: $('#overlay-feature-list'),
-    url: 'http://localhost:3333/dev-data.json',
-
     initialize: function(){
       // FIXME: this would be the way to go
-      //this.collection.sync( );
+      this.collection.url = window.globalOptions.baseMap.viewurl;
       //_.bindAll(this, 'render');
-      var self = this;
-      reqwest({
-        url: window.globalOptions.baseMap.viewurl,
-        type: 'json',
-        method: 'get',
-        success: function( response ) {
-            self.updateCollection( response );
-        },
-        failure: function( e ) {
-          alert( e );
-        }
-      });
+      //var self = this;
+      //reqwest({
+      //  url: window.globalOptions.baseMap.viewurl,
+      //  type: 'json',
+      //  method: 'get',
+      //  success: function( response ) {
+      //      self.updateCollection( response );
+      //  },
+      //  failure: function( e ) {
+      //    alert( e );
+      //  }
+      //});
 
 
 
@@ -237,12 +237,12 @@ $.domReady(function () {
        * how to add more data to the view:
        *
        * The additionally passend markerLetter ends up in
-       * the FeatureListItemView as Options.markerLetter.
+       * the FeatuerBoxItemView as Options.markerLetter.
        */
       _(this.collection.models).each(function(feature, i){
         var markerLetter = String.fromCharCode(letter+i);
-        var featureListItemView = new FeatureListItemView({model: feature, markerLetter: markerLetter });
-        var renderedTemplate = featureListItemView.render();
+        var featuerBoxItemView = new FeatuerBoxItemView({model: feature, markerLetter: markerLetter });
+        var renderedTemplate = featuerBoxItemView.render();
 
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
@@ -283,8 +283,21 @@ $.domReady(function () {
 
   });
   var FeatureCollection = Backbone.Collection.extend({
-      model: Feature
-  });
+      model: Feature,
+      url: function(){
+        return 'http://localhost:3333/dev-data.json'; },
+      sync: function(){
+        var self = this;
+        reqwest({
+          url: window.globalOptions.baseMap.viewurl,
+          success: function( response ) {
+            self.add( response.features ); },
+          failure: function( e ) {
+            alert( e ); }
+        });
+  
+      }
+    });
 
   var World = Backbone.Model.extend({
 
@@ -293,7 +306,9 @@ $.domReady(function () {
        * actual initialization and rendering of a Map
        */
 
-      this.featureCollection = new FeatureCollection( );
+      this.collection = new FeatureCollection( );
+      this.collection.sync( );
+
       this.map = new Map({world: this});
       this.map.render();
       // start rendering early maybe it works
@@ -315,7 +330,7 @@ $.domReady(function () {
             
 
           //this.geoJson = response;
-          self.featureCollection.add( response.features );
+          self.collection.add( response.features );
 
 //      var featureBoxView = new FeatureBoxView({collection: map.featureCollection});
 //      featureBoxView.render();
@@ -324,7 +339,7 @@ $.domReady(function () {
 //          for(var i=0; i < features.length; i++) {
 //            feature = new Feature();
 //            feature.setGeoJsonFeature( features[i]); 
-//            that.featureCollection.add(feature);
+//            that.collection.add(feature);
 //          };
 
           //that.view.addOverlay( );

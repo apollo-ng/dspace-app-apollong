@@ -213,22 +213,6 @@ $.domReady(function () {
 console.log( {event: event, data: data });
         self.render( );
       });
-      //
-      //var self = this;
-      //reqwest({
-      //  url: window.globalOptions.baseMap.viewurl,
-      //  type: 'json',
-      //  method: 'get',
-      //  success: function( response ) {
-      //      self.updateCollection( response );
-      //  },
-      //  failure: function( e ) {
-      //    alert( e );
-      //  }
-      //});
-
-
-
     },
 
     render: function(){//{{{
@@ -300,7 +284,6 @@ console.log({ features: response });
           failure: function( e ) {
             alert( e ); }
         });
-  
       }
     });
 
@@ -316,45 +299,6 @@ console.log({ features: response });
 
       this.map = new Map({world: this});
       this.map.render();
-      // start rendering early maybe it works
-      // asyncronous request to sync featurcollection
-      //this.setFeatureCollection( );
-    },
-
-    /*
-     * gets geoJSON and add features from it to collection
-     */
-    setFeatureCollection: function( ){
-      var self = this;
-      // request collection
-      reqwest({
-        url: window.globalOptions.baseMap.viewurl,
-        type: 'json',
-        method: 'get',
-        success: function( response ) {
-            
-
-          //this.geoJson = response;
-          self.collection.add( response.features );
-
-//      var featureBoxView = new FeatureBoxView({collection: map.featureCollection});
-//      featureBoxView.render();
-
-          var features = response.features;
-//          for(var i=0; i < features.length; i++) {
-//            feature = new Feature();
-//            feature.setGeoJsonFeature( features[i]); 
-//            that.collection.add(feature);
-//          };
-
-          //that.view.addOverlay( );
-
-        },
-        failure: function( e ) {
-          alert( e );
-        }
-      });
-
     }
   });
 
@@ -365,9 +309,6 @@ console.log({ features: response });
    */
   var world = new World();
   window.world = world; //FIXME: unbind!!
-
-
-
 
 
 });

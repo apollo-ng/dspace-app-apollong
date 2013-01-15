@@ -86,7 +86,7 @@ $.domReady(function () {
       this.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
 
       // create FeatureBox
-      this.box = new FeatureBoxView( );
+      this.featureBox = new FeatureBox( );
 
       // create StatusPanel
       this.user = new User();
@@ -129,7 +129,7 @@ $.domReady(function () {
   /*
    * UI element with information about feature
    */
-  var FeatuerBoxItemView = Backbone.View.extend({
+  var FeatureBoxItem = Backbone.View.extend({
     className: 'overlay-feature-info', //FIXME: remove confusing overlays PLEASE
 
     initialize: function(){
@@ -173,11 +173,11 @@ $.domReady(function () {
   /*
    * UI element with list of features
    */
-  var FeatureBoxView = Backbone.View.extend({
+  var FeatureBox = Backbone.View.extend({
     el: $('#overlay-feature-list'),
     render: function( collection ){
       var that = this;
-      var lastletter = 122  // DEC value of ascii "a" to "z" for marker lettering
+      var lastletter = 122;  // DEC value of ascii "a" to "z" for marker lettering
       var letter = 97;
 
 
@@ -185,13 +185,13 @@ $.domReady(function () {
        * example how to add more data to the view:
        *
        * The additionally passend markerLetter ends up in
-       * the FeatuerBoxItemView as Options.markerLetter.
+       * the featureBoxItem as Options.markerLetter.
        */
       _(collection.models).each(function(feature, i){
 
         var markerLetter = String.fromCharCode(letter+i);
-        var featuerBoxItemView = new FeatuerBoxItemView({model: collection.models[i], markerLetter: markerLetter });
-        var renderedTemplate = featuerBoxItemView.render();
+        var featureBoxItem= new FeatureBoxItem({model: collection.models[i], markerLetter: markerLetter });
+        var renderedTemplate = featureBoxItem.render();
 
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
@@ -209,7 +209,7 @@ $.domReady(function () {
         var self = this;
         this.collection.on( 'reset', function( event, data ){
           self.render( );
-          self.map.box.render( self.collection );
+          self.map.featureBox.render( self.collection );
         });
     },
     render: function(){

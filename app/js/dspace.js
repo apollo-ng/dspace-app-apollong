@@ -4,7 +4,7 @@ $.domReady(function () {
   //FIXME document ex deoes order matter?
   var Backbone = require('backbone');
   var _ = require('underscore');
-
+  var Reqwest = require('reqwest');
   /*
    * single geographical featue of interest
    * with option to set from geoJSON feature object
@@ -55,7 +55,8 @@ $.domReady(function () {
      */
     render: function(){
 
-      this.mm = this.renderBaseMap( {tileSet: this.world.globalOptions.tileSet });
+      // crate frame -- uses MapBox
+      this.frame = this.createFrame();
 
       // create FeatureBox
       this.featureBox = new FeatureBox({ map: this });
@@ -74,22 +75,23 @@ $.domReady(function () {
       });
     },
 
-    renderBaseMap: function( opts ){
+    /**
+     * creates frame using ModestMaps library
+     */
+    createFrame: function(){
       var globalOptions = this.world.globalOptions;
-      var mm = com.modestmaps;
-      var modestmap = new mm.Map(document.getElementById('map'),
-                                 new wax.mm.connector(opts.tileSet), null, [
-                                   easey_handlers.DragHandler(),
-                                   easey_handlers.TouchHandler(),
-                                   easey_handlers.MouseWheelHandler(),
-                                   easey_handlers.DoubleClickHandler()
-                                 ]);
+      var modestmaps = com.modestmaps;
+
+      var template = this.world.globalOptions.tileSet.template; //FIXME
+      var layer = new MM.TemplatedLayer(template);
+
+      var modestmap = new modestmaps.Map('map', layer);
 
       // setup boundaries
       modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
 
       // show and zoom map
-      modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
+      modestmap.setCenterZoom(new modestmaps.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
 
       // FIXME add modestmap.addCallback('drawn', function(m){});
 
@@ -103,11 +105,11 @@ $.domReady(function () {
 
       // easey interaction library for modestmaps
       var self = this;
-      var mmCoordinate = this.mm.locationCoordinate({
+      var mmCoordinate = this.frame.locationCoordinate({
         lat: feature.get('lat'),
         lon: feature.get('lon')
       });
-      easey().map(self.mm)
+      easey().map(self.frame)
       .to(mmCoordinate)
       .zoom(this.world.globalOptions.maxZoom).optimal(); //FIXME globalOptions sage
     },
@@ -116,7 +118,7 @@ $.domReady(function () {
      * delegats to modest map and returns MM.Location of center
      */
     getCenter: function( ){
-      return this.mm.getCenter();
+      return this.frame.getCenter();
     }
 
   });
@@ -203,7 +205,7 @@ $.domReady(function () {
     render: function(){
       //
       // Add markers
-      // mapbox lib NOT same as mm (modestmap)
+      // mapbox lib NOT same as ModestMap
       var markerLayer = mapbox.markers.layer();
 
       markerLayer.factory(function(feature){
@@ -216,8 +218,7 @@ $.domReady(function () {
       // display markers
       // .extent() called to redraw map!
       markerLayer.features(this.collection.toJSON());
-      this.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
-
+      this.map.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
     },
   });
 
@@ -255,7 +256,7 @@ $.domReady(function () {
        */
       sync: function(){
         var self = this;
-        reqwest({
+        new Reqwest({
           url: this.url,
           success: function( response ) {
             self.reset( response.features ); },
@@ -310,9 +311,7 @@ $.domReady(function () {
     globalOptions: {
 
       tileSet: {
-          tilejson: '1.0.0',
-          scheme: 'zxy',
-          tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+          template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
       },
 
       geoFeeds: [

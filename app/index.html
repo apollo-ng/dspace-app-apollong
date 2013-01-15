@@ -38,7 +38,7 @@
    <div id='minimap'></div>
   </div>
 
-  <div id='keel'></div>
+  <div id='statusPanel'></div>
 
   <script id="featureBoxItem-template" type="text/x-handlebars-template">
     <div class="black-shield-{{markerLetter}}" ><h3>{{properties.title}}</h3></div>
@@ -52,7 +52,7 @@
   </script>
 
   <script id="statusPanel-template" type="text/x-handlebars-template">
-    <div class="mapCenter">LAT: {{mapCenter.lat}}</div>
+    <div class="mapCenter">LAT: {{status.map.lat}}</div>
   </script>
 
 

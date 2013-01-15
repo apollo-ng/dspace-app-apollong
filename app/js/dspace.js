@@ -99,7 +99,7 @@ $.domReady(function () {
       // create StatusPanel
       // set statusPanel model to user
       this.statusPanel = new StatusPanel({model: this.world.user, map: this });
-      $('#keel').append(this.statusPanel.render());
+      this.statusPanel.render();
 
       // set overlays
       var self = this;
@@ -249,7 +249,7 @@ $.domReady(function () {
    * UI element to show current position in botttom left
    */
   var StatusPanel = Backbone.View.extend({
-    id: 'statusPanel',
+    el: $('#statusPanel'),
 
     initialize: function(){
       _.bindAll(this, 'render');
@@ -259,10 +259,10 @@ $.domReady(function () {
       this.map = this.options.map;
 
       this.template = Handlebars.compile($('#statusPanel-template').html());
-      //TODO listen to changes on model (User)
-      //TODO listen on map changing it's center
     },
 
+    //TODO listen to changes on model (User)
+    //TODO listen on map changing it's center
     render: function(){
 
       $(this.el).html(this.template(this.user.toJSON()));

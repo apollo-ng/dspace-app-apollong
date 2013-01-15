@@ -191,7 +191,7 @@ clear: after;
 clear: after;
 }
 
-#keel {
+#statusPanel {
   position:absolute;
   right:0;
   left:0;

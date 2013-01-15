@@ -28,13 +28,9 @@ $.domReady(function () {
 
   window.globalOptions = globalOptions;
 
-
   //get packages from ender
   var Backbone = require('backbone');
-  Backbone.emulateHTTP = true;
-
   var _ = require('underscore');
-
 
   /*
    * single geographical featue of interest
@@ -88,8 +84,8 @@ $.domReady(function () {
       //var userView = new UserView({model: this.model });
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
-      this.overlay = new Overlay({ collection: this.world.collections[0], map: this });
-      this.overlay2 = new Overlay({ collection: this.world.collections[1], map: this });
+      new Overlay({ collection: this.world.collections[0], map: this });
+      new Overlay({ collection: this.world.collections[1], map: this });
     },
 
     renderBaseMap: function( opts ){
@@ -193,9 +189,9 @@ $.domReady(function () {
     }
   });
 
-  /* uses collection of Type FeatureCollection
-   * and binds to its reset events.
-   * gets a new marker layer from mapbox 
+  /* binds to FeatureCollection reset events.
+   * adds the collection to the listbox
+   * draws marker with mapbox
    */ 
   var Overlay = Backbone.View.extend({
     initialize: function(){
@@ -221,7 +217,6 @@ $.domReady(function () {
 
       // display markers
       // .extent() called to redraw map!
-console.log( { overlayevent: this.collection } );
       markerLayer.features(this.collection.toJSON());
       this.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
 
@@ -255,6 +250,9 @@ console.log( { overlayevent: this.collection } );
   });
   var FeatureCollection = Backbone.Collection.extend({
       model: Feature,
+      /* requests the geojson
+       * resets ifselft with the result
+       */
       sync: function(){
         var self = this;
         reqwest({
@@ -262,27 +260,23 @@ console.log( { overlayevent: this.collection } );
           success: function( response ) {
             self.reset( response.features ); },
           failure: function( e ) {
-            alert( e ); }
+            alert( '#FIXME' ); }
         });
       }
     });
 
   var World = Backbone.Model.extend({
-
+    /* initialisation of collections 
+     * creates and renders the Map
+     */
     initialize: function(){
-      /*
-       * actual initialization and rendering of a Map
-       */
       this.collections = [];
-
       this.addFeatureCollection({ 
             url: globalOptions.defaultFeatureCollection.viewurl });
       this.addFeatureCollection({ 
             url: globalOptions.defaultFeatureCollection.viewurl2 });
 
       this.map = new Map({world: this});
-console.log({ foo: this.map });
-
       this.map.render();
     },
     addFeatureCollection: function( opts ){

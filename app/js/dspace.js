@@ -35,6 +35,7 @@ $.domReady(function () {
   window.globalOptions = globalOptions;
 
   //get packages from ender
+  //FIXME document ex deoes order matter?
   var Backbone = require('backbone');
   var _ = require('underscore');
 
@@ -66,9 +67,6 @@ $.domReady(function () {
     initialize: function() {
       this.world = this.get('world');
     }
-      // add map center ???
-      //FIXME
-      //userDataJSON.mapCenter = this.user.world.map.mm.getCenter();
   });
 
   /*
@@ -135,6 +133,13 @@ $.domReady(function () {
       });
       return modestmap;
     },
+
+    /**
+     * delegats to modest map and returns MM.Location of center
+     */
+    getCenter: function( ){
+      return this.mm.getCenter();
+    }
 
   });
 
@@ -264,8 +269,10 @@ $.domReady(function () {
     //TODO listen to changes on model (User)
     //TODO listen on map changing it's center
     render: function(){
-
-      $(this.el).html(this.template(this.user.toJSON()));
+      var mapCenter = this.map.getCenter();
+      var mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
+      var templateData = {user: this.user.toJSON(), map: mapData};
+      $(this.el).html(this.template(templateData));
       return this.el;
     }
 

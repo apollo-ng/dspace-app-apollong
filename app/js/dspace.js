@@ -158,7 +158,7 @@ $.domReady(function () {
      * calls map to jump to its Feature
      */
     jumpMap: function( event ){
-      window.world.map.jumpToFeature(this.model);
+      window.world.map.jumpToFeature(this.model); //FIXME !!!
     }
   });
 

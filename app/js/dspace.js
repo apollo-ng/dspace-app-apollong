@@ -299,7 +299,7 @@ $.domReady(function () {
 
   });
 
-  var Map = Backbone.Model.extend({
+  var World = Backbone.Model.extend({
 
     initialize: function(){
       /*
@@ -356,8 +356,8 @@ $.domReady(function () {
    * creating single instance of Map model for global logic
    * for now attaching it to window
    */
-  var map = new Map();
-  window.map = map;
+  var world = new World();
+  window.world = world; //FIXME: unbind!!
 
 
 

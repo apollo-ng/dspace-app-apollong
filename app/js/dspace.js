@@ -38,15 +38,19 @@ $.domReady(function () {
    * with option to set from geoJSON feature object
    */
   var Feature = Backbone.Model.extend({
-
+    initialize: function() {
+        if( this.attributes.length ) {
+console.log( 'helo' );
+            this.setLatLon( );
+        }
+    },
     /*
      * helper method for setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
-      this.set({
-        lat: this.get('coordinates')[1],
-        lon: this.get('coordinates')[0]
-      });
+      var g = this.get('geometry');
+      if( 'coordinates' in g && g.coordinates.length == 2 ) {
+          this.set({ lat: g[1], lon: g[0] }); }
     },
 
     /*
@@ -61,7 +65,7 @@ $.domReady(function () {
         properties: geoJsonFeature.properties
       });
 
-      this.setLatLon();
+      //this.setLatLon();
     }
 
   });
@@ -81,21 +85,6 @@ $.domReady(function () {
    */
   var FeatureCollection = Backbone.Collection.extend({
     model: Feature,
-
-    /*
-     * gets geoJSON and add features from it to collection
-     */
-    setGeoJson: function(geoJson){
-      this.geoJson = geoJson;
-      var features = geoJson.features;
-      for(var i=0; i < features.length; i++) {
-        feature = new Feature();
-        // check if its worth showing
-        if( 'properties' in features[i] ) {
-            feature.setGeoJsonFeature(features[i]); 
-            this.add(feature); }
-      };
-    }
   });
 
   var Navigator = {
@@ -119,6 +108,7 @@ $.domReady(function () {
    * main UI logic for global viewport
    */
   var MapView = Backbone.View.extend({
+
     initialize: function(){
       this.model = window.map;
       this.model.modestmap = this.renderBaseMap();
@@ -127,7 +117,6 @@ $.domReady(function () {
         iconPath: 'icons/black-shield-a.png'
       };
     },
-
 
     /*
      * renders main map
@@ -166,8 +155,30 @@ $.domReady(function () {
                                                          $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
                                                        });
       return modestmap;
-  },
+    },
 
+    addOverlay: function(){
+      // Add Overlay-Feature-List
+      var markerLayer = mapbox.markers.layer();
+
+      var that = this;
+      markerLayer.factory(function(feature){
+        var img = document.createElement('img');
+        img.className = that.markerOptions.className;
+        img.setAttribute('src', that.markerOptions.iconPath);
+        return img;
+      });
+
+
+      // render all
+      var featureListView = new FeatureListView({collection: map.featureCollection});
+      featureListView.render();
+
+      // display markers
+      markerLayer.features(map.featureCollection.features);
+      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
+
+    },
     renderOverlays: function(){
       // Add Overlay-Feature-List
       var markerLayer = mapbox.markers.layer();
@@ -297,14 +308,16 @@ $.domReady(function () {
        * actual initialization and rendering of a mapView
        */
       this.view = new MapView();
-      this.view.render( );
-      this.setGeoJson( );
+      // start rendering early maybe it works
+      this.view.render( ); 
+      // asyncronous request to sync featurcollection
+      this.setFeatureCollection( );
     },
 
     /*
      * gets geoJSON and add features from it to collection
      */
-    setGeoJson: function( ){
+    setFeatureCollection: function( ){
       var that = this;
       // request collection
       reqwest({
@@ -316,15 +329,15 @@ $.domReady(function () {
 console.log( response );
 
           //this.geoJson = response;
-          that.featureCollection = new FeatureCollection( );
+          that.featureCollection = new FeatureCollection( response.features );
           var features = response.features;
-          for(var i=0; i < features.length; i++) {
-            feature = new Feature();
-            feature.setGeoJsonFeature( features[i]); 
-            that.featureCollection.add(feature);
-          };
+//          for(var i=0; i < features.length; i++) {
+//            feature = new Feature();
+//            feature.setGeoJsonFeature( features[i]); 
+//            that.featureCollection.add(feature);
+//          };
 
-          that.view.renderOverlays( );
+          that.view.addOverlay( );
 
         },
         failure: function( e ) {

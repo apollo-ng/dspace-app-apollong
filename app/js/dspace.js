@@ -77,36 +77,17 @@ $.domReady(function () {
 
   });
 
-
-   /*
-   * collection of geographical featues
-   * with option to set from geoJSON FeatureCollection
-   */
-  var FeatureCollection = Backbone.Collection.extend({
-    model: Feature,
-  });
-
-  var Navigator = {
-
-    maxZoomTo: window.globalOptions.maxZoom,
-
-    /*
-     * moves vieport to given coordinate
-     * expects map.locationCoordinate
-     */
-    jumpToCoordinate: function(coordinate){
-
-      // easey interaction library for modestmaps
-      easey().map(window.map.modestmap)
-      .to(coordinate)
-      .zoom(this.maxZoomTo).optimal();
-    }
-  };
-
   /*
    * main UI logic for global viewport
    */
-  var MapView = Backbone.View.extend({
+  var Map = Backbone.View.extend({
+
+    initialize: function(){
+        /*
+         * to use with map.world FIXME
+         */
+        this.world = this.options.world;
+    },
 
     /*
      * renders main map
@@ -120,7 +101,7 @@ $.domReady(function () {
       //var userView = new UserView({model: this.model });
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
-      var featureBoxView = new FeatureBoxView({collection: this.model.featureCollection});
+      var featureBoxView = new FeatureBoxView({collection: this.world.featureCollection});
     },
     renderBaseMap: function( opts ){//{{{
       var mm = com.modestmaps;
@@ -206,12 +187,15 @@ $.domReady(function () {
 
     // function for above click event to jump to a marker on the map
     jumpToMarker: function (event) {
-      var coordinate = window.map.modestmap.locationCoordinate({
+      var coordinate = this.mm.locationCoordinate({
           lat: this.model.get('coordinates')[1]
         , lon: this.model.get('coordinates')[0]
       });
 
-      Navigator.jumpToCoordinate(coordinate);
+      // easey interaction library for modestmaps
+      easey().map(this.mm)
+      .to(coordinate)
+      .zoom(this.maxZoomTo).optimal();
     }
   });
 
@@ -255,9 +239,9 @@ $.domReady(function () {
        * The additionally passend markerLetter ends up in
        * the FeatureListItemView as Options.markerLetter.
        */
-      _(this.collection.models).each(function(model, i){
+      _(this.collection.models).each(function(feature, i){
         var markerLetter = String.fromCharCode(letter+i);
-        var featureListItemView = new FeatureListItemView({model: model, markerLetter: markerLetter });
+        var featureListItemView = new FeatureListItemView({model: feature, markerLetter: markerLetter });
         var renderedTemplate = featureListItemView.render();
 
         // here it gets added to DOM
@@ -298,17 +282,20 @@ $.domReady(function () {
     }
 
   });
+  var FeatureCollection = Backbone.Collection.extend({
+      model: Feature
+  });
 
   var World = Backbone.Model.extend({
 
     initialize: function(){
       /*
-       * actual initialization and rendering of a mapView
+       * actual initialization and rendering of a Map
        */
 
       this.featureCollection = new FeatureCollection( );
-      this.view = new MapView({model: this});
-      this.view.render();
+      this.map = new Map({world: this});
+      this.map.render();
       // start rendering early maybe it works
       // asyncronous request to sync featurcollection
       //this.setFeatureCollection( );

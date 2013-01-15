@@ -41,34 +41,18 @@ $.domReady(function () {
    */
   var Feature = Backbone.Model.extend({
     initialize: function() {
-      this.bind("all", this.setLatLon);
+      this.setLatLon();
     },
+
     /*
      * helper method for setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
       var g = this.get('geometry');
       if( 'coordinates' in g && g.coordinates.length == 2 ) {
-      console.log(g.coordinates[1]);
         this.set({ lat: g.coordinates[1], lon: g.coordinates[0] });
       }
-    },
-
-    /*
-     * receives feature element of geoJSON and set attributes from it
-     */
-    setGeoJsonFeature: function(geoJsonFeature){
-      this.geoJsonFeature = geoJsonFeature;
-      this.set({
-        // array [lon, lon] from geoJSON Point
-        coordinates: geoJsonFeature.geometry.coordinates,
-        // object from geoJSON Feature
-        properties: geoJsonFeature.properties
-      });
-
-      //this.setLatLon();
     }
-
   });
 
 
@@ -105,7 +89,8 @@ $.domReady(function () {
       //$('#keel').append(renderedTemplate);
       var featureBoxView = new FeatureBoxView({collection: this.world.collection});
     },
-    renderBaseMap: function( opts ){//{{{
+
+    renderBaseMap: function( opts ){
       var mm = com.modestmaps;
       var modestmap = new mm.Map(document.getElementById('map'),
                                  new wax.mm.connector(opts.tileSet), null, [
@@ -129,8 +114,7 @@ $.domReady(function () {
       $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
       });
       return modestmap;
-    },//}}}
-
+    },
 
     renderOverlay: function(){
       // Add Overlay-Feature-List
@@ -147,11 +131,6 @@ $.domReady(function () {
         img.setAttribute('src', that.markerOptions.iconPath);
         return img;
       });
-
-
-//      // render all
-//      var featureBoxView = new featureBoxView({collection: map.featureCollection});
-//      featureBoxView.render();
 
 //      // display markers
 //      markerLayer.features(map.featureCollection.features);
@@ -210,13 +189,11 @@ $.domReady(function () {
     initialize: function(){
       var self = this;
       this.collection.on( 'reset', function( event, data ){
-console.log( {event: event, data: data });
         self.render( );
       });
     },
 
-    render: function(){//{{{
-console.log( 'onall' );
+    render: function(){
       var that = this;
       var letter = 97; // DEC value of ascii "a" for marker lettering
 
@@ -235,7 +212,7 @@ console.log( 'onall' );
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
       });
-    },//}}}
+    },
 
     updateCollection: function( featureCollection ){
       // FIXME: this is because we didnt fix above 
@@ -279,7 +256,6 @@ console.log( 'onall' );
         reqwest({
           url: window.globalOptions.baseMap.viewurl,
           success: function( response ) {
-console.log({ features: response });
             self.reset( response.features ); },
           failure: function( e ) {
             alert( e ); }

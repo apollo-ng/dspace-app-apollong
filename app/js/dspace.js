@@ -113,15 +113,15 @@ $.domReady(function () {
      */
     render: function(){
 
-      this.model.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
+      this.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
       // Add User View
       //var user = new User();
       //var userView = new UserView({model: this.model });
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
-
+      var featureBoxView = new FeatureBoxView({collection: this.model.featureCollection});
     },
-    renderBaseMap: function( opts ){
+    renderBaseMap: function( opts ){//{{{
       var mm = com.modestmaps;
       var modestmap = new mm.Map(document.getElementById('map'),
                                  new wax.mm.connector(opts.tileSet), null, [
@@ -146,9 +146,10 @@ $.domReady(function () {
       });
 console.log( {modestmap: modestmap } );
       return modestmap;
-    },
+    },//}}}
 
-    addOverlay: function(){
+
+    renderOverlay: function(){
       // Add Overlay-Feature-List
       var markerLayer = mapbox.markers.layer();
 
@@ -165,13 +166,13 @@ console.log( {modestmap: modestmap } );
       });
 
 
-      // render all
-      var featureListView = new FeatureListView({collection: map.featureCollection});
-      featureListView.render();
+//      // render all
+//      var featureBoxView = new featureBoxView({collection: map.featureCollection});
+//      featureBoxView.render();
 
-      // display markers
-      markerLayer.features(map.featureCollection.features);
-      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
+//      // display markers
+//      markerLayer.features(map.featureCollection.features);
+//      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
   });
@@ -218,10 +219,11 @@ console.log( {modestmap: modestmap } );
   /*
    * UI element with list of features
    */
-  var FeatureListView = Backbone.View.extend({
+  var FeatureBoxView = Backbone.View.extend({
     el: $('#overlay-feature-list'),
 
     initialize: function(){
+
       _.bindAll(this, 'render');
     },
 
@@ -281,12 +283,12 @@ console.log( {modestmap: modestmap } );
        * actual initialization and rendering of a mapView
        */
 
+      this.featureCollection = new FeatureCollection( );
       this.view = new MapView({model: this});
       this.view.render();
       // start rendering early maybe it works
       // asyncronous request to sync featurcollection
-      this.featureCollection = new FeatureCollection( );
-      this.setFeatureCollection( );
+      //this.setFeatureCollection( );
     },
 
     /*
@@ -305,8 +307,8 @@ console.log( {modestmap: modestmap } );
           //this.geoJson = response;
           self.featureCollection.add( response.features );
 
-//      var featureListView = new FeatureListView({collection: map.featureCollection});
-//      featureListView.render();
+//      var featureBoxView = new FeatureBoxView({collection: map.featureCollection});
+//      featureBoxView.render();
 
           var features = response.features;
 //          for(var i=0; i < features.length; i++) {

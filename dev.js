@@ -93,6 +93,13 @@ http.createServer(function(request, response) {
         return;
       }
 
+      // set MIME
+      var filetype = filename.split( '.' ).slice( -1 );
+      if( filetype == 'js' ) {
+        response.setHeader( 'Content-Type',  'text/javascript' ); }
+      else if( filetype == 'css' ) {
+        response.setHeader( 'Content-Type',  'text/css' ); }
+
       // set CORS
       response.setHeader('Access-Control-Allow-Origin',  "*");
       response.setHeader('Access-Control-Allow-Headers',  "X-Requested-With");

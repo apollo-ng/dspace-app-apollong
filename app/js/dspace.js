@@ -88,16 +88,11 @@ $.domReady(function () {
       // setup boundaries
       modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
 
-      // enable zoom control buttons
-      wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
-
       // show and zoom map
       modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
 
-      modestmap.addCallback('drawn', function(m)
-      {
-      $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
-      });
+      // FIXME add modestmap.addCallback('drawn', function(m){});
+
       return modestmap;
     },
 

@@ -45,10 +45,10 @@ $.domReady(function () {
      * helper method for setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
-      var g = this.get('geometry');
-console.log( this.toJSON );
-      if( 'coordinates' in g && g.coordinates.length == 2 ) {
-          this.set({ lat: g[1], lon: g[0] }); }
+      //var g = this.get('geometry');
+//console.log( this.toJSON );
+      //if( 'coordinates' in g && g.coordinates.length == 2 ) {
+          //this.set({ lat: g[1], lon: g[0] }); }
     },
 
     /*
@@ -107,24 +107,13 @@ console.log( this.toJSON );
    */
   var MapView = Backbone.View.extend({
 
-    initialize: function(){
-
-      //this.model.modestmap = this.renderBaseMap();
-      this.model.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
-      this.render( );
-
-      this.markerOptions = {
-        className: 'marker-image',
-        iconPath: 'icons/black-shield-a.png'
-      };
-    },
-
     /*
      * renders main map
      * FIXME: add support for multiple overlays
      */
     render: function(){
 
+      this.model.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
       // Add User View
       var user = new User();
       var userView = new UserView({model: this.model });
@@ -163,6 +152,10 @@ console.log( {modestmap: modestmap } );
       // Add Overlay-Feature-List
       var markerLayer = mapbox.markers.layer();
 
+      var markerOptions = {
+        className: 'marker-image',
+        iconPath: 'icons/black-shield-a.png'
+      };
       var that = this;
       markerLayer.factory(function(feature){
         var img = document.createElement('img');
@@ -203,7 +196,7 @@ console.log( {modestmap: modestmap } );
       templateData.markerLetter = this.options.markerLetter;
 
       $(this.el).html(this.template(templateData));
-      return this.el
+      return this.el;
     },
 
     events: {
@@ -276,7 +269,7 @@ console.log( {modestmap: modestmap } );
 
       $(this.el).html(this.template(userDataJSON));
 
-      return this.el
+      return this.el;
     }
 
   });
@@ -289,6 +282,7 @@ console.log( {modestmap: modestmap } );
        */
 
       this.view = new MapView({model: this});
+      this.view.render();
       // start rendering early maybe it works
       // asyncronous request to sync featurcollection
       this.featureCollection = new FeatureCollection( );

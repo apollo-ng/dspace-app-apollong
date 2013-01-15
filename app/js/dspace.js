@@ -77,20 +77,19 @@ $.domReady(function () {
     },
 
     /*
-     * renders main map
-     * FIXME: add support for multiple overlays
+     * renders the main map, 
      */
     render: function(){
 
       this.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
+      this.box = new FeatureBoxView( );
       // Add User View
       //var user = new User();
       //var userView = new UserView({model: this.model });
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
-      var featureBoxView = new FeatureBoxView({ collection: this.world.collections[0] });
-      this.overlay = new Overlay({collection: this.world.collections[0], world: this.world });
-      this.overlay2 = new Overlay({collection: this.world.collections[1], world: this.world });
+      this.overlay = new Overlay({ collection: this.world.collections[0], map: this });
+      this.overlay2 = new Overlay({ collection: this.world.collections[1], map: this });
     },
 
     renderBaseMap: function( opts ){
@@ -170,27 +169,22 @@ $.domReady(function () {
    */
   var FeatureBoxView = Backbone.View.extend({
     el: $('#overlay-feature-list'),
-    initialize: function(){
-      var self = this;
-      this.collection.on( 'reset', function( event, data ){
-        self.render( );
-      });
-    },
-
-    render: function(){
+    render: function( collection ){
       var that = this;
-      var letter = 97; // DEC value of ascii "a" for marker lettering
+      var lastletter = 122  // DEC value of ascii "a" to "z" for marker lettering
+      var letter = 97;
+
 
       /* Loop through each feature in the model
-       * using underscore each. Also a good exanple
-       * how to add more data to the view:
+       * example how to add more data to the view:
        *
        * The additionally passend markerLetter ends up in
        * the FeatuerBoxItemView as Options.markerLetter.
        */
-      _(this.collection.models).each(function(feature, i){
+      _(collection.models).each(function(feature, i){
+
         var markerLetter = String.fromCharCode(letter+i);
-        var featuerBoxItemView = new FeatuerBoxItemView({model: feature, markerLetter: markerLetter });
+        var featuerBoxItemView = new FeatuerBoxItemView({model: collection.models[i], markerLetter: markerLetter });
         var renderedTemplate = featuerBoxItemView.render();
 
         // here it gets added to DOM
@@ -205,11 +199,11 @@ $.domReady(function () {
    */ 
   var Overlay = Backbone.View.extend({
     initialize: function(){
-        this.world = this.options.world;
+        this.map = this.options.map;
         var self = this;
-console.log( { overlaycollection: this.collection });
         this.collection.on( 'reset', function( event, data ){
           self.render( );
+          self.map.box.render( self.collection );
         });
     },
     render: function(){
@@ -229,7 +223,7 @@ console.log( { overlaycollection: this.collection });
       // .extent() called to redraw map!
 console.log( { overlayevent: this.collection } );
       markerLayer.features(this.collection.toJSON());
-      this.world.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
+      this.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
   });

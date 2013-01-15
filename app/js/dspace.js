@@ -97,7 +97,8 @@ $.domReady(function () {
       this.featureBox = new FeatureBox( );
 
       // create StatusPanel
-      this.statusPanel = new StatusPanel({model: this.world.user });
+      // set statusPanel model to user
+      this.statusPanel = new StatusPanel({model: this.world.user, map: this });
       $('#keel').append(this.statusPanel.render());
 
       // set overlays
@@ -255,6 +256,7 @@ $.domReady(function () {
 
       // create convienience accessor
       this.user = this.model;
+      this.map = this.options.map;
 
       this.template = Handlebars.compile($('#statusPanel-template').html());
       //TODO listen to changes on model (User)

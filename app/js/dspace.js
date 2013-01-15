@@ -13,10 +13,16 @@ $.domReady(function () {
     },
 
     defaultFeatureCollection: {
-      viewurl: 'http://localhost:3333/dev-data.json',
-      viewurl2: 'http://localhost:3333/dev-data2.json',
-      //viewurl: '/places/_design/gc-utils/_list/geojson/all',
-      //viewurl2: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+
+      //local files with dev eerver
+      hackerspacesMunich: 'http://localhost:3333/hackerspaces-munich.json',
+      openwifiMunich: 'http://localhost:3333/openwifi-munich.json',
+
+      //local proxy
+      //hackerspacesMunich: '/places/_design/gc-utils/_list/geojson/all',
+
+      //public couchdb
+      //hackerspacesMunich: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
     },
 
     geolat:  48.115293,
@@ -272,9 +278,9 @@ $.domReady(function () {
     initialize: function(){
       this.collections = [];
       this.addFeatureCollection({ 
-            url: globalOptions.defaultFeatureCollection.viewurl });
+            url: globalOptions.defaultFeatureCollection.hackerspacesMunich });
       this.addFeatureCollection({ 
-            url: globalOptions.defaultFeatureCollection.viewurl2 });
+            url: globalOptions.defaultFeatureCollection.openwifiMunich });
 
       this.map = new Map({world: this});
       this.map.render();

@@ -48,8 +48,10 @@ watch('./app', function(filename) {
   console.log(filename);
   exec("cp -rf app/* build");
 });
+
+//FIXME change to test/fixtures
 watch('./test', function(filename) {
-  if( filename.match(/\/\./, '')) { 
+  if( filename.match(/\/\./, '')) {
     console.log('lock file '+ filename);
     return; }
   console.log(filename);

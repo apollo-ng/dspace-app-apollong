@@ -88,6 +88,7 @@ $.domReady(function () {
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
       var featureBoxView = new FeatureBoxView({collection: this.world.collection});
+      this.overlay = new Overlay({collection: this.world.collection, world: this.world });
     },
 
     renderBaseMap: function( opts ){
@@ -116,26 +117,6 @@ $.domReady(function () {
       return modestmap;
     },
 
-    renderOverlay: function(){
-      //
-      // Add Overlay-Feature-List
-      // mapbox lib NOT same as mm (modestmap)
-      var markerLayer = mapbox.markers.layer();
-
-      markerLayer.factory(function(feature){
-        var img = document.createElement('img');
-        img.className = 'marker-image';
-        img.setAttribute('src', 'icons/black-shield-a.png');
-        return img;
-      });
-
-      console.log(this.world.collection.toJSON());
-      // display markers
-      // .extent() called to redraw map!
-      markerLayer.features(this.world.collection.toJSON());
-      this.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
-
-    },
   });
 
   /*
@@ -221,6 +202,35 @@ $.domReady(function () {
       this.render( );
     }
 
+  });
+  var Overlay = Backbone.View.extend({
+    initialize: function(){
+        this.world = this.options.world;
+        var self = this;
+        this.collection.on( 'reset', function( event, data ){
+          self.render( );
+        });
+    },
+    render: function(){
+      //
+      // Add Overlay-Feature-List
+      // mapbox lib NOT same as mm (modestmap)
+      var markerLayer = mapbox.markers.layer();
+
+      markerLayer.factory(function(feature){
+        var img = document.createElement('img');
+        img.className = 'marker-image';
+        img.setAttribute('src', 'icons/black-shield-a.png');
+        return img;
+      });
+
+      console.log(this.world.collection.toJSON());
+      // display markers
+      // .extent() called to redraw map!
+      markerLayer.features(this.world.collection.toJSON());
+      this.world.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
+
+    },
   });
 
    /*

@@ -108,7 +108,11 @@ console.log( this.toJSON );
   var MapView = Backbone.View.extend({
 
     initialize: function(){
-      this.model.modestmap = this.renderBaseMap();
+
+      //this.model.modestmap = this.renderBaseMap();
+      this.model.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
+      this.render( );
+
       this.markerOptions = {
         className: 'marker-image',
         iconPath: 'icons/black-shield-a.png'
@@ -128,29 +132,30 @@ console.log( this.toJSON );
       $('#keel').append(renderedTemplate);
 
     },
-    renderBaseMap: function(){
+    renderBaseMap: function( opts ){
       var mm = com.modestmaps;
       var modestmap = new mm.Map(document.getElementById('map'),
-                                 new wax.mm.connector(globalOptions.tileSet), null, [
+                                 new wax.mm.connector(opts.tileSet), null, [
                                    easey_handlers.DragHandler(),
                                    easey_handlers.TouchHandler(),
                                    easey_handlers.MouseWheelHandler(),
                                    easey_handlers.DoubleClickHandler()
                                  ]);
 
-                                 // setup boundaries
-                                 modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
+      // setup boundaries
+      modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
 
-                                 // enable zoom control buttons
-                                 wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
+      // enable zoom control buttons
+      wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
 
-                                 // show and zoom map
-                                 modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
+      // show and zoom map
+      modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
 
-                                 modestmap.addCallback('drawn', function(m)
-                                                       {
-                                                         $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
-                                                       });
+      modestmap.addCallback('drawn', function(m)
+      {
+      $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
+      });
+console.log( {modestmap: modestmap } );
       return modestmap;
     },
 
@@ -176,28 +181,6 @@ console.log( this.toJSON );
       this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
-    renderOverlays: function(){
-      // Add Overlay-Feature-List
-      var markerLayer = mapbox.markers.layer();
-
-      var that = this;
-      markerLayer.factory(function(feature){
-        var img = document.createElement('img');
-        img.className = that.markerOptions.className;
-        img.setAttribute('src', that.markerOptions.iconPath);
-        return img;
-      });
-
-
-      // render all
-      var featureListView = new FeatureListView({collection: map.featureCollection});
-      featureListView.render();
-
-      // display markers
-      markerLayer.features(map.featureCollection.geoJson.features);
-      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
-
-    }
   });
 
   /*
@@ -298,7 +281,7 @@ console.log( this.toJSON );
 
   });
 
-  var World = Backbone.Model.extend({
+  var Map = Backbone.Model.extend({
 
     initialize: function(){
       /*
@@ -307,8 +290,8 @@ console.log( this.toJSON );
 
       this.view = new MapView({model: this});
       // start rendering early maybe it works
-      this.view.render( ); 
       // asyncronous request to sync featurcollection
+      this.featureCollection = new FeatureCollection( );
       this.setFeatureCollection( );
     },
 
@@ -324,10 +307,13 @@ console.log( this.toJSON );
         method: 'get',
         success: function( response ) {
             
-console.log( response );
 
           //this.geoJson = response;
-          that.featureCollection = new FeatureCollection( response.features );
+          that.featureCollection.add( response.features );
+
+//      var featureListView = new FeatureListView({collection: map.featureCollection});
+//      featureListView.render();
+
           var features = response.features;
 //          for(var i=0; i < features.length; i++) {
 //            feature = new Feature();
@@ -335,7 +321,7 @@ console.log( response );
 //            that.featureCollection.add(feature);
 //          };
 
-          that.view.addOverlay( );
+          //that.view.addOverlay( );
 
         },
         failure: function( e ) {

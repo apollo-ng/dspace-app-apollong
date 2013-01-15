@@ -1,39 +1,5 @@
 $.domReady(function () {
 
-  /*
-   * Display basemap with UI
-   */
-
-  var globalOptions = {
-
-    tileSet: {
-        tilejson: '1.0.0',
-        scheme: 'zxy',
-        tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
-    },
-
-    geoFeeds: [
-
-      //local files with dev eerver
-    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
-    { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json'}
-
-      //local proxy
-      //hackerspacesMunich: '/places/_design/gc-utils/_list/geojson/all',
-
-      //public couchdb
-      //hackerspacesMunich: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
-    ],
-
-    geolat:  48.115293,
-    geolon:  11.60218,
-    minZoom: 13,
-    maxZoom: 17,
-    defaultZoom: 12
-  };
-
-  window.globalOptions = globalOptions;
-
   //get packages from ender
   //FIXME document ex deoes order matter?
   var Backbone = require('backbone');
@@ -89,7 +55,7 @@ $.domReady(function () {
      */
     render: function(){
 
-      this.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
+      this.mm = this.renderBaseMap( {tileSet: this.world.globalOptions.tileSet });
 
       // create FeatureBox
       this.featureBox = new FeatureBox( );
@@ -109,6 +75,7 @@ $.domReady(function () {
     },
 
     renderBaseMap: function( opts ){
+      var globalOptions = this.world.globalOptions;
       var mm = com.modestmaps;
       var modestmap = new mm.Map(document.getElementById('map'),
                                  new wax.mm.connector(opts.tileSet), null, [
@@ -312,7 +279,7 @@ $.domReady(function () {
       this.collections = [];
 
       // FIXME proper way for setting initial set of overlays
-      _(globalOptions.geoFeeds).each(function(geoFeed){
+      _(this.globalOptions.geoFeeds).each(function(geoFeed){
         self.addFeatureCollection(geoFeed);
       });
 
@@ -335,6 +302,34 @@ $.domReady(function () {
       this.collections.push( featureCollection );
       return featureCollection;
     },
+
+    globalOptions: {
+
+      tileSet: {
+          tilejson: '1.0.0',
+          scheme: 'zxy',
+          tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
+      },
+
+      geoFeeds: [
+
+        //local files with dev eerver
+      { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
+      { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json'}
+
+        //local proxy
+        //hackerspacesMunich: '/places/_design/gc-utils/_list/geojson/all',
+
+        //public couchdb
+        //hackerspacesMunich: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+      ],
+
+      geolat:  48.115293,
+      geolon:  11.60218,
+      minZoom: 13,
+      maxZoom: 17,
+      defaultZoom: 12
+    }
   });
 
 

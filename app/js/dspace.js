@@ -39,16 +39,17 @@ $.domReady(function () {
    */
   var Feature = Backbone.Model.extend({
     initialize: function() {
-            this.setLatLon( );
+      this.bind("all", this.setLatLon);
     },
     /*
      * helper method for setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
-      //var g = this.get('geometry');
-//console.log( this.toJSON );
-      //if( 'coordinates' in g && g.coordinates.length == 2 ) {
-          //this.set({ lat: g[1], lon: g[0] }); }
+      var g = this.get('geometry');
+      if( 'coordinates' in g && g.coordinates.length == 2 ) {
+      console.log(g.coordinates[1]);
+        this.set({ lat: g.coordinates[1], lon: g.coordinates[0] });
+      }
     },
 
     /*
@@ -144,7 +145,6 @@ $.domReady(function () {
       {
       $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
       });
-console.log( {modestmap: modestmap } );
       return modestmap;
     },//}}}
 
@@ -245,7 +245,6 @@ console.log( {modestmap: modestmap } );
     },
 
     render: function(){//{{{
-console.log( {render: this.collection } );
       var that = this;
       var letter = 97; // DEC value of ascii "a" for marker lettering
 
@@ -268,7 +267,7 @@ console.log( {render: this.collection } );
 
     updateCollection: function( featureCollection ){
       // FIXME: this is because we didnt fix above 
-      this.collection.update( featureCollection.features ) 
+      this.collection.update( featureCollection.features );
       this.render( );
     }
 

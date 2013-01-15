@@ -168,15 +168,17 @@ $.domReady(function () {
 
     // function for above click event to jump to a marker on the map
     jumpToMarker: function (event) {
-      var coordinate = this.mm.locationCoordinate({
-          lat: this.model.get('coordinates')[1]
-        , lon: this.model.get('coordinates')[0]
-      });
+
+      var lat = this.model.get('geometry').coordinates[1];
+      var lon = this.model.get('geometry').coordinates[0];
+
+      var mm = world.map.mm;
+      var coordinate = mm.locationCoordinate({lat: lat, lon: lon});
 
       // easey interaction library for modestmaps
-      easey().map(this.mm)
+      easey().map(mm)
       .to(coordinate)
-      .zoom(this.maxZoomTo).optimal();
+      .zoom(17).optimal(); //FIXME globalOptions sage
     }
   });
 

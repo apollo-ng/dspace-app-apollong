@@ -204,6 +204,10 @@ clear: after;
   border-top:1px solid #888;
 }
 
+#statusPanel {
+  color: #eee;
+}
+
 #info {
 color: #fafafa;
 }

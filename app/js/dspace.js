@@ -88,11 +88,12 @@ $.domReady(function () {
       // create FeatureBox
       this.box = new FeatureBoxView( );
 
-      // create control panel
-      //this.user = new User();
-      //var statusPanel = new StatusView({model: this.user });
-      //var renderedTemplate = statusPanel.render();
-      //$('#keel').append(renderedTemplate);
+      // create StatusPanel
+      this.user = new User();
+      this.statusPanel = new StatusPanel({model: this.user });
+      $('#keel').append(this.statusPanel.render());
+
+      // set overlays
       var hackerspacesMunich = new Overlay({ collection: this.world.collections[0], map: this });
       var openwifiMunich = new Overlay({ collection: this.world.collections[1], map: this });
     },
@@ -240,7 +241,9 @@ $.domReady(function () {
 
     initialize: function(){
       _.bindAll(this, 'render');
-      this.template = Handlebars.compile($('#userData-template').html());
+      this.template = Handlebars.compile($('#statusPanel-template').html());
+      //TODO listen to changes on model (User)
+      //TODO listen on map changing it's center
     },
 
     render: function(){

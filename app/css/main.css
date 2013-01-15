@@ -116,7 +116,7 @@ h3	 { font-size: 18px; color: #f888; }
 }
 
 
-#overlay-feature-list {
+#featureBox {
   background: rgb(255,255,255);
   background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,0.4) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,0.4)));
@@ -137,7 +137,7 @@ h3	 { font-size: 18px; color: #f888; }
 }
 
 
-.overlay-feature {
+.featureBoxItem { //set from backbone
   list-style-type: none;
   text-align: left;
   border:1px solid #bbb;
@@ -156,30 +156,30 @@ background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1
    cursor: pointer;
 }
 
-.overlay-feature h3 {
+.featureBoxItem h3 {
 height: 30px; line-height: 38px; padding-left: 45px;
 color:#41403d;
 text-shadow: 0px -1px #000, 0px 1px #fff;
 border: 0px solid red;
 }
 
-.overlay-feature-description {
+.featureBoxItem-description {
 font-size: 12px;
 height: 14px; width: 230px; text-align: left; padding-left: 46px;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
 }
 
-.overlay-feature-details {
+.featureBoxItem-details {
 height: 40px; width: 230px; text-align: right;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
 }
 
-.overlay-feature-distance {
+.featureBoxItem-distance {
 float: left;
 font-size: 10px;
 padding-left: 12px;
 text-align: center;
 }
 
-.overlay-feature-position {
+.featureBoxItem-position {
 float: right;
 font-size: 10px;
 padding-top: 7px;

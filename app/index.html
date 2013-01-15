@@ -29,8 +29,7 @@
 
   <div id='zoom-indicator'></div>
 
-  <div id='overlay-feature-list'>
-   <h2 id='overlay-name'></h2>
+  <div id='featureBox'>
   </div>
 
   <div id='map'></div>
@@ -41,17 +40,15 @@
 
   <div id='keel'></div>
 
-  <script id="overlay-feature-info-template" type="text/x-handlebars-template">
-   <div class="overlay-feature">
+  <script id="featureBoxItem-template" type="text/x-handlebars-template">
     <div class="black-shield-{{markerLetter}}" ><h3>{{properties.title}}</h3></div>
-    <div class="overlay-feature-details">
-     <div class="overlay-feature-description">{{properties.description}}</div>
+    <div class="featureBoxItem-details">
+     <div class="featureBoxItem-description">{{properties.description}}</div>
      <div class="clear-after">
-      <div class="overlay-feature-distance">5<br />km</div>
-      <div class="overlay-feature-position">LAT: {{lat}} LON: {{lon}}</div>
+      <div class="featureBoxItem-distance">5<br />km</div>
+      <div class="featureBoxItem-position">LAT: {{lat}} LON: {{lon}}</div>
      </div>
     </div>
-   </div>
   </script>
 
   <script id="statusPanel-template" type="text/x-handlebars-template">

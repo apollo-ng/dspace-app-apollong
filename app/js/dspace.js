@@ -130,11 +130,11 @@ $.domReady(function () {
    * UI element with information about feature
    */
   var FeatureBoxItem = Backbone.View.extend({
-    className: 'overlay-feature-info', //FIXME: remove confusing overlays PLEASE
+    className: 'featureBoxItem',
 
     initialize: function(){
       _.bindAll(this, 'render');
-      this.template = Handlebars.compile($('#overlay-feature-info-template').html());
+      this.template = Handlebars.compile($('#featureBoxItem-template').html());
     },
 
     render: function(){
@@ -174,7 +174,7 @@ $.domReady(function () {
    * UI element with list of features
    */
   var FeatureBox = Backbone.View.extend({
-    el: $('#overlay-feature-list'),
+    el: $('#featureBox'),
     render: function( collection ){
       var that = this;
       var lastletter = 122;  // DEC value of ascii "a" to "z" for marker lettering
@@ -214,7 +214,7 @@ $.domReady(function () {
     },
     render: function(){
       //
-      // Add Overlay-Feature-List
+      // Add markers
       // mapbox lib NOT same as mm (modestmap)
       var markerLayer = mapbox.markers.layer();
 

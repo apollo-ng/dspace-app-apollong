@@ -115,10 +115,10 @@ $.domReady(function () {
 
       this.model.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
       // Add User View
-      var user = new User();
-      var userView = new UserView({model: this.model });
-      var renderedTemplate = userView.render();
-      $('#keel').append(renderedTemplate);
+      //var user = new User();
+      //var userView = new UserView({model: this.model });
+      //var renderedTemplate = userView.render();
+      //$('#keel').append(renderedTemplate);
 
     },
     renderBaseMap: function( opts ){
@@ -265,7 +265,7 @@ console.log( {modestmap: modestmap } );
       var userDataJSON = this.model.toJSON();
 
       // add map center
-      userDataJSON.mapCenter = this.model.modestmap.getCenter();
+      //FIXME:userDataJSON.mapCenter = this.model.modestmap.getCenter();
 
       $(this.el).html(this.template(userDataJSON));
 
@@ -293,7 +293,7 @@ console.log( {modestmap: modestmap } );
      * gets geoJSON and add features from it to collection
      */
     setFeatureCollection: function( ){
-      var that = this;
+      var self = this;
       // request collection
       reqwest({
         url: window.globalOptions.baseMap.viewurl,
@@ -303,7 +303,7 @@ console.log( {modestmap: modestmap } );
             
 
           //this.geoJson = response;
-          that.featureCollection.add( response.features );
+          self.featureCollection.add( response.features );
 
 //      var featureListView = new FeatureListView({collection: map.featureCollection});
 //      featureListView.render();

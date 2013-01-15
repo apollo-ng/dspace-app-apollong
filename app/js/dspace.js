@@ -123,7 +123,7 @@ $.domReady(function () {
    * UI element with information about feature
    */
   var FeatuerBoxItemView = Backbone.View.extend({
-    className: 'overlay-feature-info',
+    className: 'overlay-feature-info', //FIXME: remove confusing overlays PLEASE
 
     initialize: function(){
       _.bindAll(this, 'render');
@@ -194,15 +194,9 @@ $.domReady(function () {
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
       });
-    },
-
-    updateCollection: function( featureCollection ){
-      // FIXME: this is because we didnt fix above 
-      this.collection.update( featureCollection.features );
-      this.render( );
     }
-
   });
+
   var Overlay = Backbone.View.extend({
     initialize: function(){
         this.world = this.options.world;
@@ -224,7 +218,6 @@ $.domReady(function () {
         return img;
       });
 
-      console.log(this.world.collection.toJSON());
       // display markers
       // .extent() called to redraw map!
       markerLayer.features(this.world.collection.toJSON());

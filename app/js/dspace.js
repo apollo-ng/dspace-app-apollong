@@ -36,22 +36,29 @@ $.domReady(function () {
   });
 
   /*
-   * main UI logic for global viewport
+   * main UI logic for the Map
    */
   var Map = Backbone.View.extend({
 
     initialize: function(){
-        /*
+        /**
          * to use with map.world FIXME
          */
         this.world = this.options.world;
 
-        // to keep track on overlays
+        /**
+         * stores config passed from world
+         */
+        this.config = this.options.config;
+
+        /**
+         * to keep track on overlays
+         */
         this.overlays = [];
     },
 
-    /*
-     * renders the main map, 
+    /**
+     * renders the map
      */
     render: function(){
 
@@ -79,19 +86,20 @@ $.domReady(function () {
      * creates frame using ModestMaps library
      */
     createFrame: function(){
-      var globalOptions = this.world.globalOptions;
       var modestmaps = com.modestmaps;
 
-      var template = this.world.globalOptions.tileSet.template; //FIXME
-      var layer = new MM.TemplatedLayer(template);
+      var config = this.config;
+
+      var template = config.tileSet.template;
+      var layer = new MM.TemplatedLayer(template); //FIXME
 
       var modestmap = new modestmaps.Map('map', layer);
 
       // setup boundaries
-      modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
-
+      modestmap.setZoomRange(config.minZoom, config.maxZoom);
+      var location = new modestmaps.Location(config.geolat, config.geolon);
       // show and zoom map
-      modestmap.setCenterZoom(new modestmaps.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
+      modestmap.setCenterZoom(location, config.defaultZoom);
 
       // FIXME add modestmap.addCallback('drawn', function(m){});
 
@@ -111,7 +119,7 @@ $.domReady(function () {
       });
       easey().map(self.frame)
       .to(mmCoordinate)
-      .zoom(this.world.globalOptions.maxZoom).optimal(); //FIXME globalOptions sage
+      .zoom(this.options.maxZoom).optimal();
     },
 
     /**
@@ -132,6 +140,7 @@ $.domReady(function () {
     initialize: function(){
       _.bindAll(this, 'render');
       this.map = this.options.map;
+      console.log(this.map);
       this.template = Handlebars.compile($('#featureBoxItem-template').html());
     },
 
@@ -155,7 +164,8 @@ $.domReady(function () {
      * calls map to jump to its Feature
      */
     jumpMap: function( event ){
-      window.world.map.jumpToFeature(this.model); //FIXME !!!
+      console.log(this.map);
+      this.map.jumpToFeature(this.model); //FIXME !!!
     }
   });
 
@@ -291,7 +301,7 @@ $.domReady(function () {
       /**
        * create Map
        */
-      this.map = new Map({world: this});
+      this.map = new Map({world: this, config: this.mapConfig});
       this.map.render();
     },
 
@@ -310,10 +320,6 @@ $.domReady(function () {
 
     globalOptions: {
 
-      tileSet: {
-          template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
-      },
-
       geoFeeds: [
 
         //local files with dev eerver
@@ -326,7 +332,13 @@ $.domReady(function () {
         //public couchdb
         //hackerspacesMunich: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
       ],
+    },
 
+    mapConfig: {
+
+      tileSet: {
+          template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
+      },
       geolat:  48.115293,
       geolon:  11.60218,
       minZoom: 13,
@@ -337,10 +349,13 @@ $.domReady(function () {
 
 
   /*
-   * creating single instance of Map model for global logic
-   * for now attaching it to window
+   * BIG BANG!
    */
   var world = new World();
+
+  /**
+   * for ease of debugging sticking it to window
+   */
   window.world = world; //FIXME: unbind!!
 
 

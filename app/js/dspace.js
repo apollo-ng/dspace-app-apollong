@@ -63,7 +63,12 @@ $.domReady(function () {
    * Add basic user model
    */
   var User = Backbone.Model.extend({
-
+    initialize: function() {
+      this.world = this.get('world');
+    }
+      // add map center ???
+      //FIXME
+      //userDataJSON.mapCenter = this.user.world.map.mm.getCenter();
   });
 
   /*
@@ -92,8 +97,7 @@ $.domReady(function () {
       this.featureBox = new FeatureBox( );
 
       // create StatusPanel
-      this.user = new User();
-      this.statusPanel = new StatusPanel({model: this.user });
+      this.statusPanel = new StatusPanel({model: this.world.user });
       $('#keel').append(this.statusPanel.render());
 
       // set overlays
@@ -248,6 +252,10 @@ $.domReady(function () {
 
     initialize: function(){
       _.bindAll(this, 'render');
+
+      // create convienience accessor
+      this.user = this.model;
+
       this.template = Handlebars.compile($('#statusPanel-template').html());
       //TODO listen to changes on model (User)
       //TODO listen on map changing it's center
@@ -255,14 +263,7 @@ $.domReady(function () {
 
     render: function(){
 
-      // temporary userData simulation, should come from user model in backbone
-      var userDataJSON = this.model.toJSON();
-
-      // add map center
-      //FIXME:userDataJSON.mapCenter = this.model.modestmap.getCenter();
-
-      $(this.el).html(this.template(userDataJSON));
-
+      $(this.el).html(this.template(this.user.toJSON()));
       return this.el;
     }
 
@@ -285,12 +286,20 @@ $.domReady(function () {
     });
 
   var World = Backbone.Model.extend({
-    /* initialisation of collections 
-     * creates and renders the Map
+    /*
+     * Genesis ;)
      */
     initialize: function(){
       var self = this;
 
+      /**
+       * create User
+       */
+      this.user = new User({world: this});
+
+      /**
+       * create collections of FeatureCollection
+       */
       this.collections = [];
 
       // FIXME proper way for setting initial set of overlays
@@ -298,6 +307,9 @@ $.domReady(function () {
         self.addFeatureCollection(geoFeed);
       });
 
+      /**
+       * create Map
+       */
       this.map = new Map({world: this});
       this.map.render();
     },

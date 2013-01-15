@@ -12,18 +12,18 @@ $.domReady(function () {
         tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
-    defaultFeatureCollection: {
+    featureCollections: [
 
       //local files with dev eerver
-      hackerspacesMunich: 'http://localhost:3333/hackerspaces-munich.json',
-      openwifiMunich: 'http://localhost:3333/openwifi-munich.json',
+    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
+    { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json'}
 
       //local proxy
       //hackerspacesMunich: '/places/_design/gc-utils/_list/geojson/all',
 
       //public couchdb
       //hackerspacesMunich: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
-    },
+    ],
 
     geolat:  48.115293,
     geolon:  11.60218,
@@ -76,6 +76,9 @@ $.domReady(function () {
          * to use with map.world FIXME
          */
         this.world = this.options.world;
+
+        // to keep track on overlays
+        this.overlays = [];
     },
 
     /*
@@ -94,8 +97,12 @@ $.domReady(function () {
       $('#keel').append(this.statusPanel.render());
 
       // set overlays
-      var hackerspacesMunich = new Overlay({ collection: this.world.collections[0], map: this });
-      var openwifiMunich = new Overlay({ collection: this.world.collections[1], map: this });
+      var self = this;
+
+      _(this.world.collections).each(function(featureCollection){
+        var overlay = new Overlay({ collection: featureCollection, map: self });
+        self.overlays.push(overlay);
+      });
     },
 
     renderBaseMap: function( opts ){
@@ -282,11 +289,14 @@ $.domReady(function () {
      * creates and renders the Map
      */
     initialize: function(){
+      var self = this;
+
       this.collections = [];
-      this.addFeatureCollection({ 
-            url: globalOptions.defaultFeatureCollection.hackerspacesMunich });
-      this.addFeatureCollection({ 
-            url: globalOptions.defaultFeatureCollection.openwifiMunich });
+
+      // FIXME proper way for setting initial set of overlays
+      _(globalOptions.featureCollections).each(function(featureCollection){
+        self.addFeatureCollection({ url: featureCollection.url });
+      });
 
       this.map = new Map({world: this});
       this.map.render();

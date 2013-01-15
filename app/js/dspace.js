@@ -30,6 +30,8 @@ $.domReady(function () {
 
   //get packages from ender
   var Backbone = require('backbone');
+  Backbone.emulateHTTP = true;
+
   var _ = require('underscore');
 
 
@@ -39,35 +41,18 @@ $.domReady(function () {
    */
   var Feature = Backbone.Model.extend({
     initialize: function() {
-        if( this.attributes.length ) {
-console.log( 'helo' );
-            this.setLatLon( );
-        }
+      this.setLatLon();
     },
+
     /*
      * helper method for setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
       var g = this.get('geometry');
       if( 'coordinates' in g && g.coordinates.length == 2 ) {
-          this.set({ lat: g[1], lon: g[0] }); }
-    },
-
-    /*
-     * receives feature element of geoJSON and set attributes from it
-     */
-    setGeoJsonFeature: function(geoJsonFeature){
-      this.geoJsonFeature = geoJsonFeature;
-      this.set({
-        // array [lon, lon] from geoJSON Point
-        coordinates: geoJsonFeature.geometry.coordinates,
-        // object from geoJSON Feature
-        properties: geoJsonFeature.properties
-      });
-
-      //this.setLatLon();
+        this.set({ lat: g.coordinates[1], lon: g.coordinates[0] });
+      }
     }
-
   });
 
 
@@ -78,44 +63,16 @@ console.log( 'helo' );
 
   });
 
-
-   /*
-   * collection of geographical featues
-   * with option to set from geoJSON FeatureCollection
-   */
-  var FeatureCollection = Backbone.Collection.extend({
-    model: Feature,
-  });
-
-  var Navigator = {
-
-    maxZoomTo: window.globalOptions.maxZoom,
-
-    /*
-     * moves vieport to given coordinate
-     * expects map.locationCoordinate
-     */
-    jumpToCoordinate: function(coordinate){
-
-      // easey interaction library for modestmaps
-      easey().map(window.map.modestmap)
-      .to(coordinate)
-      .zoom(this.maxZoomTo).optimal();
-    }
-  };
-
   /*
    * main UI logic for global viewport
    */
-  var MapView = Backbone.View.extend({
+  var Map = Backbone.View.extend({
 
     initialize: function(){
-      this.model = window.map;
-      this.model.modestmap = this.renderBaseMap();
-      this.markerOptions = {
-        className: 'marker-image',
-        iconPath: 'icons/black-shield-a.png'
-      };
+        /*
+         * to use with map.world FIXME
+         */
+        this.world = this.options.world;
     },
 
     /*
@@ -124,43 +81,49 @@ console.log( 'helo' );
      */
     render: function(){
 
+      this.mm = this.renderBaseMap( {tileSet: globalOptions.tileSet });
       // Add User View
-      var user = new User();
-      var userView = new UserView({model: user});
-      var renderedTemplate = userView.render();
-      $('#keel').append(renderedTemplate);
-
+      //var user = new User();
+      //var userView = new UserView({model: this.model });
+      //var renderedTemplate = userView.render();
+      //$('#keel').append(renderedTemplate);
+      var featureBoxView = new FeatureBoxView({collection: this.world.collection});
     },
-    renderBaseMap: function(){
+
+    renderBaseMap: function( opts ){
       var mm = com.modestmaps;
       var modestmap = new mm.Map(document.getElementById('map'),
-                                 new wax.mm.connector(globalOptions.tileSet), null, [
+                                 new wax.mm.connector(opts.tileSet), null, [
                                    easey_handlers.DragHandler(),
                                    easey_handlers.TouchHandler(),
                                    easey_handlers.MouseWheelHandler(),
                                    easey_handlers.DoubleClickHandler()
                                  ]);
 
-                                 // setup boundaries
-                                 modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
+      // setup boundaries
+      modestmap.setZoomRange(globalOptions.minZoom, globalOptions.maxZoom);
 
-                                 // enable zoom control buttons
-                                 wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
+      // enable zoom control buttons
+      wax.mm.zoomer (modestmap, globalOptions.tileSet).appendTo(modestmap.parent);
 
-                                 // show and zoom map
-                                 modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
+      // show and zoom map
+      modestmap.setCenterZoom(new mm.Location(globalOptions.geolat, globalOptions.geolon), globalOptions.defaultZoom);
 
-                                 modestmap.addCallback('drawn', function(m)
-                                                       {
-                                                         $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
-                                                       });
+      modestmap.addCallback('drawn', function(m)
+      {
+      $('#zoom-indicator').html('ZOOM ' + m.getZoom().toString().substring(0,2));
+      });
       return modestmap;
     },
 
-    addOverlay: function(){
+    renderOverlay: function(){
       // Add Overlay-Feature-List
       var markerLayer = mapbox.markers.layer();
 
+      var markerOptions = {
+        className: 'marker-image',
+        iconPath: 'icons/black-shield-a.png'
+      };
       var that = this;
       markerLayer.factory(function(feature){
         var img = document.createElement('img');
@@ -169,44 +132,17 @@ console.log( 'helo' );
         return img;
       });
 
-
-      // render all
-      var featureListView = new FeatureListView({collection: map.featureCollection});
-      featureListView.render();
-
-      // display markers
-      markerLayer.features(map.featureCollection.features);
-      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
+//      // display markers
+//      markerLayer.features(map.featureCollection.features);
+//      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
-    renderOverlays: function(){
-      // Add Overlay-Feature-List
-      var markerLayer = mapbox.markers.layer();
-
-      var that = this;
-      markerLayer.factory(function(feature){
-        var img = document.createElement('img');
-        img.className = that.markerOptions.className;
-        img.setAttribute('src', that.markerOptions.iconPath);
-        return img;
-      });
-
-
-      // render all
-      var featureListView = new FeatureListView({collection: map.featureCollection});
-      featureListView.render();
-
-      // display markers
-      markerLayer.features(map.featureCollection.geoJson.features);
-      this.model.modestmap.addLayer(markerLayer).setExtent(markerLayer.extent());
-
-    }
   });
 
   /*
    * UI element with information about feature
    */
-  var FeatureListItemView = Backbone.View.extend({
+  var FeatuerBoxItemView = Backbone.View.extend({
     className: 'overlay-feature-info',
 
     initialize: function(){
@@ -223,7 +159,7 @@ console.log( 'helo' );
       templateData.markerLetter = this.options.markerLetter;
 
       $(this.el).html(this.template(templateData));
-      return this.el
+      return this.el;
     },
 
     events: {
@@ -232,12 +168,15 @@ console.log( 'helo' );
 
     // function for above click event to jump to a marker on the map
     jumpToMarker: function (event) {
-      var coordinate = window.map.modestmap.locationCoordinate({
+      var coordinate = this.mm.locationCoordinate({
           lat: this.model.get('coordinates')[1]
         , lon: this.model.get('coordinates')[0]
       });
 
-      Navigator.jumpToCoordinate(coordinate);
+      // easey interaction library for modestmaps
+      easey().map(this.mm)
+      .to(coordinate)
+      .zoom(this.maxZoomTo).optimal();
     }
   });
 
@@ -245,11 +184,13 @@ console.log( 'helo' );
   /*
    * UI element with list of features
    */
-  var FeatureListView = Backbone.View.extend({
+  var FeatureBoxView = Backbone.View.extend({
     el: $('#overlay-feature-list'),
-
     initialize: function(){
-      _.bindAll(this, 'render');
+      var self = this;
+      this.collection.on( 'reset', function( event, data ){
+        self.render( );
+      });
     },
 
     render: function(){
@@ -261,16 +202,22 @@ console.log( 'helo' );
        * how to add more data to the view:
        *
        * The additionally passend markerLetter ends up in
-       * the FeatureListItemView as Options.markerLetter.
+       * the FeatuerBoxItemView as Options.markerLetter.
        */
-      _(this.collection.models).each(function(model, i){
+      _(this.collection.models).each(function(feature, i){
         var markerLetter = String.fromCharCode(letter+i);
-        var featureListItemView = new FeatureListItemView({model: model, markerLetter: markerLetter });
-        var renderedTemplate = featureListItemView.render();
+        var featuerBoxItemView = new FeatuerBoxItemView({model: feature, markerLetter: markerLetter });
+        var renderedTemplate = featuerBoxItemView.render();
 
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
       });
+    },
+
+    updateCollection: function( featureCollection ){
+      // FIXME: this is because we didnt fix above 
+      this.collection.update( featureCollection.features );
+      this.render( );
     }
 
   });
@@ -292,59 +239,42 @@ console.log( 'helo' );
       var userDataJSON = this.model.toJSON();
 
       // add map center
-      userDataJSON.mapCenter = window.map.modestmap.getCenter();
+      //FIXME:userDataJSON.mapCenter = this.model.modestmap.getCenter();
 
       $(this.el).html(this.template(userDataJSON));
 
-      return this.el
+      return this.el;
     }
 
   });
+  var FeatureCollection = Backbone.Collection.extend({
+      model: Feature,
+      url: function(){
+        return 'http://localhost:3333/dev-data.json'; },
+      sync: function(){
+        var self = this;
+        reqwest({
+          url: window.globalOptions.baseMap.viewurl,
+          success: function( response ) {
+            self.reset( response.features ); },
+          failure: function( e ) {
+            alert( e ); }
+        });
+      }
+    });
 
-  var Map = Backbone.Model.extend({
+  var World = Backbone.Model.extend({
 
     initialize: function(){
       /*
-       * actual initialization and rendering of a mapView
+       * actual initialization and rendering of a Map
        */
-      this.view = new MapView();
-      // start rendering early maybe it works
-      this.view.render( ); 
-      // asyncronous request to sync featurcollection
-      this.setFeatureCollection( );
-    },
 
-    /*
-     * gets geoJSON and add features from it to collection
-     */
-    setFeatureCollection: function( ){
-      var that = this;
-      // request collection
-      reqwest({
-        url: window.globalOptions.baseMap.viewurl,
-        type: 'json',
-        method: 'get',
-        success: function( response ) {
-            
-console.log( response );
+      this.collection = new FeatureCollection( );
+      this.collection.sync( );
 
-          //this.geoJson = response;
-          that.featureCollection = new FeatureCollection( response.features );
-          var features = response.features;
-//          for(var i=0; i < features.length; i++) {
-//            feature = new Feature();
-//            feature.setGeoJsonFeature( features[i]); 
-//            that.featureCollection.add(feature);
-//          };
-
-          that.view.addOverlay( );
-
-        },
-        failure: function( e ) {
-          alert( e );
-        }
-      });
-
+      this.map = new Map({world: this});
+      this.map.render();
     }
   });
 
@@ -353,11 +283,8 @@ console.log( response );
    * creating single instance of Map model for global logic
    * for now attaching it to window
    */
-  var map = new Map();
-  window.map = map;
-
-
-
+  var world = new World();
+  window.world = world; //FIXME: unbind!!
 
 
 });

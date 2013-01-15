@@ -12,10 +12,10 @@ $.domReady(function () {
         tiles: ['http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{z}/{x}/{y}.png']
     },
 
-    baseMap: {
+    defaultFeatureCollection: {
       viewurl: 'http://localhost:3333/dev-data.json',
       //viewurl: '/places/_design/gc-utils/_list/geojson/all',
-      //viewurl: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+      viewurl2: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
     },
 
     geolat:  48.115293,
@@ -87,8 +87,8 @@ $.domReady(function () {
       //var userView = new UserView({model: this.model });
       //var renderedTemplate = userView.render();
       //$('#keel').append(renderedTemplate);
-      var featureBoxView = new FeatureBoxView({collection: this.world.collection});
-      this.overlay = new Overlay({collection: this.world.collection, world: this.world });
+      var featureBoxView = new FeatureBoxView({ collection: this.world.collections[0] });
+      this.overlay = new Overlay({collection: this.world.collections[0], world: this.world });
     },
 
     renderBaseMap: function( opts ){
@@ -197,6 +197,10 @@ $.domReady(function () {
     }
   });
 
+  /* uses collection of Type FeatureCollection
+   * and binds to its reset events.
+   * gets a new marker layer from mapbox 
+   */ 
   var Overlay = Backbone.View.extend({
     initialize: function(){
         this.world = this.options.world;
@@ -220,7 +224,7 @@ $.domReady(function () {
 
       // display markers
       // .extent() called to redraw map!
-      markerLayer.features(this.world.collection.toJSON());
+      markerLayer.features(this.world.collections[0].toJSON());
       this.world.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
@@ -253,12 +257,10 @@ $.domReady(function () {
   });
   var FeatureCollection = Backbone.Collection.extend({
       model: Feature,
-      url: function(){
-        return 'http://localhost:3333/dev-data.json'; },
       sync: function(){
         var self = this;
         reqwest({
-          url: window.globalOptions.baseMap.viewurl,
+          url: this.url,
           success: function( response ) {
             self.reset( response.features ); },
           failure: function( e ) {
@@ -273,13 +275,26 @@ $.domReady(function () {
       /*
        * actual initialization and rendering of a Map
        */
+      this.collections = [];
 
-      this.collection = new FeatureCollection( );
-      this.collection.sync( );
+      this.addFeatureCollection({ 
+            url: globalOptions.defaultFeatureCollection.viewurl });
+      this.addFeatureCollection({ 
+            url: globalOptions.defaultFeatureCollection.viewurl2 });
 
       this.map = new Map({world: this});
       this.map.render();
-    }
+    },
+    addFeatureCollection: function( opts ){
+console.log({ locationspushopts: opts });
+      var features = new FeatureCollection( );
+      features.url = opts.url;
+      features.sync( );
+
+      this.collections.push( features );
+console.log({ locationspush: this.collections });
+      return features;
+    },
   });
 
 

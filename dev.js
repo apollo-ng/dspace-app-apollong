@@ -7,7 +7,7 @@ console.log('creating ***TEMPORARY*** build dir');
 shell.mkdir('build');
 
 console.log('copying dev data');
-shell.cp('test/dev-data.json', 'build/');
+shell.cp('test/*', 'build/');
 
 console.log('copying design');
 shell.cp('-rf', 'design/*', 'build/');

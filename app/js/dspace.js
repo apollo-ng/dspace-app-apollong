@@ -14,8 +14,9 @@ $.domReady(function () {
 
     defaultFeatureCollection: {
       viewurl: 'http://localhost:3333/dev-data.json',
+      viewurl2: 'http://localhost:3333/dev-data2.json',
       //viewurl: '/places/_design/gc-utils/_list/geojson/all',
-      viewurl2: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
+      //viewurl2: 'http://dspace.ruebezahl.cc:5966/places/_design/gc-utils/_list/geojson/all',
     },
 
     geolat:  48.115293,
@@ -89,6 +90,7 @@ $.domReady(function () {
       //$('#keel').append(renderedTemplate);
       var featureBoxView = new FeatureBoxView({ collection: this.world.collections[0] });
       this.overlay = new Overlay({collection: this.world.collections[0], world: this.world });
+      this.overlay2 = new Overlay({collection: this.world.collections[1], world: this.world });
     },
 
     renderBaseMap: function( opts ){
@@ -205,6 +207,7 @@ $.domReady(function () {
     initialize: function(){
         this.world = this.options.world;
         var self = this;
+console.log( { overlaycollection: this.collection });
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
@@ -224,7 +227,8 @@ $.domReady(function () {
 
       // display markers
       // .extent() called to redraw map!
-      markerLayer.features(this.world.collections[0].toJSON());
+console.log( { overlayevent: this.collection } );
+      markerLayer.features(this.collection.toJSON());
       this.world.map.mm.addLayer(markerLayer).setExtent(markerLayer.extent());
 
     },
@@ -283,16 +287,16 @@ $.domReady(function () {
             url: globalOptions.defaultFeatureCollection.viewurl2 });
 
       this.map = new Map({world: this});
+console.log({ foo: this.map });
+
       this.map.render();
     },
     addFeatureCollection: function( opts ){
-console.log({ locationspushopts: opts });
       var features = new FeatureCollection( );
       features.url = opts.url;
       features.sync( );
 
       this.collections.push( features );
-console.log({ locationspush: this.collections });
       return features;
     },
   });

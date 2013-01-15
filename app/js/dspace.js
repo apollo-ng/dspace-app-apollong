@@ -221,13 +221,31 @@ console.log( {modestmap: modestmap } );
    */
   var FeatureBoxView = Backbone.View.extend({
     el: $('#overlay-feature-list'),
+    url: 'http://localhost:3333/dev-data.json',
 
     initialize: function(){
+      // FIXME: this would be the way to go
+      //this.collection.sync( );
+      //_.bindAll(this, 'render');
+      var self = this;
+      reqwest({
+        url: window.globalOptions.baseMap.viewurl,
+        type: 'json',
+        method: 'get',
+        success: function( response ) {
+            self.updateCollection( response );
+        },
+        failure: function( e ) {
+          alert( e );
+        }
+      });
 
-      _.bindAll(this, 'render');
+
+
     },
 
-    render: function(){
+    render: function(){//{{{
+console.log( {render: this.collection } );
       var that = this;
       var letter = 97; // DEC value of ascii "a" for marker lettering
 
@@ -246,6 +264,12 @@ console.log( {modestmap: modestmap } );
         // here it gets added to DOM
         $(that.el).append(renderedTemplate);
       });
+    },//}}}
+
+    updateCollection: function( featureCollection ){
+      // FIXME: this is because we didnt fix above 
+      this.collection.update( featureCollection.features ) 
+      this.render( );
     }
 
   });

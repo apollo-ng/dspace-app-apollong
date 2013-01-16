@@ -427,27 +427,3 @@ var DSpace = function(){
 
 };
 
-/**
- * BIG BANG!
- */
-$.domReady(function (){
-
-  var world = new DSpace();
-  world.init();
-
-});
-
-
-
-/*
- *  Handlebar Template Helper Functions
- *  Should be outsourced in the next cleanup run
- */
-
-Handlebars.registerHelper('shortPos', function(object) {
-  return new Handlebars.SafeString(
-    object.toString().substring(0,6)
-  );
-});
-
-

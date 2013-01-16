@@ -1,4 +1,4 @@
-window.data = {
+{
   "type": "FeatureCollection",
   "name": "Hackerspaces",
   "features": [
@@ -45,4 +45,4 @@ window.data = {
       }
     }
   ]
-};
+}

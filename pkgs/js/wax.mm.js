@@ -1,4 +1,4 @@
-/* wax - 6.4.2 - v6.0.4-31-g769f4ce */
+/* wax - 7.0.0dev13 - v6.0.4-142-ga157a2d */
 
 
 !function (name, context, definition) {
@@ -1486,86 +1486,57 @@ html4.ATTRIBS['video::controls'] = 0;
  * mustache.js - Logic-less {{mustache}} templates with JavaScript
  * http://github.com/janl/mustache.js
  */
-var Mustache = (typeof module !== "undefined" && module.exports) || {};
+
+/*global define: false*/
+
+var Mustache;
 
 (function (exports) {
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = exports; // CommonJS
+  } else if (typeof define === "function") {
+    define(exports); // AMD
+  } else {
+    Mustache = exports; // <script>
+  }
+}((function () {
+
+  var exports = {};
 
   exports.name = "mustache.js";
-  exports.version = "0.5.0-dev";
+  exports.version = "0.7.0";
   exports.tags = ["{{", "}}"];
-  exports.parse = parse;
-  exports.compile = compile;
-  exports.render = render;
-  exports.clearCache = clearCache;
 
-  // This is here for backwards compatibility with 0.4.x.
-  exports.to_html = function (template, view, partials, send) {
-    var result = render(template, view, partials);
+  exports.Scanner = Scanner;
+  exports.Context = Context;
+  exports.Writer = Writer;
 
-    if (typeof send === "function") {
-      send(result);
-    } else {
-      return result;
-    }
-  };
+  var whiteRe = /\s*/;
+  var spaceRe = /\s+/;
+  var nonSpaceRe = /\S/;
+  var eqRe = /\s*=/;
+  var curlyRe = /\s*\}/;
+  var tagRe = /#|\^|\/|>|\{|&|=|!/;
 
-  var _toString = Object.prototype.toString;
-  var _isArray = Array.isArray;
-  var _forEach = Array.prototype.forEach;
-  var _trim = String.prototype.trim;
-
-  var isArray;
-  if (_isArray) {
-    isArray = _isArray;
-  } else {
-    isArray = function (obj) {
-      return _toString.call(obj) === "[object Array]";
-    };
+  // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
+  // See https://github.com/janl/mustache.js/issues/189
+  function testRe(re, string) {
+    return RegExp.prototype.test.call(re, string);
   }
-
-  var forEach;
-  if (_forEach) {
-    forEach = function (obj, callback, scope) {
-      return _forEach.call(obj, callback, scope);
-    };
-  } else {
-    forEach = function (obj, callback, scope) {
-      for (var i = 0, len = obj.length; i < len; ++i) {
-        callback.call(scope, obj[i], i, obj);
-      }
-    };
-  }
-
-  var spaceRe = /^\s*$/;
 
   function isWhitespace(string) {
-    return spaceRe.test(string);
+    return !testRe(nonSpaceRe, string);
   }
 
-  var trim;
-  if (_trim) {
-    trim = function (string) {
-      return string == null ? "" : _trim.call(string);
-    };
-  } else {
-    var trimLeft, trimRight;
+  var isArray = Array.isArray || function (obj) {
+    return Object.prototype.toString.call(obj) === "[object Array]";
+  };
 
-    if (isWhitespace("\xA0")) {
-      trimLeft = /^\s+/;
-      trimRight = /\s+$/;
-    } else {
-      // IE doesn't match non-breaking spaces with \s, thanks jQuery.
-      trimLeft = /^[\s\xA0]+/;
-      trimRight = /[\s\xA0]+$/;
-    }
-
-    trim = function (string) {
-      return string == null ? "" :
-        String(string).replace(trimLeft, "").replace(trimRight, "");
-    };
+  function escapeRe(string) {
+    return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
   }
 
-  var escapeMap = {
+  var entityMap = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -1574,156 +1545,421 @@ var Mustache = (typeof module !== "undefined" && module.exports) || {};
     "/": '&#x2F;'
   };
 
-  function escapeHTML(string) {
+  function escapeHtml(string) {
     return String(string).replace(/[&<>"'\/]/g, function (s) {
-      return escapeMap[s] || s;
+      return entityMap[s];
     });
   }
 
-  /**
-   * Adds the `template`, `line`, and `file` properties to the given error
-   * object and alters the message to provide more useful debugging information.
-   */
-  function debug(e, template, line, file) {
-    file = file || "<template>";
+  // Export the escaping function so that the user may override it.
+  // See https://github.com/janl/mustache.js/issues/244
+  exports.escape = escapeHtml;
 
-    var lines = template.split("\n"),
-        start = Math.max(line - 3, 0),
-        end = Math.min(lines.length, line + 3),
-        context = lines.slice(start, end);
-
-    var c;
-    for (var i = 0, len = context.length; i < len; ++i) {
-      c = i + start + 1;
-      context[i] = (c === line ? " >> " : "    ") + context[i];
-    }
-
-    e.template = template;
-    e.line = line;
-    e.file = file;
-    e.message = [file + ":" + line, context.join("\n"), "", e.message].join("\n");
-
-    return e;
+  function Scanner(string) {
+    this.string = string;
+    this.tail = string;
+    this.pos = 0;
   }
 
   /**
-   * Looks up the value of the given `name` in the given context `stack`.
+   * Returns `true` if the tail is empty (end of string).
    */
-  function lookup(name, stack, defaultValue) {
-    if (name === ".") {
-      return stack[stack.length - 1];
+  Scanner.prototype.eos = function () {
+    return this.tail === "";
+  };
+
+  /**
+   * Tries to match the given regular expression at the current position.
+   * Returns the matched text if it can match, the empty string otherwise.
+   */
+  Scanner.prototype.scan = function (re) {
+    var match = this.tail.match(re);
+
+    if (match && match.index === 0) {
+      this.tail = this.tail.substring(match[0].length);
+      this.pos += match[0].length;
+      return match[0];
     }
 
-    var names = name.split(".");
-    var lastIndex = names.length - 1;
-    var target = names[lastIndex];
+    return "";
+  };
 
-    var value, context, i = stack.length, j, localStack;
-    while (i) {
-      localStack = stack.slice(0);
-      context = stack[--i];
+  /**
+   * Skips all text until the given regular expression can be matched. Returns
+   * the skipped string, which is the entire tail if no match can be made.
+   */
+  Scanner.prototype.scanUntil = function (re) {
+    var match, pos = this.tail.search(re);
 
-      j = 0;
-      while (j < lastIndex) {
-        context = context[names[j++]];
+    switch (pos) {
+    case -1:
+      match = this.tail;
+      this.pos += this.tail.length;
+      this.tail = "";
+      break;
+    case 0:
+      match = "";
+      break;
+    default:
+      match = this.tail.substring(0, pos);
+      this.tail = this.tail.substring(pos);
+      this.pos += pos;
+    }
 
-        if (context == null) {
-          break;
+    return match;
+  };
+
+  function Context(view, parent) {
+    this.view = view;
+    this.parent = parent;
+    this.clearCache();
+  }
+
+  Context.make = function (view) {
+    return (view instanceof Context) ? view : new Context(view);
+  };
+
+  Context.prototype.clearCache = function () {
+    this._cache = {};
+  };
+
+  Context.prototype.push = function (view) {
+    return new Context(view, this);
+  };
+
+  Context.prototype.lookup = function (name) {
+    var value = this._cache[name];
+
+    if (!value) {
+      if (name === ".") {
+        value = this.view;
+      } else {
+        var context = this;
+
+        while (context) {
+          if (name.indexOf(".") > 0) {
+            var names = name.split("."), i = 0;
+
+            value = context.view;
+
+            while (value && i < names.length) {
+              value = value[names[i++]];
+            }
+          } else {
+            value = context.view[name];
+          }
+
+          if (value != null) {
+            break;
+          }
+
+          context = context.parent;
         }
-
-        localStack.push(context);
       }
 
-      if (context && typeof context === "object" && target in context) {
-        value = context[target];
-        break;
-      }
+      this._cache[name] = value;
     }
 
-    // If the value is a function, call it in the current context.
     if (typeof value === "function") {
-      value = value.call(localStack[localStack.length - 1]);
-    }
-
-    if (value == null)  {
-      return defaultValue;
+      value = value.call(this.view);
     }
 
     return value;
+  };
+
+  function Writer() {
+    this.clearCache();
   }
 
-  function renderSection(name, stack, callback, inverted) {
-    var buffer = "";
-    var value =  lookup(name, stack);
+  Writer.prototype.clearCache = function () {
+    this._cache = {};
+    this._partialCache = {};
+  };
 
-    if (inverted) {
-      // From the spec: inverted sections may render text once based on the
-      // inverse value of the key. That is, they will be rendered if the key
-      // doesn't exist, is false, or is an empty list.
-      if (value == null || value === false || (isArray(value) && value.length === 0)) {
-        buffer += callback();
-      }
-    } else if (isArray(value)) {
-      forEach(value, function (value) {
-        stack.push(value);
-        buffer += callback();
-        stack.pop();
-      });
-    } else if (typeof value === "object") {
-      stack.push(value);
-      buffer += callback();
-      stack.pop();
-    } else if (typeof value === "function") {
-      var scope = stack[stack.length - 1];
-      var scopedRender = function (template) {
-        return render(template, scope);
+  Writer.prototype.compile = function (template, tags) {
+    return this._compile(this._cache, template, template, tags);
+  };
+
+  Writer.prototype.compilePartial = function (name, template, tags) {
+    return this._compile(this._partialCache, name, template, tags);
+  };
+
+  Writer.prototype.render = function (template, view, partials) {
+    return this.compile(template)(view, partials);
+  };
+
+  Writer.prototype._compile = function (cache, key, template, tags) {
+    if (!cache[key]) {
+      var tokens = exports.parse(template, tags);
+      var fn = compileTokens(tokens);
+
+      var self = this;
+      cache[key] = function (view, partials) {
+        if (partials) {
+          if (typeof partials === "function") {
+            self._loadPartial = partials;
+          } else {
+            for (var name in partials) {
+              self.compilePartial(name, partials[name]);
+            }
+          }
+        }
+
+        return fn(self, Context.make(view), template);
       };
-      buffer += value.call(scope, callback(), scopedRender) || "";
-    } else if (value) {
-      buffer += callback();
     }
 
-    return buffer;
+    return cache[key];
+  };
+
+  Writer.prototype._section = function (name, context, text, callback) {
+    var value = context.lookup(name);
+
+    switch (typeof value) {
+    case "object":
+      if (isArray(value)) {
+        var buffer = "";
+
+        for (var i = 0, len = value.length; i < len; ++i) {
+          buffer += callback(this, context.push(value[i]));
+        }
+
+        return buffer;
+      }
+
+      return value ? callback(this, context.push(value)) : "";
+    case "function":
+      var self = this;
+      var scopedRender = function (template) {
+        return self.render(template, context);
+      };
+
+      return value.call(context.view, text, scopedRender) || "";
+    default:
+      if (value) {
+        return callback(this, context);
+      }
+    }
+
+    return "";
+  };
+
+  Writer.prototype._inverted = function (name, context, callback) {
+    var value = context.lookup(name);
+
+    // Use JavaScript's definition of falsy. Include empty arrays.
+    // See https://github.com/janl/mustache.js/issues/186
+    if (!value || (isArray(value) && value.length === 0)) {
+      return callback(this, context);
+    }
+
+    return "";
+  };
+
+  Writer.prototype._partial = function (name, context) {
+    if (!(name in this._partialCache) && this._loadPartial) {
+      this.compilePartial(name, this._loadPartial(name));
+    }
+
+    var fn = this._partialCache[name];
+
+    return fn ? fn(context) : "";
+  };
+
+  Writer.prototype._name = function (name, context) {
+    var value = context.lookup(name);
+
+    if (typeof value === "function") {
+      value = value.call(context.view);
+    }
+
+    return (value == null) ? "" : String(value);
+  };
+
+  Writer.prototype._escaped = function (name, context) {
+    return exports.escape(this._name(name, context));
+  };
+
+  /**
+   * Calculates the bounds of the section represented by the given `token` in
+   * the original template by drilling down into nested sections to find the
+   * last token that is part of that section. Returns an array of [start, end].
+   */
+  function sectionBounds(token) {
+    var start = token[3];
+    var end = start;
+
+    var tokens;
+    while ((tokens = token[4]) && tokens.length) {
+      token = tokens[tokens.length - 1];
+      end = token[3];
+    }
+
+    return [start, end];
   }
 
   /**
-   * Parses the given `template` and returns the source of a function that,
-   * with the proper arguments, will render the template. Recognized options
-   * include the following:
-   *
-   *   - file     The name of the file the template comes from (displayed in
-   *              error messages)
-   *   - tags     An array of open and close tags the `template` uses. Defaults
-   *              to the value of Mustache.tags
-   *   - debug    Set `true` to log the body of the generated function to the
-   *              console
-   *   - space    Set `true` to preserve whitespace from lines that otherwise
-   *              contain only a {{tag}}. Defaults to `false`
+   * Low-level function that compiles the given `tokens` into a function
+   * that accepts two arguments: a Context and a Writer.
    */
-  function parse(template, options) {
-    options = options || {};
+  function compileTokens(tokens) {
+    var subRenders = {};
 
-    var tags = options.tags || exports.tags,
-        openTag = tags[0],
-        closeTag = tags[tags.length - 1];
+    function subRender(i, tokens, template) {
+      if (!subRenders[i]) {
+        var fn = compileTokens(tokens);
+        subRenders[i] = function (writer, context) {
+          return fn(writer, context, template);
+        };
+      }
 
-    var code = [
-      'var buffer = "";', // output buffer
-      "\nvar line = 1;", // keep track of source line number
-      "\ntry {",
-      '\nbuffer += "'
+      return subRenders[i];
+    }
+
+    function renderFunction(writer, context, template) {
+      var buffer = "";
+      var token, sectionText;
+
+      for (var i = 0, len = tokens.length; i < len; ++i) {
+        token = tokens[i];
+
+        switch (token[0]) {
+        case "#":
+          sectionText = template.slice.apply(template, sectionBounds(token));
+          buffer += writer._section(token[1], context, sectionText, subRender(i, token[4], template));
+          break;
+        case "^":
+          buffer += writer._inverted(token[1], context, subRender(i, token[4], template));
+          break;
+        case ">":
+          buffer += writer._partial(token[1], context);
+          break;
+        case "&":
+          buffer += writer._name(token[1], context);
+          break;
+        case "name":
+          buffer += writer._escaped(token[1], context);
+          break;
+        case "text":
+          buffer += token[1];
+          break;
+        }
+      }
+
+      return buffer;
+    }
+
+    return renderFunction;
+  }
+
+  /**
+   * Forms the given array of `tokens` into a nested tree structure where
+   * tokens that represent a section have a fifth item: an array that contains
+   * all tokens in that section.
+   */
+  function nestTokens(tokens) {
+    var tree = [];
+    var collector = tree;
+    var sections = [];
+    var token, section;
+
+    for (var i = 0; i < tokens.length; ++i) {
+      token = tokens[i];
+
+      switch (token[0]) {
+      case "#":
+      case "^":
+        token[4] = [];
+        sections.push(token);
+        collector.push(token);
+        collector = token[4];
+        break;
+      case "/":
+        if (sections.length === 0) {
+          throw new Error("Unopened section: " + token[1]);
+        }
+
+        section = sections.pop();
+
+        if (section[1] !== token[1]) {
+          throw new Error("Unclosed section: " + section[1]);
+        }
+
+        if (sections.length > 0) {
+          collector = sections[sections.length - 1][4];
+        } else {
+          collector = tree;
+        }
+        break;
+      default:
+        collector.push(token);
+      }
+    }
+
+    // Make sure there were no open sections when we're done.
+    section = sections.pop();
+
+    if (section) {
+      throw new Error("Unclosed section: " + section[1]);
+    }
+
+    return tree;
+  }
+
+  /**
+   * Combines the values of consecutive text tokens in the given `tokens` array
+   * to a single token.
+   */
+  function squashTokens(tokens) {
+    var token, lastToken;
+
+    for (var i = 0; i < tokens.length; ++i) {
+      token = tokens[i];
+
+      if (lastToken && lastToken[0] === "text" && token[0] === "text") {
+        lastToken[1] += token[1];
+        lastToken[3] = token[3];
+        tokens.splice(i--, 1); // Remove this token from the array.
+      } else {
+        lastToken = token;
+      }
+    }
+  }
+
+  function escapeTags(tags) {
+    if (tags.length !== 2) {
+      throw new Error("Invalid tags: " + tags.join(" "));
+    }
+
+    return [
+      new RegExp(escapeRe(tags[0]) + "\\s*"),
+      new RegExp("\\s*" + escapeRe(tags[1]))
     ];
+  }
 
-    var spaces = [],      // indices of whitespace in code on the current line
-        hasTag = false,   // is there a {{tag}} on the current line?
-        nonSpace = false; // is there a non-space char on the current line?
+  /**
+   * Breaks up the given `template` string into a tree of token objects. If
+   * `tags` is given here it must be an array with two string values: the
+   * opening and closing tags used in the template (e.g. ["<%", "%>"]). Of
+   * course, the default is to use mustaches (i.e. Mustache.tags).
+   */
+  exports.parse = function (template, tags) {
+    tags = tags || exports.tags;
 
-    // Strips all space characters from the code array for the current line
-    // if there was a {{tag}} on it and otherwise only spaces.
-    var stripSpace = function () {
-      if (hasTag && !nonSpace && !options.space) {
+    var tagRes = escapeTags(tags);
+    var scanner = new Scanner(template);
+
+    var tokens = [],      // Buffer to hold the tokens
+        spaces = [],      // Indices of whitespace tokens on the current line
+        hasTag = false,   // Is there a {{tag}} on the current line?
+        nonSpace = false; // Is there a non-space char on the current line?
+
+    // Strips all whitespace tokens array for the current line
+    // if there was a {{#tag}} on it and otherwise only space.
+    function stripSpace() {
+      if (hasTag && !nonSpace) {
         while (spaces.length) {
-          code.splice(spaces.pop(), 1);
+          tokens.splice(spaces.pop(), 1);
         }
       } else {
         spaces = [];
@@ -1731,326 +1967,152 @@ var Mustache = (typeof module !== "undefined" && module.exports) || {};
 
       hasTag = false;
       nonSpace = false;
-    };
+    }
 
-    var sectionStack = [], updateLine, nextOpenTag, nextCloseTag;
+    var start, type, value, chr;
 
-    var setTags = function (source) {
-      tags = trim(source).split(/\s+/);
-      nextOpenTag = tags[0];
-      nextCloseTag = tags[tags.length - 1];
-    };
+    while (!scanner.eos()) {
+      start = scanner.pos;
+      value = scanner.scanUntil(tagRes[0]);
 
-    var includePartial = function (source) {
-      code.push(
-        '";',
-        updateLine,
-        '\nvar partial = partials["' + trim(source) + '"];',
-        '\nif (partial) {',
-        '\n  buffer += render(partial,stack[stack.length - 1],partials);',
-        '\n}',
-        '\nbuffer += "'
-      );
-    };
+      if (value) {
+        for (var i = 0, len = value.length; i < len; ++i) {
+          chr = value.charAt(i);
 
-    var openSection = function (source, inverted) {
-      var name = trim(source);
-
-      if (name === "") {
-        throw debug(new Error("Section name may not be empty"), template, line, options.file);
-      }
-
-      sectionStack.push({name: name, inverted: inverted});
-
-      code.push(
-        '";',
-        updateLine,
-        '\nvar name = "' + name + '";',
-        '\nvar callback = (function () {',
-        '\n  return function () {',
-        '\n    var buffer = "";',
-        '\nbuffer += "'
-      );
-    };
-
-    var openInvertedSection = function (source) {
-      openSection(source, true);
-    };
-
-    var closeSection = function (source) {
-      var name = trim(source);
-      var openName = sectionStack.length != 0 && sectionStack[sectionStack.length - 1].name;
-
-      if (!openName || name != openName) {
-        throw debug(new Error('Section named "' + name + '" was never opened'), template, line, options.file);
-      }
-
-      var section = sectionStack.pop();
-
-      code.push(
-        '";',
-        '\n    return buffer;',
-        '\n  };',
-        '\n})();'
-      );
-
-      if (section.inverted) {
-        code.push("\nbuffer += renderSection(name,stack,callback,true);");
-      } else {
-        code.push("\nbuffer += renderSection(name,stack,callback);");
-      }
-
-      code.push('\nbuffer += "');
-    };
-
-    var sendPlain = function (source) {
-      code.push(
-        '";',
-        updateLine,
-        '\nbuffer += lookup("' + trim(source) + '",stack,"");',
-        '\nbuffer += "'
-      );
-    };
-
-    var sendEscaped = function (source) {
-      code.push(
-        '";',
-        updateLine,
-        '\nbuffer += escapeHTML(lookup("' + trim(source) + '",stack,""));',
-        '\nbuffer += "'
-      );
-    };
-
-    var line = 1, c, callback;
-    for (var i = 0, len = template.length; i < len; ++i) {
-      if (template.slice(i, i + openTag.length) === openTag) {
-        i += openTag.length;
-        c = template.substr(i, 1);
-        updateLine = '\nline = ' + line + ';';
-        nextOpenTag = openTag;
-        nextCloseTag = closeTag;
-        hasTag = true;
-
-        switch (c) {
-        case "!": // comment
-          i++;
-          callback = null;
-          break;
-        case "=": // change open/close tags, e.g. {{=<% %>=}}
-          i++;
-          closeTag = "=" + closeTag;
-          callback = setTags;
-          break;
-        case ">": // include partial
-          i++;
-          callback = includePartial;
-          break;
-        case "#": // start section
-          i++;
-          callback = openSection;
-          break;
-        case "^": // start inverted section
-          i++;
-          callback = openInvertedSection;
-          break;
-        case "/": // end section
-          i++;
-          callback = closeSection;
-          break;
-        case "{": // plain variable
-          closeTag = "}" + closeTag;
-          // fall through
-        case "&": // plain variable
-          i++;
-          nonSpace = true;
-          callback = sendPlain;
-          break;
-        default: // escaped variable
-          nonSpace = true;
-          callback = sendEscaped;
-        }
-
-        var end = template.indexOf(closeTag, i);
-
-        if (end === -1) {
-          throw debug(new Error('Tag "' + openTag + '" was not closed properly'), template, line, options.file);
-        }
-
-        var source = template.substring(i, end);
-
-        if (callback) {
-          callback(source);
-        }
-
-        // Maintain line count for \n in source.
-        var n = 0;
-        while (~(n = source.indexOf("\n", n))) {
-          line++;
-          n++;
-        }
-
-        i = end + closeTag.length - 1;
-        openTag = nextOpenTag;
-        closeTag = nextCloseTag;
-      } else {
-        c = template.substr(i, 1);
-
-        switch (c) {
-        case '"':
-        case "\\":
-          nonSpace = true;
-          code.push("\\" + c);
-          break;
-        case "\r":
-          // Ignore carriage returns.
-          break;
-        case "\n":
-          spaces.push(code.length);
-          code.push("\\n");
-          stripSpace(); // Check for whitespace on the current line.
-          line++;
-          break;
-        default:
-          if (isWhitespace(c)) {
-            spaces.push(code.length);
+          if (isWhitespace(chr)) {
+            spaces.push(tokens.length);
           } else {
             nonSpace = true;
           }
 
-          code.push(c);
+          tokens.push(["text", chr, start, start + 1]);
+          start += 1;
+
+          if (chr === "\n") {
+            stripSpace(); // Check for whitespace on the current line.
+          }
         }
       }
-    }
 
-    if (sectionStack.length != 0) {
-      throw debug(new Error('Section "' + sectionStack[sectionStack.length - 1].name + '" was not closed properly'), template, line, options.file);
-    }
+      start = scanner.pos;
 
-    // Clean up any whitespace from a closing {{tag}} that was at the end
-    // of the template without a trailing \n.
-    stripSpace();
+      // Match the opening tag.
+      if (!scanner.scan(tagRes[0])) {
+        break;
+      }
 
-    code.push(
-      '";',
-      "\nreturn buffer;",
-      "\n} catch (e) { throw {error: e, line: line}; }"
-    );
+      hasTag = true;
+      type = scanner.scan(tagRe) || "name";
 
-    // Ignore `buffer += "";` statements.
-    var body = code.join("").replace(/buffer \+= "";\n/g, "");
+      // Skip any whitespace between tag and value.
+      scanner.scan(whiteRe);
 
-    if (options.debug) {
-      if (typeof console != "undefined" && console.log) {
-        console.log(body);
-      } else if (typeof print === "function") {
-        print(body);
+      // Extract the tag value.
+      if (type === "=") {
+        value = scanner.scanUntil(eqRe);
+        scanner.scan(eqRe);
+        scanner.scanUntil(tagRes[1]);
+      } else if (type === "{") {
+        var closeRe = new RegExp("\\s*" + escapeRe("}" + tags[1]));
+        value = scanner.scanUntil(closeRe);
+        scanner.scan(curlyRe);
+        scanner.scanUntil(tagRes[1]);
+        type = "&";
+      } else {
+        value = scanner.scanUntil(tagRes[1]);
+      }
+
+      // Match the closing tag.
+      if (!scanner.scan(tagRes[1])) {
+        throw new Error("Unclosed tag at " + scanner.pos);
+      }
+
+      tokens.push([type, value, start, scanner.pos]);
+
+      if (type === "name" || type === "{" || type === "&") {
+        nonSpace = true;
+      }
+
+      // Set the tags for the next time around.
+      if (type === "=") {
+        tags = value.split(spaceRe);
+        tagRes = escapeTags(tags);
       }
     }
 
-    return body;
-  }
+    squashTokens(tokens);
+
+    return nestTokens(tokens);
+  };
+
+  // The high-level clearCache, compile, compilePartial, and render functions
+  // use this default writer.
+  var _writer = new Writer();
 
   /**
-   * Used by `compile` to generate a reusable function for the given `template`.
+   * Clears all cached templates and partials in the default writer.
    */
-  function _compile(template, options) {
-    var args = "view,partials,stack,lookup,escapeHTML,renderSection,render";
-    var body = parse(template, options);
-    var fn = new Function(args, body);
-
-    // This anonymous function wraps the generated function so we can do
-    // argument coercion, setup some variables, and handle any errors
-    // encountered while executing it.
-    return function (view, partials) {
-      partials = partials || {};
-
-      var stack = [view]; // context stack
-
-      try {
-        return fn(view, partials, stack, lookup, escapeHTML, renderSection, render);
-      } catch (e) {
-        throw debug(e.error, template, e.line, options.file);
-      }
-    };
-  }
-
-  // Cache of pre-compiled templates.
-  var _cache = {};
+  exports.clearCache = function () {
+    return _writer.clearCache();
+  };
 
   /**
-   * Clear the cache of compiled templates.
+   * Compiles the given `template` to a reusable function using the default
+   * writer.
    */
-  function clearCache() {
-    _cache = {};
-  }
+  exports.compile = function (template, tags) {
+    return _writer.compile(template, tags);
+  };
 
   /**
-   * Compiles the given `template` into a reusable function using the given
-   * `options`. In addition to the options accepted by Mustache.parse,
-   * recognized options include the following:
-   *
-   *   - cache    Set `false` to bypass any pre-compiled version of the given
-   *              template. Otherwise, a given `template` string will be cached
-   *              the first time it is parsed
+   * Compiles the partial with the given `name` and `template` to a reusable
+   * function using the default writer.
    */
-  function compile(template, options) {
-    options = options || {};
+  exports.compilePartial = function (name, template, tags) {
+    return _writer.compilePartial(name, template, tags);
+  };
 
-    // Use a pre-compiled version from the cache if we have one.
-    if (options.cache !== false) {
-      if (!_cache[template]) {
-        _cache[template] = _compile(template, options);
-      }
+  /**
+   * Renders the `template` with the given `view` and `partials` using the
+   * default writer.
+   */
+  exports.render = function (template, view, partials) {
+    return _writer.render(template, view, partials);
+  };
 
-      return _cache[template];
+  // This is here for backwards compatibility with 0.4.x.
+  exports.to_html = function (template, view, partials, send) {
+    var result = exports.render(template, view, partials);
+
+    if (typeof send === "function") {
+      send(result);
+    } else {
+      return result;
     }
+  };
 
-    return _compile(template, options);
-  }
+  return exports;
 
-  /**
-   * High-level function that renders the given `template` using the given
-   * `view` and `partials`. If you need to use any of the template options (see
-   * `compile` above), you must compile in a separate step, and then call that
-   * compiled function.
-   */
-  function render(template, view, partials) {
-    return compile(template)(view, partials);
-  }
-
-})(Mustache);
+}())));
 /*!
   * Reqwest! A general purpose XHR connection manager
-  * (c) Dustin Diaz 2011
+  * (c) Dustin Diaz 2012
   * https://github.com/ded/reqwest
   * license MIT
   */
-!function(a,b){typeof module!="undefined"?module.exports=b():typeof define=="function"&&define.amd?define(a,b):this[a]=b()}("reqwest",function(){function handleReadyState(a,b,c){return function(){a&&a[readyState]==4&&(twoHundo.test(a.status)?b(a):c(a))}}function setHeaders(a,b){var c=b.headers||{},d;c.Accept=c.Accept||defaultHeaders.accept[b.type]||defaultHeaders.accept["*"],!b.crossOrigin&&!c[requestedWith]&&(c[requestedWith]=defaultHeaders.requestedWith),c[contentType]||(c[contentType]=b.contentType||defaultHeaders.contentType);for(d in c)c.hasOwnProperty(d)&&a.setRequestHeader(d,c[d])}function generalCallback(a){lastValue=a}function urlappend(a,b){return a+(/\?/.test(a)?"&":"?")+b}function handleJsonp(a,b,c,d){var e=uniqid++,f=a.jsonpCallback||"callback",g=a.jsonpCallbackName||"reqwest_"+e,h=new RegExp("((^|\\?|&)"+f+")=([^&]+)"),i=d.match(h),j=doc.createElement("script"),k=0;i?i[3]==="?"?d=d.replace(h,"$1="+g):g=i[3]:d=urlappend(d,f+"="+g),win[g]=generalCallback,j.type="text/javascript",j.src=d,j.async=!0,typeof j.onreadystatechange!="undefined"&&(j.event="onclick",j.htmlFor=j.id="_reqwest_"+e),j.onload=j.onreadystatechange=function(){if(j[readyState]&&j[readyState]!=="complete"&&j[readyState]!=="loaded"||k)return!1;j.onload=j.onreadystatechange=null,j.onclick&&j.onclick(),a.success&&a.success(lastValue),lastValue=undefined,head.removeChild(j),k=1},head.appendChild(j)}function getRequest(a,b,c){var d=(a.method||"GET").toUpperCase(),e=typeof a=="string"?a:a.url,f=a.processData!==!1&&a.data&&typeof a.data!="string"?reqwest.toQueryString(a.data):a.data||null,g;return(a.type=="jsonp"||d=="GET")&&f&&(e=urlappend(e,f),f=null),a.type=="jsonp"?handleJsonp(a,b,c,e):(g=xhr(),g.open(d,e,!0),setHeaders(g,a),g.onreadystatechange=handleReadyState(g,b,c),a.before&&a.before(g),g.send(f),g)}function Reqwest(a,b){this.o=a,this.fn=b,init.apply(this,arguments)}function setType(a){var b=a.match(/\.(json|jsonp|html|xml)(\?|$)/);return b?b[1]:"js"}function init(o,fn){function complete(a){o.timeout&&clearTimeout(self.timeout),self.timeout=null,o.complete&&o.complete(a)}function success(resp){var r=resp.responseText;if(r)switch(type){case"json":try{resp=win.JSON?win.JSON.parse(r):eval("("+r+")")}catch(err){return error(resp,"Could not parse JSON in response",err)}break;case"js":resp=eval(r);break;case"html":resp=r}fn(resp),o.success&&o.success(resp),complete(resp)}function error(a,b,c){o.error&&o.error(a,b,c),complete(a)}this.url=typeof o=="string"?o:o.url,this.timeout=null;var type=o.type||setType(this.url),self=this;fn=fn||function(){},o.timeout&&(this.timeout=setTimeout(function(){self.abort()},o.timeout)),this.request=getRequest(o,success,error)}function reqwest(a,b){return new Reqwest(a,b)}function normalize(a){return a?a.replace(/\r?\n/g,"\r\n"):""}function serial(a,b){var c=a.name,d=a.tagName.toLowerCase(),e=function(a){a&&!a.disabled&&b(c,normalize(a.attributes.value&&a.attributes.value.specified?a.value:a.text))};if(a.disabled||!c)return;switch(d){case"input":if(!/reset|button|image|file/i.test(a.type)){var f=/checkbox/i.test(a.type),g=/radio/i.test(a.type),h=a.value;(!f&&!g||a.checked)&&b(c,normalize(f&&h===""?"on":h))}break;case"textarea":b(c,normalize(a.value));break;case"select":if(a.type.toLowerCase()==="select-one")e(a.selectedIndex>=0?a.options[a.selectedIndex]:null);else for(var i=0;a.length&&i<a.length;i++)a.options[i].selected&&e(a.options[i])}}function eachFormElement(){var a=this,b,c,d,e=function(b,c){for(var e=0;e<c.length;e++){var f=b[byTag](c[e]);for(d=0;d<f.length;d++)serial(f[d],a)}};for(c=0;c<arguments.length;c++)b=arguments[c],/input|select|textarea/i.test(b.tagName)&&serial(b,a),e(b,["input","select","textarea"])}function serializeQueryString(){return reqwest.toQueryString(reqwest.serializeArray.apply(null,arguments))}function serializeHash(){var a={};return eachFormElement.apply(function(b,c){b in a?(a[b]&&!isArray(a[b])&&(a[b]=[a[b]]),a[b].push(c)):a[b]=c},arguments),a}var win=window,doc=document,twoHundo=/^20\d$/,byTag="getElementsByTagName",readyState="readyState",contentType="Content-Type",requestedWith="X-Requested-With",head=doc[byTag]("head")[0],uniqid=0,lastValue,xmlHttpRequest="XMLHttpRequest",isArray=typeof Array.isArray=="function"?Array.isArray:function(a){return a instanceof Array},defaultHeaders={contentType:"application/x-www-form-urlencoded",accept:{"*":"text/javascript, text/html, application/xml, text/xml, */*",xml:"application/xml, text/xml",html:"text/html",text:"text/plain",json:"application/json, text/javascript",js:"application/javascript, text/javascript"},requestedWith:xmlHttpRequest},xhr=win[xmlHttpRequest]?function(){return new XMLHttpRequest}:function(){return new ActiveXObject("Microsoft.XMLHTTP")};return Reqwest.prototype={abort:function(){this.request.abort()},retry:function(){init.call(this,this.o,this.fn)}},reqwest.serializeArray=function(){var a=[];return eachFormElement.apply(function(b,c){a.push({name:b,value:c})},arguments),a},reqwest.serialize=function(){if(arguments.length===0)return"";var a,b,c=Array.prototype.slice.call(arguments,0);return a=c.pop(),a&&a.nodeType&&c.push(a)&&(a=null),a&&(a=a.type),a=="map"?b=serializeHash:a=="array"?b=reqwest.serializeArray:b=serializeQueryString,b.apply(null,c)},reqwest.toQueryString=function(a){var b="",c,d=encodeURIComponent,e=function(a,c){b+=d(a)+"="+d(c)+"&"};if(isArray(a))for(c=0;a&&c<a.length;c++)e(a[c].name,a[c].value);else for(var f in a){if(!Object.hasOwnProperty.call(a,f))continue;var g=a[f];if(isArray(g))for(c=0;c<g.length;c++)e(f,g[c]);else e(f,a[f])}return b.replace(/&$/,"").replace(/%20/g,"+")},reqwest.compat=function(a,b){return a&&(a.type&&(a.method=a.type)&&delete a.type,a.dataType&&(a.type=a.dataType),a.jsonpCallback&&(a.jsonpCallbackName=a.jsonpCallback)&&delete a.jsonpCallback,a.jsonp&&(a.jsonpCallback=a.jsonp)),new Reqwest(a,b)},reqwest});wax = wax || {};
+!function(e,t){typeof module!="undefined"?module.exports=t():typeof define=="function"&&define.amd?define(t):this[e]=t()}("reqwest",function(){function handleReadyState(e,t,n){return function(){e&&e[readyState]==4&&(twoHundo.test(e.status)?t(e):n(e))}}function setHeaders(e,t){var n=t.headers||{},r;n.Accept=n.Accept||defaultHeaders.accept[t.type]||defaultHeaders.accept["*"],!t.crossOrigin&&!n[requestedWith]&&(n[requestedWith]=defaultHeaders.requestedWith),n[contentType]||(n[contentType]=t.contentType||defaultHeaders.contentType);for(r in n)n.hasOwnProperty(r)&&e.setRequestHeader(r,n[r])}function setCredentials(e,t){typeof t.withCredentials!="undefined"&&typeof e.withCredentials!="undefined"&&(e.withCredentials=!!t.withCredentials)}function generalCallback(e){lastValue=e}function urlappend(e,t){return e+(/\?/.test(e)?"&":"?")+t}function handleJsonp(e,t,n,r){var i=uniqid++,s=e.jsonpCallback||"callback",o=e.jsonpCallbackName||reqwest.getcallbackPrefix(i),u=new RegExp("((^|\\?|&)"+s+")=([^&]+)"),a=r.match(u),f=doc.createElement("script"),l=0,c=navigator.userAgent.indexOf("MSIE 10.0")!==-1;a?a[3]==="?"?r=r.replace(u,"$1="+o):o=a[3]:r=urlappend(r,s+"="+o),win[o]=generalCallback,f.type="text/javascript",f.src=r,f.async=!0,typeof f.onreadystatechange!="undefined"&&!c&&(f.event="onclick",f.htmlFor=f.id="_reqwest_"+i),f.onload=f.onreadystatechange=function(){if(f[readyState]&&f[readyState]!=="complete"&&f[readyState]!=="loaded"||l)return!1;f.onload=f.onreadystatechange=null,f.onclick&&f.onclick(),e.success&&e.success(lastValue),lastValue=undefined,head.removeChild(f),l=1},head.appendChild(f)}function getRequest(e,t,n){var r=(e.method||"GET").toUpperCase(),i=typeof e=="string"?e:e.url,s=e.processData!==!1&&e.data&&typeof e.data!="string"?reqwest.toQueryString(e.data):e.data||null,o;return(e.type=="jsonp"||r=="GET")&&s&&(i=urlappend(i,s),s=null),e.type=="jsonp"?handleJsonp(e,t,n,i):(o=xhr(),o.open(r,i,!0),setHeaders(o,e),setCredentials(o,e),o.onreadystatechange=handleReadyState(o,t,n),e.before&&e.before(o),o.send(s),o)}function Reqwest(e,t){this.o=e,this.fn=t,init.apply(this,arguments)}function setType(e){var t=e.match(/\.(json|jsonp|html|xml)(\?|$)/);return t?t[1]:"js"}function init(o,fn){function complete(e){o.timeout&&clearTimeout(self.timeout),self.timeout=null;while(self._completeHandlers.length>0)self._completeHandlers.shift()(e)}function success(resp){var r=resp.responseText;if(r)switch(type){case"json":try{resp=win.JSON?win.JSON.parse(r):eval("("+r+")")}catch(err){return error(resp,"Could not parse JSON in response",err)}break;case"js":resp=eval(r);break;case"html":resp=r;break;case"xml":resp=resp.responseXML}self._responseArgs.resp=resp,self._fulfilled=!0,fn(resp);while(self._fulfillmentHandlers.length>0)self._fulfillmentHandlers.shift()(resp);complete(resp)}function error(e,t,n){self._responseArgs.resp=e,self._responseArgs.msg=t,self._responseArgs.t=n,self._erred=!0;while(self._errorHandlers.length>0)self._errorHandlers.shift()(e,t,n);complete(e)}this.url=typeof o=="string"?o:o.url,this.timeout=null,this._fulfilled=!1,this._fulfillmentHandlers=[],this._errorHandlers=[],this._completeHandlers=[],this._erred=!1,this._responseArgs={};var self=this,type=o.type||setType(this.url);fn=fn||function(){},o.timeout&&(this.timeout=setTimeout(function(){self.abort()},o.timeout)),o.success&&this._fulfillmentHandlers.push(function(){o.success.apply(o,arguments)}),o.error&&this._errorHandlers.push(function(){o.error.apply(o,arguments)}),o.complete&&this._completeHandlers.push(function(){o.complete.apply(o,arguments)}),this.request=getRequest(o,success,error)}function reqwest(e,t){return new Reqwest(e,t)}function normalize(e){return e?e.replace(/\r?\n/g,"\r\n"):""}function serial(e,t){var n=e.name,r=e.tagName.toLowerCase(),i=function(e){e&&!e.disabled&&t(n,normalize(e.attributes.value&&e.attributes.value.specified?e.value:e.text))};if(e.disabled||!n)return;switch(r){case"input":if(!/reset|button|image|file/i.test(e.type)){var s=/checkbox/i.test(e.type),o=/radio/i.test(e.type),u=e.value;(!s&&!o||e.checked)&&t(n,normalize(s&&u===""?"on":u))}break;case"textarea":t(n,normalize(e.value));break;case"select":if(e.type.toLowerCase()==="select-one")i(e.selectedIndex>=0?e.options[e.selectedIndex]:null);else for(var a=0;e.length&&a<e.length;a++)e.options[a].selected&&i(e.options[a])}}function eachFormElement(){var e=this,t,n,r,i=function(t,n){for(var i=0;i<n.length;i++){var s=t[byTag](n[i]);for(r=0;r<s.length;r++)serial(s[r],e)}};for(n=0;n<arguments.length;n++)t=arguments[n],/input|select|textarea/i.test(t.tagName)&&serial(t,e),i(t,["input","select","textarea"])}function serializeQueryString(){return reqwest.toQueryString(reqwest.serializeArray.apply(null,arguments))}function serializeHash(){var e={};return eachFormElement.apply(function(t,n){t in e?(e[t]&&!isArray(e[t])&&(e[t]=[e[t]]),e[t].push(n)):e[t]=n},arguments),e}var win=window,doc=document,twoHundo=/^20\d$/,byTag="getElementsByTagName",readyState="readyState",contentType="Content-Type",requestedWith="X-Requested-With",head=doc[byTag]("head")[0],uniqid=0,callbackPrefix="reqwest_"+ +(new Date),lastValue,xmlHttpRequest="XMLHttpRequest",isArray=typeof Array.isArray=="function"?Array.isArray:function(e){return e instanceof Array},defaultHeaders={contentType:"application/x-www-form-urlencoded",requestedWith:xmlHttpRequest,accept:{"*":"text/javascript, text/html, application/xml, text/xml, */*",xml:"application/xml, text/xml",html:"text/html",text:"text/plain",json:"application/json, text/javascript",js:"application/javascript, text/javascript"}},xhr=win[xmlHttpRequest]?function(){return new XMLHttpRequest}:function(){return new ActiveXObject("Microsoft.XMLHTTP")};return Reqwest.prototype={abort:function(){this.request.abort()},retry:function(){init.call(this,this.o,this.fn)},then:function(e,t){return this._fulfilled?e(this._responseArgs.resp):this._erred?t(this._responseArgs.resp,this._responseArgs.msg,this._responseArgs.t):(this._fulfillmentHandlers.push(e),this._errorHandlers.push(t)),this},always:function(e){return this._fulfilled||this._erred?e(this._responseArgs.resp):this._completeHandlers.push(e),this},fail:function(e){return this._erred?e(this._responseArgs.resp,this._responseArgs.msg,this._responseArgs.t):this._errorHandlers.push(e),this}},reqwest.serializeArray=function(){var e=[];return eachFormElement.apply(function(t,n){e.push({name:t,value:n})},arguments),e},reqwest.serialize=function(){if(arguments.length===0)return"";var e,t,n=Array.prototype.slice.call(arguments,0);return e=n.pop(),e&&e.nodeType&&n.push(e)&&(e=null),e&&(e=e.type),e=="map"?t=serializeHash:e=="array"?t=reqwest.serializeArray:t=serializeQueryString,t.apply(null,n)},reqwest.toQueryString=function(e){var t="",n,r=encodeURIComponent,i=function(e,n){t+=r(e)+"="+r(n)+"&"};if(isArray(e))for(n=0;e&&n<e.length;n++)i(e[n].name,e[n].value);else for(var s in e){if(!Object.hasOwnProperty.call(e,s))continue;var o=e[s];if(isArray(o))for(n=0;n<o.length;n++)i(s,o[n]);else i(s,e[s])}return t.replace(/&$/,"").replace(/%20/g,"+")},reqwest.getcallbackPrefix=function(e){return callbackPrefix},reqwest.compat=function(e,t){return e&&(e.type&&(e.method=e.type)&&delete e.type,e.dataType&&(e.type=e.dataType),e.jsonpCallback&&(e.jsonpCallbackName=e.jsonpCallback)&&delete e.jsonpCallback,e.jsonp&&(e.jsonpCallback=e.jsonp)),new Reqwest(e,t)},reqwest});wax = wax || {};
 
 // Attribution
 // -----------
 wax.attribution = function() {
-    var container,
-        a = {};
+    var a = {};
 
-    function urlX(url) {
-        // Data URIs are subject to a bug in Firefox
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=255107
-        // which let them be a vector. But WebKit does 'the right thing'
-        // or at least 'something' about this situation, so we'll tolerate
-        // them.
-        if (/^(https?:\/\/|data:image)/.test(url)) {
-            return url;
-        }
-    }
-
-    function idX(id) {
-        return id;
-    }
+    var container = document.createElement('div');
+    container.className = 'map-attribution';
 
     a.content = function(x) {
         if (typeof x === 'undefined') return container.innerHTML;
-        container.innerHTML = html_sanitize(x, urlX, idX);
+        container.innerHTML = wax.u.sanitize(x);
         return this;
     };
 
@@ -2059,12 +2121,10 @@ wax.attribution = function() {
     };
 
     a.init = function() {
-        container = document.createElement('div');
-        container.className = 'wax-attribution';
         return this;
     };
 
-    return a.init();
+    return a;
 };
 wax = wax || {};
 
@@ -2155,21 +2215,11 @@ wax.formatter = function(x) {
         f = function() {};
     }
 
-    function urlX(url) {
-        if (/^(https?:\/\/|data:image)/.test(url)) {
-            return url;
-        }
-    }
-
-    function idX(id) {
-        return id;
-    }
-
     // Wrap the given formatter function in order to
     // catch exceptions that it may throw.
     formatter.format = function(options, data) {
         try {
-            return html_sanitize(f(options, data), urlX, idX);
+            return wax.u.sanitize(f(options, data));
         } catch (e) {
             if (console) console.log(e);
         }
@@ -2349,6 +2399,10 @@ wax = wax || {};
 wax.hash = function(options) {
     options = options || {};
 
+    var s0, // old hash
+        hash = {},
+        lat = 90 - 1e-8;  // allowable latitude range
+
     function getState() {
         return location.hash.substring(1);
     }
@@ -2357,10 +2411,6 @@ wax.hash = function(options) {
         var l = window.location;
         l.replace(l.toString().replace((l.hash || /$/), '#' + state));
     }
-
-    var s0, // old hash
-        hash = {},
-        lat = 90 - 1e-8;  // allowable latitude range
 
     function parseHash(s) {
         var args = s.split('/');
@@ -2399,15 +2449,15 @@ wax.hash = function(options) {
     hash.add = function() {
         stateChange(getState());
         options.bindChange(_move);
-        return this;
+        return hash;
     };
 
     hash.remove = function() {
         options.unbindChange(_move);
-        return this;
+        return hash;
     };
 
-    return hash.add();
+    return hash;
 };
 wax = wax || {};
 
@@ -2415,7 +2465,7 @@ wax.interaction = function() {
     var gm = wax.gm(),
         interaction = {},
         _downLock = false,
-        _clickTimeout = false,
+        _clickTimeout = null,
         // Active feature
         // Down event
         _d,
@@ -2486,11 +2536,12 @@ wax.interaction = function() {
         });
     }
 
+    function dragEnd() {
+        _downLock = false;
+    }
+
     // A handler for 'down' events - which means `mousedown` and `touchstart`
     function onDown(e) {
-        // Ignore double-clicks by ignoring clicks within 300ms of
-        // each other.
-        if (killTimeout()) { return; }
 
         // Prevent interaction offset calculations happening while
         // the user is dragging the map.
@@ -2501,6 +2552,8 @@ wax.interaction = function() {
         _d = wax.u.eventoffset(e);
         if (e.type === 'mousedown') {
             bean.add(document.body, 'click', onUp);
+            // track mouse up to remove lockDown when the drags end
+            bean.add(document.body, 'mouseup', dragEnd);
 
         // Only track single-touches. Double-touches will not affect this
         // control
@@ -2508,12 +2561,12 @@ wax.interaction = function() {
             // Don't make the user click close if they hit another tooltip
             bean.fire(interaction, 'off');
             // Touch moves invalidate touches
-            bean.add(parent(), touchEnds);
+            bean.add(e.srcElement, touchEnds);
         }
     }
 
-    function touchCancel() {
-        bean.remove(parent(), touchEnds);
+    function touchCancel(e) {
+        bean.remove(e.srcElement, touchEnds);
         _downLock = false;
     }
 
@@ -2528,7 +2581,7 @@ wax.interaction = function() {
         }
 
         bean.remove(document.body, 'mouseup', onUp);
-        bean.remove(parent(), touchEnds);
+        bean.remove(e.srcElement, touchEnds);
 
         if (e.type === 'touchend') {
             // If this was a touch and it survived, there's no need to avoid a double-tap
@@ -2538,11 +2591,16 @@ wax.interaction = function() {
         } else if (Math.round(pos.y / tol) === Math.round(_d.y / tol) &&
             Math.round(pos.x / tol) === Math.round(_d.x / tol)) {
             // Contain the event data in a closure.
-            _clickTimeout = window.setTimeout(
-                function() {
-                    _clickTimeout = null;
-                    interaction.click(evt, pos);
-                }, 300);
+            // Ignore double-clicks by ignoring clicks within 300ms of
+            // each other.
+            if(!_clickTimeout) {
+              _clickTimeout = window.setTimeout(function() {
+                  _clickTimeout = null;
+                  interaction.click(evt, pos);
+              }, 300);
+            } else {
+              killTimeout();
+            }
         }
         return onUp;
     }
@@ -2660,43 +2718,28 @@ wax.legend = function() {
         legend = {},
         container;
 
-    function urlX(url) {
-        // Data URIs are subject to a bug in Firefox
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=255107
-        // which let them be a vector. But WebKit does 'the right thing'
-        // or at least 'something' about this situation, so we'll tolerate
-        // them.
-        if (/^(https?:\/\/|data:image)/.test(url)) {
-            return url;
-        }
-    }
-
-    function idX(id) {
-        return id;
-    }
-
     legend.element = function() {
         return container;
     };
 
     legend.content = function(content) {
         if (!arguments.length) return element.innerHTML;
-        if (content) {
-            element.innerHTML = html_sanitize(content, urlX, idX);
-            element.style.display = 'block';
-        } else {
-            element.innerHTML = '';
+
+        element.innerHTML = wax.u.sanitize(content);
+        element.style.display = 'block';
+        if (element.innerHTML === '') {
             element.style.display = 'none';
         }
+
         return legend;
     };
 
     legend.add = function() {
         container = document.createElement('div');
-        container.className = 'wax-legends';
+        container.className = 'map-legends wax-legends';
 
         element = container.appendChild(document.createElement('div'));
-        element.className = 'wax-legend';
+        element.className = 'map-legend wax-legend';
         element.style.display = 'none';
         return legend;
     };
@@ -2710,13 +2753,12 @@ wax.location = function() {
     var t = {};
 
     function on(o) {
-        console.log(o);
         if ((o.e.type === 'mousemove' || !o.e.type)) {
             return;
         } else {
             var loc = o.formatter({ format: 'location' }, o.data);
             if (loc) {
-                window.location.href = loc;
+                window.top.location.href = loc;
             }
         }
     }
@@ -2766,7 +2808,7 @@ wax.movetip = function() {
     // Hide any tooltips on layers underneath this one.
     function getTooltip(feature) {
         var tooltip = document.createElement('div');
-        tooltip.className = 'wax-tooltip wax-tooltip-0';
+        tooltip.className = 'map-tooltip map-tooltip-0';
         tooltip.innerHTML = feature;
         return tooltip;
     }
@@ -2793,7 +2835,7 @@ wax.movetip = function() {
             if (!content) return;
             hide();
             var tt = document.body.appendChild(getTooltip(content));
-            tt.className += ' wax-popup';
+            tt.className += ' map-popup';
 
             var close = tt.appendChild(document.createElement('a'));
             close.href = '#close';
@@ -2870,9 +2912,8 @@ wax.request = {
             var that = this;
             this.locks[url] = true;
             reqwest({
-                url: url + (~url.indexOf('?') ? '&' : '?') + 'callback=grid',
+                url: url + (~url.indexOf('?') ? '&' : '?') + 'callback=?',
                 type: 'jsonp',
-                jsonpCallback: 'callback',
                 success: function(data) {
                     that.locks[url] = false;
                     that.cache[url] = [null, data];
@@ -2896,21 +2937,6 @@ wax.request = {
 wax.template = function(x) {
     var template = {};
 
-    function urlX(url) {
-        // Data URIs are subject to a bug in Firefox
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=255107
-        // which let them be a vector. But WebKit does 'the right thing'
-        // or at least 'something' about this situation, so we'll tolerate
-        // them.
-        if (/^(https?:\/\/|data:image)/.test(url)) {
-            return url;
-        }
-    }
-
-    function idX(id) {
-        return id;
-    }
-
     // Clone the data object such that the '__[format]__' key is only
     // set for this instance of templating.
     template.format = function(options, data) {
@@ -2921,7 +2947,7 @@ wax.template = function(x) {
         if (options.format) {
             clone['__' + options.format + '__'] = true;
         }
-        return html_sanitize(Mustache.to_html(x, clone), urlX, idX);
+        return wax.u.sanitize(Mustache.to_html(x, clone));
     };
 
     return template;
@@ -2931,9 +2957,8 @@ if (!wax) var wax = {};
 // A wrapper for reqwest jsonp to easily load TileJSON from a URL.
 wax.tilejson = function(url, callback) {
     reqwest({
-        url: url + (~url.indexOf('?') ? '&' : '?') + 'callback=grid',
+        url: url + (~url.indexOf('?') ? '&' : '?') + 'callback=?',
         type: 'jsonp',
-        jsonpCallback: 'callback',
         success: callback,
         error: callback
     });
@@ -2960,12 +2985,11 @@ wax.tooltip = function() {
     // Hide any tooltips on layers underneath this one.
     function getTooltip(feature) {
         var tooltip = document.createElement('div');
-        tooltip.className = 'wax-tooltip wax-tooltip-0';
+        tooltip.className = 'map-tooltip map-tooltip-0 wax-tooltip';
         tooltip.innerHTML = feature;
         return tooltip;
     }
 
-    
     function remove() {
         if (this.parentNode) this.parentNode.removeChild(this);
     }
@@ -2978,7 +3002,7 @@ wax.tooltip = function() {
                 // This code assumes that transform-supporting browsers
                 // also support proper events. IE9 does both.
                   bean.add(_ct, transitionEvent, remove);
-                  _ct.className += ' wax-fade';
+                  _ct.className += ' map-fade';
             } else {
                 if (_ct.parentNode) _ct.parentNode.removeChild(_ct);
             }
@@ -3009,7 +3033,7 @@ wax.tooltip = function() {
             hide();
             parent.style.cursor = 'pointer';
             var tt = parent.appendChild(getTooltip(content));
-            tt.className += ' wax-popup';
+            tt.className += ' map-popup wax-popup';
 
             var close = tt.appendChild(document.createElement('a'));
             close.href = '#close';
@@ -3087,10 +3111,11 @@ wax.u = {
                 el.style.msTransform;
 
             if (style) {
-                if (match = style.match(/translate\((.+)px, (.+)px\)/)) {
+                var match;
+                if (match = style.match(/translate\((.+)[px]?, (.+)[px]?\)/)) {
                     top += parseInt(match[2], 10);
                     left += parseInt(match[1], 10);
-                } else if (match = style.match(/translate3d\((.+)px, (.+)px, (.+)px\)/)) {
+                } else if (match = style.match(/translate3d\((.+)[px]?, (.+)[px]?, (.+)[px]?\)/)) {
                     top += parseInt(match[2], 10);
                     left += parseInt(match[1], 10);
                 } else if (match = style.match(/matrix3d\(([\-\d,\s]+)\)/)) {
@@ -3104,12 +3129,26 @@ wax.u = {
             }
         };
 
-        calculateOffset(el);
+        // from jquery, offset.js
+        if ( typeof el.getBoundingClientRect !== "undefined" ) {
+          var body = document.body;
+          var doc = el.ownerDocument.documentElement;
+          var clientTop  = document.clientTop  || body.clientTop  || 0;
+          var clientLeft = document.clientLeft || body.clientLeft || 0;
+          var scrollTop  = window.pageYOffset || doc.scrollTop;
+          var scrollLeft = window.pageXOffset || doc.scrollLeft;
 
-        try {
-            while (el = el.offsetParent) { calculateOffset(el); }
-        } catch(e) {
-            // Hello, internet explorer.
+          var box = el.getBoundingClientRect();
+          top = box.top + scrollTop  - clientTop;
+          left = box.left + scrollLeft - clientLeft;
+
+        } else {
+          calculateOffset(el);
+          try {
+              while (el = el.offsetParent) { calculateOffset(el); }
+          } catch(e) {
+              // Hello, internet explorer.
+          }
         }
 
         // Offsets from the body
@@ -3145,16 +3184,6 @@ wax.u = {
             x;
     },
 
-    // IE doesn't have indexOf
-    indexOf: function(array, item) {
-        var nativeIndexOf = Array.prototype.indexOf;
-        if (array === null) return -1;
-        var i, l;
-        if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item);
-        for (i = 0, l = array.length; i < l; i++) if (array[i] === item) return i;
-        return -1;
-    },
-
     // From quirksmode: normalize the offset of an event from the top-left
     // of the page.
     eventoffset: function(e) {
@@ -3169,15 +3198,9 @@ wax.u = {
             };
         } else if (e.clientX || e.clientY) {
             // Internet Explorer
-            var doc = document.documentElement, body = document.body;
-            var htmlComputed = document.body.parentNode.currentStyle;
-            var topMargin = parseInt(htmlComputed.marginTop, 10) || 0;
-            var leftMargin = parseInt(htmlComputed.marginLeft, 10) || 0;
             return {
-                x: e.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-                    (doc && doc.clientLeft || body && body.clientLeft || 0) + leftMargin,
-                y: e.clientY + (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-                    (doc && doc.clientTop  || body && body.clientTop  || 0) + topMargin
+                x: e.clientX,
+                y: e.clientY
             };
         } else if (e.touches && e.touches.length === 1) {
             // Touch browsers
@@ -3207,48 +3230,78 @@ wax.u = {
     // during a given window of time.
     throttle: function(func, wait) {
         return this.limit(func, wait, false);
+    },
+
+    sanitize: function(content) {
+        if (!content) return '';
+
+        function urlX(url) {
+            // Data URIs are subject to a bug in Firefox
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=255107
+            // which let them be a vector. But WebKit does 'the right thing'
+            // or at least 'something' about this situation, so we'll tolerate
+            // them.
+            if (/^(https?:\/\/|data:image)/.test(url)) {
+                return url;
+            }
+        }
+
+        function idX(id) { return id; }
+
+        return html_sanitize(content, urlX, idX);
     }
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// Attribution
-// -----------
-// Attribution wrapper for Modest Maps.
-wax.mm.attribution = function(map, tilejson) {
-    tilejson = tilejson || {};
-    var a, // internal attribution control
-        attribution = {};
+wax.mm.attribution = function() {
+    var map,
+        a = {},
+        container = document.createElement('div');
 
-    attribution.element = function() {
-        return a.element();
+    container.className = 'map-attribution map-mm';
+
+    a.content = function(x) {
+        if (typeof x === 'undefined') return container.innerHTML;
+        container.innerHTML = wax.u.sanitize(x);
+        return a;
     };
 
-    attribution.appendTo = function(elem) {
-        wax.u.$(elem).appendChild(a.element());
-        return this;
+    a.element = function() {
+        return container;
     };
 
-    attribution.init = function() {
-        a = wax.attribution();
-        a.content(tilejson.attribution);
-        a.element().className = 'wax-attribution wax-mm';
-        return this;
+    a.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return a;
     };
 
-    return attribution.init();
+    a.add = function() {
+        if (!map) return false;
+        map.parent.appendChild(container);
+        return a;
+    };
+
+    a.remove = function() {
+        if (!map) return false;
+        if (container.parentNode) container.parentNode.removeChild(container);
+        return a;
+    };
+
+    a.appendTo = function(elem) {
+        wax.u.$(elem).appendChild(container);
+        return a;
+    };
+
+    return a;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// Box Selector
-// ------------
-wax.mm.boxselector = function(map, tilejson, opts) {
-    var corner = null,
-        nearCorner = null,
-        callback = ((typeof opts === 'function') ?
-            opts :
-            opts.callback),
+wax.mm.boxselector = function() {
+    var corner,
+        nearCorner,
         boxDiv,
         style,
         borderWidth = 0,
@@ -3258,14 +3311,18 @@ wax.mm.boxselector = function(map, tilejson, opts) {
         addEvent = MM.addEvent,
         removeEvent = MM.removeEvent,
         box,
-        boxselector = {};
+        boxselector = {},
+        map,
+        callbackManager = new MM.CallbackManager(boxselector, ['change']);
 
     function getMousePoint(e) {
         // start with just the mouse (x, y)
         var point = new MM.Point(e.clientX, e.clientY);
         // correct for scrolled document
-        point.x += document.body.scrollLeft + document.documentElement.scrollLeft;
-        point.y += document.body.scrollTop + document.documentElement.scrollTop;
+        point.x += document.body.scrollLeft +
+            document.documentElement.scrollLeft;
+        point.y += document.body.scrollTop +
+            document.documentElement.scrollTop;
 
         // correct for nested offsets in DOM
         for (var node = map.parent; node; node = node.offsetParent) {
@@ -3401,6 +3458,16 @@ wax.mm.boxselector = function(map, tilejson, opts) {
         style.bottom = Math.max(0, map.dimensions.y - br.y) + 'px';
     }
 
+    boxselector.addCallback = function(event, callback) {
+        callbackManager.addCallback(event, callback);
+        return boxselector;
+    };
+
+    boxselector.removeCallback = function(event, callback) {
+        callbackManager.removeCallback(event, callback);
+        return boxselector;
+    };
+
     boxselector.extent = function(x, silent) {
         if (!x) return box;
 
@@ -3415,40 +3482,47 @@ wax.mm.boxselector = function(map, tilejson, opts) {
 
         drawbox(map);
 
-        if (!silent) callback(box);
+        if (!silent) callbackManager.dispatchCallback('change', box);
     };
+    boxDiv = document.createElement('div');
+    boxDiv.className = 'boxselector-box';
+    style = boxDiv.style;
 
-    boxselector.add = function(map) {
-        boxDiv = boxDiv || document.createElement('div');
+    boxselector.add = function() {
         boxDiv.id = map.parent.id + '-boxselector-box';
-        boxDiv.className = 'boxselector-box';
         map.parent.appendChild(boxDiv);
-        style = boxDiv.style;
         borderWidth = parseInt(window.getComputedStyle(boxDiv).borderWidth, 10);
 
         addEvent(map.parent, 'mousedown', mouseDown);
         addEvent(boxDiv, 'mousedown', mouseDownResize);
         addEvent(map.parent, 'mousemove', mouseMoveCursor);
         map.addCallback('drawn', drawbox);
-        return this;
+        return boxselector;
+    };
+
+    boxselector.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return boxselector;
     };
 
     boxselector.remove = function() {
         map.parent.removeChild(boxDiv);
+
         removeEvent(map.parent, 'mousedown', mouseDown);
         removeEvent(boxDiv, 'mousedown', mouseDownResize);
         removeEvent(map.parent, 'mousemove', mouseMoveCursor);
+
         map.removeCallback('drawn', drawbox);
+        return boxselector;
     };
 
-    return boxselector.add(map);
+    return boxselector;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 wax._ = {};
 
-// Bandwidth Detection
-// ------------------
 wax.mm.bwdetect = function(map, options) {
     options = options || {};
     var lowpng = options.png || '.png128',
@@ -3470,21 +3544,22 @@ wax.mm.bwdetect = function(map, options) {
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// Fullscreen
-// ----------
-// A simple fullscreen control for Modest Maps
-
 // Add zoom links, which can be styled as buttons, to a `modestmaps.Map`
 // control. This function can be used chaining-style with other
 // chaining-style controls.
-wax.mm.fullscreen = function(map) {
+wax.mm.fullscreen = function() {
     // true: fullscreen
     // false: minimized
     var fullscreened = false,
         fullscreen = {},
-        a,
+        a = document.createElement('a'),
+        map,
         body = document.body,
-        smallSize;
+        dimensions;
+
+    a.className = 'map-fullscreen';
+    a.href = '#fullscreen';
+    // a.innerHTML = 'fullscreen';
 
     function click(e) {
         if (e) e.stop();
@@ -3495,49 +3570,76 @@ wax.mm.fullscreen = function(map) {
         }
     }
 
-    function ss(w, h) {
-        map.dimensions = new MM.Point(w, h);
-        map.parent.style.width = Math.round(map.dimensions.x) + 'px';
-        map.parent.style.height = Math.round(map.dimensions.y) + 'px';
-        map.dispatchCallback('resized', map.dimensions);
-    }
+    fullscreen.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return fullscreen;
+    };
 
     // Modest Maps demands an absolute height & width, and doesn't auto-correct
     // for changes, so here we save the original size of the element and
     // restore to that size on exit from fullscreen.
-    fullscreen.add = function(map) {
-        a = document.createElement('a');
-        a.className = 'wax-fullscreen';
-        a.href = '#fullscreen';
-        a.innerHTML = 'fullscreen';
+    fullscreen.add = function() {
         bean.add(a, 'click', click);
-        return this;
-    };
-    fullscreen.full = function() {
-        if (fullscreened) { return; } else { fullscreened = true; }
-        smallSize = [map.parent.offsetWidth, map.parent.offsetHeight];
-        map.parent.className += ' wax-fullscreen-map';
-        body.className += ' wax-fullscreen-view';
-        ss(map.parent.offsetWidth, map.parent.offsetHeight);
-    };
-    fullscreen.original = function() {
-        if (!fullscreened) { return; } else { fullscreened = false; }
-        map.parent.className = map.parent.className.replace(' wax-fullscreen-map', '');
-        body.className = body.className.replace(' wax-fullscreen-view', '');
-        ss(smallSize[0], smallSize[1]);
-    };
-    fullscreen.appendTo = function(elem) {
-        wax.u.$(elem).appendChild(a);
-        return this;
+        map.parent.appendChild(a);
+        return fullscreen;
     };
 
-    return fullscreen.add(map);
+    fullscreen.remove = function() {
+        bean.remove(a, 'click', click);
+        if (a.parentNode) a.parentNode.removeChild(a);
+        return fullscreen;
+    };
+
+    fullscreen.full = function() {
+        if (fullscreened) { return; } else { fullscreened = true; }
+        dimensions = map.dimensions;
+        map.parent.className += ' map-fullscreen-map';
+        body.className += ' map-fullscreen-view';
+        map.dimensions = { x: map.parent.offsetWidth, y: map.parent.offsetHeight };
+        map.draw();
+        return fullscreen;
+    };
+
+    fullscreen.original = function() {
+        if (!fullscreened) { return; } else { fullscreened = false; }
+        map.parent.className = map.parent.className.replace(' map-fullscreen-map', '');
+        body.className = body.className.replace(' map-fullscreen-view', '');
+        map.dimensions = dimensions;
+        map.draw();
+        return fullscreen;
+    };
+
+    fullscreen.fullscreen = function(x) {
+        if (!arguments.length) {
+            return fullscreened;
+        } else {
+            if (x && !fullscreened) {
+                fullscreen.full();
+            } else if (!x && fullscreened) {
+                fullscreen.original();
+            }
+            return fullscreen;
+        }
+    };
+
+    fullscreen.element = function() {
+        return a;
+    };
+
+    fullscreen.appendTo = function(elem) {
+        wax.u.$(elem).appendChild(a);
+        return fullscreen;
+    };
+
+    return fullscreen;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-wax.mm.hash = function(map) {
-    return wax.hash({
+wax.mm.hash = function() {
+    var map;
+    var hash = wax.hash({
         getCenterZoom: function() {
             var center = map.getCenter(),
                 zoom = map.getZoom(),
@@ -3562,6 +3664,14 @@ wax.mm.hash = function(map) {
             map.removeCallback('drawn', fn);
         }
     });
+
+    hash.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return hash;
+    };
+
+    return hash;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
@@ -3574,15 +3684,22 @@ wax.mm.interaction = function() {
             'extentset', 'resized', 'drawn'];
 
     function grid() {
-        var zoomLayer = map.getLayerAt(0)
-            .levels[Math.round(map.getZoom())];
         if (!dirty && _grid !== undefined && _grid.length) {
             return _grid;
         } else {
+            var tiles;
+            for (var i = 0; i < map.getLayers().length; i++) {
+                var levels = map.getLayerAt(i).levels;
+                var zoomLayer = levels && levels[Math.round(map.zoom())];
+                if (zoomLayer !== undefined) {
+                    tiles = map.getLayerAt(i).tileElementsInLevel(zoomLayer);
+                    if (tiles.length) break;
+                }
+            }
             _grid = (function(t) {
                 var o = [];
                 for (var key in t) {
-                    if (t[key].parentNode === zoomLayer) {
+                    if (t.hasOwnProperty(key) && t[key].parentNode === zoomLayer) {
                         var offset = wax.u.offset(t[key]);
                         o.push([
                             offset.top,
@@ -3592,7 +3709,7 @@ wax.mm.interaction = function() {
                     }
                 }
                 return o;
-            })(map.getLayerAt(0).tiles);
+            })(tiles);
             return _grid;
         }
     }
@@ -3624,115 +3741,61 @@ wax.mm.interaction = function() {
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// LatLng
-// ------
-// Show the current cursor position in
-// lat/long
-wax.mm.latlngtooltip = function(map) {
-    var tt, // tooltip
-        _down = false,
-        latlng = {};
+wax.mm.legend = function() {
+    var map,
+        l = {};
 
-    function getMousePoint(e) {
-        // start with just the mouse (x, y)
-        var point = new MM.Point(e.clientX, e.clientY);
-        // correct for scrolled document
-        point.x += document.body.scrollLeft + document.documentElement.scrollLeft;
-        point.y += document.body.scrollTop + document.documentElement.scrollTop;
+    var container = document.createElement('div');
+    container.className = 'wax-legends map-legends';
 
-        // correct for nested offsets in DOM
-        for (var node = map.parent; node; node = node.offsetParent) {
-            point.x -= node.offsetLeft;
-            point.y -= node.offsetTop;
+    var element = container.appendChild(document.createElement('div'));
+    element.className = 'wax-legend map-legend';
+    element.style.display = 'none';
+
+    l.content = function(x) {
+        if (!arguments.length) return element.innerHTML;
+
+        element.innerHTML = wax.u.sanitize(x);
+        element.style.display = 'block';
+        if (element.innerHTML === '') {
+            element.style.display = 'none';
         }
-        return point;
-    }
-
-    function onDown(e) {
-        console.log('here');
-        _down = true;
-    }
-
-    function onUp(e) {
-        _down = false;
-    }
-
-    function onMove(e) {
-        if (!e.shiftKey || _down) {
-            if (tt.parentNode === map.parent) {
-                map.parent.removeChild(tt);
-            }
-            return;
-        }
-
-        var pt = getMousePoint(e),
-            ll = map.pointLocation(pt),
-            fmt = ll.lat.toFixed(2) + ', ' + ll.lon.toFixed(2);
-
-        tt.innerHTML = fmt;
-        pt.scale = pt.width = pt.height = 1;
-        pt.x += 10;
-        MM.moveElement(tt, pt);
-        map.parent.appendChild(tt);
-    }
-
-    latlng.add = function() {
-        MM.addEvent(map.parent, 'mousemove', onMove);
-        MM.addEvent(map.parent, 'mousedown', onDown);
-        MM.addEvent(map.parent, 'mouseup', onUp);
-        tt = document.createElement('div');
-        tt.className = 'wax-latlngtooltip';
-        return this;
+        return l;
     };
 
-    latlng.remove = function() {
-        MM.removeEvent(map.parent, 'mousemove', onMove);
-        MM.removeEvent(map.parent, 'mousedown', onDown);
-        MM.removeEvent(map.parent, 'mouseup', onUp);
-        return this;
+    l.element = function() {
+        return container;
     };
 
-    return latlng.add();
+    l.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return l;
+    };
+
+    l.add = function() {
+        if (!map) return false;
+        l.appendTo(map.parent);
+        return l;
+    };
+
+    l.remove = function() {
+        if (container.parentNode) {
+            container.parentNode.removeChild(container);
+        }
+        return l;
+    };
+
+    l.appendTo = function(elem) {
+        wax.u.$(elem).appendChild(container);
+        return l;
+    };
+
+    return l;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// Legend Control
-// --------------
-// The Modest Maps version of this control is a very, very
-// light wrapper around the `/lib` code for legends.
-wax.mm.legend = function(map, tilejson) {
-    tilejson = tilejson || {};
-    var l, // parent legend
-        legend = {};
-
-    legend.add = function() {
-        l = wax.legend()
-            .content(tilejson.legend || '');
-        return this;
-    };
-
-    legend.content = function(x) {
-        if (x) l.content(x.legend || '');
-    };
-
-    legend.element = function() {
-        return l.element();
-    };
-
-    legend.appendTo = function(elem) {
-        wax.u.$(elem).appendChild(l.element());
-        return this;
-    };
-
-    return legend.add();
-};
-wax = wax || {};
-wax.mm = wax.mm || {};
-
-// Point Selector
-// --------------
-//
 // This takes an object of options:
 //
 // * `callback`: a function called with an array of `com.modestmaps.Location`
@@ -3740,19 +3803,18 @@ wax.mm = wax.mm || {};
 //
 // It also exposes a public API function: `addLocation`, which adds a point
 // to the map as if added by the user.
-wax.mm.pointselector = function(map, tilejson, opts) {
-    var mouseDownPoint = null,
+wax.mm.pointselector = function() {
+    var map,
+        mouseDownPoint = null,
         mouseUpPoint = null,
+        callback = null,
         tolerance = 5,
         overlayDiv,
         pointselector = {},
+        callbackManager = new MM.CallbackManager(pointselector, ['change']),
         locations = [];
 
-    var callback = (typeof opts === 'function') ?
-        opts :
-        opts.callback;
-
-    // Create a `com.modestmaps.Point` from a screen event, like a click.
+    // Create a `MM.Point` from a screen event, like a click.
     function makePoint(e) {
         var coords = wax.u.eventoffset(e);
         var point = new MM.Point(coords.x, coords.y);
@@ -3798,7 +3860,7 @@ wax.mm.pointselector = function(map, tilejson, opts) {
             var point = map.locationPoint(locations[i]);
             if (!locations[i].pointDiv) {
                 locations[i].pointDiv = document.createElement('div');
-                locations[i].pointDiv.className = 'wax-point-div';
+                locations[i].pointDiv.className = 'map-point-div';
                 locations[i].pointDiv.style.position = 'absolute';
                 locations[i].pointDiv.style.display = 'block';
                 // TODO: avoid circular reference
@@ -3831,7 +3893,7 @@ wax.mm.pointselector = function(map, tilejson, opts) {
         mouseUpPoint = makePoint(e);
         if (MM.Point.distance(mouseDownPoint, mouseUpPoint) < tolerance) {
             pointselector.addLocation(map.pointLocation(mouseDownPoint));
-            callback(cleanLocations(locations));
+            callbackManager.dispatchCallback('change', cleanLocations(locations));
         }
         mouseDownPoint = null;
     }
@@ -3842,49 +3904,70 @@ wax.mm.pointselector = function(map, tilejson, opts) {
     pointselector.addLocation = function(location) {
         locations.push(location);
         drawPoints();
-        callback(cleanLocations(locations));
+        callbackManager.dispatchCallback('change', cleanLocations(locations));
+        return pointselector;
     };
 
-    pointselector.locations = function(x) {
-        return locations;
+    // TODO set locations
+    pointselector.locations = function() {
+        if (!arguments.length) return locations;
     };
 
-    pointselector.add = function(map) {
+    pointselector.addCallback = function(event, callback) {
+        callbackManager.addCallback(event, callback);
+        return pointselector;
+    };
+
+    pointselector.removeCallback = function(event, callback) {
+        callbackManager.removeCallback(event, callback);
+        return pointselector;
+    };
+
+    pointselector.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return pointselector;
+    };
+
+    pointselector.add = function() {
         bean.add(map.parent, 'mousedown', mouseDown);
         map.addCallback('drawn', drawPoints);
-        return this;
+        return pointselector;
     };
 
-    pointselector.remove = function(map) {
+    pointselector.remove = function() {
         bean.remove(map.parent, 'mousedown', mouseDown);
         map.removeCallback('drawn', drawPoints);
         for (var i = locations.length - 1; i > -1; i--) {
             pointselector.deleteLocation(locations[i]);
         }
-        return this;
+        return pointselector;
     };
 
     pointselector.deleteLocation = function(location, e) {
         if (!e || confirm('Delete this point?')) {
             location.pointDiv.parentNode.removeChild(location.pointDiv);
-            locations.splice(wax.u.indexOf(locations, location), 1);
-            callback(cleanLocations(locations));
+            for (var i = 0; i < locations.length; i++) {
+                if (locations[i] === location) {
+                    locations.splice(i, 1);
+                    break;
+                }
+            }
+            callbackManager.dispatchCallback('change', cleanLocations(locations));
         }
     };
 
-    return pointselector.add(map);
+    return pointselector;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// ZoomBox
-// -------
-// An OL-style ZoomBox control, from the Modest Maps example.
-wax.mm.zoombox = function(map) {
+wax.mm.zoombox = function() {
     // TODO: respond to resize
     var zoombox = {},
+        map,
         drawing = false,
-        box,
+        box = document.createElement('div'),
         mouseDownPoint = null;
 
     function getMousePoint(e) {
@@ -3956,11 +4039,17 @@ wax.mm.zoombox = function(map) {
         return MM.cancelEvent(e);
     }
 
-    zoombox.add = function(map) {
+    zoombox.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return zoombox;
+    };
+
+    zoombox.add = function() {
+        if (!map) return false;
         // Use a flag to determine whether the zoombox is currently being
         // drawn. Necessary only for IE because `mousedown` is triggered
         // twice.
-        box = box || document.createElement('div');
         box.id = map.parent.id + '-zoombox-box';
         box.className = 'zoombox-box';
         map.parent.appendChild(box);
@@ -3969,66 +4058,107 @@ wax.mm.zoombox = function(map) {
     };
 
     zoombox.remove = function() {
-        map.parent.removeChild(box);
+        if (!map) return false;
+        if (box.parentNode) box.parentNode.removeChild(box);
         MM.removeEvent(map.parent, 'mousedown', mouseDown);
+        return zoombox;
     };
 
-    return zoombox.add(map);
+    return zoombox;
 };
 wax = wax || {};
 wax.mm = wax.mm || {};
 
-// Zoomer
-// ------
-// Add zoom links, which can be styled as buttons, to a `modestmaps.Map`
-// control. This function can be used chaining-style with other
-// chaining-style controls.
-wax.mm.zoomer = function(map) {
-    var zoomin = document.createElement('a');
+wax.mm.zoomer = function() {
+    var zoomer = {},
+        smooth = true,
+        map;
+
+    var zoomin = document.createElement('a'),
+        zoomout = document.createElement('a');
+
+    function stopEvents(e) {
+        e.stop();
+    }
+
+    function zIn(e) {
+        e.stop();
+        if (smooth && map.ease) {
+            map.ease.zoom(map.zoom() + 1).run(50);
+        } else {
+            map.zoomIn();
+        }
+    }
+
+    function zOut(e) {
+        e.stop();
+        if (smooth && map.ease) {
+            map.ease.zoom(map.zoom() - 1).run(50);
+        } else {
+            map.zoomOut();
+        }
+    }
+
     zoomin.innerHTML = '+';
     zoomin.href = '#';
     zoomin.className = 'zoomer zoomin';
-    bean.add(zoomin, 'mousedown dblclick', function(e) {
-        e.stop();
-    });
-    bean.add(zoomin, 'touchstart click', function(e) {
-        e.stop();
-        map.zoomIn();
-    }, false);
-
-    var zoomout = document.createElement('a');
     zoomout.innerHTML = '-';
     zoomout.href = '#';
     zoomout.className = 'zoomer zoomout';
-    bean.add(zoomout, 'mousedown dblclick', function(e) {
-        e.stop();
-    });
-    bean.add(zoomout, 'touchstart click', function(e) {
-        e.stop();
-        map.zoomOut();
-    });
 
-    var zoomer = {
-        add: function(map) {
-            map.addCallback('drawn', function(map, e) {
-                if (map.coordinate.zoom === map.coordLimits[0].zoom) {
-                    zoomout.className = 'zoomer zoomout zoomdisabled';
-                } else if (map.coordinate.zoom === map.coordLimits[1].zoom) {
-                    zoomin.className = 'zoomer zoomin zoomdisabled';
-                } else {
-                    zoomin.className = 'zoomer zoomin';
-                    zoomout.className = 'zoomer zoomout';
-                }
-            });
-            return this;
-        },
-        appendTo: function(elem) {
-            wax.u.$(elem).appendChild(zoomin);
-            wax.u.$(elem).appendChild(zoomout);
-            return this;
+    function updateButtons(map, e) {
+        if (map.coordinate.zoom === map.coordLimits[0].zoom) {
+            zoomout.className = 'zoomer zoomout zoomdisabled';
+        } else if (map.coordinate.zoom === map.coordLimits[1].zoom) {
+            zoomin.className = 'zoomer zoomin zoomdisabled';
+        } else {
+            zoomin.className = 'zoomer zoomin';
+            zoomout.className = 'zoomer zoomout';
         }
+    }
+
+    zoomer.map = function(x) {
+        if (!arguments.length) return map;
+        map = x;
+        return zoomer;
     };
-    return zoomer.add(map);
+
+    zoomer.add = function() {
+        if (!map) return false;
+        map.addCallback('drawn', updateButtons);
+        zoomer.appendTo(map.parent);
+        bean.add(zoomin, 'mousedown dblclick', stopEvents);
+        bean.add(zoomout, 'mousedown dblclick', stopEvents);
+        bean.add(zoomout, 'touchstart click', zOut);
+        bean.add(zoomin, 'touchstart click', zIn);
+        return zoomer;
+    };
+
+    zoomer.remove = function() {
+        if (!map) return false;
+        map.removeCallback('drawn', updateButtons);
+        if (zoomin.parentNode) zoomin.parentNode.removeChild(zoomin);
+        if (zoomout.parentNode) zoomout.parentNode.removeChild(zoomout);
+        bean.remove(zoomin, 'mousedown dblclick', stopEvents);
+        bean.remove(zoomout, 'mousedown dblclick', stopEvents);
+        bean.remove(zoomout, 'touchstart click', zOut);
+        bean.remove(zoomin, 'touchstart click', zIn);
+        return zoomer;
+    };
+
+    zoomer.appendTo = function(elem) {
+        wax.u.$(elem).appendChild(zoomin);
+        wax.u.$(elem).appendChild(zoomout);
+        return zoomer;
+    };
+
+    zoomer.smooth = function(x) {
+        if (!arguments.length) return smooth;
+        smooth = x;
+        return zoomer;
+    };
+
+    return zoomer;
 };
 var wax = wax || {};
 wax.mm = wax.mm || {};
@@ -4059,6 +4189,7 @@ wax.mm._provider.prototype = {
         ];
     },
     getTile: function(c) {
+        var coord;
         if (!(coord = this.sourceCoordinate(c))) return null;
         if (coord.zoom < this.options.minzoom || coord.zoom > this.options.maxzoom) return null;
 

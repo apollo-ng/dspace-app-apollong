@@ -160,13 +160,13 @@ var DSpace = function(){
       },
 
       events: {
-              "click": "jumpMap"
+              "click": "jumpToMarker"
       },
 
       /**
        * calls map to jump to its Feature
        */
-      jumpMap: function( event ){
+      jumpToMarker: function( event ){
         this.map.jumpToFeature(this.model); //FIXME !!!
       }
     });
@@ -184,8 +184,11 @@ var DSpace = function(){
 
       render: function( collection ){
         var that = this;
-        var lastletter = 122;  // DEC value of ascii "a" to "z" for marker lettering
+
+        // DEC value of ascii "a" to "z" for marker lettering
         var letter = 97;
+        var lastletter = 122;
+
 
         /* Loop through each feature in the model
          * example how to add more data to the view:
@@ -208,7 +211,7 @@ var DSpace = function(){
     /* binds to FeatureCollection reset events.
      * adds the collection to the listbox
      * draws marker with mapbox
-     */ 
+     */
     var Overlay = Backbone.View.extend({
       initialize: function(){
           this.map = this.options.map;
@@ -366,3 +369,18 @@ $.domReady(function () {
   var world = new DSpace();
   world.init();
 });
+
+
+
+/*
+ *  Handlebar Template Helper Functions
+ *  Should be outsourced in the next cleanup run
+ */
+
+Handlebars.registerHelper('shortPos', function(object) {
+  return new Handlebars.SafeString(
+    object.toString().substring(0,6)
+  );
+});
+
+

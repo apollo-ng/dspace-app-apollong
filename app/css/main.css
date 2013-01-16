@@ -191,23 +191,6 @@ clear: after;
 clear: after;
 }
 
-#statusPanel {
-  position:absolute;
-  right:0;
-  left:0;
-  bottom: 0;
-  z-index: 999;
-  height: 50px;
-  line-height: 50px;
-  padding-left:10px;
-  background:#3f3e3a;
-  border-top:1px solid #888;
-}
-
-#statusPanel {
-  color: #eee;
-}
-
 #info {
 color: #fafafa;
 }

@@ -4,9 +4,10 @@
 var DSpace = function(){
 
   /**
-   * TODO document
+   * expects a config object
+   * FIXME set defautls to override and don't crash if no options ;)
    */
-  this.init = function (){
+  this.init = function ( config ){
 
     /**
      * require dependencies with Ender
@@ -353,8 +354,13 @@ var DSpace = function(){
       /**
        * Genesis ;)
        */
-      initialize: function(){
+      initialize: function( config ){
         var self = this;
+
+        /**
+         * store config
+         */
+        this.config = config;
 
         /**
          * create User
@@ -369,14 +375,14 @@ var DSpace = function(){
         /**
          * FIXME proper way for setting initial set of overlays
          */
-        _(this.geoFeeds).each(function(geoFeed){
+        _(this.config.geoFeeds).each(function(geoFeed){
           self.addFeatureCollection(geoFeed);
         });
 
         /**
          * create and render Map
          */
-        this.map = new Map({world: this, config: this.mapConfig});
+        this.map = new Map({world: this, config: this.config.map});
         this.map.render();
       },
 
@@ -392,31 +398,12 @@ var DSpace = function(){
         this.collections.push( featureCollection );
         return featureCollection;
       },
-
-      /**
-       * FIXME pass as argument from domOnReady
-       */
-      geoFeeds: [
-        { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
-        { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json'}
-      ],
-
-      mapConfig: {
-        tileSet: {
-            template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
-        },
-        geolat:  48.115293,
-        geolon:  11.60218,
-        minZoom: 13,
-        maxZoom: 17,
-        defaultZoom: 12
-      }
     });
 
     /**
      * init() returns an instance of a World
      */
-    return new World();
+    return new World( config );
 
   };
 
@@ -426,28 +413,4 @@ var DSpace = function(){
   return this;
 
 };
-
-/**
- * BIG BANG!
- */
-$.domReady(function (){
-
-  var world = new DSpace();
-  world.init();
-
-});
-
-
-
-/*
- *  Handlebar Template Helper Functions
- *  Should be outsourced in the next cleanup run
- */
-
-Handlebars.registerHelper('shortPos', function(object) {
-  return new Handlebars.SafeString(
-    object.toString().substring(0,6)
-  );
-});
-
 

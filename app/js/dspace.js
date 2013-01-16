@@ -113,7 +113,7 @@ var DSpace = function(){
 
         var config = this.config;
 
-        var template = config.tileSet.template;
+        var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME
 
         var modestmap = new modestmaps.Map('map', layer);
@@ -208,6 +208,7 @@ var DSpace = function(){
         /**
          * get template data from model
          * FIXME rethink and clarify comment
+         * shuldn't need reference to map but just some util object
          */
         var templateData = this.model.toJSON();
 
@@ -229,7 +230,7 @@ var DSpace = function(){
        * calls map to jump to its Feature
        */
       jumpToMarker: function( event ){
-        this.map.jumpToFeature(this.model); //FIXME !!!
+        this.map.jumpToFeature(this.model); //FIXME use events!!! Backbone.Router?
       }
     });
 
@@ -278,6 +279,13 @@ var DSpace = function(){
       }
     });
 
+    /** @wip
+     * FIXME implementing
+     */
+    var Marker = Backbone.View.extend({
+
+    });
+
     /**
      * binds to FeatureCollection reset events.
      * adds the collection to the listbox
@@ -319,8 +327,8 @@ var DSpace = function(){
          */
         markerLayer.factory(function(feature){
           var img = document.createElement('img');
+          img.setAttribute('src', 'icons/black-shield-' + feature.letter + '.png');
           img.className = 'marker-image';
-          img.setAttribute('src', 'icons/black-shield-a.png');
           return img;
         });
 
@@ -328,10 +336,26 @@ var DSpace = function(){
          * display markers
          * .extent() called to redraw map!
          */
-        markerLayer.features(this.collection.toJSON());
+        var jLettColl = this.jsonLetteredCollection(this.collection);
+        markerLayer.features(jLettColl);
         this.map.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
-
       },
+
+      /**
+       * returns json of collection with extra **letter** attribute
+       * FIXME optimise passing models or toJSON
+       */
+      jsonLetteredCollection: function(collection) {
+
+        var self = this;
+
+        var mappedJson = _(collection.models).map( function(feature, index){
+          var featureJson = feature.toJSON();
+          featureJson.letter = self.map.markerLetter(index);
+          return featureJson;
+        });
+        return mappedJson;
+      }
     });
 
     /**

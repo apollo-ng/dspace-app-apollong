@@ -212,12 +212,18 @@ var DSpace = function(){
 
     /**
      * UI element with list of features
+     *
+     * gets FeatureCollection as collection
+     * gets reference to the map
      */
     var FeatureBox = Backbone.View.extend({
 
       el: $('#featureBox'),
 
       initialize: function(){
+        /*
+         * convienience accessor to map
+         */
         this.map = this.options.map;
       },
 
@@ -256,12 +262,23 @@ var DSpace = function(){
      * binds to FeatureCollection reset events.
      * adds the collection to the listbox
      * draws marker with mapbox
+     *
+     * gets FeatureCollection as collection
+     * gets reference to the map
      */
     var Overlay = Backbone.View.extend({
 
       initialize: function(){
-          this.map = this.options.map;
           var self = this;
+
+          /*
+           * convienience accessor to map
+           */
+          this.map = this.options.map;
+
+          /*
+           * listens to its FeatureCollection reset event
+           */
           this.collection.on( 'reset', function( event, data ){
             self.render( );
             self.map.featureBox.render( self.collection );

@@ -163,6 +163,21 @@ var DSpace = function(){
        */
       getCenter: function( ){
         return this.frame.getCenter();
+      },
+
+      /**
+       * gets letter form a markers depending on a position in collection
+       */
+      markerLetter: function(index){
+
+        /**
+         * DEC value of ascii "a" to "z" for marker lettering
+         */
+        var aCharCode = 97;
+        var zCharCode = 122;  //FIXME add top boundry
+        var letter = String.fromCharCode(aCharCode + index);
+        return letter;
+
       }
     });
 
@@ -176,7 +191,15 @@ var DSpace = function(){
       initialize: function(){
         _.bindAll(this, 'render');
 
+        /**
+         * convienience accessors
+         */
         this.map = this.options.map;
+        this.index = this.options.index;
+
+        /**
+         * DOM template
+         */
         this.template = Handlebars.compile($('#featureBoxItem-template').html());
       },
 
@@ -184,13 +207,14 @@ var DSpace = function(){
 
         /**
          * get template data from model
+         * FIXME rethink and clarify comment
          */
         var templateData = this.model.toJSON();
 
         /**
          * add markerLetter passed from options
          */
-        templateData.markerLetter = this.options.markerLetter;
+        templateData.markerLetter = this.map.markerLetter(this.index);
 
         $(this.el).html(this.template(templateData));
         return this.el;
@@ -229,9 +253,6 @@ var DSpace = function(){
 
       render: function( collection ){
         var self = this;
-        var letter = 97;
-        var lastletter = 122;  //FIXME DEC value of ascii "a" to "z" for marker lettering
-
 
         /**
          * Loop through each feature in the model
@@ -240,12 +261,11 @@ var DSpace = function(){
          * The additionally passend markerLetter ends up in
          * the featureBoxItem as Options.markerLetter.
          */
-        _(collection.models).each(function(feature, i){
-          var markerLetter = String.fromCharCode(letter+i);
+        _(collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
-              model: collection.models[i]
-            , map: self.map
-            , markerLetter: markerLetter
+              model: collection.models[index]
+            , map: self.map //FIXME - why map?
+            , index: index
           });
           var renderedTemplate = featureBoxItem.render();
 

@@ -101,7 +101,7 @@ var DSpace = function(){
         _(this.world.collections).each(function(featureCollection){
 
           this.featureBox = new FeatureBox({ collection: featureCollection, map: self });
-          self.overlays.push(overlay);
+          self.featureBoxes.push(overlay);
 
           var overlay = new Overlay({ collection: featureCollection, map: self });
           self.overlays.push(overlay);
@@ -283,7 +283,7 @@ var DSpace = function(){
 
           /**
            * here it gets added to DOM
-           * FIXME move to map
+           * FIXME innerHTML for single box at a time?
            */
           $(self.el).append(renderedTemplate);
 
@@ -344,7 +344,7 @@ var DSpace = function(){
         });
 
         /**
-         * display markers
+         * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
         var jLettColl = this.jsonLetteredCollection(this.collection);

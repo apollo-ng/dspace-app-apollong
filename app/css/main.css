@@ -196,7 +196,8 @@ color: #fafafa;
 }
 
 
-.markerfix {
+.marker-image {
+position: absolute;
 margin-top: -35px;
 margin-left: -16px;
 }

@@ -33,7 +33,7 @@ var DSpace = function(){
       setLatLon: function(){
         var g = this.get('geometry');
         if( 'coordinates' in g && g.coordinates.length == 2 ) {
-          this.set({ lat: g.coordinates[1], lon: g.coordinates[0] });
+          this.set({ lat: g.coordinates[1], lon: g.coordinates[0] }); //FIXME
         }
       }
     });
@@ -217,6 +217,8 @@ var DSpace = function(){
        * sets linked Feature current
        */
       setFeatureCurrent: function( event ){
+        //FIXME don't modify data but just ues this.model.setCurrent()
+        // also changing event from 'change' in views
         this.model.set('curent', true);
       }
     });

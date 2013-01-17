@@ -67,9 +67,10 @@ var DSpace = function(){
           this.config = this.options.config;
 
           /**
-           * to keep track on overlays
+           * to keep track on overlays and feature boxes
            */
           this.overlays = [];
+          this.featureBoxes = [];
       },
 
       /**
@@ -83,11 +84,6 @@ var DSpace = function(){
         this.frame = this.createFrame();
 
         /**
-         *  create FeatureBox
-         */
-        this.featureBox = new FeatureBox({ map: this });
-
-        /**
          * create StatusPanel
          * set statusPanel model to user
          */
@@ -99,7 +95,14 @@ var DSpace = function(){
          */
         var self = this;
 
+        /**
+         *  create Overlays and FeatureBoxes
+         */
         _(this.world.collections).each(function(featureCollection){
+
+          this.featureBox = new FeatureBox({ collection: featureCollection, map: self });
+          self.overlays.push(overlay);
+
           var overlay = new Overlay({ collection: featureCollection, map: self });
           self.overlays.push(overlay);
         });
@@ -246,13 +249,21 @@ var DSpace = function(){
       el: $('#featureBox'),
 
       initialize: function(){
+        var self = this;
         /*
          * convienience accessor to map
          */
         this.map = this.options.map;
+
+        /*
+         * listens to its FeatureCollection reset event
+         */
+        this.collection.on( 'reset', function( event, data ){
+          self.render( );
+        });
       },
 
-      render: function( collection ){
+      render: function(){
         var self = this;
 
         /**
@@ -262,9 +273,9 @@ var DSpace = function(){
          * The additionally passend markerLetter ends up in
          * the featureBoxItem as Options.markerLetter.
          */
-        _(collection.models).each(function(feature, index){
+        _(this.collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
-              model: collection.models[index]
+              model: feature
             , map: self.map //FIXME - why map?
             , index: index
           });
@@ -272,6 +283,7 @@ var DSpace = function(){
 
           /**
            * here it gets added to DOM
+           * FIXME move to map
            */
           $(self.el).append(renderedTemplate);
 
@@ -309,7 +321,6 @@ var DSpace = function(){
            */
           this.collection.on( 'reset', function( event, data ){
             self.render( );
-            self.map.featureBox.render( self.collection );
           });
       },
 

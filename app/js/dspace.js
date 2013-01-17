@@ -166,21 +166,6 @@ var DSpace = function(){
        */
       getCenter: function( ){
         return this.frame.getCenter();
-      },
-
-      /**
-       * gets letter form a markers depending on a position in collection
-       */
-      markerLetter: function(index){
-
-        /**
-         * DEC value of ascii "a" to "z" for marker lettering
-         */
-        var aCharCode = 97;
-        var zCharCode = 122;  //FIXME add top boundry
-        var letter = String.fromCharCode(aCharCode + index);
-        return letter;
-
       }
     });
 
@@ -215,9 +200,9 @@ var DSpace = function(){
         var templateData = this.model.toJSON();
 
         /**
-         * add markerLetter passed from options
+         * add index passed from options
          */
-        //templateData.markerLetter = this.map.markerLetter(this.index);
+        templateData.index = this.index;
 
         $(this.el).html(this.template(templateData));
         return this.el;
@@ -276,9 +261,6 @@ var DSpace = function(){
         /**
          * Loop through each feature in the model
          * example how to add more data to the view:
-         *
-         * The additionally passend markerLetter ends up in
-         * the featureBoxItem as Options.markerLetter.
          */
         _(this.collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
@@ -344,7 +326,7 @@ var DSpace = function(){
          */
         markerLayer.factory(function(feature){
           var img = document.createElement('img');
-          img.setAttribute('src', 'icons/black-shield-' + feature.letter + '.png');
+          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
           img.className = 'marker-image';
           return img;
         });
@@ -353,8 +335,8 @@ var DSpace = function(){
          * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
-        var jLettColl = this.jsonLetteredCollection(this.collection);
-        markerLayer.features(jLettColl);
+        var jsonWithIndex = this.jsonWithIndex(this.collection);
+        markerLayer.features(jsonWithIndex);
         this.map.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
       },
 
@@ -362,13 +344,13 @@ var DSpace = function(){
        * returns json of collection with extra **letter** attribute
        * FIXME optimise passing models or toJSON
        */
-      jsonLetteredCollection: function(collection) {
+      jsonWithIndex: function(collection) {
 
         var self = this;
 
         var mappedJson = _(collection.models).map( function(feature, index){
           var featureJson = feature.toJSON();
-          featureJson.letter = self.map.markerLetter(index);
+          featureJson.index = index;
           return featureJson;
         });
         return mappedJson;

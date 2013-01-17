@@ -341,6 +341,7 @@ var DSpace = function(){
         var self = this;
         var request = new Reqwest({
           url: this.url,
+          type: 'json',
           success: function( response ) {
             self.reset( response.features ); },
             failure: function( e ) {

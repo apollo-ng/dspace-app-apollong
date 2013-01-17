@@ -49,6 +49,15 @@ watch('./app', function(filename) {
   exec("cp -rf app/* build");
 });
 
+// changes to app
+watch('./design', function(filename) {
+  if( filename.match(/\/\./, '')) { 
+    console.log('lock file '+ filename);
+    return; }
+  console.log(filename);
+  shell.cp('-rf', 'design/*', 'build/');
+});
+
 //FIXME change to test/fixtures
 watch('./test', function(filename) {
   if( filename.match(/\/\./, '')) {
@@ -57,7 +66,6 @@ watch('./test', function(filename) {
   console.log(filename);
   shell.cp( '-f', 'test/*', 'build/');
 });
-
 
 /**Static file server for serving data and UI
  *

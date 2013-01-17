@@ -197,7 +197,6 @@ var DSpace = function(){
         /**
          * convienience accessors
          */
-        this.map = this.options.map;
         this.index = this.options.index;
 
         /**
@@ -218,7 +217,7 @@ var DSpace = function(){
         /**
          * add markerLetter passed from options
          */
-        templateData.markerLetter = this.map.markerLetter(this.index);
+        //templateData.markerLetter = this.map.markerLetter(this.index);
 
         $(this.el).html(this.template(templateData));
         return this.el;
@@ -226,14 +225,14 @@ var DSpace = function(){
       },
 
       events: {
-              "click": "jumpToMarker"
+              "click": "setFeatureCurrent"
       },
 
       /**
-       * calls map to jump to its Feature
+       * sets linked Feature current
        */
-      jumpToMarker: function( event ){
-        this.map.jumpToFeature(this.model); //FIXME use events!!! Backbone.Router?
+      setFeatureCurrent: function( event ){
+        this.model.set('curent', true);
       }
     });
 
@@ -261,6 +260,14 @@ var DSpace = function(){
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
+
+        /**@wip
+         * listen to changes on model
+         */
+        this.collection.on('change', function(feature){
+          self.map.jumpToFeature(feature);
+        });
+
       },
 
       render: function(){
@@ -276,7 +283,6 @@ var DSpace = function(){
         _(this.collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
               model: feature
-            , map: self.map //FIXME - why map?
             , index: index
           });
           var renderedTemplate = featureBoxItem.render();

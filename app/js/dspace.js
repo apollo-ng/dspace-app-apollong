@@ -33,7 +33,7 @@ var DSpace = function(){
       setLatLon: function(){
         var g = this.get('geometry');
         if( 'coordinates' in g && g.coordinates.length == 2 ) {
-          this.set({ lat: g.coordinates[1], lon: g.coordinates[0] });
+          this.set({ lat: g.coordinates[1], lon: g.coordinates[0] }); //FIXME
         }
       }
     });
@@ -67,9 +67,10 @@ var DSpace = function(){
           this.config = this.options.config;
 
           /**
-           * to keep track on overlays
+           * to keep track on overlays and feature boxes
            */
           this.overlays = [];
+          this.featureBoxes = [];
       },
 
       /**
@@ -83,11 +84,6 @@ var DSpace = function(){
         this.frame = this.createFrame();
 
         /**
-         *  create FeatureBox
-         */
-        this.featureBox = new FeatureBox({ map: this });
-
-        /**
          * create StatusPanel
          * set statusPanel model to user
          */
@@ -99,7 +95,14 @@ var DSpace = function(){
          */
         var self = this;
 
+        /**
+         *  create Overlays and FeatureBoxes
+         */
         _(this.world.collections).each(function(featureCollection){
+
+          this.featureBox = new FeatureBox({ collection: featureCollection, map: self });
+          self.featureBoxes.push(overlay);
+
           var overlay = new Overlay({ collection: featureCollection, map: self });
           self.overlays.push(overlay);
         });
@@ -113,7 +116,7 @@ var DSpace = function(){
 
         var config = this.config;
 
-        var template = config.tileSet.template;
+        var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME
 
         var modestmap = new modestmaps.Map('map', layer);
@@ -176,7 +179,14 @@ var DSpace = function(){
       initialize: function(){
         _.bindAll(this, 'render');
 
-        this.map = this.options.map;
+        /**
+         * convienience accessors
+         */
+        this.index = this.options.index;
+
+        /**
+         * DOM template
+         */
         this.template = Handlebars.compile($('#featureBoxItem-template').html());
       },
 
@@ -184,13 +194,15 @@ var DSpace = function(){
 
         /**
          * get template data from model
+         * FIXME rethink and clarify comment
+         * shuldn't need reference to map but just some util object
          */
         var templateData = this.model.toJSON();
 
         /**
-         * add markerLetter passed from options
+         * add index passed from options
          */
-        templateData.markerLetter = this.options.markerLetter;
+        templateData.index = this.index;
 
         $(this.el).html(this.template(templateData));
         return this.el;
@@ -198,14 +210,16 @@ var DSpace = function(){
       },
 
       events: {
-              "click": "jumpToMarker"
+              "click": "setFeatureCurrent"
       },
 
       /**
-       * calls map to jump to its Feature
+       * sets linked Feature current
        */
-      jumpToMarker: function( event ){
-        this.map.jumpToFeature(this.model); //FIXME !!!
+      setFeatureCurrent: function( event ){
+        //FIXME don't modify data but just ues this.model.setCurrent()
+        // also changing event from 'change' in views
+        this.model.set('curent', true);
       }
     });
 
@@ -221,41 +235,58 @@ var DSpace = function(){
       el: $('#featureBox'),
 
       initialize: function(){
+        var self = this;
+
         /*
          * convienience accessor to map
          */
         this.map = this.options.map;
+
+        /*
+         * listens to its FeatureCollection reset event
+         */
+        this.collection.on( 'reset', function( event, data ){
+          self.render( );
+        });
+
+        /**@wip
+         * listen to changes on model
+         */
+        this.collection.on('change', function(feature){
+          self.map.jumpToFeature(feature);
+        });
+
       },
 
-      render: function( collection ){
+      render: function(){
         var self = this;
-        var letter = 97;
-        var lastletter = 122;  //FIXME DEC value of ascii "a" to "z" for marker lettering
-
 
         /**
          * Loop through each feature in the model
          * example how to add more data to the view:
-         *
-         * The additionally passend markerLetter ends up in
-         * the featureBoxItem as Options.markerLetter.
          */
-        _(collection.models).each(function(feature, i){
-          var markerLetter = String.fromCharCode(letter+i);
+        _(this.collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
-              model: collection.models[i]
-            , map: self.map
-            , markerLetter: markerLetter
+              model: feature
+            , index: index
           });
           var renderedTemplate = featureBoxItem.render();
 
           /**
            * here it gets added to DOM
+           * FIXME innerHTML for single box at a time?
            */
           $(self.el).append(renderedTemplate);
 
         });
       }
+    });
+
+    /** @wip
+     * FIXME implementing
+     */
+    var Marker = Backbone.View.extend({
+
     });
 
     /**
@@ -281,7 +312,6 @@ var DSpace = function(){
            */
           this.collection.on( 'reset', function( event, data ){
             self.render( );
-            self.map.featureBox.render( self.collection );
           });
       },
 
@@ -299,19 +329,35 @@ var DSpace = function(){
          */
         markerLayer.factory(function(feature){
           var img = document.createElement('img');
+          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
           img.className = 'marker-image';
-          img.setAttribute('src', 'icons/black-shield-a.png');
           return img;
         });
 
         /**
-         * display markers
+         * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
-        markerLayer.features(this.collection.toJSON());
+        var jsonWithIndex = this.jsonWithIndex(this.collection);
+        markerLayer.features(jsonWithIndex);
         this.map.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
-
       },
+
+      /**
+       * returns json of collection with extra **letter** attribute
+       * FIXME optimise passing models or toJSON
+       */
+      jsonWithIndex: function(collection) {
+
+        var self = this;
+
+        var mappedJson = _(collection.models).map( function(feature, index){
+          var featureJson = feature.toJSON();
+          featureJson.index = index;
+          return featureJson;
+        });
+        return mappedJson;
+      }
     });
 
     /**

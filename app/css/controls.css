@@ -233,3 +233,20 @@ background: linear-gradient(to bottom, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 1
 .status {}
 .walk { cursor: pointer; }
 .drive { cursor: pointer; }
+
+/* Control Panel */
+#controlPanel {
+  z-index: 999;
+  overflow: hidden;
+  font-size: 10px;
+  position:absolute;
+  top:0px;
+  right:0;
+  left:0;
+  height: 50px;
+  line-height: 50px;
+  padding-left:10px;
+  background:#3f3e3a;
+  border-bottom:1px solid #000;
+}
+

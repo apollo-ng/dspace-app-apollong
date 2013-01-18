@@ -23,8 +23,7 @@
 
 </head>
 <body>
-  <div id='masthead'>
-    <h1>DSpace Munich</h1>
+  <div id='controlPanel'>
   </div>
 
   <div id='featureBox'>
@@ -53,7 +52,6 @@
   <script id="statusPanel-template" type="text/x-handlebars-template">
     <div class="fullScreen">X</div>
     <div class="statusPanelPositions">
-     <div class="mapCenter">MAP: N {{shortPos map.lat}}, E: {{shortPos map.lon}}</div>
      <div class="geoLocation">YOU: N 48.201, E 11.037</div>
     </div>
     <div class="status">online</div>
@@ -61,5 +59,11 @@
     <div class="drive">drive</div>
   </script>
 
+  <script id="controlPanel-template" type="text/x-handlebars-template">
+    <div class="fullScreen">X</div>
+    <div class="statusPanelPositions">
+     <div class="mapCenter">MAP: N {{shortPos map.lat}}, E: {{shortPos map.lon}}</div>
+    </div>
+  </script>
 </body>
 </html>

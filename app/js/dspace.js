@@ -87,8 +87,15 @@ var DSpace = function(){
          * create StatusPanel
          * set statusPanel model to user
          */
-        this.statusPanel = new StatusPanel({model: this.world.user, map: this });
+        this.statusPanel = new StatusPanel({model: this.world.user});
         this.statusPanel.render();
+
+        /**
+         * create ControlPanel
+         * set controlPanel model to map
+         */
+        this.controlPanel = new ControlPanel({map: this });
+        this.controlPanel.render();
 
         /**
          * set overlays
@@ -373,7 +380,6 @@ var DSpace = function(){
          * create convienience accessors
          */
         this.user = this.model;
-        this.map = this.options.map;
 
         this.template = Handlebars.compile($('#statusPanel-template').html());
       },
@@ -383,9 +389,38 @@ var DSpace = function(){
        * TODO listen on map changing it's center
        */
       render: function(){
+        var templateData = {user: this.user.toJSON()};
+        $(this.el).html(this.template(templateData));
+        return this.el;
+      }
+    });
+
+    /**
+     * UI element to show map controls
+     */
+    var ControlPanel = Backbone.View.extend({
+
+      el: $('#controlPanel'),
+
+      initialize: function(){
+        _.bindAll(this, 'render');
+
+        /**
+         * create convienience accessors
+         */
+        this.map = this.options.map;
+
+        this.template = Handlebars.compile($('#controlPanel-template').html());
+      },
+
+      /**
+       * TODO listen to changes on model (User)
+       * TODO listen on map changing it's center
+       */
+      render: function(){
         var mapCenter = this.map.getCenter();
         var mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
-        var templateData = {user: this.user.toJSON(), map: mapData};
+        var templateData = {map: mapData};
         $(this.el).html(this.template(templateData));
         return this.el;
       }

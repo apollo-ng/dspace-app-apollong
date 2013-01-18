@@ -61,7 +61,7 @@ h3	 { font-size: 18px; color: #f888; }
   bottom:50px;
 }
 
-#minimap-canvas {
+#miniMapCanvas {
   background: rgb(237,237,237);
   background: -moz-linear-gradient(top, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,237,237,1)), color-stop(53%,rgba(246,246,246,1)), color-stop(100%,rgba(255,255,255,1)));
@@ -79,8 +79,6 @@ h3	 { font-size: 18px; color: #f888; }
   padding: 10px;
   -webkit-border-radius:5px;
   border-radius: 5px;
-  visibility: hidden;
-  display: none;
 }
 
 #minimap {

@@ -115,23 +115,35 @@ var DSpace = function(){
         });
 
         //FIXME
-        this.boxStatus = 'on';
-
+        this.ui = {
+            box: 'on'
+          , miniMap:'off'
+        };
+        $('#miniMapCanvas').hide();
       },
 
       /**
        * toggles state (on/off) for #featureBox
        */
       boxToggle: function(){
-        if(this.boxStatus === 'on'){
+        if(this.ui.box=== 'on'){
           $('#featureBox').hide();
-          this.boxStatus = 'off';
+          this.ui.box= 'off';
         } else {
           $('#featureBox').show();
-          this.boxStatus = 'on';
+          this.ui.box= 'on';
         }
       },
 
+      miniMapToggle: function(){
+        if(this.ui.miniMap === 'on'){
+          $('#miniMapCanvas').hide();
+          this.ui.miniMap = 'off';
+        } else {
+          $('#miniMapCanvas').show();
+          this.ui.miniMap = 'on';
+        }
+      },
       /**
        * creates frame using ModestMaps library
        */
@@ -420,7 +432,8 @@ var DSpace = function(){
       el: $('#controlPanel'),
 
       events: {
-        'click #boxToggle': 'boxToggle'
+          'click #boxToggle': 'boxToggle'
+        , 'click #miniMapToggle': 'miniMapToggle'
 
       },
 
@@ -437,6 +450,10 @@ var DSpace = function(){
 
       boxToggle: function(event){
         this.map.boxToggle();
+      },
+
+      miniMapToggle: function(event){
+        this.map.miniMapToggle();
       },
 
 

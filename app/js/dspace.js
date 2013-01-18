@@ -113,6 +113,23 @@ var DSpace = function(){
           var overlay = new Overlay({ collection: featureCollection, map: self });
           self.overlays.push(overlay);
         });
+
+        //FIXME
+        this.boxStatus = 'on';
+
+      },
+
+      /**
+       * toggles state (on/off) for #featureBox
+       */
+      boxToggle: function(){
+        if(this.boxStatus === 'on'){
+          $('#featureBox').hide();
+          this.boxStatus = 'off';
+        } else {
+          $('#featureBox').show();
+          this.boxStatus = 'on';
+        }
       },
 
       /**
@@ -402,6 +419,11 @@ var DSpace = function(){
 
       el: $('#controlPanel'),
 
+      events: {
+        'click #boxToggle': 'boxToggle'
+
+      },
+
       initialize: function(){
         _.bindAll(this, 'render');
 
@@ -413,8 +435,12 @@ var DSpace = function(){
         this.template = Handlebars.compile($('#controlPanel-template').html());
       },
 
+      boxToggle: function(event){
+        this.map.boxToggle();
+      },
+
+
       /**
-       * TODO listen to changes on model (User)
        * TODO listen on map changing it's center
        */
       render: function(){

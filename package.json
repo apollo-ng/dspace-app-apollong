@@ -12,6 +12,7 @@
     , "domready": "0.2.x"
     , "ender-js": "0.4.x"
     , "qwery": "3.4.x"
+    , "morpheus": "0.6.2"
     , "reqwest": "0.6.x"
     }
   , "devDependencies": {

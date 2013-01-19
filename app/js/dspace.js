@@ -11,11 +11,12 @@ var DSpace = function(){
 
     /**
      * require dependencies with Ender
-     * FIXME document (ex deoes order matter)?
+     * FIXME document (ex does order matter)?
      */
     var Backbone = require('backbone');
     var _ = require('underscore');
     var Reqwest = require('reqwest');
+    var morpheus = require('morpheus');
 
     /**
      * single geographical featue of interest
@@ -118,6 +119,8 @@ var DSpace = function(){
         this.ui = {
             box: 'on'
           , miniMap:'off'
+          , fullscreen: 'off'
+          , animation: '350' // Animation (Fade/Tween Time in ms)
         };
         $('#miniMapCanvas').hide();
       },
@@ -127,23 +130,45 @@ var DSpace = function(){
        */
       boxToggle: function(){
         if(this.ui.box=== 'on'){
-          $('#featureBox').hide();
+          $('#featureBox').fadeOut(this.ui.animation);
           this.ui.box= 'off';
         } else {
-          $('#featureBox').show();
+          $('#featureBox').fadeIn(this.ui.animation);
           this.ui.box= 'on';
         }
       },
 
       miniMapToggle: function(){
         if(this.ui.miniMap === 'on'){
-          $('#miniMapCanvas').hide();
+          $('#miniMapCanvas').fadeOut(this.ui.animation);
           this.ui.miniMap = 'off';
         } else {
-          $('#miniMapCanvas').show();
+          $('#miniMapCanvas').fadeIn(this.ui.animation);
           this.ui.miniMap = 'on';
         }
       },
+
+      fullscreenToggle: function(){
+        if(this.ui.fullscreen === 'on'){
+          $('#miniMapCanvas').fadeOut(this.ui.animation);
+          //$('#controlPanel').fadeOut(this.ui.animation);
+          $('#statusPanel').fadeOut(this.ui.animation);
+          $('#featureBox').animate({ top: -600  });
+          $('#featureBox').fadeOut(this.ui.animation);
+          $('#map').animate({ top: 0 , bottom: 0 });
+          this.ui.fullscreen = 'off';
+        } else {
+          $('#miniMapCanvas').fadeIn(this.ui.animation);
+          //$('#controlPanel').fadeIn(this.ui.animation);
+          $('#statusPanel').fadeIn(this.ui.animation);
+          $('#featureBox').animate({ top: 60  });
+          $('#featureBox').fadeIn(this.ui.animation);
+          $('#map').animate({ top: 50 , bottom: 50 });
+          this.ui.fullscreen = 'on';
+        }
+      },
+
+
       /**
        * creates frame using ModestMaps library
        */
@@ -432,9 +457,9 @@ var DSpace = function(){
       el: $('#controlPanel'),
 
       events: {
-          'click #boxToggle': 'boxToggle'
-        , 'click #miniMapToggle': 'miniMapToggle'
-
+          'click #toggleFeatureBox': 'boxToggle'
+        , 'click #toggleMiniMap': 'miniMapToggle'
+        , 'click #toggleFullscreen': 'fullscreenToggle'
       },
 
       initialize: function(){
@@ -456,6 +481,9 @@ var DSpace = function(){
         this.map.miniMapToggle();
       },
 
+      fullscreenToggle: function(event){
+        this.map.fullscreenToggle();
+      },
 
       /**
        * TODO listen on map changing it's center

@@ -120,6 +120,15 @@ h3	 { font-size: 18px; color: #f888; }
   width:240px;
   -webkit-border-radius:5px;
   border-radius: 5px;
+
+    -webkit-transition:opacity 150ms;
+     -moz-transition:opacity 150ms;
+      -ms-transition:opacity 150ms;
+       -o-transition:opacity 150ms;
+          transition:opacity 150ms;
+  -webkit-user-select:auto;
+     -moz-user-select:auto;
+          user-select:auto;
 }
 
 
@@ -129,68 +138,71 @@ h3	 { font-size: 18px; color: #f888; }
   border:1px solid #bbb;
   margin-top: 10px;
   z-index: 999999;
-background: rgb(244,241,235);
-background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,1)), color-stop(47%,rgba(232,229,222,1)), color-stop(100%,rgba(221,218,208,1)));
-background: -webkit-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: rgb(244,241,235);
+  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,1)), color-stop(47%,rgba(232,229,222,1)), color-stop(100%,rgba(221,218,208,1)));
+  background: -webkit-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
   -webkit-border-radius:3px;
   border-radius: 3px;
-   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-   cursor: pointer;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  cursor: pointer;
 }
 
 .featureBoxItem h3 {
-height: 30px; line-height: 38px; padding-left: 45px;
-color:#41403d;
-text-shadow: 0px -1px #000, 0px 1px #fff;
-border: 0px solid red;
+  height: 30px; line-height: 38px; padding-left: 45px;
+  color:#41403d;
+  text-shadow: 0px -1px #000, 0px 1px #fff;
+  border: 0px solid red;
+}
+
+.featureBoxItem-icon {
+  background-repeat: no-repeat;
+  background-position: 5px -2px;
 }
 
 .featureBoxItem-description {
-font-size: 12px;
-height: 14px; width: 230px; text-align: left; padding-left: 46px;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
+  font-size: 12px;
+  height: 14px; width: 230px; text-align: left; padding-left: 46px;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
 }
 
 .featureBoxItem-details {
-height: 40px; width: 230px; text-align: right;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
+  height: 40px; width: 230px; text-align: right;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
 }
 
 .featureBoxItem-distance {
-float: left;
-font-size: 10px;
-padding-left: 12px;
-text-align: center;
+  float: left;
+  font-size: 10px;
+  padding-left: 12px;
+  text-align: center;
 }
 
 .featureBoxItem-position {
-float: right;
-font-size: 10px;
-padding-top: 7px;
-padding-right: 5px;
-clear: after;
+  float: right;
+  font-size: 10px;
+  padding-top: 7px;
+  padding-right: 5px;
+  clear: after;
 }
 
 .clear-after {
-clear: after;
+  clear: after;
 }
 
 #info {
-color: #fafafa;
+  color: #fafafa;
 }
-
 
 .marker-image {
-position: absolute;
-margin-top: -35px;
-margin-left: -16px;
+  position: absolute;
+  margin-top: -35px;
+  margin-left: -16px;
 }
 
-
-.black-shield-0 { background: transparent url(../icons/black-shield-0.png) no-repeat 5px -2px; }
-.black-shield-1 { background: transparent url(../icons/black-shield-1.png) no-repeat 5px -2px; }
-.black-shield-2 { background: transparent url(../icons/black-shield-2.png) no-repeat 5px -2px; }
+.black-shield-0 { background-image: url(../icons/black-shield-0.png) }
+.black-shield-1 { background-image: url(../icons/black-shield-1.png) }
+.black-shield-2 { background-image: url(../icons/black-shield-2.png) }
 
 

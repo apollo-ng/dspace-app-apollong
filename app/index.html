@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang='en'>
 <head>
 
   <title>DSpace</title>
-  <meta charset="utf-8"/>
+  <meta charset='utf-8'/>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
   <meta name='apple-mobile-web-app-status-bar-style' content='black' />
   <meta name='apple-mobile-web-app-capable' content='yes' />
@@ -23,11 +23,9 @@
 
 </head>
 <body>
-  <div id='controlPanel'>
-  </div>
+  <div id='controlPanel'></div>
 
-  <div id='featureBox'>
-  </div>
+  <div id='featureBox'></div>
 
   <div id='map'></div>
 
@@ -37,34 +35,32 @@
 
   <div id='statusPanel'></div>
 
-  <script id="featureBoxItem-template" type="text/x-handlebars-template">
-    <!-- FIXME: manage url with js + fallbacks -->
-   <div class="black-shield-{{index}}" ><h3>{{properties.title}}</h3></div>
-   <div class="featureBoxItem-details">
-    <div class="featureBoxItem-description">{{properties.description}}</div>
-    <div class="clear-after">
-     <div class="featureBoxItem-distance">5<br />km</div>
-     <div class="featureBoxItem-position">LAT: {{shortPos lat}} LON: {{shortPos lon}}</div>
+  <script id='featureBoxItem-template' type='text/x-handlebars-template'>
+   <!-- FIXME: manage url with js + fallbacks -->
+   <div class='black-shield-{{index}} featureBoxItem-icon' ><h3>{{properties.title}}</h3></div>
+   <div class='featureBoxItem-details'>
+    <div class='featureBoxItem-description'>{{properties.description}}</div>
+    <div class='clear-after'>
+     <!-- FIXME: show real distance to mapcenter/geolocation -->
+     <div class='featureBoxItem-distance'>5<br />km</div>
+     <div class='featureBoxItem-position'>LAT: {{shortPos lat}} LON: {{shortPos lon}}</div>
     </div>
    </div>
   </script>
 
-  <script id="statusPanel-template" type="text/x-handlebars-template">
-    <div class="fullScreen">X</div>
-    <div class="statusPanelPositions">
-     <div class="geoLocation">YOU: N 48.201, E 11.037</div>
-    </div>
-    <div class="status">online</div>
-    <div class="walk">walk</div>
-    <div class="drive">drive</div>
+  <script id='statusPanel-template' type='text/x-handlebars-template'>
+   <div id='systemStatus'>online</div>
+   <div id='coordsGeoLocation'>YOU: N 48.201, E 11.037</div>
+   <div id='userModeWalk'>walk</div>
+   <div id='userModeDrive'>drive</div>
   </script>
 
-  <script id="controlPanel-template" type="text/x-handlebars-template">
-    <div id="boxToggle" class="fullScreen">B</div>
-    <div id="miniMapToggle" class="fullScreen">M</div>
-    <div class="statusPanelPositions">
-     <div class="mapCenter">MAP: N {{shortPos map.lat}}, E: {{shortPos map.lon}}</div>
-    </div>
+  <script id='controlPanel-template' type='text/x-handlebars-template'>
+   <div id='toggleFullscreen'>X</div>
+   <div id='coordsMapCenter'>MAP: N {{shortPos map.lat}}, E: {{shortPos map.lon}}</div>
+   <div id='toggleMiniMap'>M</div>
+   <div id='toggleFeatureBox'>B</div>
   </script>
+
 </body>
 </html>

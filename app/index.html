@@ -23,16 +23,13 @@
 
 </head>
 <body>
+
   <div id='controlPanel'></div>
-
   <div id='featureBox'></div>
-
   <div id='map'></div>
-
   <div id='miniMapCanvas'>
    <div id='minimap'></div>
   </div>
-
   <div id='statusPanel'></div>
 
   <script id='featureBoxItem-template' type='text/x-handlebars-template'>
@@ -43,23 +40,34 @@
     <div class='clear-after'>
      <!-- FIXME: show real distance to mapcenter/geolocation -->
      <div class='featureBoxItem-distance'>5<br />km</div>
-     <div class='featureBoxItem-position'>LAT: {{shortPos lat}} LON: {{shortPos lon}}</div>
+     <div class='featureBoxItem-position'>N {{shortPos lat}}, E {{shortPos lon}}</div>
     </div>
    </div>
   </script>
 
-  <script id='statusPanel-template' type='text/x-handlebars-template'>
-   <div id='systemStatus'>online</div>
-   <div id='coordsGeoLocation'>YOU: N 48.201, E 11.037</div>
-   <div id='userModeWalk'>walk</div>
-   <div id='userModeDrive'>drive</div>
+  <script id='controlPanel-template' type='text/x-handlebars-template'>
+   <div id='toggleFullscreen' class='uiButton'>X</div>
+   <div id='toggleMiniMap' class='uiButton'>M</div>
+   <div id='coordsMapCenter' class='uiDisplay'>N {{shortPos map.lat}}, E {{shortPos map.lon}}</div>
+   <div id='geobar'>
+    <!-- FIXME: show model window with search options -->
+    <div id='geobarOptions' class='uiButton'>Options</div>
+    <div id='geobarContainer' class='uiDisplay'>
+     <!-- FIXME: make the search functional -->
+     <input type='search' placeholder='find stuff in dspace' name='geobarQuery' id='geobarQuery' x-webkit-speech />
+    </div>
+    <div id='geobarButton' class='uiButton'>GO</div>
+   </div>
+   <div id='toggleFeatureBox' class='uiButton'>B</div>
+   <!-- FIXME: show name over the FeatureCollection -->
+   <div id='featureOptions' class='uiDisplay'>Hackerspaces in Munich</div>
   </script>
 
-  <script id='controlPanel-template' type='text/x-handlebars-template'>
-   <div id='toggleFullscreen'>X</div>
-   <div id='coordsMapCenter'>MAP: N {{shortPos map.lat}}, E: {{shortPos map.lon}}</div>
-   <div id='toggleMiniMap'>M</div>
-   <div id='toggleFeatureBox'>B</div>
+  <script id='statusPanel-template' type='text/x-handlebars-template'>
+   <div id='userModeWalk' class='uiButton'>W</div>
+   <div id='userModeDrive' class='uiButton'>D</div>
+   <div id='coordsGeoLocation' class='uiDisplay'>N 48.201, E 11.037</div>
+   <div id='systemStatus' class='uiDisplay'>%</div>
   </script>
 
 </body>

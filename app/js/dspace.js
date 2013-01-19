@@ -122,7 +122,7 @@ var DSpace = function(){
           , fullscreen: 'off'
           , animation: '350' // Animation (Fade/Tween Time in ms)
         };
-        $('#miniMapCanvas').hide();
+        //$('#miniMapCanvas').hide();
       },
 
       /**
@@ -140,30 +140,33 @@ var DSpace = function(){
 
       miniMapToggle: function(){
         if(this.ui.miniMap === 'on'){
-          $('#miniMapCanvas').fadeOut(this.ui.animation);
+          $('#miniMapCanvas').animate({ bottom: -250  });
           this.ui.miniMap = 'off';
         } else {
-          $('#miniMapCanvas').fadeIn(this.ui.animation);
+          $('#miniMapCanvas').animate({ bottom: 10  });
           this.ui.miniMap = 'on';
         }
       },
 
       fullscreenToggle: function(){
         if(this.ui.fullscreen === 'on'){
-          $('#miniMapCanvas').fadeOut(this.ui.animation);
+          $('#miniMapCanvas').animate({ bottom: -250  });
           //$('#controlPanel').fadeOut(this.ui.animation);
-          $('#statusPanel').fadeOut(this.ui.animation);
+          $('#statusPanel').fadeOut(this.ui.animation, function() { $('#statusPanel').hide(); });
           $('#featureBox').animate({ top: -600  });
           $('#featureBox').fadeOut(this.ui.animation);
           $('#map').animate({ top: 0 , bottom: 0 });
+          //browserFullscreen($('#map'));
           this.ui.fullscreen = 'off';
         } else {
-          $('#miniMapCanvas').fadeIn(this.ui.animation);
+          $('#miniMapCanvas').animate({ bottom: 10  });
           //$('#controlPanel').fadeIn(this.ui.animation);
+          $('#statusPanel').show();
           $('#statusPanel').fadeIn(this.ui.animation);
           $('#featureBox').animate({ top: 60  });
           $('#featureBox').fadeIn(this.ui.animation);
           $('#map').animate({ top: 50 , bottom: 50 });
+          //browserFullscreen($('#map'));
           this.ui.fullscreen = 'on';
         }
       },
@@ -202,14 +205,14 @@ var DSpace = function(){
 
       /**
        * animates map to focus location
-       * gets feature f 
+       * gets feature f
        */
       jumpToFeature: function( f ) {
 
         /**
          * easey interaction library for modestmaps
          */
-        var mmCoordinate = this.frame.locationCoordinate({ 
+        var mmCoordinate = this.frame.locationCoordinate({
             lat: f.get( 'lat' ),
             lon: f.get( 'lon' ) });
 
@@ -222,7 +225,7 @@ var DSpace = function(){
       },
 
       /**
-       * delegates to modest map and 
+       * delegates to modest map and
        * maybe rename
        * returns MM.Location of center
        */
@@ -279,7 +282,7 @@ var DSpace = function(){
        * sets linked Feature current
        */
       setFeatureCurrent: function( event ){
-        //FIXME current wasnt bad ... maybe namespace this 
+        //FIXME current wasnt bad ... maybe namespace this
         this.model.trigger('focus', this );
       }
     });
@@ -309,8 +312,8 @@ var DSpace = function(){
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
-        // listen for focus requests from features and 
-        // call map for focus 
+        // listen for focus requests from features and
+        // call map for focus
         this.collection.on( 'focus', function( event ){
           map.jumpToFeature( event.model );
         });
@@ -334,7 +337,7 @@ var DSpace = function(){
           /**
            * append to backbone provided $obj
            * FIXME innerHTML for single box at a time?
-	   * no, should hide the element until the update is done 
+	   * no, should hide the element until the update is done
            */
           self.$el.append(renderedTemplate);
 

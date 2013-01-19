@@ -140,29 +140,30 @@ var DSpace = function(){
       },
 
       /**
-       * animates map to focus on given feature
+       * animates map to focus location
+       * gets feature f 
        */
-      jumpToFeature: function( feature ) {
+      jumpToFeature: function( f ) {
 
         /**
          * easey interaction library for modestmaps
          */
-        var self = this;
-        var mmCoordinate = this.frame.locationCoordinate({
-          lat: feature.get('lat'),
-          lon: feature.get('lon')
-        });
+        var mmCoordinate = this.frame.locationCoordinate({ 
+            lat: f.get( 'lat' ),
+            lon: f.get( 'lon' ) });
 
         /**
          * TODO document
          */
-        easey().map(self.frame)
+        easey().map(this.frame)
         .to(mmCoordinate)
-        .zoom(self.config.maxZoom).optimal();
+        .zoom(this.config.maxZoom).optimal();
       },
 
       /**
-       * delegats to modest map and returns MM.Location of center
+       * delegates to modest map and 
+       * maybe rename
+       * returns MM.Location of center
        */
       getCenter: function( ){
         return this.frame.getCenter();
@@ -217,9 +218,8 @@ var DSpace = function(){
        * sets linked Feature current
        */
       setFeatureCurrent: function( event ){
-        //FIXME don't modify data but just ues this.model.setCurrent()
-        // also changing event from 'change' in views
-        this.model.set('curent', true);
+        //FIXME current wasnt bad ... maybe namespace this 
+        this.model.trigger('focus', this );
       }
     });
 
@@ -227,8 +227,8 @@ var DSpace = function(){
     /**
      * UI element with list of features
      *
-     * gets FeatureCollection as collection
-     * gets reference to the map
+     * gets collection FeatureCollection
+     * gets option map
      */
     var FeatureBox = Backbone.View.extend({
 
@@ -236,11 +236,11 @@ var DSpace = function(){
 
       initialize: function(){
         var self = this;
-
         /*
          * convienience accessor to map
+         * for use in callbacks
          */
-        this.map = this.options.map;
+        map = this.options.map;
 
         /*
          * listens to its FeatureCollection reset event
@@ -248,12 +248,10 @@ var DSpace = function(){
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
-
-        /**@wip
-         * listen to changes on model
-         */
-        this.collection.on('change', function(feature){
-          self.map.jumpToFeature(feature);
+        // listen for focus requests from features and 
+        // call map for focus 
+        this.collection.on( 'focus', function( event ){
+          map.jumpToFeature( event.model );
         });
 
       },
@@ -263,8 +261,8 @@ var DSpace = function(){
 
         /**
          * Loop through each feature in the model
-         * example how to add more data to the view:
-         */
+     * example how to add more data to the view:
+     */
         _(this.collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
               model: feature
@@ -273,10 +271,11 @@ var DSpace = function(){
           var renderedTemplate = featureBoxItem.render();
 
           /**
-           * here it gets added to DOM
+           * append to backbone provided $obj
            * FIXME innerHTML for single box at a time?
+	   * no, should hide the element until the update is done 
            */
-          $(self.el).append(renderedTemplate);
+          self.$el.append(renderedTemplate);
 
         });
       }

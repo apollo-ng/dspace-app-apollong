@@ -118,8 +118,8 @@ var DSpace = function(){
         //FIXME
         this.ui = {
             box: 'on'
-          , miniMap:'off'
-          , fullscreen: 'off'
+          , miniMap:'on'
+          , fullscreen: 'on'
           , animation: '350' // Animation (Fade/Tween Time in ms)
         };
         //$('#miniMapCanvas').hide();
@@ -128,49 +128,50 @@ var DSpace = function(){
       /**
        * toggles state (on/off) for #featureBox
        */
-      boxToggle: function(){
-        if(this.ui.box=== 'on'){
-          $('#featureBox').fadeOut(this.ui.animation);
+      boxToggle: function() {
+        if(this.ui.box === 'on') {
+          $('#featureBox').animate({ top: -400, duration: 700 });
+          $('#featureBox').fadeOut(600);
           this.ui.box= 'off';
         } else {
-          $('#featureBox').fadeIn(this.ui.animation);
+          $('#featureBox').animate({ top: 60, duration: 700  });
+          $('#featureBox').fadeIn(600);
           this.ui.box= 'on';
         }
       },
 
-      miniMapToggle: function(){
-        if(this.ui.miniMap === 'on'){
-          $('#miniMapCanvas').animate({ bottom: -250  });
+      miniMapToggle: function() {
+        if(this.ui.miniMap === 'on') {
+          $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
           this.ui.miniMap = 'off';
         } else {
-          $('#miniMapCanvas').animate({ bottom: 10  });
+          $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });
           this.ui.miniMap = 'on';
         }
       },
 
-      fullscreenToggle: function(){
-        if(this.ui.fullscreen === 'on'){
-          $('#miniMapCanvas').animate({ bottom: -250  });
-          //$('#controlPanel').fadeOut(this.ui.animation);
+      fullscreenToggle: function() {
+        if(this.ui.fullscreen === 'on') {
+          $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
           $('#statusPanel').fadeOut(this.ui.animation, function() { $('#statusPanel').hide(); });
-          $('#featureBox').animate({ top: -600  });
-          $('#featureBox').fadeOut(this.ui.animation);
-          $('#map').animate({ top: 0 , bottom: 0 });
-          //browserFullscreen($('#map'));
+          $('#featureBox').animate({ top: -400, duration: 700  });
+          $('#featureBox').fadeOut(600);
+          $('#map').animate({ top: 0, bottom: 0, duration: 600 });
+          this.ui.box= 'off';
+          this.ui.miniMap = 'off';
           this.ui.fullscreen = 'off';
         } else {
-          $('#miniMapCanvas').animate({ bottom: 10  });
-          //$('#controlPanel').fadeIn(this.ui.animation);
+          $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });
           $('#statusPanel').show();
           $('#statusPanel').fadeIn(this.ui.animation);
-          $('#featureBox').animate({ top: 60  });
-          $('#featureBox').fadeIn(this.ui.animation);
-          $('#map').animate({ top: 50 , bottom: 50 });
-          //browserFullscreen($('#map'));
+          $('#featureBox').animate({ top: 60, duration: 700  });
+          $('#featureBox').fadeIn(600);
+          $('#map').animate({ top: 50, bottom: 50, duration: 600 });
+          this.ui.box= 'on';
+          this.ui.miniMap = 'on';
           this.ui.fullscreen = 'on';
         }
       },
-
 
       /**
        * creates frame using ModestMaps library

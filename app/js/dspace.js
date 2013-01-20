@@ -490,8 +490,8 @@ var DSpace = function(){
          */
         this.map = this.options.map;
         this.template = Handlebars.compile($('#controlPanel-template').html());
-        this.template1 = Handlebars.compile($('#featureOptionModal-template').html());
-        this.template2 = Handlebars.compile($('#geobarOptionModal-template').html());
+        this.templates = {
+	    'geobar': Handlebars.compile($('#featureOptionModal-template').html()) }
 
       },
 
@@ -512,6 +512,7 @@ var DSpace = function(){
           $('#geobarOptionModal').fadeOut(this.ui.animation, function() { $('#geobarOptionModal').hide(); });
           this.ui.geobarOptionModal = 'off';
         } else {
+          $('#geobarOptionModal').html( this.templates.geobar( { ui: this.ui } ) );
           $('#geobarOptionModal').show();
           $('#geobarOptionModal').fadeIn(this.ui.animation);
           this.ui.geobarOptionModal = 'on';

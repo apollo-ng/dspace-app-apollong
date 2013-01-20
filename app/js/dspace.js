@@ -55,6 +55,13 @@ var DSpace = function(){
      */
     var Map = Backbone.View.extend({
 
+      el: $('#map'),
+
+      events: {
+        "click": "clearAll"
+        ,"contextmenu": "mapContext"
+      },
+
       initialize: function(){
 
           /**
@@ -72,6 +79,34 @@ var DSpace = function(){
            */
           this.overlays = [];
           this.featureBoxes = [];
+
+          /**
+           * Map Context Menu Template
+           */
+          this.template = Handlebars.compile($('#mapContext-template').html());
+
+      },
+
+      /**
+       * Failsafe: A click on the map should clear all modal/context windows
+       */
+      clearAll: function () {
+        if($('#mapContext').css( 'opacity' ) === '1' ) {
+          $('#mapContext').fadeOut(350, function() { $('#mapContext').hide(); });
+        }
+      },
+
+      /**
+       *  Map right-click/long touch context menu
+       */
+      mapContext: function () {
+        if($('#mapContext').css( 'opacity' ) === '1' ) {
+          $('#mapContext').fadeOut(350, function() { $('#mapContext').hide(); });
+        } else {
+          $('#mapContext').css( { 'left': cursorX, 'top': cursorY });
+          $('#mapContext').css( { 'display': 'block'});
+          $('#mapContext').fadeIn(350);
+        }
       },
 
       /**
@@ -353,7 +388,7 @@ var DSpace = function(){
 
       events: {
          "click .marker-image": "featureInfoModal"
-        ,"rightclick": "markerContext"
+        ,"contextmenu .marker-image": "markerContext"
       },
 
       initialize: function() {
@@ -375,18 +410,20 @@ var DSpace = function(){
       },
 
       featureInfoModal: function(event) {
-          console.log('fmodal called');
         if($('#featureInfoModal').css( 'opacity' ) === '1' ) {
           $('#featureInfoModal').fadeOut(350, function() { $('#featureInfoModal').hide(); });
         } else {
-          $('#featureInfoModal').html( this.template( { title: 'Feature Title' } ) );
-          $('#featureInfoModal').show();
+          $('#featureInfoModal').html( this.template( { title: 'Feature Title' } ));
+          $('#featureInfoModal').css( { 'display': 'block'});
           $('#featureInfoModal').fadeIn(350);
         }
       },
 
+      /**
+       * Context-Menu for right-click/long touch on marker
+       */
       markerContext: function(event) {
-         console.log('marker context (right-click)') ;
+        console.log('marker context (right-click)') ;
       },
 
       render: function(){
@@ -482,7 +519,7 @@ var DSpace = function(){
           $('#userOptionModal').fadeOut(350, function() { $('#userOptionModal').hide(); });
         } else {
           $('#userOptionModal').html( this.templates.userOptions( { ui: this.ui } ) );
-          $('#userOptionModal').show();
+          $('#userOptionModal').css( { 'display': 'block'});
           $('#userOptionModal').fadeIn(350);
         }
       },
@@ -546,7 +583,7 @@ var DSpace = function(){
           $('#geobarOptionModal').fadeOut(350, function() { $('#geobarOptionModal').hide(); });
         } else {
           $('#geobarOptionModal').html( this.templates.geobarOptions( { ui: this.ui } ) );
-          $('#geobarOptionModal').show();
+          $('#geobarOptionModal').css( { 'display': 'block'});
           $('#geobarOptionModal').fadeIn(350);
         }
       },
@@ -556,7 +593,7 @@ var DSpace = function(){
           $('#featureOptionModal').fadeOut(350, function() { $('#featureOptionModal').hide(); });
         } else {
           $('#featureOptionModal').html( this.templates.featureOptions( { ui: this.ui } ) );
-          $('#featureOptionModal').show();
+          $('#featureOptionModal').css( { 'display': 'block'});
           $('#featureOptionModal').fadeIn(350);
         }
       },

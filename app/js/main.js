@@ -8,10 +8,10 @@ Handlebars.registerHelper('shortPos', function(object) {
   );
 });
 
-/*
+
+/**
  * X-Browser Fullscreen API Calls
  */
-
 function reqBFS () {
   var e = document.documentElement;
   if (e.requestFullscreen) {
@@ -32,6 +32,14 @@ function exitBFS () {
     document.webkitCancelFullScreen();
   }
 }
+
+/**
+ *  Ugly hack to get cursor position for context menus
+ */
+ document.onmousemove = function( ev ){
+  cursorX = ev.pageX;
+  cursorY = ev.pageY;
+};
 
 /**
  * config for initializing DSpace Wrorld

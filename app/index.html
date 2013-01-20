@@ -26,7 +26,7 @@
 
   <div id='controlPanel'></div>
   <div id='featureBox'></div>
-  <div id='map'></div>
+  <div id='map' class='map' oncontextmenu='javascript: return false;'></div>
   <div id='miniMapCanvas'>
    <div id='minimap'></div>
   </div>
@@ -35,6 +35,7 @@
   <div id='featureOptionModal' class='uiModal'></div>
   <div id='userOptionModal' class='uiModal'></div>
   <div id='featureInfoModal' class='uiModal'></div>
+  <div id='mapContext' class='uiContext'></div>
 
   <script id='featureBoxItem-template' type='text/x-handlebars-template'>
    <!-- FIXME: manage url with js + fallbacks -->

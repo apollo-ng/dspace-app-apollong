@@ -31,9 +31,8 @@
    <div id='minimap'></div>
   </div>
   <div id='statusPanel'></div>
-
-  <div id='geoBarOptionModal' class='uiModal'></div>
-  <div id='featureOptionModal' class='uiModal'></div>
+<div id='geobarOptionModal' class='uiModal'>   </div>
+   <div id='featureOptionModal' class='uiModal'>   </div>
 
   <script id='featureBoxItem-template' type='text/x-handlebars-template'>
    <!-- FIXME: manage url with js + fallbacks -->
@@ -64,6 +63,22 @@
    <div id='toggleFeatureBox' class='uiButton'>B</div>
    <!-- FIXME: show name over the FeatureCollection -->
    <div id='featureOptions' class='uiDisplay'>Hackerspaces in Munich</div>
+   </script>
+
+   <script id='geobarOptionModal-template' type='text/x-handlebars-template'>
+    <!-- FIXME: show available Search Options here -->
+    <h2>Search Options</h2>
+    This is a placeholder for search options and explanations
+   </script>
+
+  <script id='featureOptionModal-template' type='text/x-handlebars-template'>
+    <!-- FIXME: show available FeatureCollections here -->
+    <h2>Please select an Overlay</h2>
+    This is a placeholder for a list of available FeatureCollections
+     <ul>
+     <li>Overlay Title</li>
+     <li>Overlay Title 2</li>
+     </ul>
   </script>
 
   <script id='statusPanel-template' type='text/x-handlebars-template'>
@@ -71,14 +86,6 @@
    <div id='userModeDrive' class='uiButton'>D</div>
    <div id='coordsGeoLocation' class='uiDisplay'>N 48.201, E 11.037</div>
    <div id='systemStatus' class='uiDisplay'>%</div>
-  </script>
-
-  <script id='geoBarOptionModal-template' type='text/x-handlebars-template'>
-   <div>test</div>
-  </script>
-
-  <script id='featureOptionModal-template' type='text/x-handlebars-template'>
- gudu
   </script>
 
 </body>

@@ -123,6 +123,8 @@ var DSpace = function(){
           , animation: '350' // Animation (Fade/Tween Time in ms)
         };
 
+        $('#featureOptionModal').hide();
+        $('#geobarOptionModal').hide();
 
       },
 
@@ -465,7 +467,7 @@ var DSpace = function(){
           'click #toggleFeatureBox': 'boxToggle'
         , 'click #toggleMiniMap': 'miniMapToggle'
         , 'click #toggleFullscreen': 'fullscreenToggle'
-        , 'click #geoBarOptions': 'geoBarOptions'
+        , 'click #geobarOptions': 'geobarOptions'
         , 'click #featureOptions': 'featureOptions'
       },
 
@@ -476,17 +478,17 @@ var DSpace = function(){
         //FIXME
         this.ui = {
             featureOptionModal: 'off'
-          , geoBarOptionModal: 'off'
-          , animation: '350' // Animation (Fade/Tween Time in ms)
+          , geobarOptionModal: 'off'
+          , animation: '400' // Animation (Fade/Tween Time in ms)
 
         };
+
+
 
         /**
          * create convienience accessors
          */
         this.map = this.options.map;
-        //this.template = Handlebars.compile($('#geoBarOptionModal-template').html());
-        //this.template = Handlebars.compile($('#featureOptionModal-template').html());
         this.template = Handlebars.compile($('#controlPanel-template').html());
 
       },
@@ -503,25 +505,25 @@ var DSpace = function(){
         this.map.fullscreenToggle();
       },
 
-      geoBarOptions: function(event) {
-        if(this.ui.geoBarOptionModal === 'on') {
-          $('#geoBarOptionModal').fadeOut(this.ui.animation, function() { $('#geoBarOptionModal').hide(); });
-          this.ui.geoBarOptionModal = 'off';
+      geobarOptions: function(event) {
+        if(this.ui.geobarOptionModal === 'on') {
+          $('#geobarOptionModal').fadeOut(this.ui.animation, function() { $('#geobarOptionModal').hide(); });
+          this.ui.geobarOptionModal = 'off';
         } else {
-          $('#geoBarOptionModal').show();
-          $('#geoBarOptionModal').fadeIn(this.ui.animation);
-          this.ui.geoBarOptionModal = 'on';
+          $('#geobarOptionModal').show();
+          $('#geobarOptionModal').fadeIn(this.ui.animation);
+          this.ui.geobarOptionModal = 'on';
         }
       },
 
       featureOptions: function(event){
         if(this.ui.featureOptionModal === 'on') {
-          $('#geoBarOptionModal').fadeOut(this.ui.animation, function() { $('#featureOptionModal').hide(); });
-          this.ui.featureOptionModal= 'off';
+          $('#featureOptionModal').fadeOut(this.ui.animation, function() { $('#featureOptionModal').hide(); });
+          this.ui.featureOptionModal = 'off';
         } else {
           $('#featureOptionModal').show();
           $('#featureOptionModal').fadeIn(this.ui.animation);
-          this.ui.featureOptionModal= 'on';
+          this.ui.featureOptionModal = 'on';
         }
       },
 

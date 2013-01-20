@@ -122,7 +122,8 @@ var DSpace = function(){
           , fullscreen: 'on'
           , animation: '350' // Animation (Fade/Tween Time in ms)
         };
-        //$('#miniMapCanvas').hide();
+
+
       },
 
       /**
@@ -464,17 +465,28 @@ var DSpace = function(){
           'click #toggleFeatureBox': 'boxToggle'
         , 'click #toggleMiniMap': 'miniMapToggle'
         , 'click #toggleFullscreen': 'fullscreenToggle'
+        , 'click #geoBarOptions': 'geoBarOptions'
+        , 'click #featureOptions': 'featureOptions'
       },
 
-      initialize: function(){
+      initialize: function() {
+
         _.bindAll(this, 'render');
+
+        //FIXME
+        this.ui = {
+            featureOptionModal: 'off'
+          , geoBarOptionModal: 'off'
+          , animation: '350' // Animation (Fade/Tween Time in ms)
+
+        };
 
         /**
          * create convienience accessors
          */
         this.map = this.options.map;
-
         this.template = Handlebars.compile($('#controlPanel-template').html());
+
       },
 
       boxToggle: function(event){
@@ -487,6 +499,28 @@ var DSpace = function(){
 
       fullscreenToggle: function(event){
         this.map.fullscreenToggle();
+      },
+
+      geoBarOptions: function(event) {
+        if(this.ui.geoBarOptionModal === 'on') {
+          $('#geoBarOptionModal').fadeOut(this.ui.animation, function() { $('#geoBarOptionModal').hide(); });
+          this.ui.geoBarOptionModal = 'off';
+        } else {
+          $('#geoBarOptionModal').show();
+          $('#geoBarOptionModal').fadeIn(this.ui.animation);
+          this.ui.geoBarOptionModal = 'on';
+        }
+      },
+
+      featureOptions: function(event){
+        if(this.ui.featureOptionModal === 'on') {
+          $('#geoBarOptionModal').fadeOut(this.ui.animation, function() { $('#featureOptionModal').hide(); });
+          this.ui.featureOptionModal= 'off';
+        } else {
+          $('#featureOptionModal').show();
+          $('#featureOptionModal').fadeIn(this.ui.animation);
+          this.ui.featureOptionModal= 'on';
+        }
       },
 
       /**

@@ -14,6 +14,7 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
+  outline: none;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
@@ -72,9 +73,11 @@ h3	 { font-size: 18px; color: #f888; }
   position:absolute;
   border-top: 1px solid #888;
   top:50px;
-  right:0;
-  left:0;
+  left:0px;
+  right: -15px;
   bottom:50px;
+  margin: 0;
+  overflow: hidden;
 }
 
 #miniMapCanvas {

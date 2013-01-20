@@ -490,6 +490,8 @@ var DSpace = function(){
          */
         this.map = this.options.map;
         this.template = Handlebars.compile($('#controlPanel-template').html());
+        this.template1 = Handlebars.compile($('#featureOptionModal-template').html());
+        this.template2 = Handlebars.compile($('#geobarOptionModal-template').html());
 
       },
 

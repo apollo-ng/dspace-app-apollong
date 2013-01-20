@@ -16,7 +16,7 @@
   color: #fafafa;
   font-size: 12px;
   border: 1px solid #000;
-  cursor: arrow;
+  cursor: default;
   background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
   background: -webkit-linear-gradient(top, rgba(40,40,40,0.65) 0%,rgba(40,40,40,0.3) 100%);

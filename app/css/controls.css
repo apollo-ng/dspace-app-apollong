@@ -26,6 +26,17 @@
   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
+.uiModal {
+ position: absolute;
+ left: 8px;
+ top: 60px;
+ width: 600px;
+ height: 400px;
+ z-index: 99999999;
+ background: red;
+}
+
+
 /*********************************************************
  *  Status Panel
  *********************************************************/

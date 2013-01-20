@@ -34,6 +34,7 @@
   <div id='geobarOptionModal' class='uiModal'></div>
   <div id='featureOptionModal' class='uiModal'></div>
   <div id='userOptionModal' class='uiModal'></div>
+  <div id='featureInfoModal' class='uiModal'></div>
 
   <script id='featureBoxItem-template' type='text/x-handlebars-template'>
    <!-- FIXME: manage url with js + fallbacks -->
@@ -100,6 +101,14 @@
    <h2>User Options</h2>
    <div class='modalContainer'>
    This is a placeholder for user selectable options and explanations
+   </div>
+  </script>
+
+  <script id='featureInfoModal-template' type='text/x-handlebars-template'>
+   <!-- FIXME: show User Settings here -->
+   <h2>{{title}}</h2>
+   <div class='modalContainer'>
+   Here should the properties of the feature being listed.
    </div>
   </script>
 

@@ -359,6 +359,8 @@ var DSpace = function(){
       initialize: function() {
           var self = this;
 
+          this.template = Handlebars.compile($('#featureInfoModal-template').html());
+
           /*
            * convienience accessor to map
            */
@@ -373,7 +375,14 @@ var DSpace = function(){
       },
 
       featureInfoModal: function(event) {
-         console.log('marker event') ;
+          console.log('fmodal called');
+        if($('#featureInfoModal').css( 'opacity' ) === '1' ) {
+          $('#featureInfoModal').fadeOut(350, function() { $('#featureInfoModal').hide(); });
+        } else {
+          $('#featureInfoModal').html( this.template( { title: 'Feature Title' } ) );
+          $('#featureInfoModal').show();
+          $('#featureInfoModal').fadeIn(350);
+        }
       },
 
       markerContext: function(event) {

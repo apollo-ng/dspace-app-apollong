@@ -96,6 +96,9 @@ h3	 { font-size: 18px; color: #f888; }
   height: 180px;
   border: 1px solid #afafaf;
   padding: 10px;
+  -moz-box-shadow: 2px 2px 5px #888;
+  -webkit-box-shadow: 0 0 5px#888;
+  box-shadow: 0 0 5px #888;
   -webkit-border-radius:5px;
   border-radius: 5px;
 }
@@ -137,6 +140,9 @@ h3	 { font-size: 18px; color: #f888; }
   padding: 10px;
   padding-top: 0;
   width:240px;
+  -moz-box-shadow: 2px 2px 5px #888;
+  -webkit-box-shadow: 0 0 5px#888;
+  box-shadow: 0 0 5px #888;
   -webkit-border-radius:5px;
   border-radius: 5px;
 }
@@ -206,6 +212,7 @@ h3	 { font-size: 18px; color: #f888; }
 
 .marker-image {
   position: absolute;
+  cursor: pointer;
   margin-top: -32px;
   margin-left: -16px;
   z-index: 9999;

@@ -485,8 +485,8 @@ var DSpace = function(){
          * create convienience accessors
          */
         this.map = this.options.map;
-        this.template = Handlebars.compile($('#geoBarOptionModal-template').html());
-        this.template = Handlebars.compile($('#featureOptionModal-template').html());
+        //this.template = Handlebars.compile($('#geoBarOptionModal-template').html());
+        //this.template = Handlebars.compile($('#featureOptionModal-template').html());
         this.template = Handlebars.compile($('#controlPanel-template').html());
 
       },

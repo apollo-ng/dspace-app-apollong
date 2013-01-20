@@ -31,8 +31,9 @@
    <div id='minimap'></div>
   </div>
   <div id='statusPanel'></div>
-<div id='geobarOptionModal' class='uiModal'>   </div>
-   <div id='featureOptionModal' class='uiModal'>   </div>
+  <div id='geobarOptionModal' class='uiModal'></div>
+  <div id='featureOptionModal' class='uiModal'></div>
+  <div id='userOptionModal' class='uiModal'></div>
 
   <script id='featureBoxItem-template' type='text/x-handlebars-template'>
    <!-- FIXME: manage url with js + fallbacks -->
@@ -70,29 +71,36 @@
    <div id='userModeDrive' class='uiButton'>D</div>
    <div id='coordsGeoLocation' class='uiDisplay'>N 48.201, E 11.037</div>
    <div id='systemStatus' class='uiDisplay'>%</div>
+   <div id='userOptions' class='uiButton'>U</div>
   </script>
 
   <script id='geobarOptionModal-template' type='text/x-handlebars-template'>
    <!-- FIXME: show available Search Options here -->
-   <h2>Search Options</h2>
-   This is a placeholder for search options and explanations
+   <h2>Geobar Options</h2>
+   <div class='modalContainer'>
+   This is a placeholder for geobar options and explanations
+   </div>
   </script>
 
   <script id='featureOptionModal-template' type='text/x-handlebars-template'>
    <!-- FIXME: show available FeatureCollections here -->
    <h2>Please select an Overlay</h2>
+   <div class='modalContainer'>
    This is a placeholder for a list of available FeatureCollections, that will be loaded into
    the FeatureBox, when selected by the user.
    <ul>
     <li>Overlay Title</li>
     <li>Overlay Title 2</li>
    </ul>
+   </div>
   </script>
 
   <script id='userOptionModal-template' type='text/x-handlebars-template'>
    <!-- FIXME: show User Settings here -->
-   <h2>Settings</h2>
+   <h2>User Options</h2>
+   <div class='modalContainer'>
    This is a placeholder for user selectable options and explanations
+   </div>
   </script>
 
 </body>

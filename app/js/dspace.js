@@ -125,6 +125,7 @@ var DSpace = function(){
 
         $('#featureOptionModal').hide();
         $('#geobarOptionModal').hide();
+        $('#userOptionModal').hide();
 
       },
 
@@ -366,6 +367,13 @@ var DSpace = function(){
      */
     var Overlay = Backbone.View.extend({
 
+      el: $('#map'),
+
+      events: {
+         "click": "featureInfoModal"
+        ,"rightclick": "markerContext"
+      },
+
       initialize: function(){
           var self = this;
 
@@ -382,6 +390,14 @@ var DSpace = function(){
           });
       },
 
+      featureInfoModal: function(event) {
+         console.log('marker event') ;
+      },
+
+      markerContext: function(event) {
+         console.log('marker context (right-click)') ;
+      },
+
       render: function(){
 
         /**
@@ -391,7 +407,7 @@ var DSpace = function(){
         var markerLayer = mapbox.markers.layer();
 
         /**
-         * define a foctory to make markers
+         * define a factory to make markers
          * FIXME use backbone views?
          */
         markerLayer.factory(function(feature){
@@ -434,8 +450,20 @@ var DSpace = function(){
 
       el: $('#statusPanel'),
 
-      initialize: function(){
+      events: {
+          'click #userModeWalk': 'userModeWalk'
+        , 'click #userModeDrive': 'userModeDrive'
+        , 'click #userOptions': 'userOptions'
+      },
+
+      initialize: function() {
         _.bindAll(this, 'render');
+
+        //FIXME
+        this.ui = {
+            userOptionModal: 'off'
+          , animation: '300' // Animation (Fade/Tween Time in ms)
+        };
 
         /**
          * create convienience accessors
@@ -443,6 +471,36 @@ var DSpace = function(){
         this.user = this.model;
 
         this.template = Handlebars.compile($('#statusPanel-template').html());
+        this.templates = {
+           'userOptions': Handlebars.compile($('#userOptionModal-template').html())
+        }
+
+      },
+
+      /*
+       *  FIXME: store this in the user's options to
+       *  help the system making decisions based
+       *  on the user's mode of movement
+       */
+
+      userModeWalk: function(event) {
+        console.log('user is walking');
+      },
+
+      userModeDrive: function(event) {
+        console.log('user is driving');
+      },
+
+      userOptions: function(event){
+        if(this.ui.userOptionModal === 'on') {
+          $('#userOptionModal').fadeOut(this.ui.animation, function() { $('#userOptionModal').hide(); });
+          this.ui.userOptionModal = 'off';
+        } else {
+          $('#userOptionModal').html( this.templates.userOptions( { ui: this.ui } ) );
+          $('#userOptionModal').show();
+          $('#userOptionModal').fadeIn(this.ui.animation);
+          this.ui.userOptionModal = 'on';
+        }
       },
 
       /**
@@ -479,11 +537,9 @@ var DSpace = function(){
         this.ui = {
             featureOptionModal: 'off'
           , geobarOptionModal: 'off'
-          , animation: '400' // Animation (Fade/Tween Time in ms)
+          , animation: '300' // Animation (Fade/Tween Time in ms)
 
         };
-
-
 
         /**
          * create convienience accessors
@@ -491,7 +547,9 @@ var DSpace = function(){
         this.map = this.options.map;
         this.template = Handlebars.compile($('#controlPanel-template').html());
         this.templates = {
-	    'geobar': Handlebars.compile($('#featureOptionModal-template').html()) }
+           'geobarOptions': Handlebars.compile($('#geobarOptionModal-template').html())
+          ,'featureOptions': Handlebars.compile($('#featureOptionModal-template').html())
+        }
 
       },
 
@@ -512,7 +570,7 @@ var DSpace = function(){
           $('#geobarOptionModal').fadeOut(this.ui.animation, function() { $('#geobarOptionModal').hide(); });
           this.ui.geobarOptionModal = 'off';
         } else {
-          $('#geobarOptionModal').html( this.templates.geobar( { ui: this.ui } ) );
+          $('#geobarOptionModal').html( this.templates.geobarOptions( { ui: this.ui } ) );
           $('#geobarOptionModal').show();
           $('#geobarOptionModal').fadeIn(this.ui.animation);
           this.ui.geobarOptionModal = 'on';
@@ -524,6 +582,7 @@ var DSpace = function(){
           $('#featureOptionModal').fadeOut(this.ui.animation, function() { $('#featureOptionModal').hide(); });
           this.ui.featureOptionModal = 'off';
         } else {
+          $('#featureOptionModal').html( this.templates.featureOptions( { ui: this.ui } ) );
           $('#featureOptionModal').show();
           $('#featureOptionModal').fadeIn(this.ui.animation);
           this.ui.featureOptionModal = 'on';

@@ -33,10 +33,6 @@ function exitBFS () {
   }
 }
 
-function openMarkerModal() {
-console.log('ebola');
-}
-
 /**
  * config for initializing DSpace Wrorld
  */

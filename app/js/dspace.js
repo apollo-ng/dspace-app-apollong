@@ -115,65 +115,47 @@ var DSpace = function(){
           self.overlays.push(overlay);
         });
 
-        //FIXME
-        this.ui = {
-            box: 'on'
-          , miniMap:'on'
-          , fullscreen: 'on'
-          , animation: '350' // Animation (Fade/Tween Time in ms)
-        };
-
-        $('#featureOptionModal').hide();
-        $('#geobarOptionModal').hide();
-        $('#userOptionModal').hide();
-
       },
 
       /**
        * toggles state (on/off) for #featureBox
        */
       boxToggle: function() {
-        if(this.ui.box === 'on') {
+        if($('#featureBox').css( 'opacity' ) === '1' ) {
           $('#featureBox').animate({ top: -400, duration: 700 });
           $('#featureBox').fadeOut(600);
-          this.ui.box= 'off';
         } else {
           $('#featureBox').animate({ top: 60, duration: 700  });
           $('#featureBox').fadeIn(600);
-          this.ui.box= 'on';
         }
       },
 
       miniMapToggle: function() {
-        if(this.ui.miniMap === 'on') {
+        if($('#miniMapCanvas').css( 'opacity' ) === '1' ) {
           $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
-          this.ui.miniMap = 'off';
+          $('#miniMapCanvas').fadeOut(600);
         } else {
           $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });
-          this.ui.miniMap = 'on';
+          $('#miniMapCanvas').fadeIn(600);
         }
       },
 
       fullscreenToggle: function() {
-        if(this.ui.fullscreen === 'on') {
+        if($('#statusPanel').css( 'opacity' ) === '1' ) {
           $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
-          $('#statusPanel').fadeOut(this.ui.animation, function() { $('#statusPanel').hide(); });
+          $('#miniMapCanvas').fadeOut(600);
+          $('#statusPanel').fadeOut(450, function() { $('#statusPanel').hide(); });
           $('#featureBox').animate({ top: -400, duration: 700  });
           $('#featureBox').fadeOut(600);
           $('#map').animate({ top: 0, bottom: 0, duration: 600 });
-          this.ui.box= 'off';
-          this.ui.miniMap = 'off';
-          this.ui.fullscreen = 'off';
         } else {
           $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });
+          $('#miniMapCanvas').fadeIn(600);
           $('#statusPanel').show();
-          $('#statusPanel').fadeIn(this.ui.animation);
+          $('#statusPanel').fadeIn(450);
           $('#featureBox').animate({ top: 60, duration: 700  });
           $('#featureBox').fadeIn(600);
           $('#map').animate({ top: 50, bottom: 50, duration: 600 });
-          this.ui.box= 'on';
-          this.ui.miniMap = 'on';
-          this.ui.fullscreen = 'on';
         }
       },
 
@@ -370,11 +352,11 @@ var DSpace = function(){
       el: $('#map'),
 
       events: {
-         "click": "featureInfoModal"
+         "click .marker-image": "featureInfoModal"
         ,"rightclick": "markerContext"
       },
 
-      initialize: function(){
+      initialize: function() {
           var self = this;
 
           /*
@@ -413,6 +395,7 @@ var DSpace = function(){
         markerLayer.factory(function(feature){
           var img = document.createElement('img');
           img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
+          img.setAttribute('style', 'pointer-events:auto');
           img.className = 'marker-image';
           return img;
         });
@@ -459,12 +442,6 @@ var DSpace = function(){
       initialize: function() {
         _.bindAll(this, 'render');
 
-        //FIXME
-        this.ui = {
-            userOptionModal: 'off'
-          , animation: '300' // Animation (Fade/Tween Time in ms)
-        };
-
         /**
          * create convienience accessors
          */
@@ -491,15 +468,13 @@ var DSpace = function(){
         console.log('user is driving');
       },
 
-      userOptions: function(event){
-        if(this.ui.userOptionModal === 'on') {
-          $('#userOptionModal').fadeOut(this.ui.animation, function() { $('#userOptionModal').hide(); });
-          this.ui.userOptionModal = 'off';
+      userOptions: function(event) {
+        if($('#userOptionModal').css( 'opacity' ) === '1' ) {
+          $('#userOptionModal').fadeOut(350, function() { $('#userOptionModal').hide(); });
         } else {
           $('#userOptionModal').html( this.templates.userOptions( { ui: this.ui } ) );
           $('#userOptionModal').show();
-          $('#userOptionModal').fadeIn(this.ui.animation);
-          this.ui.userOptionModal = 'on';
+          $('#userOptionModal').fadeIn(350);
         }
       },
 
@@ -533,15 +508,7 @@ var DSpace = function(){
 
         _.bindAll(this, 'render');
 
-        //FIXME
-        this.ui = {
-            featureOptionModal: 'off'
-          , geobarOptionModal: 'off'
-          , animation: '300' // Animation (Fade/Tween Time in ms)
-
-        };
-
-        /**
+         /**
          * create convienience accessors
          */
         this.map = this.options.map;
@@ -566,26 +533,22 @@ var DSpace = function(){
       },
 
       geobarOptions: function(event) {
-        if(this.ui.geobarOptionModal === 'on') {
-          $('#geobarOptionModal').fadeOut(this.ui.animation, function() { $('#geobarOptionModal').hide(); });
-          this.ui.geobarOptionModal = 'off';
+        if($('#geobarOptionModal').css( 'opacity' ) === '1' ) {
+          $('#geobarOptionModal').fadeOut(350, function() { $('#geobarOptionModal').hide(); });
         } else {
           $('#geobarOptionModal').html( this.templates.geobarOptions( { ui: this.ui } ) );
           $('#geobarOptionModal').show();
-          $('#geobarOptionModal').fadeIn(this.ui.animation);
-          this.ui.geobarOptionModal = 'on';
+          $('#geobarOptionModal').fadeIn(350);
         }
       },
 
       featureOptions: function(event){
-        if(this.ui.featureOptionModal === 'on') {
-          $('#featureOptionModal').fadeOut(this.ui.animation, function() { $('#featureOptionModal').hide(); });
-          this.ui.featureOptionModal = 'off';
+        if($('#featureOptionModal').css( 'opacity' ) === '1' ) {
+          $('#featureOptionModal').fadeOut(350, function() { $('#featureOptionModal').hide(); });
         } else {
           $('#featureOptionModal').html( this.templates.featureOptions( { ui: this.ui } ) );
           $('#featureOptionModal').show();
-          $('#featureOptionModal').fadeIn(this.ui.animation);
-          this.ui.featureOptionModal = 'on';
+          $('#featureOptionModal').fadeIn(350);
         }
       },
 

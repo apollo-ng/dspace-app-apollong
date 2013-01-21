@@ -224,6 +224,49 @@ var DSpace = function(){
         return modestmap;
 
       },
+      addLayer: function( collection ){
+        /**
+         * Add markers
+         * mapbox lib NOT same as ModestMap
+         */
+        var markerLayer = mapbox.markers.layer();
+
+        /**
+         * define a factory to make markers
+         * FIXME use backbone views?
+         */
+        markerLayer.factory(function(feature){
+          var img = document.createElement('img');
+          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
+          img.setAttribute('style', 'pointer-events:auto');
+          img.className = 'marker-image';
+          return img;
+        });
+
+        /**
+         * display markers MM adds it to DOM
+         * .extent() called to redraw map!
+         */
+        var jsonWithIndex = this.jsonWithIndex( collection );
+        markerLayer.features(jsonWithIndex);
+        this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+      },
+
+      /**
+       * returns json of collection with extra **letter** attribute
+       * FIXME optimise passing models or toJSON
+       */
+      jsonWithIndex: function(collection) {
+
+        var self = this;
+
+        var mappedJson = _(collection.models).map( function(feature, index){
+          var featureJson = feature.toJSON();
+          featureJson.index = index;
+          return featureJson;
+        });
+        return mappedJson;
+      },
 
       /**
        * animates map to focus location
@@ -428,48 +471,8 @@ var DSpace = function(){
 
       render: function(){
 
-        /**
-         * Add markers
-         * mapbox lib NOT same as ModestMap
-         */
-        var markerLayer = mapbox.markers.layer();
-
-        /**
-         * define a factory to make markers
-         * FIXME use backbone views?
-         */
-        markerLayer.factory(function(feature){
-          var img = document.createElement('img');
-          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
-          img.setAttribute('style', 'pointer-events:auto');
-          img.className = 'marker-image';
-          return img;
-        });
-
-        /**
-         * display markers MM adds it to DOM
-         * .extent() called to redraw map!
-         */
-        var jsonWithIndex = this.jsonWithIndex(this.collection);
-        markerLayer.features(jsonWithIndex);
-        this.map.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+        this.map.addLayer( this.collection );
       },
-
-      /**
-       * returns json of collection with extra **letter** attribute
-       * FIXME optimise passing models or toJSON
-       */
-      jsonWithIndex: function(collection) {
-
-        var self = this;
-
-        var mappedJson = _(collection.models).map( function(feature, index){
-          var featureJson = feature.toJSON();
-          featureJson.index = index;
-          return featureJson;
-        });
-        return mappedJson;
-      }
     });
 
     /**

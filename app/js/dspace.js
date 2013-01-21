@@ -328,23 +328,15 @@ var DSpace = function(){
         this.template = Handlebars.compile($('#featureBoxItem-template').html());
       },
 
+     /**
+      * gets model feature and index 
+      * and returns html
+      */
       render: function(){
-
-        /**
-         * get template data from model
-         * FIXME rethink and clarify comment
-         * shuldn't need reference to map but just some util object
-         */
         var templateData = this.model.toJSON();
-
-        /**
-         * add index passed from options
-         */
         templateData.index = this.index;
-
-        $(this.el).html(this.template(templateData));
+        this.$el.html(this.template(templateData));
         return this.el;
-
       },
 
       events: {
@@ -355,8 +347,7 @@ var DSpace = function(){
        * sets linked Feature current
        */
       setFeatureCurrent: function( event ){
-        //FIXME current wasnt bad ... maybe namespace this
-        this.model.trigger('focus', this );
+        this.model.trigger('featureboxitem:current', this );
       }
     });
 
@@ -370,7 +361,6 @@ var DSpace = function(){
     var FeatureBox = Backbone.View.extend({
 
       el: $('#featureBox'),
-
       initialize: function(){
         var self = this;
         /*
@@ -391,7 +381,7 @@ var DSpace = function(){
         });
         // listen for focus requests from features and
         // call map for focus
-        this.collection.on( 'focus', function( event ){
+        this.collection.on( 'featureboxitem:current', function( event ){
           map.jumpToFeature( event.model );
         });
 
@@ -411,9 +401,7 @@ var DSpace = function(){
           var renderedTemplate = featureBoxItem.render();
 
           /**
-           * append to backbone provided $obj
-           * FIXME innerHTML for single box at a time?
-	   * no, should hide the element until the update is done
+           * append to backbone provided $obj 
            */
           self.$el.append(renderedTemplate);
 
@@ -495,6 +483,7 @@ var DSpace = function(){
 
     /**
      * UI element to show current position in botttom left
+     * gets model user and binds to all changes
      */
     var StatusPanel = Backbone.View.extend({
 
@@ -522,17 +511,16 @@ var DSpace = function(){
       },
 
       /*
-       *  FIXME: store this in the user's options to
        *  help the system making decisions based
        *  on the user's mode of movement
        */
 
       userModeWalk: function(event) {
-        console.log('user is walking');
+        this.model.set( 'usermode', 'walk' );
       },
 
       userModeDrive: function(event) {
-        console.log('user is driving');
+        this.model.set( 'usermode', 'drive' );
       },
 
       userOptions: function(event) {
@@ -546,7 +534,6 @@ var DSpace = function(){
       },
 
       /**
-       * TODO listen to changes on model (User)
        * TODO listen on map changing it's center
        */
       render: function(){
@@ -640,19 +627,9 @@ var DSpace = function(){
         var self = this;
 
         /**
-         * store config
-         */
-        this.config = config;
-
-        /**
          * create User
          */
         this.user = new User({world: this});
-
-        /**
-         * create collections of FeatureCollection
-         */
-        this.collections = [];
 
         /**
          * create and render Map
@@ -661,18 +638,6 @@ var DSpace = function(){
         this.map.render();
       },
 
-      /**
-       * expects GeoFeed and returns FeatureCollection
-       */
-      initFeatureCollection: function( geoFeed ){
-        var featureCollection = new FeatureCollection( );
-        featureCollection.url = geoFeed.url; //FIXME create setGeoFeed()
-        //featureCollection.sync( );
-
-        // add to world collections to keep track on!
-        this.collections.push( featureCollection );
-        return featureCollection;
-      },
     });
 
     /**

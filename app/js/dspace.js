@@ -224,7 +224,7 @@ var DSpace = function(){
         return modestmap;
 
       },
-      addLayer: function( collection ){
+      addMapLayer: function( collection ){
         /**
          * Add markers
          * mapbox lib NOT same as ModestMap
@@ -236,11 +236,12 @@ var DSpace = function(){
          * FIXME use backbone views?
          */
         markerLayer.factory(function(feature){
-          var img = document.createElement('img');
-          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
-          img.setAttribute('style', 'pointer-events:auto');
-          img.className = 'marker-image';
-          return img;
+           return new Marker({ model: feature }).render( );
+//          var img = document.createElement('img');
+//          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
+//          img.setAttribute('style', 'pointer-events:auto');
+//          img.className = 'marker-image';
+//          return img;
         });
 
         /**
@@ -414,7 +415,14 @@ var DSpace = function(){
      * FIXME implementing
      */
     var Marker = Backbone.View.extend({
-
+        tagName: 'div',
+        className: 'marker',
+        template: Handlebars.compile( '<div>feature {{properties.title}}</div>' ),
+        render: function( ) { 
+console.log( this.template( this.model ));
+          this.$el.html( this.template( this.model ))
+          return this.el;
+        }
     });
 
     /**
@@ -471,7 +479,7 @@ var DSpace = function(){
 
       render: function(){
 
-        this.map.addLayer( this.collection );
+        var maplayer = this.map.addMapLayer( this.collection );
       },
     });
 

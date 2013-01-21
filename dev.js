@@ -18,6 +18,9 @@ shell.cp('-rf', 'pkgs', 'build/');
 console.log('copying app');
 shell.cp('-rf', 'app/*', 'build/');
 
+console.log('building templates.js');
+shell.exec('./node_modules/.bin/handlebars templates/* -f build/js/templates.js');
+
 console.log('building ender');
 shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
 

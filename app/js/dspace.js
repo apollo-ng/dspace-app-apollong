@@ -417,17 +417,30 @@ var DSpace = function(){
      * view for Overlay Markers 
      */
     var Marker = Backbone.View.extend({
-        tagName: 'div',
-        className: 'marker',
-        /** FIXME put into /templates 
-         * set icon according to index
-         * set pointer-events active to override layer settings
-         */
-        template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" styple="pointer-events:auto" /> feature {{properties.title}}' ),
-        render: function( ) { 
+      tagName: 'div',
+      className: 'marker',
+      events: {
+         "click .marker-image": "featureInfoModal"
+        ,"rightclick": "markerContext"
+      },
+
+      featureInfoModal: function(event) {
+         console.log('marker event') ;
+      },
+
+      markerContext: function(event) {
+         console.log('marker context (right-click)') ;
+      },
+
+      /** FIXME put into /templates 
+       * set icon according to index
+       * set pointer-events active to override layer settings
+       */
+      template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
+      render: function( ) { 
           this.$el.html( this.template( this.model ))
           return this.el;
-        }
+      }
     });
 
     /**
@@ -439,14 +452,7 @@ var DSpace = function(){
      * gets reference to the map
      */
     var Overlay = Backbone.View.extend({
-
       el: $('#map'),
-
-      events: {
-         "click .marker-image": "featureInfoModal"
-        ,"contextmenu .marker-image": "markerContext"
-      },
-
       initialize: function() {
           var self = this;
 
@@ -465,26 +471,8 @@ var DSpace = function(){
           });
       },
 
-      featureInfoModal: function(event) {
-        if($('#featureInfoModal').css( 'opacity' ) === '1' ) {
-          $('#featureInfoModal').fadeOut(350, function() { $('#featureInfoModal').hide(); });
-        } else {
-          $('#featureInfoModal').html( this.template( { title: 'Feature Title' } ));
-          $('#featureInfoModal').css( { 'display': 'block'});
-          $('#featureInfoModal').fadeIn(350);
-        }
-      },
-
-      /**
-       * Context-Menu for right-click/long touch on marker
-       */
-      markerContext: function(event) {
-        console.log('marker context (right-click)') ;
-      },
-
       render: function(){
-
-        var maplayer = this.map.addMapLayer( this.collection );
+          var maplayer = this.map.addMapLayer( this.collection );
       },
     });
 
@@ -653,7 +641,6 @@ var DSpace = function(){
     /**
      * init() returns an instance of a World
      */
-console.log( config );
     return new World( config );
 
   };

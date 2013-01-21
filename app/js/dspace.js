@@ -60,7 +60,16 @@ var DSpace = function(){
             failure: function( e ) {
               alert( '#FIXME' ); }
         });
+      },
+      toJsonWithIndex: function( ) {
+        var mappedJson = _(this.models).map( function(feature, index){
+          feature.set( 'index', index );
+          var featureJson = feature.toJSON();
+          return featureJson;
+        });
+        return mappedJson;
       }
+
     });
 
     /**
@@ -272,7 +281,7 @@ var DSpace = function(){
          * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
-        markerLayer.features(collection.toJSON( ));
+        markerLayer.features( collection.toJsonWithIndex( ));
         this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
       },
 
@@ -318,11 +327,6 @@ var DSpace = function(){
         _.bindAll(this, 'render');
 
         /**
-         * convienience accessors
-         */
-        this.index = this.options.index;
-
-        /**
          * DOM template
          */
         this.template = Handlebars.compile($('#featureBoxItem-template').html());
@@ -334,7 +338,6 @@ var DSpace = function(){
       */
       render: function(){
         var templateData = this.model.toJSON();
-        templateData.index = this.index;
         this.$el.html(this.template(templateData));
         return this.el;
       },
@@ -394,9 +397,9 @@ var DSpace = function(){
          * example how to add more data to the view:
          */
         _(this.collection.models).each(function(feature, index){
+          feature.set( 'index', index );
           var featureBoxItem= new FeatureBoxItem({
               model: feature
-            , index: index
           });
           var renderedTemplate = featureBoxItem.render();
 
@@ -416,7 +419,11 @@ var DSpace = function(){
     var Marker = Backbone.View.extend({
         tagName: 'div',
         className: 'marker',
-        template: Handlebars.compile( '<div>feature {{properties.title}}</div>' ),
+        /** FIXME put into /templates 
+         * set icon according to index
+         * set pointer-events active to override layer settings
+         */
+        template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" styple="pointer-events:auto" /> feature {{properties.title}}' ),
         render: function( ) { 
           this.$el.html( this.template( this.model ))
           return this.el;
@@ -626,6 +633,9 @@ var DSpace = function(){
       initialize: function( config ){
         var self = this;
 
+        this.set( 'geofeed', config['geofeed'] );
+        this.set( 'map', config['map'] );
+
         /**
          * create User
          */
@@ -634,7 +644,7 @@ var DSpace = function(){
         /**
          * create and render Map
          */
-        this.map = new Map({world: this, config: this.config.map});
+        this.map = new Map({world: this, config: this.get( 'map' )});
         this.map.render();
       },
 
@@ -643,6 +653,7 @@ var DSpace = function(){
     /**
      * init() returns an instance of a World
      */
+console.log( config );
     return new World( config );
 
   };

@@ -131,29 +131,31 @@ var DSpace = function(){
          * set controlPanel model to map
          */
         this.controlPanel = new ControlPanel({map: this });
+        this.world.on( 'all', function( e ) {
+console.log( e );
+        });
         this.controlPanel.render();
 
-        /**
-         * set overlays
-         */
-        var self = this;
 
         /**
-         *  create Overlays and FeatureBoxes
+         * create feature collections from world attributes 
+         * create overlays with collection and map
+         * sync active feature collection when all items are bound 
+         *
+         * FIXME: bind to world attribute change and rerender accordingly
          */
         var feeds = this.world.get( 'geoFeeds' );
         this.overlays = [];
-
         for( var i = feeds.length; i--; ) {
-          var featureCollection = this.world.initFeatureCollection( feeds[i] )
-          var overlay = new Overlay({ collection: featureCollection, map: this });
-          this.overlays.push( overlay ); }
+          this.overlays.push( 
+            new Overlay({ 
+                collection: this.world.initFeatureCollection( feeds[i] )
+              , map: this })); }
 
-        this.featureBox = new FeatureBox({ map: self });
+        this.featureBox = new FeatureBox({ map: this });
 
-
-        this.featureBox.setFeatureCollection( featureCollection );
-        featureCollection.sync( );
+        this.featureBox.setFeatureCollection( this.overlays[1].collection );
+        this.overlays[1].collection.sync( );
 
       },
 
@@ -238,17 +240,10 @@ var DSpace = function(){
 
         /**
          * define a factory to make markers
-         * FIXME use backbone views?
          */
         markerLayer.factory(function(feature){
            return new Marker({ model: feature }).render( );
-//          var img = document.createElement('img');
-//          img.setAttribute('src', 'icons/black-shield-' + feature.index + '.png');
-//          img.setAttribute('style', 'pointer-events:auto');
-//          img.className = 'marker-image';
-//          return img;
         });
-
         /**
          * display markers MM adds it to DOM
          * .extent() called to redraw map!
@@ -263,9 +258,6 @@ var DSpace = function(){
        * FIXME optimise passing models or toJSON
        */
       jsonWithIndex: function(collection) {
-
-        var self = this;
-
         var mappedJson = _(collection.models).map( function(feature, index){
           var featureJson = feature.toJSON();
           featureJson.index = index;

@@ -33,12 +33,35 @@ var DSpace = function(){
        */
       setLatLon: function(){
         var g = this.get('geometry');
-        if( 'coordinates' in g && g.coordinates.length == 2 ) {
+        if( typeof g !== 'undefined' && 'coordinates' in g && g.coordinates.length == 2 ) {
           this.set({ lat: g.coordinates[1], lon: g.coordinates[0] }); //FIXME
         }
       }
     });
+    var FeatureCollection = Backbone.Collection.extend({
 
+      model: Feature,
+      initialize: function( options ){
+        this.url = options.url;
+        this.name = options.name;
+      },
+
+      /**
+       * requests the geojson
+       * resets ifselft with the result
+       */
+      sync: function(){
+        var self = this;
+        var request = new Reqwest({
+          url: this.url,
+          type: 'json',
+          success: function( response ) {
+            self.reset( response.features ); },
+            failure: function( e ) {
+              alert( '#FIXME' ); }
+        });
+      }
+    });
 
     /**
      * Add basic user model FIXME
@@ -120,8 +143,7 @@ var DSpace = function(){
         this.frame = this.createFrame();
 
         /**
-         * create StatusPanel
-         * set statusPanel model to user
+         * create StatusPanel with model user
          */
         this.statusPanel = new StatusPanel({model: this.world.user});
         this.statusPanel.render();
@@ -130,32 +152,34 @@ var DSpace = function(){
          * create ControlPanel
          * set controlPanel model to map
          */
-        this.controlPanel = new ControlPanel({map: this });
-        this.world.on( 'all', function( e ) {
-console.log( e );
-        });
+        this.controlPanel = new ControlPanel({ map: this });
         this.controlPanel.render();
 
+        /** 
+         * listen to world changes nothing todo here yet
+         */
+        this.world.on( 'all', function( e, v ) {
+          console.log({ world: e, v: v });
+        });
 
         /**
-         * create feature collections from world attributes 
-         * create overlays with collection and map
+         * create overlay collection and markers
          * sync active feature collection when all items are bound 
-         *
-         * FIXME: bind to world attribute change and rerender accordingly
          */
         var feeds = this.world.get( 'geoFeeds' );
-        this.overlays = [];
+        overlays = [];
         for( var i = feeds.length; i--; ) {
-          this.overlays.push( 
+          overlays.push( 
             new Overlay({ 
-                collection: this.world.initFeatureCollection( feeds[i] )
+                collection: new FeatureCollection( feeds[i] )
               , map: this })); }
 
+
+        this.world.set( 'overlays', overlays );
         this.featureBox = new FeatureBox({ map: this });
 
-        this.featureBox.setFeatureCollection( this.overlays[1].collection );
-        this.overlays[1].collection.sync( );
+        this.featureBox.setFeatureCollection( overlays[1].collection );
+        overlays[1].collection.sync( );
 
       },
 
@@ -248,22 +272,8 @@ console.log( e );
          * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
-        var jsonWithIndex = this.jsonWithIndex( collection );
-        markerLayer.features(jsonWithIndex);
+        markerLayer.features(collection.toJSON( ));
         this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
-      },
-
-      /**
-       * returns json of collection with extra **letter** attribute
-       * FIXME optimise passing models or toJSON
-       */
-      jsonWithIndex: function(collection) {
-        var mappedJson = _(collection.models).map( function(feature, index){
-          var featureJson = feature.toJSON();
-          featureJson.index = index;
-          return featureJson;
-        });
-        return mappedJson;
       },
 
       /**
@@ -370,7 +380,6 @@ console.log( e );
         map = this.options.map;
       },
       setFeatureCollection: function( collection ){
-console.log( collection );
         this.collection = collection;
 
         /*
@@ -390,11 +399,10 @@ console.log( collection );
 
       render: function(){
         var self = this;
-
         /**
          * Loop through each feature in the model
-     * example how to add more data to the view:
-     */
+         * example how to add more data to the view:
+         */
         _(this.collection.models).each(function(feature, index){
           var featureBoxItem= new FeatureBoxItem({
               model: feature
@@ -414,7 +422,8 @@ console.log( collection );
     });
 
     /** @wip
-     * FIXME implementing
+     *
+     * view for Overlay Markers 
      */
     var Marker = Backbone.View.extend({
         tagName: 'div',
@@ -619,27 +628,6 @@ console.log( collection );
         var templateData = {map: mapData};
         $(this.el).html(this.template(templateData));
         return this.el;
-      }
-    });
-
-    var FeatureCollection = Backbone.Collection.extend({
-
-      model: Feature,
-
-      /**
-       * requests the geojson
-       * resets ifselft with the result
-       */
-      sync: function(){
-        var self = this;
-        var request = new Reqwest({
-          url: this.url,
-          type: 'json',
-          success: function( response ) {
-            self.reset( response.features ); },
-            failure: function( e ) {
-              alert( '#FIXME' ); }
-        });
       }
     });
 

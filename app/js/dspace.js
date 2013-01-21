@@ -141,14 +141,19 @@ var DSpace = function(){
         /**
          *  create Overlays and FeatureBoxes
          */
-        _(this.world.collections).each(function(featureCollection){
+        var feeds = this.world.get( 'geoFeeds' );
+        this.overlays = [];
 
-          this.featureBox = new FeatureBox({ collection: featureCollection, map: self });
-          self.featureBoxes.push(overlay);
+        for( var i = feeds.length; i--; ) {
+          var featureCollection = this.world.initFeatureCollection( feeds[i] )
+          var overlay = new Overlay({ collection: featureCollection, map: this });
+          this.overlays.push( overlay ); }
 
-          var overlay = new Overlay({ collection: featureCollection, map: self });
-          self.overlays.push(overlay);
-        });
+        this.featureBox = new FeatureBox({ map: self });
+
+
+        this.featureBox.setFeatureCollection( featureCollection );
+        featureCollection.sync( );
 
       },
 
@@ -371,10 +376,15 @@ var DSpace = function(){
          * for use in callbacks
          */
         map = this.options.map;
+      },
+      setFeatureCollection: function( collection ){
+console.log( collection );
+        this.collection = collection;
 
         /*
          * listens to its FeatureCollection reset event
          */
+        var self = this;
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
@@ -419,7 +429,6 @@ var DSpace = function(){
         className: 'marker',
         template: Handlebars.compile( '<div>feature {{properties.title}}</div>' ),
         render: function( ) { 
-console.log( this.template( this.model ));
           this.$el.html( this.template( this.model ))
           return this.el;
         }
@@ -666,13 +675,6 @@ console.log( this.template( this.model ));
         this.collections = [];
 
         /**
-         * FIXME proper way for setting initial set of overlays
-         */
-        _(this.config.geoFeeds).each(function(geoFeed){
-          self.addFeatureCollection(geoFeed);
-        });
-
-        /**
          * create and render Map
          */
         this.map = new Map({world: this, config: this.config.map});
@@ -682,10 +684,10 @@ console.log( this.template( this.model ));
       /**
        * expects GeoFeed and returns FeatureCollection
        */
-      addFeatureCollection: function( geoFeed ){
+      initFeatureCollection: function( geoFeed ){
         var featureCollection = new FeatureCollection( );
         featureCollection.url = geoFeed.url; //FIXME create setGeoFeed()
-        featureCollection.sync( );
+        //featureCollection.sync( );
 
         // add to world collections to keep track on!
         this.collections.push( featureCollection );

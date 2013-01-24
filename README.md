@@ -6,7 +6,7 @@ based on a very common ground: The map of the area, where people actually are, a
 
 ## Dev
 
-we work on **develop** branch and keep **master** stable for going live!
+We work on **develop** branch and keep **master** stable for going live!
 
 * website: https://apollo.open-resource.org/lab:dspace
 * github: https://github.com/geoinfo/dspace-client

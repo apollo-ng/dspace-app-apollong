@@ -25,7 +25,7 @@ console.log('building ender');
 shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
 
 
-if (process.argv.length > 0 && process.argv[2] == "build" ) {
+if (process.argv.length > 1 && process.argv[2] == "build" ) {
 console.log('Build complete');
 process.exit(0);
 }

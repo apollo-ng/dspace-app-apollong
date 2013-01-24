@@ -1,35 +1,48 @@
+/***
+ *
+ *  DSpace-Development Assistant
+ *
+ *  Usage: node run.js [option]
+ *  Examples: node run.js 8080 -> Run the Development-Server on port 8080 instead of 3333
+ *                   node run.js deploy -> Make only a deploy, keep the build directory and exit
+ */
+
+
 var shell = require('shelljs');
 
-console.log ('remove old ***TEMPORARY*** build dir');
+//console.log ('remove old ***TEMPORARY*** build dir');
 shell.rm('-rf', 'build');
 
-console.log('creating ***TEMPORARY*** build dir');
-shell.mkdir('build');
+//console.log('creating ***TEMPORARY*** build dir');
+shell.mkdir('-p', 'build/assets');
 
-console.log('copying dev data');
+//console.log('copying dev data');
 shell.cp('test/*', 'build/');
 
-console.log('copying design');
-shell.cp('-rf', 'design/*', 'build/');
+console.log('Adding Assets...');
+shell.cp('-rf', 'design/css', 'build/assets/');
+shell.cp('-rf', 'design/icons', 'build/assets/');
+shell.cp('-rf', 'design/images', 'build/assets/');
 
-console.log('copying pkgs');
-shell.cp('-rf', 'pkgs', 'build/');
+console.log('Adding 3rd party packages...');
+shell.cp('-rf', 'pkgs', 'build/assets/');
 
-console.log('copying app');
-shell.cp('-rf', 'app/*', 'build/');
+console.log('Adding Client-Code...');
+shell.cp('-rf', 'app/index.html', 'build/');
+shell.cp('-rf', 'app/js/*', 'build/assets/js/');
 
-console.log('building templates.js');
-shell.exec('./node_modules/.bin/handlebars templates/* -f build/js/templates.js');
+console.log('Compiling Templates...');
+shell.exec('./node_modules/.bin/handlebars design/templates/* -f build/assets/js/templates.js');
 
-console.log('building ender');
-shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
+console.log('Building Ender...');
+shell.exec('./node_modules/.bin/ender build -o build/assets/js/ender.js');
 
 
-if (process.argv.length > 1 && process.argv[2] == "build" ) {
-console.log('Build complete');
+if (process.argv.length > 1 && process.argv[2] == "deploy" ) {
+shell.rm('-rf', 'build/test/');
+console.log('DSpace-Client build completed');
 process.exit(0);
 }
-
 
 process.on('SIGINT', function() {
 
@@ -133,4 +146,4 @@ http.createServer(function(request, response) {
 
 }).listen(parseInt(port, 10));
 
-console.log("Static file server running at\n => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log("Development-Server running: http://localhost:" + port + "/\nCTRL+C to shutdown and remove temporary build directory");

@@ -422,7 +422,7 @@ var DSpace = function(){
       className: 'marker',
 
       events: {
-         "click .marker-image": "featureInfoModal"
+         "click div.marker-image": "featureInfoModal"
         ,"rightclick": "markerContext"
       },
 
@@ -439,7 +439,7 @@ var DSpace = function(){
        * set pointer-events active to override layer settings
        */
       //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
-      template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
+      template: Handlebars.compile( '<img class="marker-image" src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
 
       render: function( ) {
           this.$el.html( this.template( this.model ))

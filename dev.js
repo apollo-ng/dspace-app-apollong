@@ -24,6 +24,13 @@ shell.exec('./node_modules/.bin/handlebars templates/* -f build/js/templates.js'
 console.log('building ender');
 shell.exec('./node_modules/.bin/ender build -o build/js/ender.js');
 
+
+if (process.argv.length > 0 && process.argv[2] == "build" ) {
+console.log('Build complete');
+process.exit(0);
+}
+
+
 process.on('SIGINT', function() {
 
   console.log ('remove ***TEMPORARY*** build dir');
@@ -45,7 +52,7 @@ var path = require('path');
 
 // changes to app
 watch('./app', function(filename) {
-  if( filename.match(/\/\./, '')) { 
+  if( filename.match(/\/\./, '')) {
     console.log('lock file '+ filename);
     return; }
   console.log(filename);
@@ -54,7 +61,7 @@ watch('./app', function(filename) {
 
 // changes to app
 watch('./design', function(filename) {
-  if( filename.match(/\/\./, '')) { 
+  if( filename.match(/\/\./, '')) {
     console.log('lock file '+ filename);
     return; }
   console.log(filename);

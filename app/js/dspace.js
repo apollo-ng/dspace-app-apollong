@@ -115,7 +115,7 @@ var DSpace = function(){
           /**
            * Map Context Menu Template
            */
-          this.template = Handlebars.compile($('#mapContext-template').html());
+          this.template = Handlebars.templates['mapContext'];
 
       },
 
@@ -164,7 +164,7 @@ var DSpace = function(){
         this.controlPanel = new ControlPanel({ map: this });
         this.controlPanel.render();
 
-        /** 
+        /**
          * listen to world changes nothing todo here yet
          */
         this.world.on( 'all', function( e, v ) {
@@ -173,13 +173,13 @@ var DSpace = function(){
 
         /**
          * create overlay collection and markers
-         * sync active feature collection when all items are bound 
+         * sync active feature collection when all items are bound
          */
         var feeds = this.world.get( 'geoFeeds' );
         overlays = [];
         for( var i = feeds.length; i--; ) {
-          overlays.push( 
-            new Overlay({ 
+          overlays.push(
+            new Overlay({
                 collection: new FeatureCollection( feeds[i] )
               , map: this })); }
 
@@ -329,11 +329,11 @@ var DSpace = function(){
         /**
          * DOM template
          */
-        this.template = Handlebars.compile($('#featureBoxItem-template').html());
+        this.template = Handlebars.templates['featureBoxItem'];
       },
 
      /**
-      * gets model feature and index 
+      * gets model feature and index
       * and returns html
       */
       render: function(){
@@ -404,7 +404,7 @@ var DSpace = function(){
           var renderedTemplate = featureBoxItem.render();
 
           /**
-           * append to backbone provided $obj 
+           * append to backbone provided $obj
            */
           self.$el.append(renderedTemplate);
 
@@ -414,11 +414,13 @@ var DSpace = function(){
 
     /** @wip
      *
-     * view for Overlay Markers 
+     * view for Overlay Markers
      */
     var Marker = Backbone.View.extend({
+
       tagName: 'div',
       className: 'marker',
+
       events: {
          "click .marker-image": "featureInfoModal"
         ,"rightclick": "markerContext"
@@ -432,12 +434,14 @@ var DSpace = function(){
          console.log('marker context (right-click)') ;
       },
 
-      /** FIXME put into /templates 
+      /** FIXME put into /templates
        * set icon according to index
        * set pointer-events active to override layer settings
        */
-      template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
-      render: function( ) { 
+      //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
+      template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
+
+      render: function( ) {
           this.$el.html( this.template( this.model ))
           return this.el;
       }
@@ -456,7 +460,7 @@ var DSpace = function(){
       initialize: function() {
           var self = this;
 
-          this.template = Handlebars.compile($('#featureInfoModal-template').html());
+          this.template = Handlebars.templates['featureInfoModal'];
 
           /*
            * convienience accessor to map
@@ -498,9 +502,9 @@ var DSpace = function(){
          */
         this.user = this.model;
 
-        this.template = Handlebars.compile($('#statusPanel-template').html());
+        this.template = Handlebars.templates['statusPanel'];
         this.templates = {
-           'userOptions': Handlebars.compile($('#userOptionModal-template').html())
+          'userOptions': Handlebars.templates['userOptionModal']
         }
 
       },
@@ -561,10 +565,10 @@ var DSpace = function(){
          * create convienience accessors
          */
         this.map = this.options.map;
-        this.template = Handlebars.compile($('#controlPanel-template').html());
+        this.template = Handlebars.templates['controlPanel'];
         this.templates = {
-           'geobarOptions': Handlebars.compile($('#geobarOptionModal-template').html())
-          ,'featureOptions': Handlebars.compile($('#featureOptionModal-template').html())
+           'geobarOptions': Handlebars.templates['geobarOptionModal']
+          ,'featureOptions': Handlebars.templates['featureOptionModal']
         }
 
       },

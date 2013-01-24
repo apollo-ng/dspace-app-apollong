@@ -8,16 +8,16 @@ based on a very common ground: The map of the area, where people actually are, a
 
 We work on **develop** branch and keep **master** stable for going live!
 
-* website: https://apollo.open-resource.org/lab:dspace
-* github: https://github.com/geoinfo/dspace-client
-* irc: #apollo@freenode
-* mumble: ticonderoga.open-resource.org
-* mailinglist: dspace-develop@open-resource.org
-* blog: https://apollo.open-resource.org/tag:dspace
+* Website: https://apollo.open-resource.org/lab:dspace
+* Github: https://github.com/geoinfo/dspace-client
+* IRC: #apollo@freenode
+* Mumble: ticonderoga.open-resource.org
+* Mailinglist: dspace-develop@open-resource.org
+* Blog: https://apollo.open-resource.org/tag:dspace
 
 ### Env
 
-* requires node.js 0.8.x & npm 1.x
+* Requires node.js 0.8.x & npm 1.x
 
 #### Ubuntu
 

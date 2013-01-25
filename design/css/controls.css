@@ -116,7 +116,7 @@
 }
 
 #statusPanel div {
-  cursor: arrow;
+  cursor: default;
   float: left;
   height: 30px;
   line-height: 30px;

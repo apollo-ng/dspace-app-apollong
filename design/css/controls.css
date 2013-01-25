@@ -65,7 +65,8 @@
   line-height: 40px;
   height: 40px;
   border-bottom: 1px solid #000;
-  background:  #3f3e3a; background-image: url(../images/panel_bg.png);
+  background:  #3f3e3a;
+  background-image: url(../images/panel_bg.png);
   color: #e8e5de;
   text-shadow: 1px 1px 5px #000;
   -webkit-border-top-right-radius: 5px;

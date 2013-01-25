@@ -199,11 +199,10 @@ h3	 { font-size: 18px; }
   font-size: 10px;
   padding-top: 7px;
   padding-right: 5px;
-  clear: after;
 }
 
 .clear-after {
-  clear: after;
+  clear: both;
 }
 
 #info {

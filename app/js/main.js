@@ -36,10 +36,14 @@ function exitBFS () {
 /**
  *  Ugly hack to get cursor position for context menus
  */
- document.onmousemove = function( ev ){
-  cursorX = ev.pageX;
-  cursorY = ev.pageY;
-};
+ document.onmousemove = function(e){
+  cursorX = e.pageX;
+  cursorY = e.pageY;
+}
+
+function logPos(pos) {
+  console.log(pos.coords.latitude + ' ' + pos.coords.longitude);
+}
 
 /**
  * config for initializing DSpace Wrorld
@@ -65,10 +69,21 @@ var config = {
 /**
  * BIG BANG!
  */
-$.domReady(function (){
+$.domReady(function () {
+
+  /*
+   *  Setup geolocation
+   */
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(logPos);
+  } else {
+    console.log('Geolocation is not supported by this browser.');
+  }
 
   var world = new DSpace();
   world.init(config);
+
+
 
 });
 

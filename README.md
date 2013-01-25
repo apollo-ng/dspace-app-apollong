@@ -9,7 +9,7 @@ based on a very common ground: The map of the area, where people actually are, a
 We work on **develop** branch and keep **master** stable for going live!
 
 * Website: https://apollo.open-resource.org/lab:dspace
-* Github: https://github.com/geoinfo/dspace-client
+* Github: https://github.com/apollo-ng/dspace-client
 * IRC: #apollo@freenode
 * Mumble: ticonderoga.open-resource.org
 * Mailinglist: dspace-develop@open-resource.org

@@ -50,13 +50,7 @@ input[type="search"] {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box; /* 2 */
   box-sizing: content-box;
-  font: 16px arial,sans-serif
-}
-
-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-  border: 0;
-  outline: none;
+  font: 16px arial,sans-serif;
 }
 
 /********************************************************/

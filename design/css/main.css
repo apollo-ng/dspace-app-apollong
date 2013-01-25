@@ -65,7 +65,7 @@ body { color: #282828; background:  #3f3e3a; background-image: url(../images/pan
 a       { color: #A50B00; }
 h1	 { font-size: 24px; color: #fafafa; text-shadow: 1px 1px #777777, -1px -1px #000000; }
 h2	 { font-size: 20px; color: #3f3e3a; text-shadow:#fff 0px 1px 0, #000 0 -1px 0; margin-bottom: 10px;}
-h3	 { font-size: 18px; color: #f888; }
+h3	 { font-size: 18px; }
 
 #map {
   cursor:crosshair;
@@ -147,7 +147,7 @@ h3	 { font-size: 18px; color: #f888; }
   border-radius: 5px;
 }
 
-.featureBoxItem { //set from backbone
+.featureBoxItem {
   list-style-type: none;
   text-align: left;
   border:1px solid #bbb;

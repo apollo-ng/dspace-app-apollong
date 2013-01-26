@@ -139,6 +139,8 @@ var DSpace = function(){
            */
           this.config = this.options.config;
 
+          this.fullScreen = false;
+
           /**
            * to keep track on overlays and feature boxes
            */
@@ -189,6 +191,7 @@ var DSpace = function(){
          */
         this.statusPanel = new StatusPanel({model: this.world.user});
         this.statusPanel.render();
+        this.statusPanel.visible = true;
 
         /**
          * create ControlPanel
@@ -196,6 +199,7 @@ var DSpace = function(){
          */
         this.controlPanel = new ControlPanel({ map: this });
         this.controlPanel.render();
+        this.controlPanel.visible = true;
 
         /**
          * listen to world changes nothing todo here yet
@@ -223,11 +227,13 @@ var DSpace = function(){
 
         this.featureBox.setFeatureCollection( overlays[1].collection );
         overlays[1].collection.sync( );
+        this.featureBox.visible = true;
 
         /**
          * create miniMap
          */
         this.miniMap = new MiniMap();
+        this.miniMap.visible = true;
         //FIXME add render!
 
       },
@@ -243,30 +249,17 @@ var DSpace = function(){
         this.miniMap.toggle();
       },
 
-      resetCenter: function() {
-        var currentCenter = this.frame.getCenter();
-        var currentZoom = this.frame.getZoom();
-        this.frame.setCenterZoom(currentCenter, currentZoom);
-        //console.log(this.frame.getCenter());
-      },
-
       fullscreenToggle: function() {
-        var self = this;
-        if($('#statusPanel').css( 'opacity' ) === '1' ) {
-          $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
-          $('#miniMapCanvas').fadeOut(600);
-          $('#statusPanel').fadeOut(450, function() { $('#statusPanel').hide(); });
-          $('#featureBox').animate({ top: -400, duration: 700  });
-          $('#featureBox').fadeOut(600, function() { self.resetCenter()});
-          $('#map').animate({ top: 0, bottom: 0, duration: 600 });
+        if(this.fullScreen) {
+          this.miniMap.show()
+          this.statusPanel.show();
+          this.featureBox.show();
+          this.fullScreen = false;
         } else {
-          $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });
-          $('#miniMapCanvas').fadeIn(600);
-          $('#statusPanel').show();
-          $('#statusPanel').fadeIn(450);
-          $('#featureBox').animate({ top: 60, duration: 700  });
-          $('#featureBox').fadeIn(600);
-          $('#map').animate({ top: 50, bottom: 50, duration: 600 });
+          this.miniMap.hide()
+          this.statusPanel.hide();
+          this.featureBox.hide();
+          this.fullScreen = true;
         }
       },
 
@@ -405,13 +398,23 @@ var DSpace = function(){
 
       el: $('#miniMapCanvas'),
 
+      show: function(){
+        $(this.el).animate({ bottom: 10, duration: 600  });
+        $(this.el).fadeIn(600);
+        this.visible = true;
+      },
+
+      hide: function(){
+        $(this.el).animate({ bottom: -250, duration: 600  });
+        $(this.el).fadeOut(600);
+        this.visible = false;
+      },
+
       toggle: function(){
-        if($(this.el).css( 'opacity' ) === '1' ) {
-          $(this.el).animate({ bottom: -250, duration: 600  });
-          $(this.el).fadeOut(600);
+        if(this.visible) {
+          this.hide();
         } else {
-          $(this.el).animate({ bottom: 10, duration: 600  });
-          $(this.el).fadeIn(600);
+          this.show();
         }
       }
     });
@@ -473,13 +476,23 @@ var DSpace = function(){
         });
       },
 
+      show: function(){
+        $(this.el).animate({ top: 60, duration: 700  });
+        $(this.el).fadeIn(600);
+        this.visible = true;
+      },
+
+      hide: function(){
+        $(this.el).animate({ top: -400, duration: 700 });
+        $(this.el).fadeOut(600);
+        this.visible = false;
+      },
+
       toggle: function(){
-        if($(this.el).css( 'opacity' ) === '1' ) {
-          $(this.el).animate({ top: -400, duration: 700 });
-          $(this.el).fadeOut(600);
+        if(this.visible) {
+          this.hide();
         } else {
-          $(this.el).animate({ top: 60, duration: 700  });
-          $(this.el).fadeIn(600);
+          this.show();
         }
       }
     });
@@ -586,6 +599,25 @@ var DSpace = function(){
           'userOptions': Handlebars.templates['userOptionModal']
         }
 
+      },
+
+      show: function(){
+        $(this.el).show();
+        $(this.el).fadeIn(450);
+        this.visible = true;
+      },
+
+      hide: function(){
+        $(this.el).fadeOut(450, function() { $(self.el).hide(); });
+        this.visible = false;
+      },
+
+      toggle: function(){
+        if(this.visible){
+          this.hide()
+        } else {
+          this.show()
+        }
       },
 
       /*

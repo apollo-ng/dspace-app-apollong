@@ -78,9 +78,29 @@ var DSpace = function(){
      */
     var User = Backbone.Model.extend({
 
-      initialize: function(){
+      initialize: function() {
+
         this.world = this.get('world');
+
+        /*
+         * Setup geolocation
+         */
+        if (navigator.geolocation) {
+          navigator.geolocation.watchPosition(this.updateGeoLocation);
+        } else {
+          // FIXME: Fall back to.... ?
+          console.log('Geolocation is not supported by this browser.');
+        }
+
+      },
+
+      /*
+       *  Update user's current geoLocation
+       */
+      updateGeoLocation: function (pos) {
+        console.log('ebola ' + pos.coords.latitude + ' ' + pos.coords.longitude);
       }
+
     });
 
     /**
@@ -216,13 +236,21 @@ var DSpace = function(){
         }
       },
 
+      resetCenter: function() {
+        var currentCenter = this.frame.getCenter();
+        var currentZoom = this.frame.getZoom();
+        this.frame.setCenterZoom(currentCenter, currentZoom);
+        console.log(this.frame.getCenter());
+      },
+
       fullscreenToggle: function() {
+        var self = this;
         if($('#statusPanel').css( 'opacity' ) === '1' ) {
           $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
           $('#miniMapCanvas').fadeOut(600);
           $('#statusPanel').fadeOut(450, function() { $('#statusPanel').hide(); });
           $('#featureBox').animate({ top: -400, duration: 700  });
-          $('#featureBox').fadeOut(600);
+          $('#featureBox').fadeOut(600, function() { self.resetCenter()});
           $('#map').animate({ top: 0, bottom: 0, duration: 600 });
         } else {
           $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });

@@ -12,7 +12,7 @@ We work on **develop** branch and keep **master** stable for going live!
 * Github: https://github.com/apollo-ng/dspace-client
 * IRC: #apollo@freenode
 * Mumble: ticonderoga.open-resource.org
-* Mailinglist: dspace-develop@open-resource.org
+* Mailinglist: dspace-develop@apollo.open-resource.org
 * Blog: https://apollo.open-resource.org/tag:dspace
 
 ### Env

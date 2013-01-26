@@ -36,13 +36,9 @@ function exitBFS () {
 /**
  *  Ugly hack to get cursor position for context menus
  */
- document.onmousemove = function(e){
+document.onmousemove = function(e) {
   cursorX = e.pageX;
   cursorY = e.pageY;
-}
-
-function logPos(pos) {
-  console.log(pos.coords.latitude + ' ' + pos.coords.longitude);
 }
 
 /**
@@ -71,19 +67,8 @@ var config = {
  */
 $.domReady(function () {
 
-  /*
-   *  Setup geolocation
-   */
-  if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(logPos);
-  } else {
-    console.log('Geolocation is not supported by this browser.');
-  }
-
   var world = new DSpace();
   world.init(config);
-
-
 
 });
 

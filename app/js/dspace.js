@@ -199,6 +199,7 @@ var DSpace = function(){
 
         /**
          * listen to world changes nothing todo here yet
+         * FIXME why not on inint?!
          */
         this.world.on( 'all', function( e, v ) {
           console.log({ world: e, v: v });

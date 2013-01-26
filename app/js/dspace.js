@@ -286,7 +286,7 @@ var DSpace = function(){
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME
 
-        var modestmap = new modestmaps.Map('map', layer);
+        var modestmap = new modestmaps.Map('map', layer, null, [new easey_handlers.TouchHandler(), new easey_handlers.DragHandler()]);
 
         /**
          *  setup boundaries
@@ -305,6 +305,7 @@ var DSpace = function(){
         return modestmap;
 
       },
+
       addMapLayer: function( collection ){
         /**
          * Add markers

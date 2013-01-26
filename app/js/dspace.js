@@ -224,6 +224,12 @@ var DSpace = function(){
         this.featureBox.setFeatureCollection( overlays[1].collection );
         overlays[1].collection.sync( );
 
+        /**
+         * create miniMap
+         */
+        this.miniMap = new MiniMap();
+        //FIXME add render!
+
       },
 
       /**
@@ -234,13 +240,7 @@ var DSpace = function(){
       },
 
       miniMapToggle: function() {
-        if($('#miniMapCanvas').css( 'opacity' ) === '1' ) {
-          $('#miniMapCanvas').animate({ bottom: -250, duration: 600  });
-          $('#miniMapCanvas').fadeOut(600);
-        } else {
-          $('#miniMapCanvas').animate({ bottom: 10, duration: 600  });
-          $('#miniMapCanvas').fadeIn(600);
-        }
+        this.miniMap.toggle();
       },
 
       resetCenter: function() {
@@ -398,6 +398,23 @@ var DSpace = function(){
       }
     });
 
+    /**
+     * UI element for showin mini map
+     */
+    var MiniMap = Backbone.View.extend({
+
+      el: $('#miniMapCanvas'),
+
+      toggle: function(){
+        if($(this.el).css( 'opacity' ) === '1' ) {
+          $(this.el).animate({ bottom: -250, duration: 600  });
+          $(this.el).fadeOut(600);
+        } else {
+          $(this.el).animate({ bottom: 10, duration: 600  });
+          $(this.el).fadeIn(600);
+        }
+      }
+    });
 
     /**
      * UI element with list of features

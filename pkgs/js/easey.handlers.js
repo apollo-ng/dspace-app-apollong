@@ -120,8 +120,15 @@
             // scale about the center of these touches
             var center = MM.Point.interpolate(p0, p1, 0.5);
 
+            if(!e.scale)
+                e.scale = Math.sqrt( Math.pow(t0.pageX - t1.pageX, 2) + Math.pow(t0.pageY - t1.pageY, 2) );
+
+            var zoomOffset = Math.log(e.scale) / Math.LN2 - Math.log(l0.scale) / Math.LN2;
+            if(isNaN(zoomOffset))
+                zoomOffset = 0;
+
             map.zoomByAbout(
-                Math.log(e.scale) / Math.LN2 - Math.log(l0.scale) / Math.LN2,
+                zoomOffset,
                 center);
 
             // pan from the previous center of these touches

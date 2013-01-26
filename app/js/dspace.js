@@ -230,13 +230,7 @@ var DSpace = function(){
        * toggles state (on/off) for #featureBox
        */
       boxToggle: function() {
-        if($('#featureBox').css( 'opacity' ) === '1' ) {
-          $('#featureBox').animate({ top: -400, duration: 700 });
-          $('#featureBox').fadeOut(600);
-        } else {
-          $('#featureBox').animate({ top: 60, duration: 700  });
-          $('#featureBox').fadeIn(600);
-        }
+        this.featureBox.toggle();
       },
 
       miniMapToggle: function() {
@@ -460,6 +454,16 @@ var DSpace = function(){
           self.$el.append(renderedTemplate);
 
         });
+      },
+
+      toggle: function(){
+        if($(this.el).css( 'opacity' ) === '1' ) {
+          $(this.el).animate({ top: -400, duration: 700 });
+          $(this.el).fadeOut(600);
+        } else {
+          $(this.el).animate({ top: 60, duration: 700  });
+          $(this.el).fadeIn(600);
+        }
       }
     });
 

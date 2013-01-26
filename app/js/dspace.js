@@ -6,7 +6,7 @@ var DSpace = function(){
 
   /**
    * expects a config object
-   * FIXME set defautls to override and don't crash if no options ;)
+   * FIXME set defautls to override and don't crash if no options ;) -- default in User model ?
    */
   this.init = function ( config ){
 
@@ -50,6 +50,7 @@ var DSpace = function(){
       /**
        * requests the geojson
        * resets ifselft with the result
+       * FIXME improve documentation
        */
       sync: function(){
         var self = this;
@@ -62,7 +63,12 @@ var DSpace = function(){
               alert( '#FIXME' ); }
         });
       },
-      toJsonWithIndex: function( ) {
+
+      /**
+       * override toJSON to adds a number to features's toJSON
+       * so we can style markers with letters etc
+       */
+      toJSON: function( ) {
         var mappedJson = _(this.models).map( function(feature, index){
           feature.set( 'index', index );
           var featureJson = feature.toJSON();
@@ -74,7 +80,7 @@ var DSpace = function(){
     });
 
     /**
-     * Add basic user model FIXME
+     * Add basic user model
      */
     var User = Backbone.Model.extend({
 
@@ -82,7 +88,11 @@ var DSpace = function(){
 
         this.world = this.get('world');
 
-        // Start the geolocation.
+        /*
+         * Start the geolocation
+         * we bind user to update funtion to have it in callback as this
+         * FIXME fallback when geolocations not allowed...
+         */
         this.watch = navigator.geolocation.watchPosition (
           this._updateGeoLocation.bind(this), // FIXME: Why doesn't this work without underscores?
           this._reportGeoError.bind(this), {
@@ -135,6 +145,13 @@ var DSpace = function(){
           this.world = this.options.world;
 
           /**
+           * listen to world changes nothing todo here yet
+           */
+          this.world.on( 'all', function( e, v ) {
+            console.log({ world: e, v: v });
+          });
+
+          /**
            * stores config passed from world
            */
           this.config = this.options.config;
@@ -152,6 +169,11 @@ var DSpace = function(){
            */
           this.template = Handlebars.templates['mapContext'];
 
+          /**
+           * define relations to other views
+           */
+          this.statusPanel = new StatusPanel({model: this.world.user});
+          this.controlPanel = new ControlPanel({ map: this });
       },
 
       /**
@@ -189,7 +211,6 @@ var DSpace = function(){
         /**
          * create StatusPanel with model user
          */
-        this.statusPanel = new StatusPanel({model: this.world.user});
         this.statusPanel.render();
         this.statusPanel.visible = true;
 
@@ -197,17 +218,9 @@ var DSpace = function(){
          * create ControlPanel
          * set controlPanel model to map
          */
-        this.controlPanel = new ControlPanel({ map: this });
         this.controlPanel.render();
         this.controlPanel.visible = true;
 
-        /**
-         * listen to world changes nothing todo here yet
-         * FIXME why not on inint?!
-         */
-        this.world.on( 'all', function( e, v ) {
-          console.log({ world: e, v: v });
-        });
 
         /**
          * create overlay collection and markers
@@ -296,6 +309,7 @@ var DSpace = function(){
 
         /**
          * FIXME add modestmap.addCallback('drawn', function(m){});
+         * here we can update center location and zoom level display
          */
         return modestmap;
 
@@ -318,7 +332,7 @@ var DSpace = function(){
          * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
-        markerLayer.features( collection.toJsonWithIndex( ));
+        markerLayer.features( collection.toJSON( ));
         this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
       },
 

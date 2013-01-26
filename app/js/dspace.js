@@ -78,30 +78,42 @@ var DSpace = function(){
      */
     var User = Backbone.Model.extend({
 
-      initialize: function() {
+        initialize: function() {
 
         this.world = this.get('world');
 
-        /*
-         * Setup geolocation
-         */
-        if (navigator.geolocation) {
-          navigator.geolocation.watchPosition(this.updateGeoLocation);
-        } else {
-          // FIXME: Fall back to.... ?
-          console.log('Geolocation is not supported by this browser.');
-        }
+        // Start the geolocation.
+        this.watch = navigator.geolocation.watchPosition (
+          this._updateGeoLocation.bind(this), // FIXME: Why doesn't this work without underscores?
+          this._reportGeoError.bind(this), {
+            enableHighAccuracy : true
+        });
+
+        // Set a timeout in case the geolocation accuracy never meets the threshold.
+        this.timeout = setTimeout(this._timeoutHandler.bind(this), 60000);
 
       },
 
       /*
        *  Update user's current geoLocation
        */
-      updateGeoLocation: function (pos) {
-        console.log('ebola ' + pos.coords.latitude + ' ' + pos.coords.longitude);
-      }
+      _updateGeoLocation: function(geolocation) {
+        this.set( 'geoLocation',  geolocation);
+        if (geolocation.coords.accuracy < 50) {
+          // FIXME: do something if this offset gets to crazy
+        }
+      },
+
+      _reportGeoError: function(geolocation) {
+          // FIXME: console.log(geolocation);
+      },
+
+      _timeoutHandler: function(geolocation) {
+          // FIXME: console.log(geolocation);
+      },
 
     });
+
 
     /**
      * main UI logic for the Map
@@ -240,7 +252,7 @@ var DSpace = function(){
         var currentCenter = this.frame.getCenter();
         var currentZoom = this.frame.getZoom();
         this.frame.setCenterZoom(currentCenter, currentZoom);
-        console.log(this.frame.getCenter());
+        //console.log(this.frame.getCenter());
       },
 
       fullscreenToggle: function() {
@@ -372,7 +384,7 @@ var DSpace = function(){
       },
 
       events: {
-              "click": "setFeatureCurrent"
+        "click": "setFeatureCurrent"
       },
 
       /**
@@ -411,6 +423,7 @@ var DSpace = function(){
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
+
         // listen for focus requests from features and
         // call map for focus
         this.collection.on( 'featureboxitem:current', function( event ){
@@ -509,6 +522,8 @@ var DSpace = function(){
       },
     });
 
+
+
     /**
      * UI element to show current position in botttom left
      * gets model user and binds to all changes
@@ -525,6 +540,11 @@ var DSpace = function(){
 
       initialize: function() {
         _.bindAll(this, 'render');
+
+        var self = this;
+        this.model.on('change', function () {
+          self.render();
+        });
 
         /**
          * create convienience accessors
@@ -565,7 +585,7 @@ var DSpace = function(){
        * TODO listen on map changing it's center
        */
       render: function(){
-        var templateData = {user: this.user.toJSON()};
+        var templateData = { user: this.user.toJSON() };
         $(this.el).html(this.template(templateData));
         return this.el;
       }

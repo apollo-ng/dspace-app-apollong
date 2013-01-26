@@ -69,17 +69,31 @@ watch('./app', function(filename) {
     console.log('lock file '+ filename);
     return; }
   console.log(filename);
-  exec("cp -rf app/* build");
+  shell.cp('-rf', 'app/index.html', 'build/');
+  shell.cp('-rf', 'app/js/*', 'build/assets/js/');
 });
 
-// changes to app
+// changes to design
 watch('./design', function(filename) {
   if( filename.match(/\/\./, '')) {
     console.log('lock file '+ filename);
     return; }
   console.log(filename);
-  shell.cp('-rf', 'design/*', 'build/');
+  shell.cp('-rf', 'design/css', 'build/assets/');
+  shell.cp('-rf', 'design/icons', 'build/assets/');
+  shell.cp('-rf', 'design/images', 'build/assets/');
 });
+
+// changes to templates
+watch('./design/templates', function(filename) {
+  if( filename.match(/\/\./, '')) {
+    console.log('lock file '+ filename);
+    return; }
+  console.log(filename);
+  console.log('Re-Compiling Templates...');
+  shell.exec('./node_modules/.bin/handlebars design/templates/* -f build/assets/js/templates.js');
+});
+
 
 //FIXME change to test/fixtures
 watch('./test', function(filename) {

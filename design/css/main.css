@@ -1,47 +1,63 @@
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li, input,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: none;
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,
+acronym,address,big,cite,code,del,dfn,em,
+font,img,ins,kbd,q,s,samp,small,strike,
+strong,sub,sup,tt,var,b,i,center,
+dl,dt,dd,ol,ul,li,fieldset,form,input,select,
+textarea,label,legend,table,caption,tbody,
+tfoot,thead,tr,th,td {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  outline: 0px;
   font-size: 100%;
   font: inherit;
+  line-height: 1;
   vertical-align: baseline;
+  background: transparent;
 }
 
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block;
+ol,ul,
+.item-list ul,
+.item-list ul li {
+  list-style:none;
 }
-body {
-  line-height: 1;
-}
-ol, ul {
-  list-style: none;
-}
-blockquote, q {
-  quotes: none;
-}
-blockquote:before, blockquote:after,
+
+blockquote,
+q { quotes:none; }
+
+blockquote:before,
+blockquote:after,
 q:before, q:after {
-  content: '';
-  content: none;
+  content:'';
+  content:none;
 }
+
+:focus { outline:0px; }
+
+ins { text-decoration:none; }
+del { text-decoration:line-through; }
+
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+  border-collapse:collapse;
+  border-spacing:0px;
 }
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix { display: inline-block; }
+
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* End hide from IE-mac */
+
 
 input[type="search"] {
   outline: none;
@@ -55,7 +71,7 @@ input[type="search"] {
 
 /********************************************************/
 
-body { color: #282828; background:  #3f3e3a; background-image: url(../images/panel_bg.png); overflow: hidden; font-size: 0.8em; font-family: "Liberation Sans", "Nimbus Sans L", "FreeSans", "Helvetica Neue", Helvetica, Arial, sans-serif;}
+body { color: #282828; background:  #3f3e3a; background-image: url(../images/panel_bg.png); overflow: hidden; font-size: 0.8em; font-family: "Liberation Sans", "Nimbus Sans L", "FreeSans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 a       { color: #A50B00; }
 h1	 { font-size: 24px; color: #fafafa; text-shadow: 1px 1px #777777, -1px -1px #000000; }
 h2	 { font-size: 20px; color: #3f3e3a; text-shadow:#fff 0px 1px 0, #000 0 -1px 0; margin-bottom: 10px;}
@@ -72,6 +88,29 @@ h3	 { font-size: 18px; }
   bottom:50px;
   margin: 0;
   overflow: hidden;
+}
+
+
+/*
+ * This tries to render the map a bit smoother on lo end devices
+ */
+.map-tile {
+  opacity:0.6;
+}
+
+.map-tile-loaded {
+  -webkit-animation-name: 'fade-in';
+  -webkit-animation-timing-function: ease-in;
+  -webkit-animation-duration: 0.15s;
+}
+
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 #miniMapCanvas {
@@ -118,13 +157,6 @@ h3	 { font-size: 18px; }
 }
 
 #featureBox {
-  background: rgb(255,255,255);
-  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,0.4) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,0.4)));
-  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,0.4) 100%);
-  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,0.4) 100%);
-  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
-  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
   position:absolute;
   top:60px;
   right:10px;
@@ -134,6 +166,13 @@ h3	 { font-size: 18px; }
   padding: 10px;
   padding-top: 0;
   width:240px;
+  background: rgb(255,255,255);
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,0.4) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,0.4)));
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,0.4) 100%);
+  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,0.4) 100%);
+  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
   -moz-box-shadow: 2px 2px 5px #888;
   -webkit-box-shadow: 0 0 5px#888;
   box-shadow: 0 0 5px #888;
@@ -147,6 +186,7 @@ h3	 { font-size: 18px; }
   border:1px solid #bbb;
   margin-top: 10px;
   z-index: 999999;
+  cursor: pointer;
   background: rgb(244,241,235);
   background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,1)), color-stop(47%,rgba(232,229,222,1)), color-stop(100%,rgba(221,218,208,1)));
@@ -157,7 +197,6 @@ h3	 { font-size: 18px; }
   -webkit-border-radius:3px;
   border-radius: 3px;
   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  cursor: pointer;
 }
 
 .featureBoxItem h3 {

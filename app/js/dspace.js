@@ -286,7 +286,14 @@ var DSpace = function(){
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME
 
-        var modestmap = new modestmaps.Map('map', layer, null, [new easey_handlers.TouchHandler(), new easey_handlers.DragHandler()]);
+        var modestmap = new modestmaps.Map(
+          'map',
+          layer,
+          null,
+          [new easey_handlers.TouchHandler(),
+           new easey_handlers.DragHandler(),
+           new easey_handlers.MouseWheelHandler()]
+        );
 
         /**
          *  setup boundaries

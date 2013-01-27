@@ -773,7 +773,16 @@ console.log({ 'featurebox:current': event })
          */
           this.featureCollections = [];
           for(var i = 0; i < this.geoFeeds.length; i++){
-            this.featureCollections.push(new FeatureCollection(this.geoFeeds[i]));
+            var feed = this.geoFeeds[i];
+            switch(feed.type){
+              case 'CORS':
+                this.featureCollections.push(new FeatureCollection(feed));
+                break;
+              default:
+                console.log('tried creating ' + feed.type + ' collections')
+                break;
+            };
+
 
           };
 

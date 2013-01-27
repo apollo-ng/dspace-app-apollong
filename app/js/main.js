@@ -96,15 +96,17 @@ function exitBFS () {
 document.onmousemove = function(e) {
   cursorX = e.pageX;
   cursorY = e.pageY;
-}
+};
 
 /**
  * config for initializing DSpace Wrorld
  */
 var config = {
   geoFeeds: [
-    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json'},
-    { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json'}
+    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json', type: 'CORS'},
+    { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json', type: 'CORS'},
+    { hub: 'open-reseource.org', type: 'DSNP'}
+
   ],
 
   map: {

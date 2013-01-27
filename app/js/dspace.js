@@ -437,7 +437,8 @@ var DSpace = function(){
         var templateData = this.model.toJSON();
         // console.log('this element', this.el, this.$el);
         // $(this.el).html(this.template(templateData));
-        return this.template(templateData);
+        this.$el.html(this.template(templateData));
+        return this.el
       },
 
       events: {

@@ -797,13 +797,6 @@ console.log({ 'featurebox:current': event })
             };
           };
 
-        /**
-         * just to notice existence of activeOverlays on a World
-         */
-        activeOverlays: function(){
-            this.get('activeOverlays')
-        },
-
         //@wip
         /**
          * create and render Map
@@ -812,6 +805,12 @@ console.log({ 'featurebox:current': event })
         this.map.render();
       },
 
+      /**
+       * just to notice existence of activeOverlays on a World
+       */
+      activeOverlays: function(){
+          this.get('activeOverlays');
+      }
     });
 
     /**

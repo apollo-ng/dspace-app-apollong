@@ -147,6 +147,7 @@ var DSpace = function(){
 
       initialize: function(){
 
+          var self = this;
           /**
            * to use with map.world FIXME
            */
@@ -157,6 +158,12 @@ var DSpace = function(){
            */
           this.world.on( 'all', function( e, v ) {
             console.log({ world: e, v: v });
+          });
+
+          this.world.user.on('change', function ( e, v) {
+            console.log(e);
+            console.log(v);
+            self.createUserLayer();
           });
 
           /**
@@ -221,7 +228,6 @@ var DSpace = function(){
         this.statusPanel.render();
         this.statusPanel.visible = true;
 
-        this.userLayer = this.createUserLayer();
         /**
          * create ControlPanel
          * set controlPanel model to map
@@ -331,9 +337,9 @@ var DSpace = function(){
       createUserLayer: function(){
         var markerLayer = mapbox.markers.layer();
 
-        var center = this.frame.getCenter();
+        var center = this.world.user.get('geoLocation');
         console.log(center);
-        var userData = {geometry: {coordinates: [center.lon, center.lat]}, properties: {type: 'user'}};
+        var userData = {geometry: {coordinates: [center.coords.longitude, center.coords.latitude]}, properties: {type: 'user'}};
 
         /**
          * define a factory to make markers

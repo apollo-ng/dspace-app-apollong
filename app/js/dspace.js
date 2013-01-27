@@ -42,27 +42,6 @@ var DSpace = function(){
     var FeatureCollection = Backbone.Collection.extend({
 
       model: Feature,
-      initialize: function( options ){
-        this.url = options.url;
-        this.name = options.name;
-      },
-
-      /**
-       * requests the geojson
-       * resets ifselft with the result
-       * FIXME improve documentation
-       */
-      sync: function(){
-        var self = this;
-        var request = new Reqwest({
-          url: this.url,
-          type: 'json',
-          success: function( response ) {
-            self.reset( response.features ); },
-            failure: function( e ) {
-              alert( '#FIXME' ); }
-        });
-      },
 
       /**
        * override toJSON to adds a number to features's toJSON
@@ -77,6 +56,35 @@ var DSpace = function(){
         return mappedJson;
       }
 
+    });
+
+    var FeatureCollectionCORS = FeatureCollection.extend({
+
+      initialize: function( options ){
+        if(options.url){
+          this.url = options.url;
+        }else{
+          console.log('CORS with no url!');
+        }
+      },
+
+      /**
+       * requests the geojson
+       * resets ifselft with the result
+       * FIXME improve documentation
+       */
+      sync: function(){
+        var self = this;
+        var request = new Reqwest({
+          url: this.url,
+          type: 'json',
+          success: function( response ) {
+            self.reset( response.features );
+          },
+            failure: function( e ) {
+              alert( '#FIXME' ); }
+        });
+      },
     });
 
     /**
@@ -235,10 +243,9 @@ var DSpace = function(){
 
 
         this.world.set( 'overlays', overlays );
-        this.featureBox = new FeatureBox({ map: this });
 
+        this.featureBox = new FeatureBox({ map: this });
         this.featureBox.setFeatureCollection( overlays[1].collection );
-        overlays[1].collection.sync( );
         this.featureBox.visible = true;
 
         /**
@@ -776,14 +783,16 @@ console.log({ 'featurebox:current': event })
             var feed = this.geoFeeds[i];
             switch(feed.type){
               case 'CORS':
-                this.featureCollections.push(new FeatureCollection(feed));
+                var featureCollection = new FeatureCollectionCORS(feed);
+                //for now sync it right away!
+                featureCollection.sync()
+
+                this.featureCollections.push(featureCollection);
                 break;
               default:
                 console.log('tried creating ' + feed.type + ' collections')
                 break;
             };
-
-
           };
 
         //@wip

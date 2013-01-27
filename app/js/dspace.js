@@ -7,17 +7,20 @@ define([
   'modestmaps',
   'easey',
   'easey_handlers',
+  'mapbox',
 
   'hbs!templates/mapContext',
   'hbs!templates/statusPanel',
   'hbs!templates/userOptionModal',
   'hbs!templates/controlPanel',
   'hbs!templates/geobarOptionModal',
-  'hbs!templates/featureOptionModal'
+  'hbs!templates/featureOptionModal',
+  'hbs!templates/featureInfoModal',
+  'hbs!templates/featureBoxItem'
 ], function(
-  $, Backbone, _, Reqwest, Handlebars, MM, easey, easey_handlers,
+  $, Backbone, _, Reqwest, Handlebars, MM, easey, easey_handlers, mapbox,
 
-  mapContextTemplate, statusPanelTemplate, userOptionModalTemplate, controlPanelTemplate, geobarOptionModalTemplate, featureOptionModalTemplate
+  mapContextTemplate, statusPanelTemplate, userOptionModalTemplate, controlPanelTemplate, geobarOptionModalTemplate, featureOptionModalTemplate, featureInfoModalTemplate, featureBoxItemTemplate
 ) {
 
 
@@ -262,6 +265,7 @@ var DSpace = function(){
          */
         this.world.set( 'activeOverlays', overlays );
 
+        console.log('new feature box!', 'map', map, 'collection', this.world.featureCollections[0]);
         this.featureBox = new FeatureBox({ map: this });
         this.featureBox.setFeatureCollection( this.world.featureCollections[0] );
         this.featureBox.visible = true;
@@ -342,6 +346,8 @@ var DSpace = function(){
       },
 
       addMapLayer: function( collection ){
+        console.log('addMapLayer', collection);
+
         /**
          * Add markers
          * mapbox lib NOT same as ModestMap
@@ -572,7 +578,7 @@ console.log({ 'featurebox:current': event })
        * set pointer-events active to override layer settings
        */
       //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
-      template: Handlebars.compile( '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
+      template: Handlebars.compile( '<img src="/design/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
 
       render: function( ) {
           this.$el.html( this.template( this.featureJson ));

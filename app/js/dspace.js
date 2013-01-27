@@ -184,6 +184,10 @@ var DSpace = function(){
           this.template = Handlebars.templates['mapContext'];
 
           /**
+           *
+           */
+          this.userLayer = null;
+          /**
            * define relations to other views
            */
           this.statusPanel = new StatusPanel({model: this.world.user});
@@ -338,7 +342,15 @@ var DSpace = function(){
        * FIXME hack to add tikiman
        */
       createUserLayer: function(){
+
+        // destroy old layer if exists...
+        // FIXME use move layer
+        if(this.userLayer){
+          this.frame.removeLayer(this.userLayer);
+        };
+
         var markerLayer = mapbox.markers.layer();
+        this.userLayer = markerLayer;
 
         var center = this.world.user.get('geoLocation');
         console.log(center);

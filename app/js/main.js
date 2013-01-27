@@ -3,9 +3,11 @@
  *  FIXME Should be outsourced in the next cleanup run
  */
 Handlebars.registerHelper('shortPos', function(object) {
+  if ( typeof object  !== 'undefined') {
   return new Handlebars.SafeString(
     object.toString().substring(0,6)
   );
+}
 });
 
 /**

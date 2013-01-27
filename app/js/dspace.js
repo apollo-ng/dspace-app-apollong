@@ -468,6 +468,7 @@ var DSpace = function(){
         // listen for focus requests from features and
         // call map for focus
         this.collection.on( 'featureboxitem:current', function( event ){
+console.log({ 'featurebox:current': event })
           map.jumpToFeature( event.model );
         });
 
@@ -518,23 +519,26 @@ var DSpace = function(){
     /** @wip
      *
      * view for Overlay Markers
+     * this creates creates a marker-image element and return the reference
+     * for modesmap factory the element has to exist on the dom
+     * modestmap sets pointer-events to none so we have to override it
      */
     var Marker = Backbone.View.extend({
 
       tagName: 'div',
-      className: 'marker',
+      className: 'markerimage',
 
       events: {
-         "click div.marker-image": "featureInfoModal"
-        ,"rightclick": "markerContext"
+         "click": "featureInfoModal"
+        ,"contextmenu": "markerContext"
       },
 
       featureInfoModal: function(event) {
-         console.log('marker event') ;
+         console.log({ 'marker event': event, object: this.model }) ;
       },
 
       markerContext: function(event) {
-         console.log('marker context (right-click)') ;
+         console.log({ 'marker context (right-click)': event, object: this.model }) ;
       },
 
       /** FIXME put into /templates
@@ -542,10 +546,11 @@ var DSpace = function(){
        * set pointer-events active to override layer settings
        */
       //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
-      template: Handlebars.compile( '<img class="marker-image" src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
+      template: Handlebars.compile( '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
 
       render: function( ) {
-          this.$el.html( this.template( this.model ))
+          this.$el.html( this.template( this.model ));
+          this.$el.css( 'pointer-events', 'auto' );
           return this.el;
       }
     });

@@ -280,6 +280,7 @@ var DSpace = function(){
        * creates frame using ModestMaps library
        */
       createFrame: function(){
+        var self = this;
         var modestmaps = com.modestmaps;
 
         var config = this.config;
@@ -311,6 +312,9 @@ var DSpace = function(){
          * FIXME add modestmap.addCallback('drawn', function(m){});
          * here we can update center location and zoom level display
          */
+        modestmap.addCallback('drawn', function(m){
+          self.controlPanel.render();
+        });
         return modestmap;
 
       },

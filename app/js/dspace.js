@@ -329,8 +329,8 @@ var DSpace = function(){
         /**
          * define a factory to make markers
          */
-        markerLayer.factory(function(feature){
-           return new Marker({ model: feature }).render( );
+        markerLayer.factory(function(featureJson){
+           return new Marker({ featureJson: featureJson }).render( );
         });
         /**
          * display markers MM adds it to DOM
@@ -533,12 +533,17 @@ console.log({ 'featurebox:current': event })
         ,"contextmenu": "markerContext"
       },
 
+      initialize: function(){
+        this.featureJson = this.options.featureJson;
+
+      },
+
       featureInfoModal: function(event) {
-         console.log({ 'marker event': event, object: this.model }) ;
+         console.log({ 'marker event': event, featureJson: this.featureJson }) ;
       },
 
       markerContext: function(event) {
-         console.log({ 'marker context (right-click)': event, object: this.model }) ;
+         console.log({ 'marker context (right-click)': event, featureJson: this.featureJson }) ;
       },
 
       /** FIXME put into /templates
@@ -549,7 +554,7 @@ console.log({ 'featurebox:current': event })
       template: Handlebars.compile( '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
 
       render: function( ) {
-          this.$el.html( this.template( this.model ));
+          this.$el.html( this.template( this.featureJson ));
           this.$el.css( 'pointer-events', 'auto' );
           return this.el;
       }

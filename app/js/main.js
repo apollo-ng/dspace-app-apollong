@@ -31,7 +31,7 @@
     'easey',
     'easey_handlers',
     'domready',
-    'mapbox'
+    'markers'
 
   ].forEach(function(dep) {
     requirejsConfig.paths[dep] = '../../deps/' + dep

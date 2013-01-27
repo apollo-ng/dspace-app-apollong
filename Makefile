@@ -45,7 +45,7 @@ deps: clean-deps
 	$(WRAP_DEFINE) pkgs/js/easey.handlers.js deps/easey_handlers.js easey_handlers \
 	  modestmaps:MM
 
-	$(WRAP_DEFINE) pkgs/js/markers.js deps/mapbox.js mapbox \
+	$(WRAP_DEFINE) pkgs/js/markers.js deps/markers.js mapbox.markers \
 	  modestmaps:MM
 
 clean-deps:

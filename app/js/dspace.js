@@ -7,7 +7,7 @@ define([
   'modestmaps',
   'easey',
   'easey_handlers',
-  'mapbox',
+  'markers',
 
   'hbs!templates/mapContext',
   'hbs!templates/statusPanel',
@@ -18,7 +18,7 @@ define([
   'hbs!templates/featureInfoModal',
   'hbs!templates/featureBoxItem'
 ], function(
-  $, Backbone, _, Reqwest, Handlebars, MM, easey, easey_handlers, mapbox,
+  $, Backbone, _, Reqwest, Handlebars, MM, easey, easey_handlers, markers,
 
   mapContextTemplate, statusPanelTemplate, userOptionModalTemplate, controlPanelTemplate, geobarOptionModalTemplate, featureOptionModalTemplate, featureInfoModalTemplate, featureBoxItemTemplate
 ) {
@@ -352,7 +352,9 @@ var DSpace = function(){
          * Add markers
          * mapbox lib NOT same as ModestMap
          */
-        var markerLayer = mapbox.markers.layer();
+        var markerLayer = markers.layer();
+
+        markerLayer.map = this.frame;
 
         /**
          * define a factory to make markers
@@ -364,8 +366,11 @@ var DSpace = function(){
          * display markers MM adds it to DOM
          * .extent() called to redraw map!
          */
-        markerLayer.features( collection.toJSON( ));
-        this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+        setTimeout(function() {
+          markerLayer.features( collection.toJSON( ));
+        }, 1500);
+
+        //this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
       },
 
       /**
@@ -404,10 +409,19 @@ var DSpace = function(){
      */
     var FeatureBoxItem = Backbone.View.extend({
 
+      tagName: 'div',
       className: 'featureBoxItem',
 
       initialize: function(){
         _.bindAll(this, 'render');
+
+        console.log("ELEMENT", this.el);
+
+        // this.el = document.createElement('div');
+        // this.$el = $(this.el);
+
+        // FIXME
+        this.el.setAttribute('class', 'featureBoxItem');
 
         /**
          * DOM template
@@ -421,8 +435,9 @@ var DSpace = function(){
       */
       render: function(){
         var templateData = this.model.toJSON();
-        this.$el.html(this.template(templateData));
-        return this.el;
+        // console.log('this element', this.el, this.$el);
+        // $(this.el).html(this.template(templateData));
+        return this.template(templateData);
       },
 
       events: {
@@ -511,7 +526,8 @@ console.log({ 'featurebox:current': event })
         _(this.collection.models).each(function(feature, index){
           feature.set( 'index', index );
           var featureBoxItem= new FeatureBoxItem({
-              model: feature
+            model: feature,
+            el: document.createElement('div')
           });
           var renderedTemplate = featureBoxItem.render();
 
@@ -610,12 +626,13 @@ console.log({ 'featurebox:current': event })
            * listens to its FeatureCollection reset event
            */
           this.collection.on( 'reset', function( event, data ){
-            self.render( );
+            //console.log('collection', self.collection.toJSON());
+            //self.render( );
           });
       },
 
       render: function(){
-          var maplayer = this.map.addMapLayer( this.collection );
+        var maplayer = this.map.addMapLayer( this.collection );
       },
     });
 
@@ -640,7 +657,7 @@ console.log({ 'featurebox:current': event })
 
         var self = this;
         this.model.on('change', function () {
-          self.render();
+          //self.render();
         });
 
         /**
@@ -702,7 +719,7 @@ console.log({ 'featurebox:current': event })
        */
       render: function(){
         var templateData = { user: this.user.toJSON() };
-        $(this.el).html(this.template(templateData));
+        this.el.innerHTML = this.template(templateData);
         return this.el;
       }
     });

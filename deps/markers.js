@@ -653,5 +653,5 @@ mapbox.markers.simplestyle_factory = function(feature) {
 };
 
 
-  return mapbox;
+  return mapbox.markers;
 });

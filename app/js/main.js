@@ -8,6 +8,16 @@ Handlebars.registerHelper('shortPos', function(object) {
   );
 });
 
+/**
+ * Handlebar helper function to show DMS coordinates
+ * Example: {{ dd2dms user.geolocation.coords.latitude lat }}
+ */
+Handlebars.registerHelper('renderPos', function (lat, lon) {
+ lat_dms = dd2dms(lat, 'lat')
+ lon_dms= dd2dms(lon, 'lon')
+ return (lat_dms + " " + lon_dms)
+});
+
 
 Handlebars.registerHelper('setAccBg', function(object) {
   if ( object > 50) {
@@ -16,6 +26,32 @@ Handlebars.registerHelper('setAccBg', function(object) {
     return ('highAccuracy')
   }
 });
+
+
+function dd2dms (decCoord, axis) {
+    var sign = 1, Abs=0;
+    var days, mins, secs, direction;
+
+    if(decCoord < 0)  { sign = -1; }
+
+    Abs = Math.abs( Math.round(decCoord * 1000000.));
+
+    if(axis == "lat" && Abs > (90 * 1000000)) {
+        return false;
+    } else if(axis == "lon" && Abs > (180 * 1000000)) {
+        return false;
+    }
+
+    days = Math.floor(Abs / 1000000);
+    mins = Math.floor(((Abs/1000000) - days) * 60);
+    secs = ( Math.floor((( ((Abs/1000000) - days) * 60) - mins) * 100000) *60/100000 ).toFixed();
+    days = days * sign;
+
+    if(axis == 'lat') direction = days<0 ? 'S' : 'N';
+    if(axis == 'lon') direction = days<0 ? 'W' : 'E';
+
+   return direction + (days * sign) + 'º ' + mins + "' " + secs + "''";
+}
 
 /**
  * X-Browser Fullscreen API Calls

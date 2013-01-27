@@ -1,0 +1,3 @@
+[submodule "pkgs/js/require-handlebars-plugin"]
+	path = pkgs/js/require-handlebars-plugin
+	url = git://github.com/SlexAxton/require-handlebars-plugin.git

@@ -1,3 +1,26 @@
+define([
+  './dollar',
+  'backbone',
+  'underscore',
+  'reqwest',
+  'handlebars',
+  'modestmaps',
+  'easey',
+  'easey_handlers',
+
+  'hbs!templates/mapContext',
+  'hbs!templates/statusPanel',
+  'hbs!templates/userOptionModal',
+  'hbs!templates/controlPanel',
+  'hbs!templates/geobarOptionModal',
+  'hbs!templates/featureOptionModal'
+], function(
+  $, Backbone, _, Reqwest, Handlebars, MM, easey, easey_handlers,
+
+  mapContextTemplate, statusPanelTemplate, userOptionModalTemplate, controlPanelTemplate, geobarOptionModalTemplate, featureOptionModalTemplate
+) {
+
+
 /**
  * TODO document
  */
@@ -10,14 +33,7 @@ var DSpace = function(){
    */
   this.init = function ( config ){
 
-    /**
-     * require dependencies with Ender
-     * FIXME document (ex does order matter)?
-     */
-    var Backbone = require('backbone');
-    var _ = require('underscore');
-    var Reqwest = require('reqwest');
-    var morpheus = require('morpheus');
+    console.log("DSpace init");
 
     /**
      * single geographical featue of interest
@@ -174,7 +190,7 @@ var DSpace = function(){
           /**
            * Map Context Menu Template
            */
-          this.template = Handlebars.templates['mapContext'];
+          this.template = mapContextTemplate;
 
           /**
            * define relations to other views
@@ -289,14 +305,12 @@ var DSpace = function(){
        */
       createFrame: function(){
         var self = this;
-        var modestmaps = com.modestmaps;
-
         var config = this.config;
 
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
 
-        var modestmap = new modestmaps.Map(
+        var modestmap = new MM.Map(
           this.el,
           layer,
           null,
@@ -309,7 +323,7 @@ var DSpace = function(){
          *  setup boundaries
          */
         modestmap.setZoomRange(config.minZoom, config.maxZoom);
-        var location = new modestmaps.Location(config.geolat, config.geolon);
+        var location = new MM.Location(config.geolat, config.geolon);
 
         /**
          * show and zoom map
@@ -392,7 +406,7 @@ var DSpace = function(){
         /**
          * DOM template
          */
-        this.template = Handlebars.templates['featureBoxItem'];
+        this.template = featureBoxItemTemplate;
       },
 
      /**
@@ -579,7 +593,7 @@ console.log({ 'featurebox:current': event })
       initialize: function() {
           var self = this;
 
-          this.template = Handlebars.templates['featureInfoModal'];
+          this.template = featureInfoModalTemplate;
 
           /*
            * convienience accessor to map
@@ -628,9 +642,9 @@ console.log({ 'featurebox:current': event })
          */
         this.user = this.model;
 
-        this.template = Handlebars.templates['statusPanel'];
+        this.template = statusPanelTemplate;
         this.templates = {
-          'userOptions': Handlebars.templates['userOptionModal']
+          'userOptions': userOptionModalTemplate
         }
 
       },
@@ -710,10 +724,10 @@ console.log({ 'featurebox:current': event })
          * create convienience accessors
          */
         this.map = this.options.map;
-        this.template = Handlebars.templates['controlPanel'];
+        this.template = controlPanelTemplate;
         this.templates = {
-           'geobarOptions': Handlebars.templates['geobarOptionModal']
-          ,'featureOptions': Handlebars.templates['featureOptionModal']
+          'geobarOptions': geobarOptionModalTemplate
+          ,'featureOptions': featureOptionModalTemplate
         }
 
       },
@@ -827,3 +841,6 @@ console.log({ 'featurebox:current': event })
 
 };
 
+  return DSpace;
+
+});

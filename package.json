@@ -17,9 +17,7 @@
     , "reqwest": "0.6.x"
     }
   , "devDependencies": {
-      "shelljs": "0.1.x"
-    , "ender": "0.8.x"
-    , "node-watch": "0.2.x"
-    , "handlebars": "1.0.x"
+      "handlebars": "1.0.x"
+    , "almond": "*"
   }
 }

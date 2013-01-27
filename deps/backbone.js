@@ -1,5 +1,5 @@
 define([
-  './dollar', 
+  'app/js/dollar', 
   'underscore'
 ], function($, _) {
 

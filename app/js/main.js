@@ -1,49 +1,7 @@
-(function() {
-
-  var requirejsConfig = {
-    paths: {
-      'templates'        : '../../design/templates',
-      'template/helpers' : 'helpers',
-
-      // dependencies of hbs
-      'i18nprecompile'   : '../../deps/hbs/i18nprecompile',
-      'json2'            : '../../deps/hbs/json2'
-    },
-    hbs: {
-      templateExtension : 'handlebars',
-      disableI18n : true
-    },
-  };
-
-  // External deps in deps/
-  [
-
-    'hbs',
-    'backbone',
-    'underscore',
-    'bonzo',
-    'bean',
-    'morpheus',
-    'reqwest',
-    'handlebars',
-    'qwery',
-    'modestmaps',
-    'easey',
-    'easey_handlers',
-    'domready',
-    'markers'
-
-  ].forEach(function(dep) {
-    requirejsConfig.paths[dep] = '../../deps/' + dep
-  });
-
-  requirejs.config(requirejsConfig);
-
-})();
 
 define([
   'domready',
-  './dspace'
+  'app/js/dspace'
 ], function(domready, DSpace) {
 
 /**

@@ -1,5 +1,5 @@
 define([
-  './dollar',
+  'app/js/dollar',
   'backbone',
   'underscore',
   'reqwest',

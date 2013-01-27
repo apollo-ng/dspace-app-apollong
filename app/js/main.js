@@ -210,8 +210,8 @@ document.onmousemove = function(e) {
  */
 var config = {
   geoFeeds: [
-    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json', type: 'CORS'},
     { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json', type: 'CORS'},
+    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json', type: 'CORS'},
     { hub: 'open-reseource.org', type: 'DSNP'}
 
   ],

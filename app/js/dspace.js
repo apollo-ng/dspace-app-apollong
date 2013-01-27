@@ -241,11 +241,13 @@ var DSpace = function(){
                 collection: feeds[i]
               , map: this })); }
 
-
-        this.world.set( 'overlays', overlays );
+        /**
+         * set active overlays on a world
+         */
+        this.world.set( 'activeOverlays', overlays );
 
         this.featureBox = new FeatureBox({ map: this });
-        this.featureBox.setFeatureCollection( overlays[1].collection );
+        this.featureBox.setFeatureCollection( this.world.featureCollections[0] );
         this.featureBox.visible = true;
 
         /**
@@ -794,6 +796,13 @@ console.log({ 'featurebox:current': event })
                 break;
             };
           };
+
+        /**
+         * just to notice existence of activeOverlays on a World
+         */
+        activeOverlays: function(){
+            this.get('activeOverlays')
+        },
 
         //@wip
         /**

@@ -73,7 +73,8 @@ input[type="search"] {
 
 /********************************************************/
 
-body { color: #282828; background:  #3f3e3a; background-image: url(../images/panel_bg.png); overflow: hidden; font-size: 0.8em; font-family: "Liberation Sans", "Nimbus Sans L", "FreeSans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+html { overflow: hidden; }
+body { color: #282828; background:  #3f3e3a; background-image: url(../images/panel_bg.png); font-size: 0.8em; font-family: "Liberation Sans", "Nimbus Sans L", "FreeSans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 a       { color: #A50B00; }
 h1	 { font-size: 24px; color: #fafafa; text-shadow: 1px 1px #777777, -1px -1px #000000; }
 h2	 { font-size: 20px; color: #3f3e3a; text-shadow:#fff 0px 1px 0, #000 0 -1px 0; margin-bottom: 10px;}
@@ -82,19 +83,18 @@ h3	 { font-size: 18px; }
 #map {
   cursor:crosshair;
   background:#c0c19f;
-  position:absolute;
+  position: absolute;
   border-top: 1px solid #888;
-  top:50px;
-  left:0px;
-  right: -15px;
-  bottom:50px;
-  margin: 0;
-  overflow: hidden;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
 }
 
 
 /*
  * This tries to render the map a bit smoother on lo end devices
+ * Still work in progress...
  */
 .map-tile {
   opacity:0.6;
@@ -244,7 +244,7 @@ h3	 { font-size: 18px; }
   color: #fafafa;
 }
 
-.marker-image {
+.markerimage {
   position: absolute;
   cursor: pointer;
   margin-top: -32px;

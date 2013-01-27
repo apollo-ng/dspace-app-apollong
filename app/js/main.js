@@ -9,6 +9,14 @@ Handlebars.registerHelper('shortPos', function(object) {
 });
 
 
+Handlebars.registerHelper('setAccBg', function(object) {
+  if ( object > 50) {
+    return ('lowAccuracy')
+  } else {
+    return ('highAccuracy')
+  }
+});
+
 /**
  * X-Browser Fullscreen API Calls
  */

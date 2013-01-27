@@ -221,6 +221,7 @@ var DSpace = function(){
         this.statusPanel.render();
         this.statusPanel.visible = true;
 
+        this.userLayer = this.createUserLayer();
         /**
          * create ControlPanel
          * set controlPanel model to map
@@ -327,6 +328,28 @@ var DSpace = function(){
 
       },
 
+      createUserLayer: function(){
+        var markerLayer = mapbox.markers.layer();
+
+        var center = this.frame.getCenter();
+        console.log(center);
+        var userData = {geometry: {coordinates: [center.lon, center.lat]}, properties: {type: 'user'}};
+
+        /**
+         * define a factory to make markers
+         */
+        markerLayer.factory(function(featureJson){
+           return new Marker({ featureJson: featureJson }).render( );
+        });
+        /**
+         * display markers MM adds it to DOM
+         * .extent() called to redraw map!
+         */
+        markerLayer.features([userData]);
+        this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+
+      },
+
       addMapLayer: function( collection ){
         /**
          * Add markers
@@ -349,7 +372,7 @@ var DSpace = function(){
       },
 
       /**
-       * animates map to focus location
+       *k animates map to focus location
        * gets feature f
        */
       jumpToFeature: function( f ) {
@@ -543,6 +566,16 @@ console.log({ 'featurebox:current': event })
 
       initialize: function(){
         this.featureJson = this.options.featureJson;
+        console.log(this.featureJson);
+        /** FIXME put into /templates
+         * set icon according to index
+         * set pointer-events active to override layer settings
+         */
+        //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
+        this.template = Handlebars.compile( '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' );
+        if(this.featureJson.properties.type == 'user'){
+        this.template = Handlebars.compile( '<img src="assets/images/tiki-man.png" pointer-events="auto" />' );
+        }
       },
 
       featureInfoModal: function(event) {
@@ -552,13 +585,6 @@ console.log({ 'featurebox:current': event })
       markerContext: function(event) {
          console.log({ 'marker context (right-click)': event, featureJson: this.featureJson }) ;
       },
-
-      /** FIXME put into /templates
-       * set icon according to index
-       * set pointer-events active to override layer settings
-       */
-      //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
-      template: Handlebars.compile( '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' ),
 
       render: function( ) {
           this.$el.html( this.template( this.featureJson ));

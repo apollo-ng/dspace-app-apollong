@@ -125,13 +125,13 @@ background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,
 }
 
 .medAccuracy {
-background: rgb(247,150,33);
-background: -moz-linear-gradient(top, rgba(247,150,33,1) 0%, rgba(249,198,103,1) 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,150,33,1)), color-stop(100%,rgba(249,198,103,1)));
-background: -webkit-linear-gradient(top, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
-background: -o-linear-gradient(top, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
-background: -ms-linear-gradient(top, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
-background: linear-gradient(to bottom, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
+background: rgb(199,152,16);
+background: -moz-linear-gradient(top, rgba(199,152,16,1) 0%, rgba(234,185,45,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(199,152,16,1)), color-stop(100%,rgba(234,185,45,1)));
+background: -webkit-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+background: -o-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+background: -ms-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+background: linear-gradient(to bottom, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
 }
 
 .highAccuracy {
@@ -163,41 +163,18 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
   overflow: hidden;
 }
 
-#userModeWalk {
+#userMode {
   width: 30px;
-  border-right: 1px solid #666;
-  -webkit-border-top-left-radius: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-#userModeDrive {
-  width: 30px;
-  margin-right: 8px;
-  border-left: 1px solid #ccc;
-  -webkit-border-top-right-radius: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  -moz-border-radius-topright: 5px;
-  -moz-border-radius-bottomright: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-#geoStatus {
-  width: 30px;
+  font-size: 25px;
   margin-right: 8px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
 
-#userGeoLocation {
-  width: 150px;
-  font-weight: bold;
-  border-right: 1px solid #000;
+#geoStatus {
+  width: 30px;
+  font-size: 25px;
   -webkit-border-top-left-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
   -moz-border-radius-topleft: 5px;
@@ -206,7 +183,14 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
   border-bottom-left-radius: 5px;
 }
 
-#userGeoLocDev {
+#userGeoLocation {
+  width: 170px;
+  font-weight: bold;
+  border-left: 1px solid #444;
+  border-right: 1px solid #000;
+}
+
+#userGeoLocAcc {
   width: 50px;
   margin-right: 8px;
   font-weight: bold;
@@ -221,7 +205,7 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
 }
 
 #userGeoInfo {
-  width: 100px;
+  width: 95px;
   margin-right: 8px;
   font-weight: bold;
   -webkit-border-radius: 5px;
@@ -231,6 +215,7 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
 
 #userOptions {
   width: 30px;
+  font-size: 25px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -254,6 +239,7 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
 #toggleFullscreen {
   float: left;
   width: 30px;
+  font-size: 25px;
   border-right: 1px solid #999;
   -webkit-border-top-left-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
@@ -278,7 +264,7 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
 
 #coordsMapCenter {
   float: left;
-  width: 160px;
+  width: 170px;
   font-weight: bold;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -345,6 +331,7 @@ background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%
 #toggleFeatureBox {
   float: right;
   width: 30px;
+  font-size: 21px;
   margin-right: 20px;
   border-left: 1px solid #eee;
   -webkit-border-top-right-radius: 5px;

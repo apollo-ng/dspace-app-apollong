@@ -184,8 +184,8 @@ h3	 { font-size: 18px; }
 
 .featureBoxItem {
   list-style-type: none;
-  text-align: left;
   border:1px solid #bbb;
+  text-align: left;
   margin-top: 10px;
   z-index: 999999;
   cursor: pointer;

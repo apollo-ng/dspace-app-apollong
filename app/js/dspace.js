@@ -254,7 +254,7 @@ var DSpace = function(){
         this.world.set( 'activeOverlays', overlays );
 
         this.featureBox = new FeatureBox({ map: this });
-        this.featureBox.setFeatureCollection( this.world.featureCollections[0] );
+        this.featureBox.setFeatureCollection( this.world.featureCollections[1] );
         this.featureBox.visible = true;
 
         /**
@@ -334,6 +334,9 @@ var DSpace = function(){
 
       },
 
+      /**
+       * FIXME hack to add tikiman
+       */
       createUserLayer: function(){
         var markerLayer = mapbox.markers.layer();
 
@@ -352,7 +355,7 @@ var DSpace = function(){
          * .extent() called to redraw map!
          */
         markerLayer.features([userData]);
-        this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+        this.frame.addLayer(markerLayer).draw();
 
       },
 

@@ -162,7 +162,6 @@ var DSpace = function(){
            * to keep track on overlays and feature boxes
            */
           this.overlays = [];
-          this.featureBoxes = [];
 
           /**
            * Map Context Menu Template
@@ -226,12 +225,12 @@ var DSpace = function(){
          * create overlay collection and markers
          * sync active feature collection when all items are bound
          */
-        var feeds = this.world.get( 'geoFeeds' );
+        var feeds = this.world.featureCollections;
         overlays = [];
         for( var i = feeds.length; i--; ) {
           overlays.push(
             new Overlay({
-                collection: new FeatureCollection( feeds[i] )
+                collection: feeds[i]
               , map: this })); }
 
 
@@ -286,10 +285,10 @@ var DSpace = function(){
         var config = this.config;
 
         var template = config.tileSet.template; //FIXME introduce BaseMap
-        var layer = new MM.TemplatedLayer(template); //FIXME
+        var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
 
         var modestmap = new modestmaps.Map(
-          'map',
+          this.el,
           layer,
           null,
           [new easey_handlers.TouchHandler(),
@@ -535,7 +534,6 @@ console.log({ 'featurebox:current': event })
 
       initialize: function(){
         this.featureJson = this.options.featureJson;
-
       },
 
       featureInfoModal: function(event) {
@@ -569,7 +567,6 @@ console.log({ 'featurebox:current': event })
      * gets reference to the map
      */
     var Overlay = Backbone.View.extend({
-      el: $('#map'),
       initialize: function() {
           var self = this;
 
@@ -764,14 +761,23 @@ console.log({ 'featurebox:current': event })
       initialize: function( config ){
         var self = this;
 
-        this.set( 'geofeed', config['geofeed'] );
-        this.set( 'map', config['map'] );
+        this.geoFeeds = config.geoFeeds;
 
         /**
          * create User
          */
         this.user = new User({world: this});
 
+        /**
+         * create FeatureCollections
+         */
+          this.featureCollections = [];
+          for(var i = 0; i < this.geoFeeds.length; i++){
+            this.featureCollections.push(new FeatureCollection(this.geoFeeds[i]));
+
+          };
+
+        //@wip
         /**
          * create and render Map
          */

@@ -1,58 +1,69 @@
 /**
- *  Handlebar Template Helper Functions
- *  FIXME Should be outsourced in the next cleanup run
- */
-Handlebars.registerHelper('shortPos', function(object) {
-  if ( typeof object  !== 'undefined') {
-  return new Handlebars.SafeString(
-    object.toString().substring(0,6)
-  );
-}
-});
-
-/**
- * Handlebar helper function to show DMS coordinates
- * Example: {{ dd2dms user.geolocation.coords.latitude lat }}
+ * Handlebar helper function to show coordinates
+ * according to user prefs (DEC, DMS, GPS, QTH)
+ * FIXME: switch according to prefs in user model
  */
 Handlebars.registerHelper('renderPos', function (lat, lon) {
- lat_dms = dd2dms(lat, 'lat')
- lon_dms= dd2dms(lon, 'lon')
- return (lat_dms + " " + lon_dms)
-});
-
-
-Handlebars.registerHelper('setAccBg', function(object) {
-  if ( object > 50) {
-    return ('lowAccuracy')
-  } else {
-    return ('highAccuracy')
+  if ( typeof lat  !== 'undefined' && typeof lon !== 'undefined') {
+    return (dd2dms(lat, 'lat') + " " + dd2dms(lon, 'lon'));
   }
 });
 
+/**
+ *  Accuracy Helper to switch between m/km in view
+ */
+Handlebars.registerHelper('renderAcc', function (acc) {
+  if ( typeof acc  === 'undefined') {
+    return ('N/A');
+} else if ( acc >= 1000 ) {
+   return ( Math.round(acc/1000) + ' km');
+} else {
+    return ( Math.round(acc) + ' m');
+}
+return ret_acc
+});
 
-function dd2dms (decCoord, axis) {
-    var sign = 1, Abs=0;
-    var days, mins, secs, direction;
-
-    if(decCoord < 0)  { sign = -1; }
-
-    Abs = Math.abs( Math.round(decCoord * 1000000.));
-
-    if(axis == "lat" && Abs > (90 * 1000000)) {
-        return false;
-    } else if(axis == "lon" && Abs > (180 * 1000000)) {
-        return false;
+/**
+ * Switch Accuracy BG depending on value
+ */
+Handlebars.registerHelper('setAccBg', function(acc) {
+  if ( typeof acc  !== 'undefined') {
+    if ( acc > 0 && acc <= 15 ) {
+      return ('highAccuracy');
+    } else if ( acc > 15 && acc < 50 ) {
+      return ('medAccuracy');
+    } else {
+      return ('lowAccuracy');
     }
+  }
+});
 
-    days = Math.floor(Abs / 1000000);
-    mins = Math.floor(((Abs/1000000) - days) * 60);
-    secs = ( Math.floor((( ((Abs/1000000) - days) * 60) - mins) * 100000) *60/100000 ).toFixed();
-    days = days * sign;
+/**
+ * Convert Decimal Coordinates to DMS
+ */
+function dd2dms (decCoord, axis) {
+  var sign = 1, Abs=0;
+  var days, mins, secs, direction;
 
-    if(axis == 'lat') direction = days<0 ? 'S' : 'N';
-    if(axis == 'lon') direction = days<0 ? 'W' : 'E';
+  if( decCoord < 0 ) {
+    sign = -1;
+  }
 
-   return direction + (days * sign) + 'º ' + mins + "' " + secs + "''";
+  Abs = Math.abs( Math.round(decCoord * 1000000.));
+
+  if(axis == "lat" && Abs > (90 * 1000000)) {
+    return false;
+  } else if (axis == "lon" && Abs > (180 * 1000000)) {
+    return false;
+  }
+
+  days = Math.floor(Abs / 1000000);
+  mins = Math.floor(((Abs/1000000) - days) * 60);
+  secs = ( Math.floor((( ((Abs/1000000) - days) * 60) - mins) * 100000) *60/100000 ).toFixed();
+  days = days * sign;
+  if(axis == 'lat') direction = days<0 ? 'S' : 'N';
+  if(axis == 'lon') direction = days<0 ? 'W' : 'E';
+  return direction + (days * sign) + 'º ' + mins + "' " + secs + "''";
 }
 
 /**

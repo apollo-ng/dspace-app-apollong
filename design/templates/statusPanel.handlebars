@@ -2,6 +2,6 @@
 <div id='userModeDrive' class='uiButton'>D</div>
 <div id='geoStatus' class='uiDisplay'></div>
 <div id='userGeoLocation' class='uiDisplay'>{{renderPos user.geoLocation.coords.latitude user.geoLocation.coords.longitude}}</div>
-<div id='userGeoLocDev' class='uiDisplay {{setAccBg user.geoLocation.coords.accuracy}}'>{{shortPos user.geoLocation.coords.accuracy}} m</div>
+<div id='userGeoLocDev' class='uiDisplay {{setAccBg user.geoLocation.coords.accuracy}}'>{{renderAcc user.geoLocation.coords.accuracy}}</div>
 <div id='userGeoInfo' class='uiDisplay'>S: {{user.geoLocation.coords.speed}} km/h  A: {{user.geoLocation.coords.altitude}} m</div>
 <div id='userOptions' class='uiButton'>U</div>

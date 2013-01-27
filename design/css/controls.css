@@ -124,6 +124,16 @@ background: -ms-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rg
 background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
 }
 
+.medAccuracy {
+background: rgb(247,150,33);
+background: -moz-linear-gradient(top, rgba(247,150,33,1) 0%, rgba(249,198,103,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,150,33,1)), color-stop(100%,rgba(249,198,103,1)));
+background: -webkit-linear-gradient(top, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
+background: -o-linear-gradient(top, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
+background: -ms-linear-gradient(top, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
+background: linear-gradient(to bottom, rgba(247,150,33,1) 0%,rgba(249,198,103,1) 100%);
+}
+
 .highAccuracy {
 background: rgb(31,59,8);
 background: -moz-linear-gradient(top, rgba(31,59,8,1) 0%, rgba(98,125,77,1) 100%);

@@ -1,42 +1,49 @@
-/**
- * Handlebar helper function to show coordinates
- * according to user prefs (DEC, DMS, GPS, QTH)
- * FIXME: switch according to prefs in user model
- */
-Handlebars.registerHelper('renderPos', function (lat, lon) {
-  if ( typeof lat  !== 'undefined' && typeof lon !== 'undefined') {
-    return (dd2dms(lat, 'lat') + " " + dd2dms(lon, 'lon'));
-  }
-});
+(function() {
 
-/**
- *  Accuracy Helper to switch between m/km in view
- */
-Handlebars.registerHelper('renderAcc', function (acc) {
-  if ( typeof acc  === 'undefined') {
-    return ('N/A');
-} else if ( acc >= 1000 ) {
-   return ( Math.round(acc/1000) + ' km');
-} else {
-    return ( Math.round(acc) + ' m');
-}
-return ret_acc
-});
+  var requirejsConfig = {
+    paths: {
+      'templates'        : '../../design/templates',
+      'template/helpers' : 'helpers',
 
-/**
- * Switch Accuracy BG depending on value
- */
-Handlebars.registerHelper('setAccBg', function(acc) {
-  if ( typeof acc  !== 'undefined') {
-    if ( acc > 0 && acc <= 15 ) {
-      return ('highAccuracy');
-    } else if ( acc > 15 && acc < 50 ) {
-      return ('medAccuracy');
-    } else {
-      return ('lowAccuracy');
-    }
-  }
-});
+      // dependencies of hbs
+      'i18nprecompile'   : '../../deps/hbs/i18nprecompile',
+      'json2'            : '../../deps/hbs/json2'
+    },
+    hbs: {
+      templateExtension : 'handlebars',
+      disableI18n : true
+    },
+  };
+
+  // External deps in deps/
+  [
+
+    'hbs',
+    'backbone',
+    'underscore',
+    'bonzo',
+    'bean',
+    'morpheus',
+    'reqwest',
+    'handlebars',
+    'qwery',
+    'modestmaps',
+    'easey',
+    'easey_handlers',
+    'domready'
+
+  ].forEach(function(dep) {
+    requirejsConfig.paths[dep] = '../../deps/' + dep
+  });
+
+  requirejs.config(requirejsConfig);
+
+})();
+
+define([
+  'domready',
+  './dspace'
+], function(domready, DSpace) {
 
 /**
  * Convert Decimal Coordinates to DMS
@@ -103,10 +110,9 @@ document.onmousemove = function(e) {
  */
 var config = {
   geoFeeds: [
-    { name: 'Hackerspaces Munich', url: 'http://localhost:3333/hackerspaces-munich.json', type: 'CORS'},
-    { name: 'OpenWiFi Munich', url: 'http://localhost:3333/openwifi-munich.json', type: 'CORS'},
+    { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
+    { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
     { hub: 'open-reseource.org', type: 'DSNP'}
-
   ],
 
   map: {
@@ -124,10 +130,16 @@ var config = {
 /**
  * BIG BANG!
  */
-$.domReady(function () {
 
-  var world = new DSpace();
-  world.init(config);
+  domready(function () {
+
+    console.log("loading?");
+
+    var world = new DSpace();
+    world.init(config);
+
+  });
+
+  console.log('main done');
 
 });
-

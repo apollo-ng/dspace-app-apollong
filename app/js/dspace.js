@@ -7,7 +7,6 @@ define([
   'reqwest',
 
 ], function( $, _, Backbone, Map, Reqwest ) {
-console.log( Map );
 /**
  * TODO document
  */

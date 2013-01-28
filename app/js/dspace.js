@@ -443,24 +443,15 @@ var DSpace = function(){
     var FeatureBoxItem = Backbone.View.extend({
 
       className: 'featureBoxItem',
-
-      initialize: function(){
-        _.bindAll(this, 'render');
-
-        /**
-         * DOM template
-         */
-        this.template = Handlebars.templates['featureBoxItem'];
-      },
+      template: Handlebars.templates['featureBoxItem'],
 
      /**
       * gets model feature and index
       * and returns html
       */
       render: function(){
-        var templateData = this.model.toJSON();
-        this.$el.html(this.template(templateData));
-        return this.el;
+        this.$el.html(this.template(this.model.toJSON()));
+        return this.el
       },
 
       events: {
@@ -469,6 +460,7 @@ var DSpace = function(){
 
       /**
        * sets linked Feature current
+       * FIXME - set on world and then listen on change?
        */
       setFeatureCurrent: function( event ){
         this.model.trigger('featureboxitem:current', this );
@@ -689,15 +681,17 @@ console.log({ 'featurebox:current': event })
      * gets reference to the map
      */
     var Overlay = Backbone.View.extend({
-      initialize: function() {
-          var self = this;
 
-          this.template = Handlebars.templates['featureInfoModal'];
+      template: Handlebars.templates['featureInfoModal'],
+
+      initialize: function() {
 
           /*
            * convienience accessor to map
            */
           this.map = this.options.map;
+
+          var self = this;
 
           /*
            * listens to its FeatureCollection reset event
@@ -707,6 +701,7 @@ console.log({ 'featurebox:current': event })
           });
       },
 
+      //FIXME remove old layer if exists!
       render: function(){
           var maplayer = this.map.addMapLayer( this.collection );
       },
@@ -875,7 +870,7 @@ console.log({ 'featurebox:current': event })
       },
 
       /**
-       * TODO listen on map changing it's center
+       * TODO listen on map changing it's center or on World?
        */
       render: function(){
         var mapCenter = this.map.getCenter();

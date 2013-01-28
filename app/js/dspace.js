@@ -161,8 +161,6 @@ var DSpace = function(){
           });
 
           this.world.user.on('change', function ( e, v) {
-            console.log(e);
-            console.log(v);
             self.createUserLayer();
           });
 
@@ -353,7 +351,6 @@ var DSpace = function(){
         this.userLayer = markerLayer;
 
         var center = this.world.user.get('geoLocation');
-        console.log(center);
         var userData = {geometry: {coordinates: [center.coords.longitude, center.coords.latitude]}, properties: {type: 'user'}};
 
         /**
@@ -587,7 +584,6 @@ console.log({ 'featurebox:current': event })
 
       initialize: function(){
         this.featureJson = this.options.featureJson;
-        console.log(this.featureJson);
         /** FIXME put into /templates
          * set icon according to index
          * set pointer-events active to override layer settings

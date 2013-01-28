@@ -695,7 +695,35 @@ console.log({ 'featurebox:current': event })
       },
     });
 
+    /**
+     * UI element for Options
+     */
+    var OptionsPanel = Backbone.View.extend({
 
+      el: '#userOptionModal',
+      template: Handlebars.templates['userOptionModal'],
+
+      show: function(){
+        this.$el.html( this.template( { ui: this.ui } ) );
+        this.$el.css( { 'display': 'block'});
+        this.$el.fadeIn(350);
+        this.visible = true;
+      },
+
+      hide: function(){
+        var self = this;
+        this.$el.fadeOut(350, function() { self.$el.hide(); });
+        this.visible = false;
+      },
+
+      toggle: function(){
+        if(this.visible){
+          this.hide()
+        } else {
+          this.show()
+        }
+      }
+    });
 
     /**
      * UI element to show current position in botttom left
@@ -704,11 +732,12 @@ console.log({ 'featurebox:current': event })
     var StatusPanel = Backbone.View.extend({
 
       el: $('#statusPanel'),
+      template: Handlebars.templates['statusPanel'],
 
       events: {
           'click #userModeWalk': 'userModeWalk'
         , 'click #userModeDrive': 'userModeDrive'
-        , 'click #userOptions': 'userOptions'
+        , 'click #userOptions': 'toggleOptionsPanel'
       },
 
       initialize: function() {
@@ -724,10 +753,10 @@ console.log({ 'featurebox:current': event })
          */
         this.user = this.model;
 
-        this.template = Handlebars.templates['statusPanel'];
-        this.templates = {
-          'userOptions': Handlebars.templates['userOptionModal']
-        }
+        /**
+         * create OptionsPanel
+         */
+        this.optionsPanel = new OptionsPanel();
 
       },
 
@@ -763,14 +792,8 @@ console.log({ 'featurebox:current': event })
         this.model.set( 'usermode', 'drive' );
       },
 
-      userOptions: function(event) {
-        if($('#userOptionModal').css( 'opacity' ) === '1' ) {
-          $('#userOptionModal').fadeOut(350, function() { $('#userOptionModal').hide(); });
-        } else {
-          $('#userOptionModal').html( this.templates.userOptions( { ui: this.ui } ) );
-          $('#userOptionModal').css( { 'display': 'block'});
-          $('#userOptionModal').fadeIn(350);
-        }
+      toggleOptionsPanel: function(event) {
+        this.optionsPanel.toggle();
       },
 
       /**

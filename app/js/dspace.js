@@ -232,7 +232,7 @@ var DSpace = function(){
          * creates statusPanel
          */
         this.statusPanel = new StatusPanel({model: this.world.user});
-        this.controlPanel = new ControlPanel({ map: this.map, ui: this });
+        this.controlPanel = new ControlPanel({ ui: this, world: this.world });
 
         /**
          * create OptionsPanel
@@ -313,13 +313,6 @@ var DSpace = function(){
            * to use with map.world
            */
           this.world = this.options.world;
-
-          /**
-           * listen to world changes nothing todo here yet
-           */
-          this.world.on( 'all', function( e, v ) {
-            console.log({ world: e, v: v });
-          });
 
           this.world.user.on('change', function ( e, v) {
             self.updateUserLayer();
@@ -431,8 +424,9 @@ var DSpace = function(){
          * here we can update center location and zoom level display
          */
         modestmap.addCallback('drawn', function(m){
-          self.controlPanel.render();
+          self.world.set('mapCenter', self.getCenter());
         });
+
         return modestmap;
 
       },
@@ -859,21 +853,19 @@ var DSpace = function(){
       template: Handlebars.templates['controlPanel'],
 
       initialize: function() {
+        this.world = this.options.world
 
-        _.bindAll(this, 'render');
-
-         /**
-         * create convienience accessors
-         */
-        this.ui = this.options.ui
-        this.map = this.options.map
+        var self = this;
+        this.world.on('change', function(){
+          self.render()
+        });
       },
 
       /**
        * TODO listen on map changing it's center or on World?
        */
       render: function(){
-        var mapCenter = this.map.getCenter();
+        var mapCenter = this.world.get('mapCenter');
         var mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
         var templateData = {map: mapData};
         this.$el.html(this.template(templateData));

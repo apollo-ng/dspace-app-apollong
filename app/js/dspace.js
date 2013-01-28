@@ -140,13 +140,13 @@ var DSpace = function(){
       el: '#mapContext',
       template: Handlebars.templates['mapContext'],
 
-      show: function(){
+      showFX: function(){
         this.$el.css( { 'left': cursorX, 'top': cursorY });
         this.$el.css( { 'display': 'block'});
         this.$el.fadeIn(350);
       },
 
-      hide: function(){
+      hideFX: function(){
         var self = this;
         this.$el.fadeOut(350, function() { self.$el.hide(); });
       }
@@ -481,6 +481,24 @@ var DSpace = function(){
      */
     var ModalPanel = Backbone.View.extend({
 
+      show: function() {
+        if(this.showFX){
+          this.showFX();
+        } else {
+          this.$el.show();
+        }
+        this.visible = true;
+      },
+
+      hide: function() {
+        if(this.hideFX){
+          this.hideFX();
+        } else {
+          this.$el.hide();
+        }
+        this.visible = false;
+      },
+
       toggle: function(){
         if(this.visible) {
           this.hide();
@@ -496,7 +514,7 @@ var DSpace = function(){
     var MiniMap = ModalPanel.extend({
 
       el: '#minimap',
-      canvasEl: '#miniMapCanvas',
+      canvasEl: '#miniMapCanvas', //#FIXME #BUG deal inside templates @chrono
 
       initialize: function(config){
         this.config = config;
@@ -533,16 +551,14 @@ var DSpace = function(){
 
       },
 
-      show: function(){
+      showFX: function(){
         $(this.canvasEl).animate({ bottom: 10, duration: 600  });
         $(this.canvasEl).fadeIn(600);
-        this.visible = true;
       },
 
-      hide: function(){
+      hideFX: function(){
         $(this.canvasEl).animate({ bottom: -250, duration: 600  });
         $(this.canvasEl).fadeOut(600);
-        this.visible = false;
       }
     });
 
@@ -604,16 +620,14 @@ console.log({ 'featurebox:current': event })
         });
       },
 
-      show: function(){
+      showFX: function(){
         $(this.el).animate({ top: 60, duration: 700  });
         $(this.el).fadeIn(600);
-        this.visible = true;
       },
 
-      hide: function(){
+      hideFX: function(){
         $(this.el).animate({ top: -400, duration: 700 });
         $(this.el).fadeOut(600);
-        this.visible = false;
       }
     });
 
@@ -702,17 +716,15 @@ console.log({ 'featurebox:current': event })
       el: '#userOptionModal',
       template: Handlebars.templates['userOptionModal'],
 
-      show: function(){
+      showFX: function(){
         this.$el.html( this.template( { ui: this.ui } ) );
         this.$el.css( { 'display': 'block'});
         this.$el.fadeIn(350);
-        this.visible = true;
       },
 
-      hide: function(){
+      hideFX: function(){
         var self = this;
         this.$el.fadeOut(350, function() { self.$el.hide(); });
-        this.visible = false;
       }
     });
 
@@ -720,7 +732,7 @@ console.log({ 'featurebox:current': event })
      * UI element to show current position in botttom left
      * gets model user and binds to all changes
      */
-    var StatusPanel = Backbone.View.extend({
+    var StatusPanel = ModalPanel.extend({
 
       el: $('#statusPanel'),
       template: Handlebars.templates['statusPanel'],
@@ -751,15 +763,13 @@ console.log({ 'featurebox:current': event })
 
       },
 
-      show: function(){
+      showFX: function(){
         $(this.el).show();
         $(this.el).fadeIn(450);
-        this.visible = true;
       },
 
-      hide: function(){
+      hideFX: function(){
         $(this.el).fadeOut(450, function() { $(self.el).hide(); });
-        this.visible = false;
       },
 
       /*
@@ -797,7 +807,7 @@ console.log({ 'featurebox:current': event })
       el: '#featureOptionModal',
       template: Handlebars.templates['featureOptionModal'],
 
-      show: function(){
+      showFX: function(){
         this.$el.html( this.template( { ui: this.ui } ));
         this.$el.css( { 'display': 'block'});
         this.$el.fadeIn(350);
@@ -805,7 +815,7 @@ console.log({ 'featurebox:current': event })
 
       },
 
-      hide: function(){
+      hideFX: function(){
         var self = this;
         this.$el.fadeOut(350, function() { self.$el.hide(); });
         this.visible = false;

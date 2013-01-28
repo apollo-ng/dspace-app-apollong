@@ -1,9 +1,6 @@
 define([
-  'ender',
-  'underscore',
-  'backbone',
+  'ender', 'underscore', 'backbone',
   'app/js/views/map/map',
-
   'reqwest',
 
 ], function( $, _, Backbone, Map, Reqwest ) {
@@ -22,8 +19,8 @@ var DSpace = function(){
 
     var config = {
       geoFeeds: [
-        { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
         { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
+        { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
         { hub: 'open-reseource.org', type: 'DSNP'}
       ],
     

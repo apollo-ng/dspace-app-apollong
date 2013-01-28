@@ -191,14 +191,27 @@ var DSpace = function(){
           this.fullScreen = false;
 
           /**
+           * on render we assign modestmap to it!
+           */
+          this.frame = null;
+
+          /**
            * to keep track on overlays and feature boxes
            */
           this.overlays = [];
 
+          this.featureBox = new FeatureBox({ map: this });
+
           /**
-           *
+           * user layer shows current geolocation
+           * later we can add pins
            */
           this.userLayer = null;
+
+          /**
+           * creates minimap
+           */
+          this.miniMap = new MiniMap(this.config);
 
           /**
            * define relations to other views
@@ -263,17 +276,14 @@ var DSpace = function(){
          */
         this.world.set( 'activeOverlays', overlays );
 
-        this.featureBox = new FeatureBox({ map: this });
         this.featureBox.setFeatureCollection( this.world.featureCollections[1] );
         this.featureBox.visible = true;
 
         /**
          * create miniMap
          */
-        this.miniMap = new MiniMap(this.config);
         this.miniMap.render();
         this.miniMap.visible = true;
-        //FIXME add render!
 
       },
 
@@ -471,6 +481,7 @@ var DSpace = function(){
     var MiniMap = Backbone.View.extend({
 
       el: $('#minimap'),
+
 
       initialize: function(config){
         this.config = config;

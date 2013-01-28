@@ -33,9 +33,14 @@ var DSpace = function(){
        * helper method for setting lat: lon: attributes from coordinates array
        */
       setLatLon: function(){
-        var g = this.get('geometry');
-        if( typeof g !== 'undefined' && 'coordinates' in g && g.coordinates.length == 2 ) {
-          this.set({ lat: g.coordinates[1], lon: g.coordinates[0] }); //FIXME
+        var geometry = this.get('geometry');
+        if( typeof geometry !== 'undefined'
+            && geometry.coordinates
+            && geometry.coordinates.length === 2 ) {
+          this.set({
+              lat: geometry.coordinates[1]
+            , lon: geometry.coordinates[0]
+          });
         }
       }
     });
@@ -393,11 +398,12 @@ var DSpace = function(){
         modestmap.setCenterZoom(location, config.defaultZoom);
 
         /**
-         * FIXME add modestmap.addCallback('drawn', function(m){});
-         * here we can update center location and zoom level display
+         * callbacks on map redraw
+         * sets current mapCenter and mapZoom
          */
         modestmap.addCallback('drawn', function(m){
-          self.world.set('mapCenter', self.getCenter());
+          self.world.set('mapCenter', modestmap.getCenter());
+          self.world.set('mapZoom', modestmap.getZoom());
         });
 
         return modestmap;
@@ -478,15 +484,6 @@ var DSpace = function(){
         easey().map(this.frame)
         .to(mmCoordinate)
         .zoom(this.config.maxZoom).optimal();
-      },
-
-      /**
-       * delegates to modest map and
-       * maybe rename
-       * returns MM.Location of center
-       */
-      getCenter: function( ){
-        return this.frame.getCenter();
       }
     });
 

@@ -322,7 +322,7 @@ var DSpace = function(){
           });
 
           this.world.user.on('change', function ( e, v) {
-            self.createUserLayer();
+            self.updateUserLayer();
           });
 
           /**
@@ -375,6 +375,8 @@ var DSpace = function(){
          * crate frame -- uses MapBox
          */
         this.frame = this.createFrame();
+
+        this.userLayer = this.createUserLayer();
 
         /**
          * create overlay collection and markers
@@ -440,12 +442,6 @@ var DSpace = function(){
        */
       createUserLayer: function(){
 
-        // destroy old layer if exists...
-        // FIXME use move layer
-        if(this.userLayer){
-          this.frame.removeLayer(this.userLayer);
-        };
-
         var markerLayer = mapbox.markers.layer();
         this.userLayer = markerLayer;
 
@@ -465,6 +461,14 @@ var DSpace = function(){
         markerLayer.features([userData]);
         this.frame.addLayer(markerLayer).draw();
 
+        return markerLayer
+
+      },
+
+      updateUserLayer: function(){
+        this.frame.removeLayer(this.userLayer);
+        // FIXME use move layer
+        this.createUserLayer();
       },
 
       addMapLayer: function( collection ){

@@ -1,15 +1,19 @@
 define([
+    'ender', 'underscore', 'backbone',
     'modestmaps', 'easey', 'easey_handlers', 'markers',
 
     'hbs!templates/mapContext', 'hbs!templates/statusPanel', 'hbs!templates/userOptionModal',
     'hbs!templates/controlPanel', 'hbs!templates/geobarOptionModal', 'hbs!templates/featureOptionModal',
     'hbs!templates/featureInfoModal', 'hbs!templates/featureBoxItem' ], 
 
-  function( MM, easey, easey_handlers, markers,
+  function( 
+    $, _, Backbone,
+    MM, easey, easey_handlers, markers,
 
     mapContextTemplate, statusPanelTemplate, userOptionModalTemplate, controlPanelTemplate, 
     geobarOptionModalTemplate, featureOptionModalTemplate, featureInfoModalTemplate, 
     featureBoxItemTemplate ) {
+console.log({ MM: MM });
 
     /**
      * main UI logic for the Map
@@ -378,14 +382,14 @@ console.log( 'amd' );
       },
 
       show: function(){
-        $(this.el).animate({ bottom: 10, duration: 600  });
-        $(this.el).fadeIn(600);
+        //this.$el.animate({ bottom: 10, duration: 600  });
+        this.$el.fadeIn(600);
         this.visible = true;
       },
 
       hide: function(){
-        $(this.el).animate({ bottom: -250, duration: 600  });
-        $(this.el).fadeOut(600);
+        this.$el.animate({ bottom: -250, duration: 600  });
+        this.$el.fadeOut(600);
         this.visible = false;
       },
 

@@ -299,14 +299,12 @@ var DSpace = function(){
        */
       createFrame: function(){
         var self = this;
-        var modestmaps = com.modestmaps;
-
         var config = this.config;
 
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
 
-        var modestmap = new modestmaps.Map(
+        var modestmap = new MM.Map(
           this.el,
           layer,
           null,
@@ -464,23 +462,21 @@ var DSpace = function(){
      */
     var MiniMap = Backbone.View.extend({
 
-      el: $('#miniMapCanvas'),
+      el: $('#minimap'),
 
       initialize: function(config){
         this.config = config;
       },
 
       render: function(){
-        var self = this;
-        var modestmaps = com.modestmaps;
-
         var config = this.config;
+
 
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
 
-        var modestmap = new modestmaps.Map(
-          'minimap',
+        var modestmap = new MM.Map(
+          this.el,
           layer,
           null,
           [new easey_handlers.TouchHandler(),

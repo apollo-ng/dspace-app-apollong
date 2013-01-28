@@ -559,8 +559,8 @@ var DSpace = function(){
      */
     var MiniMap = ModalPanel.extend({
 
-      el: '#minimap',
-      canvasEl: '#miniMapCanvas', //#FIXME #BUG deal inside templates @chrono
+      el: '#miniMapCanvas',
+      frameId: 'minimap',
 
       initialize: function(config){
         this.config = config;
@@ -574,7 +574,7 @@ var DSpace = function(){
         var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
 
         var modestmap = new MM.Map(
-          this.el,
+          this.frameId,
           layer,
           null,
           [new easey_handlers.TouchHandler(),
@@ -585,26 +585,24 @@ var DSpace = function(){
         /**
          *  setup boundaries
          */
-        modestmap.setZoomRange(8, config.maxZoom);
         var location = new MM.Location(config.geolat, config.geolon);
 
         /**
          * show and zoom map
          */
-        modestmap.setCenterZoom(location, 11); //FIXME hardcoded /magic number
+        modestmap.setCenterZoom(location, config.miniMapZoom);
 
         return modestmap;
 
       },
 
-      //FIXME $(this.canvasEl) -> this.$el
       showFX: function(){
-        $(this.canvasEl).animate({ bottom: 10, duration: 600  });
-        $(this.canvasEl).fadeIn(600);
+        this.$el.animate({ bottom: 10, duration: 600  });
+        this.$el.fadeIn(600);
       },
       hideFX: function(){
-        $(this.canvasEl).animate({ bottom: -250, duration: 600  });
-        $(this.canvasEl).fadeOut(600);
+        this.$el.animate({ bottom: -250, duration: 600  });
+        this.$el.fadeOut(600);
       }
     });
 

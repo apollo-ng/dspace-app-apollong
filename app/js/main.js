@@ -224,6 +224,7 @@ var config = {
     geolon:  11.60218,
     minZoom: 13,
     maxZoom: 17,
+    miniMapZoom: 11,
     defaultZoom: 12
   },
 

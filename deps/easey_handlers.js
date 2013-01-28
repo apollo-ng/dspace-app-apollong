@@ -1,6 +1,7 @@
 define([
-  'modestmaps'
-], function(MM) {
+  'modestmaps', 
+  'easey'
+], function(MM, easey) {
 
 ;(function(context, MM) {
 

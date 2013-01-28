@@ -262,7 +262,8 @@ var DSpace = function(){
         /**
          * create miniMap
          */
-        this.miniMap = new MiniMap();
+        this.miniMap = new MiniMap(this.config);
+        this.miniMap.render();
         this.miniMap.visible = true;
         //FIXME add render!
 
@@ -464,6 +465,43 @@ var DSpace = function(){
     var MiniMap = Backbone.View.extend({
 
       el: $('#miniMapCanvas'),
+
+      initialize: function(config){
+        this.config = config;
+      },
+
+      render: function(){
+        var self = this;
+        var modestmaps = com.modestmaps;
+
+        var config = this.config;
+
+        var template = config.tileSet.template; //FIXME introduce BaseMap
+        var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
+
+        var modestmap = new modestmaps.Map(
+          'minimap',
+          layer,
+          null,
+          [new easey_handlers.TouchHandler(),
+           new easey_handlers.DragHandler(),
+           new easey_handlers.MouseWheelHandler()]
+        );
+
+        /**
+         *  setup boundaries
+         */
+        modestmap.setZoomRange(8, config.maxZoom);
+        var location = new modestmaps.Location(config.geolat, config.geolon);
+
+        /**
+         * show and zoom map
+         */
+        modestmap.setCenterZoom(location, 11); //FIXME hardcoded /magic number
+
+        return modestmap;
+
+      },
 
       show: function(){
         $(this.el).animate({ bottom: 10, duration: 600  });

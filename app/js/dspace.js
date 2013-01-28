@@ -230,7 +230,7 @@ var DSpace = function(){
         /**
          * creates minimap
          */
-        this.miniMap = new MiniMap(this.map.config);
+        this.miniMap = new MiniMap({world: this.world, config: this.map.config});
 
         /**
          * creates statusPanel
@@ -315,6 +315,9 @@ var DSpace = function(){
           this.config = this.options.config;
 
           var self = this;
+          this.world.on('change', function(event, data){
+            self.recenter();
+          });
 
           /**
            * listens to changes on user and updates related layer
@@ -364,6 +367,14 @@ var DSpace = function(){
         var feeds = this.world.featureCollections;
         for( var i = feeds.length; i--; ) {
           var overlay = new Overlay({ collection: feeds[i], map: this });
+        }
+      },
+
+      recenter: function(){
+        var mapCenter = this.world.get('mapCenter');
+        if(mapCenter && this.frame){
+          console.log('recenter');
+          this.frame.setCenter(mapCenter);
         }
       },
 
@@ -535,13 +546,21 @@ var DSpace = function(){
       el: '#miniMapCanvas',
       frameId: 'minimap',
 
-      initialize: function(config){
-        this.config = config;
+      initialize: function(){
+
+        this.world = this.options.world;
+        this.config = this.options.config;
+
+        var self = this;
+        this.world.on('change', function(event, data){
+          self.recenter();
+        });
       },
 
       render: function(){
         var config = this.config;
 
+        var self = this;
 
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
@@ -565,6 +584,16 @@ var DSpace = function(){
          */
         modestmap.setCenterZoom(location, config.miniMapZoom);
 
+        /**
+         * callbacks on map redraw
+         * sets current mapCenter and mapZoom
+         */
+        modestmap.addCallback('drawn', function(m){
+          self.world.set('mapCenter', modestmap.getCenter());
+        });
+
+        this.frame = modestmap;
+
         return modestmap;
 
       },
@@ -576,6 +605,13 @@ var DSpace = function(){
       hideFX: function(){
         this.$el.animate({ bottom: -250, duration: 600  });
         this.$el.fadeOut(600);
+      },
+
+      recenter: function(){
+        var mapCenter = this.world.get('mapCenter');
+        if(mapCenter && this.frame){
+          this.frame.setCenter(mapCenter);
+        }
       }
     });
 

@@ -132,6 +132,25 @@ var DSpace = function(){
 
     });
 
+    /**
+     * map ContextPanel
+     */
+    var ContextPanel = Backbone.View.extend({
+
+      el: '#mapContext',
+      template: Handlebars.templates['mapContext'],
+
+      show: function(){
+        this.$el.css( { 'left': cursorX, 'top': cursorY });
+        this.$el.css( { 'display': 'block'});
+        this.$el.fadeIn(350);
+      },
+
+      hide: function(){
+        var self = this;
+        this.$el.fadeOut(350, function() { self.$el.hide(); });
+      }
+    });
 
     /**
      * main UI logic for the Map
@@ -141,8 +160,8 @@ var DSpace = function(){
       el: $('#map'),
 
       events: {
-        "click": "clearAll"
-        ,"contextmenu": "mapContext"
+        "click": "hideContextPanel"
+        ,"contextmenu": "showContextPanel"
       },
 
       initialize: function(){
@@ -177,41 +196,30 @@ var DSpace = function(){
           this.overlays = [];
 
           /**
-           * Map Context Menu Template
-           */
-          this.template = Handlebars.templates['mapContext'];
-
-          /**
            *
            */
           this.userLayer = null;
+
           /**
            * define relations to other views
            */
           this.statusPanel = new StatusPanel({model: this.world.user});
           this.controlPanel = new ControlPanel({ map: this });
+          this.contextPanel = new ContextPanel({ map: this });
       },
 
       /**
        * Failsafe: A click on the map should clear all modal/context windows
        */
-      clearAll: function () {
-        if($('#mapContext').css( 'opacity' ) === '1' ) {
-          $('#mapContext').fadeOut(350, function() { $('#mapContext').hide(); });
-        }
+      hideContextPanel: function () {
+        this.contextPanel.hide();
       },
 
       /**
        *  Map right-click/long touch context menu
        */
-      mapContext: function () {
-        if($('#mapContext').css( 'opacity' ) === '1' ) {
-          $('#mapContext').fadeOut(350, function() { $('#mapContext').hide(); });
-        } else {
-          $('#mapContext').css( { 'left': cursorX, 'top': cursorY });
-          $('#mapContext').css( { 'display': 'block'});
-          $('#mapContext').fadeIn(350);
-        }
+      showContextPanel: function () {
+        this.contextPanel.show();
       },
 
       /**

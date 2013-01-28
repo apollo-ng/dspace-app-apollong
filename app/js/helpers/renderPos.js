@@ -33,7 +33,6 @@ Handlebars.registerHelper('renderPos', function (lat, lon) {
  */
 Handlebars.registerHelper('renderAcc', function (acc) {
   if ( typeof acc  === 'undefined') {
-alert( 'helo' );
     return ('N/A');
 } else if ( acc >= 1000 ) {
    return ( Math.round(acc/1000) + ' km');

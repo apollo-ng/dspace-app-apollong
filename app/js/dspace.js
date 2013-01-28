@@ -137,6 +137,11 @@ var DSpace = function(){
      */
     var ModalPanel = Backbone.View.extend({
 
+      /**
+       * both show() and hide() check for existence of matching FX()
+       * if they exist just delegate to them!
+       * sets this.visible to true
+       */
       show: function() {
         if(this.showFX){
           this.showFX();
@@ -155,6 +160,9 @@ var DSpace = function(){
         this.visible = false;
       },
 
+      /**
+       * checks this.visible and shows or hides panel
+       */
       toggle: function(){
         if(this.visible) {
           this.hide();

@@ -157,7 +157,7 @@ var DSpace = function(){
      */
     var Map = Backbone.View.extend({
 
-      el: $('#map'),
+      el: '#map',
 
       events: {
         "click": "hideContextPanel"
@@ -551,11 +551,11 @@ var DSpace = function(){
 
       },
 
+      //FIXME $(this.canvasEl) -> this.$el
       showFX: function(){
         $(this.canvasEl).animate({ bottom: 10, duration: 600  });
         $(this.canvasEl).fadeIn(600);
       },
-
       hideFX: function(){
         $(this.canvasEl).animate({ bottom: -250, duration: 600  });
         $(this.canvasEl).fadeOut(600);
@@ -570,15 +570,19 @@ var DSpace = function(){
      */
     var FeatureBox = ModalPanel.extend({
 
-      el: $('#featureBox'),
+      el: '#featureBox',
       initialize: function(){
-        var self = this;
         /*
          * convienience accessor to map
          * for use in callbacks
          */
         map = this.options.map;
       },
+
+      /**
+       * FIXME make FeaturePanel with FeatureBoxes inside
+       * one collection per Box
+       */
       setFeatureCollection: function( collection ){
         this.collection = collection;
 
@@ -621,13 +625,13 @@ console.log({ 'featurebox:current': event })
       },
 
       showFX: function(){
-        $(this.el).animate({ top: 60, duration: 700  });
-        $(this.el).fadeIn(600);
+        this.$el.animate({ top: 60, duration: 700  });
+        this.$el.fadeIn(600);
       },
 
       hideFX: function(){
-        $(this.el).animate({ top: -400, duration: 700 });
-        $(this.el).fadeOut(600);
+        this.$el.animate({ top: -400, duration: 700 });
+        this.$el.fadeOut(600);
       }
     });
 
@@ -734,7 +738,7 @@ console.log({ 'featurebox:current': event })
      */
     var StatusPanel = ModalPanel.extend({
 
-      el: $('#statusPanel'),
+      el: '#statusPanel',
       template: Handlebars.templates['statusPanel'],
 
       events: {
@@ -764,12 +768,13 @@ console.log({ 'featurebox:current': event })
       },
 
       showFX: function(){
-        $(this.el).show();
-        $(this.el).fadeIn(450);
+        this.$el.show();
+        this.$el.fadeIn(450);
       },
 
       hideFX: function(){
-        $(this.el).fadeOut(450, function() { $(self.el).hide(); });
+        var self = this;
+        this.$el.fadeOut(450, function() { self.$el.hide(); });
       },
 
       /*
@@ -794,7 +799,7 @@ console.log({ 'featurebox:current': event })
        */
       render: function(){
         var templateData = { user: this.user.toJSON() };
-        $(this.el).html(this.template(templateData));
+        this.$el.html(this.template(templateData));
         return this.el;
       }
     });
@@ -827,7 +832,7 @@ console.log({ 'featurebox:current': event })
      */
     var ControlPanel = Backbone.View.extend({
 
-      el: $('#controlPanel'),
+      el: '#controlPanel',
       template: Handlebars.templates['controlPanel'],
 
       events: {
@@ -876,7 +881,7 @@ console.log({ 'featurebox:current': event })
         var mapCenter = this.map.getCenter();
         var mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
         var templateData = {map: mapData};
-        $(this.el).html(this.template(templateData));
+        this.$el.html(this.template(templateData));
         return this.el
       }
     });

@@ -317,7 +317,7 @@ var DSpace = function(){
          *  setup boundaries
          */
         modestmap.setZoomRange(config.minZoom, config.maxZoom);
-        var location = new modestmaps.Location(config.geolat, config.geolon);
+        var location = new MM.Location(config.geolat, config.geolon);
 
         /**
          * show and zoom map
@@ -488,7 +488,7 @@ var DSpace = function(){
          *  setup boundaries
          */
         modestmap.setZoomRange(8, config.maxZoom);
-        var location = new modestmaps.Location(config.geolat, config.geolon);
+        var location = new MM.Location(config.geolat, config.geolon);
 
         /**
          * show and zoom map

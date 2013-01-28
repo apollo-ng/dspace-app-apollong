@@ -200,7 +200,6 @@ var DSpace = function(){
 
       el: '#ui',
 
-      //FIXME move to UI
       events: {
           'click #toggleFeatureBox': 'boxToggle'
         , 'click #toggleMiniMap': 'miniMapToggle'
@@ -221,7 +220,7 @@ var DSpace = function(){
         /**
          * featureBox
          */
-        this.featureBox = new FeatureBox({ map: this, collection: this.world.featureCollections[1]});
+        this.featureBox = new FeatureBox({ map: this.map, collection: this.world.featureCollections[1]});
 
         /**
          * creates minimap
@@ -314,7 +313,7 @@ var DSpace = function(){
            */
           this.world = this.options.world;
 
-          this.world.user.on('change', function ( e, v) {
+          this.world.user.on('change', function () {
             self.updateUserLayer();
           });
 
@@ -614,7 +613,7 @@ var DSpace = function(){
          * convienience accessor to map
          * for use in callbacks
          */
-        map = this.options.map;
+        this.map = this.options.map;
 
         var self = this;
 
@@ -627,7 +626,7 @@ var DSpace = function(){
         // call map for focus
         // FIXME bind to world.currentFeature()
         this.collection.on( 'featureboxitem:current', function( event ){
-          map.jumpToFeature( event.model );
+          self.map.jumpToFeature( event.model );
         });
       },
 

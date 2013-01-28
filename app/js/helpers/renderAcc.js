@@ -1,0 +1,19 @@
+/**
+ *  Accuracy Helper to switch between m/km in view
+ */
+define(['handlebars'], function(Handlebars) {
+  function renderAcc(lat, lon) {
+    if ( typeof acc  === 'undefined') {
+      return ('N/A');
+    } else if ( acc >= 1000 ) {
+      return ( Math.round(acc/1000) + ' km');
+    } else {
+      return ( Math.round(acc) + ' m');
+    }
+    return ret_acc
+  }
+
+  Handlebars.registerHelper('renderAcc', renderAcc);
+
+  return renderAcc;
+});

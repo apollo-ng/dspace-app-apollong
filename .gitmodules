@@ -1,0 +1,6 @@
+[submodule "pkgs/js/require-handlebars-plugin"]
+	path = pkgs/js/require-handlebars-plugin
+	url = git://github.com/SlexAxton/require-handlebars-plugin.git
+[submodule "pkgs/js/backbone-amd"]
+	path = pkgs/js/backbone-amd
+	url = https://github.com/amdjs/backbone.git

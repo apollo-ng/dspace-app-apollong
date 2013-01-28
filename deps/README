@@ -1,0 +1,4 @@
+thirdparty libraries, generated in different ways from git submodules at best.
+We keep this in the repo so they dont change unexpectedly and we can make stable revisions.
+
+

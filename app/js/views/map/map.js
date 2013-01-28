@@ -463,8 +463,8 @@ console.log({ 'featurebox:current': event })
       },
 
       hide: function(){
-        $(this.el).animate({ top: -400, duration: 700 });
-        $(this.el).fadeOut(600);
+        this.$el.animate({ top: -400, duration: 700 });
+        this.$el.fadeOut(600);
         this.visible = false;
       },
 

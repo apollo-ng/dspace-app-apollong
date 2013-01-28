@@ -419,6 +419,7 @@ var DSpace = function(){
         this.userLayer = markerLayer;
 
         var center = this.world.user.get('geoLocation');
+        if(center == undefined){ return };
         var userData = {
           geometry: {
             coordinates: [center.coords.longitude, center.coords.latitude]
@@ -758,8 +759,6 @@ var DSpace = function(){
       },
 
       initialize: function() {
-        _.bindAll(this, 'render');
-
         var self = this;
         this.model.on('change', function () {
           self.render();
@@ -846,7 +845,10 @@ var DSpace = function(){
        */
       render: function(){
         var mapCenter = this.world.get('mapCenter');
-        var mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
+        var mapData;
+        if(mapCenter){
+         mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
+        };
         var templateData = {map: mapData};
         this.$el.html(this.template(templateData));
         return this.el

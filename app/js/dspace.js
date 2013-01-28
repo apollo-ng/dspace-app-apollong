@@ -240,7 +240,7 @@ var DSpace = function(){
            */
           this.overlays = [];
 
-          this.featureBox = new FeatureBox({ map: this });
+          this.featureBox = new FeatureBox({ map: this, collection: this.world.featureCollections[1]});
 
           /**
            * user layer shows current geolocation
@@ -316,7 +316,7 @@ var DSpace = function(){
          */
         this.world.set( 'activeOverlays', overlays );
 
-        this.featureBox.setFeatureCollection( this.world.featureCollections[1] );
+        //this.featureBox.setFeatureCollection(  );
         this.featureBox.visible = true;
 
         /**
@@ -577,30 +577,20 @@ var DSpace = function(){
          * for use in callbacks
          */
         map = this.options.map;
-      },
 
-      /**
-       * FIXME make FeaturePanel with FeatureBoxes inside
-       * one collection per Box
-       */
-      setFeatureCollection: function( collection ){
-        this.collection = collection;
-
-        /*
-         * listens to its FeatureCollection reset event
-         */
         var self = this;
+
+        // poplates box when collections load
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
 
         // listen for focus requests from features and
         // call map for focus
+        // FIXME bind to world.currentFeature()
         this.collection.on( 'featureboxitem:current', function( event ){
-console.log({ 'featurebox:current': event })
           map.jumpToFeature( event.model );
         });
-
       },
 
       render: function(){

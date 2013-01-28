@@ -475,10 +475,25 @@ var DSpace = function(){
       }
     });
 
+
+    /**
+     * extensible class for ModalPanel elements
+     */
+    var ModalPanel = Backbone.View.extend({
+
+      toggle: function(){
+        if(this.visible) {
+          this.hide();
+        } else {
+          this.show();
+        }
+      }
+    });
+
     /**
      * UI element for showin mini map
      */
-    var MiniMap = Backbone.View.extend({
+    var MiniMap = ModalPanel.extend({
 
       el: '#minimap',
       canvasEl: '#miniMapCanvas',
@@ -528,14 +543,6 @@ var DSpace = function(){
         $(this.canvasEl).animate({ bottom: -250, duration: 600  });
         $(this.canvasEl).fadeOut(600);
         this.visible = false;
-      },
-
-      toggle: function(){
-        if(this.visible) {
-          this.hide();
-        } else {
-          this.show();
-        }
       }
     });
 
@@ -545,7 +552,7 @@ var DSpace = function(){
      * gets collection FeatureCollection
      * gets option map
      */
-    var FeatureBox = Backbone.View.extend({
+    var FeatureBox = ModalPanel.extend({
 
       el: $('#featureBox'),
       initialize: function(){
@@ -607,14 +614,6 @@ console.log({ 'featurebox:current': event })
         $(this.el).animate({ top: -400, duration: 700 });
         $(this.el).fadeOut(600);
         this.visible = false;
-      },
-
-      toggle: function(){
-        if(this.visible) {
-          this.hide();
-        } else {
-          this.show();
-        }
       }
     });
 
@@ -698,7 +697,7 @@ console.log({ 'featurebox:current': event })
     /**
      * UI element for Options
      */
-    var OptionsPanel = Backbone.View.extend({
+    var OptionsPanel = ModalPanel.extend({
 
       el: '#userOptionModal',
       template: Handlebars.templates['userOptionModal'],
@@ -714,14 +713,6 @@ console.log({ 'featurebox:current': event })
         var self = this;
         this.$el.fadeOut(350, function() { self.$el.hide(); });
         this.visible = false;
-      },
-
-      toggle: function(){
-        if(this.visible){
-          this.hide()
-        } else {
-          this.show()
-        }
       }
     });
 
@@ -771,14 +762,6 @@ console.log({ 'featurebox:current': event })
         this.visible = false;
       },
 
-      toggle: function(){
-        if(this.visible){
-          this.hide()
-        } else {
-          this.show()
-        }
-      },
-
       /*
        *  help the system making decisions based
        *  on the user's mode of movement
@@ -809,7 +792,7 @@ console.log({ 'featurebox:current': event })
     /**
      * UI element for OverlaysPanel
      */
-    var OverlaysPanel = Backbone.View.extend({
+    var OverlaysPanel = ModalPanel.extend({
 
       el: '#featureOptionModal',
       template: Handlebars.templates['featureOptionModal'],
@@ -826,14 +809,6 @@ console.log({ 'featurebox:current': event })
         var self = this;
         this.$el.fadeOut(350, function() { self.$el.hide(); });
         this.visible = false;
-      },
-
-      toggle: function(){
-        if(this.visible){
-          this.hide()
-        } else {
-          this.show()
-        }
       }
     });
 

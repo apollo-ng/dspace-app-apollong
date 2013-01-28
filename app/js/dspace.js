@@ -807,17 +807,49 @@ console.log({ 'featurebox:current': event })
     });
 
     /**
+     * UI element for OverlaysPanel
+     */
+    var OverlaysPanel = Backbone.View.extend({
+
+      el: '#featureOptionModal',
+      template: Handlebars.templates['featureOptionModal'],
+
+      show: function(){
+        this.$el.html( this.template( { ui: this.ui } ));
+        this.$el.css( { 'display': 'block'});
+        this.$el.fadeIn(350);
+        this.visible = true;
+
+      },
+
+      hide: function(){
+        var self = this;
+        this.$el.fadeOut(350, function() { self.$el.hide(); });
+        this.visible = false;
+      },
+
+      toggle: function(){
+        if(this.visible){
+          this.hide()
+        } else {
+          this.show()
+        }
+      }
+    });
+
+    /**
      * UI element to show map controls
      */
     var ControlPanel = Backbone.View.extend({
 
       el: $('#controlPanel'),
+      template: Handlebars.templates['controlPanel'],
 
       events: {
           'click #toggleFeatureBox': 'boxToggle'
         , 'click #toggleMiniMap': 'miniMapToggle'
         , 'click #toggleFullscreen': 'fullscreenToggle'
-        , 'click #featureOptions': 'featureOptions'
+        , 'click #featureOptions': 'toggleOverlaysPanel'
       },
 
       initialize: function() {
@@ -828,10 +860,11 @@ console.log({ 'featurebox:current': event })
          * create convienience accessors
          */
         this.map = this.options.map;
-        this.template = Handlebars.templates['controlPanel'];
-        this.templates = {
-          'featureOptions': Handlebars.templates['featureOptionModal']
-        }
+
+        /**
+         * for managing active overlays
+         */
+        this.overlaysPanel = new OverlaysPanel();
 
       },
 
@@ -847,14 +880,8 @@ console.log({ 'featurebox:current': event })
         this.map.fullscreenToggle();
       },
 
-      featureOptions: function(event){
-        if($('#featureOptionModal').css( 'opacity' ) === '1' ) {
-          $('#featureOptionModal').fadeOut(350, function() { $('#featureOptionModal').hide(); });
-        } else {
-          $('#featureOptionModal').html( this.templates.featureOptions( { ui: this.ui } ) );
-          $('#featureOptionModal').css( { 'display': 'block'});
-          $('#featureOptionModal').fadeIn(350);
-        }
+      toggleOverlaysPanel: function(event){
+        this.overlaysPanel.toggle();
       },
 
       /**
@@ -865,7 +892,7 @@ console.log({ 'featurebox:current': event })
         var mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
         var templateData = {map: mapData};
         $(this.el).html(this.template(templateData));
-        return this.el;
+        return this.el
       }
     });
 

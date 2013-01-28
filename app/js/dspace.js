@@ -306,40 +306,20 @@ var DSpace = function(){
 
       initialize: function(){
 
+          this.world = this.options.world;
+          this.config = this.options.config;
+
           var self = this;
 
           /**
-           * to use with map.world
+           * listens to changes on user and updates related layer
            */
-          this.world = this.options.world;
-
           this.world.user.on('change', function () {
             self.updateUserLayer();
           });
 
           /**
-           * stores config passed from world
-           */
-          this.config = this.options.config;
-
-          /**
-           * on render we assign modestmap to it!
-           */
-          this.frame = null;
-
-          /**
-           * to keep track on overlays and feature boxes
-           */
-          this.overlays = [];
-
-          /**
-           * user layer shows current geolocation
-           * later we can add pins
-           */
-          this.userLayer = null;
-
-          /**
-           * define relations to other views
+           * contextPanel for right-click / longpress
            */
           this.contextPanel = new ContextPanel({ map: this });
       },
@@ -368,24 +348,18 @@ var DSpace = function(){
          */
         this.frame = this.createFrame();
 
+        /**
+         * creates user layer to show current location
+         */
         this.userLayer = this.createUserLayer();
 
         /**
-         * create overlay collection and markers
-         * sync active feature collection when all items are bound
+         * FIXME keep track on overlays
          */
         var feeds = this.world.featureCollections;
-        overlays = [];
         for( var i = feeds.length; i--; ) {
-          overlays.push(
-            new Overlay({
-                collection: feeds[i]
-              , map: this })); }
-
-        /**
-         * set active overlays on a world
-         */
-        this.world.set( 'activeOverlays', overlays );
+          var overlay = new Overlay({ collection: feeds[i], map: this });
+        }
       },
 
       /**
@@ -916,13 +890,6 @@ var DSpace = function(){
         this.map.render();
         this.ui.render();
 
-      },
-
-      /**
-       * just to notice existence of activeOverlays on a World
-       */
-      activeOverlays: function(){
-          this.get('activeOverlays');
       }
     });
 

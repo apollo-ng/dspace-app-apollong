@@ -419,7 +419,12 @@ var DSpace = function(){
         this.userLayer = markerLayer;
 
         var center = this.world.user.get('geoLocation');
-        var userData = {geometry: {coordinates: [center.coords.longitude, center.coords.latitude]}, properties: {type: 'user'}};
+        var userData = {
+          geometry: {
+            coordinates: [center.coords.longitude, center.coords.latitude]
+          },
+          properties: {type: 'user'}
+        };
 
         /**
          * define a factory to make markers
@@ -438,9 +443,12 @@ var DSpace = function(){
 
       },
 
+      /**
+       * moves user related markers
+       * FIXME use move layer
+       */
       updateUserLayer: function(){
         this.frame.removeLayer(this.userLayer);
-        // FIXME use move layer
         this.createUserLayer();
       },
 
@@ -652,15 +660,17 @@ var DSpace = function(){
 
       initialize: function(){
         this.featureJson = this.options.featureJson;
-        /** FIXME put into /templates
+        /**
          * set icon according to index
          * set pointer-events active to override layer settings
          */
-        //template: Handlebars.compile( '<img class="marker-image" src="icons/black-shield-{{index}}.png" pointer-events="auto" /> feature {{properties.title}}' ),
-        this.template = Handlebars.compile( '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />' );
+        var html; // FIXME put into /templates
         if(this.featureJson.properties.type == 'user'){
-        this.template = Handlebars.compile( '<img src="assets/images/tiki-man.png" pointer-events="auto" />' );
+          html =  '<img src="assets/images/tiki-man.png" pointer-events="auto" />';
+        } else {
+          html = '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />';
         }
+        this.template = Handlebars.compile(html);
       },
 
       featureInfoModal: function(event) {
@@ -832,7 +842,7 @@ var DSpace = function(){
       },
 
       /**
-       * TODO listen on map changing it's center or on World?
+       * sets map.lat and map.lon for template
        */
       render: function(){
         var mapCenter = this.world.get('mapCenter');

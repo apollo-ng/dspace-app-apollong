@@ -817,7 +817,6 @@ console.log({ 'featurebox:current': event })
           'click #toggleFeatureBox': 'boxToggle'
         , 'click #toggleMiniMap': 'miniMapToggle'
         , 'click #toggleFullscreen': 'fullscreenToggle'
-        , 'click #geobarOptions': 'geobarOptions'
         , 'click #featureOptions': 'featureOptions'
       },
 
@@ -831,8 +830,7 @@ console.log({ 'featurebox:current': event })
         this.map = this.options.map;
         this.template = Handlebars.templates['controlPanel'];
         this.templates = {
-           'geobarOptions': Handlebars.templates['geobarOptionModal']
-          ,'featureOptions': Handlebars.templates['featureOptionModal']
+          'featureOptions': Handlebars.templates['featureOptionModal']
         }
 
       },
@@ -847,16 +845,6 @@ console.log({ 'featurebox:current': event })
 
       fullscreenToggle: function(event){
         this.map.fullscreenToggle();
-      },
-
-      geobarOptions: function(event) {
-        if($('#geobarOptionModal').css( 'opacity' ) === '1' ) {
-          $('#geobarOptionModal').fadeOut(350, function() { $('#geobarOptionModal').hide(); });
-        } else {
-          $('#geobarOptionModal').html( this.templates.geobarOptions( { ui: this.ui } ) );
-          $('#geobarOptionModal').css( { 'display': 'block'});
-          $('#geobarOptionModal').fadeIn(350);
-        }
       },
 
       featureOptions: function(event){

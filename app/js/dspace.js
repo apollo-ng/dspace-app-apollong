@@ -200,6 +200,7 @@ var DSpace = function(){
 
       initialize: function(){
         this.world = this.options.world;
+        this.map = this.options.map;
 
         /**
          * for managing active overlays
@@ -210,10 +211,33 @@ var DSpace = function(){
          * featureBox
          */
         this.featureBox = new FeatureBox({ map: this, collection: this.world.featureCollections[1]});
+
+        /**
+         * creates minimap
+         */
+        this.miniMap = new MiniMap(this.map.config);
+
+        /**
+         * creates statusPanel
+         */
+        this.statusPanel = new StatusPanel({model: this.world.user});
+        this.controlPanel = new ControlPanel({ map: this.map, ui: this });
+
+        // for now fullscreen off by default FIXME
+        this.fullScreen = false;
       },
 
       render: function(){
         this.featureBox.visible = true;
+
+        this.miniMap.render();
+        this.miniMap.visible = true;
+
+        this.statusPanel.render();
+        this.statusPanel.visible = true;
+
+        this.controlPanel.render();
+        this.controlPanel.visible = true;
       },
 
       /**
@@ -222,6 +246,24 @@ var DSpace = function(){
       boxToggle: function() {
         this.featureBox.toggle();
       },
+
+      /**
+       * toggles fulls creen mode
+       */
+      fullscreenToggle: function() {
+        if(this.fullScreen) {
+          this.miniMap.show();
+          this.statusPanel.show();
+          this.featureBox.show();
+          this.fullScreen = false;
+        } else {
+          this.miniMap.hide();
+          this.statusPanel.hide();
+          this.featureBox.hide();
+          this.fullScreen = true;
+        }
+      },
+
     });
 
     /**
@@ -239,8 +281,9 @@ var DSpace = function(){
       initialize: function(){
 
           var self = this;
+
           /**
-           * to use with map.world FIXME
+           * to use with map.world
            */
           this.world = this.options.world;
 
@@ -260,8 +303,6 @@ var DSpace = function(){
            */
           this.config = this.options.config;
 
-          this.fullScreen = false;
-
           /**
            * on render we assign modestmap to it!
            */
@@ -272,7 +313,6 @@ var DSpace = function(){
            */
           this.overlays = [];
 
-
           /**
            * user layer shows current geolocation
            * later we can add pins
@@ -280,15 +320,8 @@ var DSpace = function(){
           this.userLayer = null;
 
           /**
-           * creates minimap
-           */
-          this.miniMap = new MiniMap(this.config);
-
-          /**
            * define relations to other views
            */
-          this.statusPanel = new StatusPanel({model: this.world.user});
-          this.controlPanel = new ControlPanel({ map: this, ui: this.world.ui });
           this.contextPanel = new ContextPanel({ map: this });
       },
 
@@ -317,20 +350,6 @@ var DSpace = function(){
         this.frame = this.createFrame();
 
         /**
-         * create StatusPanel with model user
-         */
-        this.statusPanel.render();
-        this.statusPanel.visible = true;
-
-        /**
-         * create ControlPanel
-         * set controlPanel model to map
-         */
-        this.controlPanel.render();
-        this.controlPanel.visible = true;
-
-
-        /**
          * create overlay collection and markers
          * sync active feature collection when all items are bound
          */
@@ -346,32 +365,6 @@ var DSpace = function(){
          * set active overlays on a world
          */
         this.world.set( 'activeOverlays', overlays );
-
-
-        /**
-         * create miniMap
-         */
-        this.miniMap.render();
-        this.miniMap.visible = true;
-
-      },
-
-      miniMapToggle: function() {
-        this.miniMap.toggle();
-      },
-
-      fullscreenToggle: function() {
-        if(this.fullScreen) {
-          this.miniMap.show()
-          this.statusPanel.show();
-          this.featureBox.show();
-          this.fullScreen = false;
-        } else {
-          this.miniMap.hide()
-          this.statusPanel.hide();
-          this.featureBox.hide();
-          this.fullScreen = true;
-        }
       },
 
       /**
@@ -850,6 +843,7 @@ var DSpace = function(){
       el: '#controlPanel',
       template: Handlebars.templates['controlPanel'],
 
+      //FIXME move to UI
       events: {
           'click #toggleFeatureBox': 'boxToggle'
         , 'click #toggleMiniMap': 'miniMapToggle'
@@ -865,9 +859,7 @@ var DSpace = function(){
          * create convienience accessors
          */
         this.ui = this.options.ui
-        this.map = this.options.map;
-
-
+        this.map = this.options.map
       },
 
       boxToggle: function(event){
@@ -875,11 +867,11 @@ var DSpace = function(){
       },
 
       miniMapToggle: function(event){
-        this.map.miniMapToggle();
+        this.ui.miniMap.toggle();
       },
 
       fullscreenToggle: function(event){
-        this.map.fullscreenToggle();
+        this.ui.fullscreenToggle();
       },
 
       toggleOverlaysPanel: function(event){
@@ -934,16 +926,14 @@ var DSpace = function(){
           };
 
         /**
-         * create and render UI
-         */
-        this.ui = new UI({world: this});
-        this.ui.render();
-
-        /**
-         * create and render Map
+         * create and render Map & UI
          */
         this.map = new Map({world: this, config: this.get( 'map' )});
+        this.ui = new UI({world: this, map: this.map});
+
         this.map.render();
+        this.ui.render();
+
       },
 
       /**

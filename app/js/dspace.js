@@ -192,6 +192,38 @@ var DSpace = function(){
       }
     });
 
+
+    /**
+     * main UI logic
+     */
+    var UI = Backbone.View.extend({
+
+      initialize: function(){
+        this.world = this.options.world;
+
+        /**
+         * for managing active overlays
+         */
+        this.overlaysPanel = new OverlaysPanel();
+
+        /**
+         * featureBox
+         */
+        this.featureBox = new FeatureBox({ map: this, collection: this.world.featureCollections[1]});
+      },
+
+      render: function(){
+        this.featureBox.visible = true;
+      },
+
+      /**
+       * toggles state (on/off) for #featureBox
+       */
+      boxToggle: function() {
+        this.featureBox.toggle();
+      },
+    });
+
     /**
      * main UI logic for the Map
      */
@@ -240,7 +272,6 @@ var DSpace = function(){
            */
           this.overlays = [];
 
-          this.featureBox = new FeatureBox({ map: this, collection: this.world.featureCollections[1]});
 
           /**
            * user layer shows current geolocation
@@ -257,7 +288,7 @@ var DSpace = function(){
            * define relations to other views
            */
           this.statusPanel = new StatusPanel({model: this.world.user});
-          this.controlPanel = new ControlPanel({ map: this });
+          this.controlPanel = new ControlPanel({ map: this, ui: this.world.ui });
           this.contextPanel = new ContextPanel({ map: this });
       },
 
@@ -316,8 +347,6 @@ var DSpace = function(){
          */
         this.world.set( 'activeOverlays', overlays );
 
-        //this.featureBox.setFeatureCollection(  );
-        this.featureBox.visible = true;
 
         /**
          * create miniMap
@@ -325,13 +354,6 @@ var DSpace = function(){
         this.miniMap.render();
         this.miniMap.visible = true;
 
-      },
-
-      /**
-       * toggles state (on/off) for #featureBox
-       */
-      boxToggle: function() {
-        this.featureBox.toggle();
       },
 
       miniMapToggle: function() {
@@ -842,17 +864,14 @@ var DSpace = function(){
          /**
          * create convienience accessors
          */
+        this.ui = this.options.ui
         this.map = this.options.map;
 
-        /**
-         * for managing active overlays
-         */
-        this.overlaysPanel = new OverlaysPanel();
 
       },
 
       boxToggle: function(event){
-        this.map.boxToggle();
+        this.ui.boxToggle();
       },
 
       miniMapToggle: function(event){
@@ -864,7 +883,7 @@ var DSpace = function(){
       },
 
       toggleOverlaysPanel: function(event){
-        this.overlaysPanel.toggle();
+        this.ui.overlaysPanel.toggle();
       },
 
       /**
@@ -914,7 +933,12 @@ var DSpace = function(){
             };
           };
 
-        //@wip
+        /**
+         * create and render UI
+         */
+        this.ui = new UI({world: this});
+        this.ui.render();
+
         /**
          * create and render Map
          */

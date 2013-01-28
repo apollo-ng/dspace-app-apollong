@@ -133,9 +133,41 @@ var DSpace = function(){
     });
 
     /**
+     * extensible class for ModalPanel elements
+     */
+    var ModalPanel = Backbone.View.extend({
+
+      show: function() {
+        if(this.showFX){
+          this.showFX();
+        } else {
+          this.$el.show();
+        }
+        this.visible = true;
+      },
+
+      hide: function() {
+        if(this.hideFX){
+          this.hideFX();
+        } else {
+          this.$el.hide();
+        }
+        this.visible = false;
+      },
+
+      toggle: function(){
+        if(this.visible) {
+          this.hide();
+        } else {
+          this.show();
+        }
+      }
+    });
+
+    /**
      * map ContextPanel
      */
-    var ContextPanel = Backbone.View.extend({
+    var ContextPanel = ModalPanel.extend({
 
       el: '#mapContext',
       template: Handlebars.templates['mapContext'],
@@ -467,38 +499,6 @@ var DSpace = function(){
       }
     });
 
-
-    /**
-     * extensible class for ModalPanel elements
-     */
-    var ModalPanel = Backbone.View.extend({
-
-      show: function() {
-        if(this.showFX){
-          this.showFX();
-        } else {
-          this.$el.show();
-        }
-        this.visible = true;
-      },
-
-      hide: function() {
-        if(this.hideFX){
-          this.hideFX();
-        } else {
-          this.$el.hide();
-        }
-        this.visible = false;
-      },
-
-      toggle: function(){
-        if(this.visible) {
-          this.hide();
-        } else {
-          this.show();
-        }
-      }
-    });
 
     /**
      * UI element for showin mini map

@@ -480,8 +480,8 @@ var DSpace = function(){
      */
     var MiniMap = Backbone.View.extend({
 
-      el: $('#minimap'),
-
+      el: '#minimap',
+      canvasEl: '#miniMapCanvas',
 
       initialize: function(config){
         this.config = config;
@@ -519,14 +519,14 @@ var DSpace = function(){
       },
 
       show: function(){
-        $(this.el).animate({ bottom: 10, duration: 600  });
-        $(this.el).fadeIn(600);
+        $(this.canvasEl).animate({ bottom: 10, duration: 600  });
+        $(this.canvasEl).fadeIn(600);
         this.visible = true;
       },
 
       hide: function(){
-        $(this.el).animate({ bottom: -250, duration: 600  });
-        $(this.el).fadeOut(600);
+        $(this.canvasEl).animate({ bottom: -250, duration: 600  });
+        $(this.canvasEl).fadeOut(600);
         this.visible = false;
       },
 

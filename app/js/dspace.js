@@ -198,6 +198,17 @@ var DSpace = function(){
      */
     var UI = Backbone.View.extend({
 
+      el: '#ui',
+
+      //FIXME move to UI
+      events: {
+          'click #toggleFeatureBox': 'boxToggle'
+        , 'click #toggleMiniMap': 'miniMapToggle'
+        , 'click #toggleFullscreen': 'fullscreenToggle'
+        , 'click #featureOptions': 'toggleOverlaysPanel'
+        , 'click #userOptions': 'toggleOptionsPanel'
+      },
+
       initialize: function(){
         this.world = this.options.world;
         this.map = this.options.map;
@@ -223,6 +234,11 @@ var DSpace = function(){
         this.statusPanel = new StatusPanel({model: this.world.user});
         this.controlPanel = new ControlPanel({ map: this.map, ui: this });
 
+        /**
+         * create OptionsPanel
+         */
+        this.optionsPanel = new OptionsPanel();
+
         // for now fullscreen off by default FIXME
         this.fullScreen = false;
       },
@@ -241,10 +257,22 @@ var DSpace = function(){
       },
 
       /**
-       * toggles state (on/off) for #featureBox
+       * toggles state (on/off) for elements
        */
       boxToggle: function() {
         this.featureBox.toggle();
+      },
+
+      miniMapToggle: function(event){
+        this.miniMap.toggle();
+      },
+
+      toggleOverlaysPanel: function(event){
+        this.overlaysPanel.toggle();
+      },
+
+      toggleOptionsPanel: function(event) {
+        this.optionsPanel.toggle();
       },
 
       /**
@@ -262,8 +290,7 @@ var DSpace = function(){
           this.featureBox.hide();
           this.fullScreen = true;
         }
-      },
-
+      }
     });
 
     /**
@@ -752,7 +779,6 @@ var DSpace = function(){
       events: {
           'click #userModeWalk': 'userModeWalk'
         , 'click #userModeDrive': 'userModeDrive'
-        , 'click #userOptions': 'toggleOptionsPanel'
       },
 
       initialize: function() {
@@ -767,12 +793,6 @@ var DSpace = function(){
          * create convienience accessors
          */
         this.user = this.model;
-
-        /**
-         * create OptionsPanel
-         */
-        this.optionsPanel = new OptionsPanel();
-
       },
 
       showFX: function(){
@@ -785,7 +805,7 @@ var DSpace = function(){
         this.$el.fadeOut(450, function() { self.$el.hide(); });
       },
 
-      /*
+      /**
        *  help the system making decisions based
        *  on the user's mode of movement
        */
@@ -798,13 +818,6 @@ var DSpace = function(){
         this.model.set( 'usermode', 'drive' );
       },
 
-      toggleOptionsPanel: function(event) {
-        this.optionsPanel.toggle();
-      },
-
-      /**
-       * TODO listen on map changing it's center
-       */
       render: function(){
         var templateData = { user: this.user.toJSON() };
         this.$el.html(this.template(templateData));
@@ -843,14 +856,6 @@ var DSpace = function(){
       el: '#controlPanel',
       template: Handlebars.templates['controlPanel'],
 
-      //FIXME move to UI
-      events: {
-          'click #toggleFeatureBox': 'boxToggle'
-        , 'click #toggleMiniMap': 'miniMapToggle'
-        , 'click #toggleFullscreen': 'fullscreenToggle'
-        , 'click #featureOptions': 'toggleOverlaysPanel'
-      },
-
       initialize: function() {
 
         _.bindAll(this, 'render');
@@ -860,22 +865,6 @@ var DSpace = function(){
          */
         this.ui = this.options.ui
         this.map = this.options.map
-      },
-
-      boxToggle: function(event){
-        this.ui.boxToggle();
-      },
-
-      miniMapToggle: function(event){
-        this.ui.miniMap.toggle();
-      },
-
-      fullscreenToggle: function(event){
-        this.ui.fullscreenToggle();
-      },
-
-      toggleOverlaysPanel: function(event){
-        this.ui.overlaysPanel.toggle();
       },
 
       /**

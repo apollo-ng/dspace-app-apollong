@@ -1,13 +1,16 @@
 define([
-  'app/js/dollar',
-  'backbone',
+  'ender',
   'underscore',
-  'reqwest',
+  'backbone',
   'handlebars',
-  'modestmaps',
-  'easey',
-  'easey_handlers',
-  'markers',
+
+  'reqwest',
+
+  // to the view with it 
+  //'modestmaps',
+  //'easey',
+  //'easey_handlers',
+  //'markers',
 
   'hbs!templates/mapContext',
   'hbs!templates/statusPanel',
@@ -17,12 +20,9 @@ define([
   'hbs!templates/featureOptionModal',
   'hbs!templates/featureInfoModal',
   'hbs!templates/featureBoxItem'
-], function(
-  $, Backbone, _, Reqwest, Handlebars, MM, easey, easey_handlers, markers,
-
+], function( $, _, Backbone, Handlebars, Reqwest,
   mapContextTemplate, statusPanelTemplate, userOptionModalTemplate, controlPanelTemplate, geobarOptionModalTemplate, featureOptionModalTemplate, featureInfoModalTemplate, featureBoxItemTemplate
 ) {
-
 
 /**
  * TODO document
@@ -30,11 +30,31 @@ define([
 
 var DSpace = function(){
 
+
   /**
    * expects a config object
    * FIXME set defautls to override and don't crash if no options ;) -- default in User model ?
    */
-  this.init = function ( config ){
+  this.init = function ( ){
+
+    var config = {
+      geoFeeds: [
+        { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
+        { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
+        { hub: 'open-reseource.org', type: 'DSNP'}
+      ],
+    
+      map: {
+        tileSet: {
+            template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
+        },
+        geolat:  48.115293,
+        geolon:  11.60218,
+        minZoom: 13,
+        maxZoom: 17,
+        defaultZoom: 12
+      }
+    };
 
     console.log("DSpace init");
 
@@ -156,7 +176,6 @@ var DSpace = function(){
      * main UI logic for the Map
      */
     var Map = Backbone.View.extend({
-
       el: $('#map'),
 
       events: {
@@ -165,11 +184,12 @@ var DSpace = function(){
       },
 
       initialize: function(){
+console.log( this );
 
           /**
-           * to use with map.world FIXME
+           * convienience accessor
            */
-          this.world = this.options.world;
+          this.world = this.model;
 
           /**
            * listen to world changes nothing todo here yet
@@ -182,7 +202,7 @@ var DSpace = function(){
            * stores config passed from world
            */
           this.config = this.options.config;
-
+console.log( { i: this.config });
           this.fullScreen = false;
 
           /**
@@ -263,6 +283,7 @@ var DSpace = function(){
         /**
          * set active overlays on a world
          */
+
         this.world.set( 'activeOverlays', overlays );
 
         console.log('new feature box!', 'map', map, 'collection', this.world.featureCollections[0]);
@@ -309,7 +330,8 @@ var DSpace = function(){
        */
       createFrame: function(){
         var self = this;
-        var config = this.config;
+console.log( this );
+        var config = this.options.config;
 
         var template = config.tileSet.template; //FIXME introduce BaseMap
         var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
@@ -628,7 +650,7 @@ console.log({ 'featurebox:current': event })
            */
           this.collection.on( 'reset', function( event, data ){
             //console.log('collection', self.collection.toJSON());
-            //self.render( );
+            self.render( );
           });
       },
 
@@ -805,10 +827,10 @@ console.log({ 'featurebox:current': event })
       /**
        * Genesis ;)
        */
-      initialize: function( config ){
+      initialize: function(  ){
         var self = this;
-
-        this.geoFeeds = config.geoFeeds;
+console.log( this.attributes );
+        this.geoFeeds = this.attributes.geoFeeds;
 
         /**
          * create User
@@ -839,7 +861,7 @@ console.log({ 'featurebox:current': event })
         /**
          * create and render Map
          */
-        this.map = new Map({world: this, config: this.get( 'map' )});
+        this.map = new Map({model: this, config: this.get( 'map' )});
         this.map.render();
       },
 
@@ -854,6 +876,7 @@ console.log({ 'featurebox:current': event })
     /**
      * init() returns an instance of a World
      */
+console.log( { j: config } );
     return new World( config );
 
   };

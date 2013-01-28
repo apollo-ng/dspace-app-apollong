@@ -16,7 +16,7 @@
   <script>
     requirejs.config({
       baseUrl: '.',
-     
+
       paths: {
         // directories
         "templates"        : "design/templates",
@@ -28,14 +28,13 @@
      
         // general deps
         "hbs": "deps/hbs",
-        "backbone": "deps/backbone",
+        "ender": 'deps/ender',
         "underscore": "deps/underscore",
-        "bonzo": "deps/bonzo",
-        "bean": "deps/bean",
-        "morpheus": "deps/morpheus",
+        "backbone": "deps/backbone",
+
         "reqwest": "deps/reqwest",
         "handlebars": "deps/handlebars",
-        "qwery": "deps/qwery",
+
         "modestmaps": "deps/modestmaps",
         "easey": "deps/easey",
         "easey_handlers": "deps/easey_handlers",
@@ -49,7 +48,6 @@
       }
      
     });
-
 
     require(['app/js/main']);
   </script>

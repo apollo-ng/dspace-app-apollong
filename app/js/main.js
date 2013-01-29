@@ -1,11 +1,10 @@
 /**
- * Handlebar helper function to show coordinates
+ * Handlebar helper function to convert decimal degrees
  * according to user prefs (DEC, DMS, GPS, QTH)
  * FIXME: switch according to prefs in user model
  */
 Handlebars.registerHelper('renderPos', function (lat, lon) {
   if ( typeof lat  !== 'undefined' && typeof lon !== 'undefined') {
-
     switch(config.user.prefCoordSys) {
       case 'GPS':
         return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
@@ -14,10 +13,12 @@ Handlebars.registerHelper('renderPos', function (lat, lon) {
       case 'DMS':
         return (dd2dms(lat, 'lat') + " - " + dd2dms(lon, 'lon'));
       case 'DEC':
-        return result3;
+        return ('Lat: ' + lat + ' Lon: ' + lon);
       default:
         return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
     }
+  } else {
+    return ('Position not acquired');
   }
 });
 
@@ -47,6 +48,17 @@ Handlebars.registerHelper('setAccBg', function(acc) {
     } else {
       return ('lowAccuracy');
     }
+  }
+});
+
+/**
+ * Geo API delivers m/s -> convert to km/h for drive modes
+ */
+Handlebars.registerHelper('ms2kmh', function (speed) {
+  if ( typeof speed  !== 'undefined') {
+    return ((speed * 3600)/1000 + 'km/h');
+  } else {
+    return ('0 km/h');
   }
 });
 

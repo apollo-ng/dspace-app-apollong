@@ -3,7 +3,6 @@
   include: 'app/js/main',
   insertRequire: ['app/js/main'],
   out: 'build/dspace.js',
-  optimize: 'none',
   wrap: true,
 
   paths: {

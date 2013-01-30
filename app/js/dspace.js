@@ -30,26 +30,7 @@ var DSpace = function(){
    * expects a config object
    * FIXME set defautls to override and don't crash if no options ;) -- default in User model ?
    */
-  this.init = function ( ){
-
-    var config = {
-      geoFeeds: [
-        { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
-        { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
-        { hub: 'open-reseource.org', type: 'DSNP'}
-      ],
-    
-      map: {
-        tileSet: {
-            template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
-        },
-        geolat:  48.115293,
-        geolon:  11.60218,
-        minZoom: 13,
-        maxZoom: 17,
-        defaultZoom: 12
-      }
-    };
+  this.init = function ( config ){
 
     console.log("DSpace init");
 

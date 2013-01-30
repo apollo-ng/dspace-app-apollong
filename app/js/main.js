@@ -14,4 +14,3 @@ function( DSpace ) {
 //  world.init(config);
 //
 //});
-

@@ -10,8 +10,7 @@ TEMPLATE_OUT = assets/templates/
 
 default: build
 
-#build: deps
-build:
+build: deps
 	node node_modules/.bin/r.js -o build.js
 
 deps: clean-deps ender
@@ -60,10 +59,7 @@ ender:
 	mv ender.js.tmp ender.js
 	sed -i 's/require(/enderRequire(/g' ender.js
 	sed -i 's/function provide/enderRequire = require;\n\nfunction provide/' ender.js
-# "\n\nenderEquire = require;" >> ender.js.tmp
-#	echo "console.log('enderRequire', enderRequire)" >> ender.js.tmp
-	$(WRAP_DEFINE) ender.js ender.js 'ender.noConflict()'
-#sed -i "s/require/require_one/g" ender.js ender.min.js
+	$(WRAP_DEFINE) ender.js ender.js 'ender.noConflict(function() {})'
 	rm ender.min.js
 	mv ender.js deps
 

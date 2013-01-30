@@ -10,7 +10,8 @@ TEMPLATE_OUT = assets/templates/
 
 default: build
 
-build: deps
+#build: deps
+build:
 	node node_modules/.bin/r.js -o build.js
 
 deps: clean-deps ender
@@ -19,7 +20,7 @@ deps: clean-deps ender
 # require handlebars plugin:
 	cp -r pkgs/js/require-handlebars-plugin/hbs deps/
 	cp pkgs/js/require-handlebars-plugin/hbs.js deps/
-	cp -r pkgs/hbs/* deps/
+#	cp -r pkgs/hbs/* deps/
 
 
 
@@ -52,10 +53,19 @@ deps: clean-deps ender
 	  modestmaps:MM
 ender: 
 	$(ENDER_BUILD) ender.js
-	$(WRAP_DEFINE) ender.js ender.js ender
-	$(WRAP_DEFINE) ender.min.js ender.min.js ender
+	sed -i 's/typeof define/typeof defineDoesntExist/g' ender.js
+	sed -i 's/define(/defineDoesntExist(/g' ender.js
+	echo "var enderRequire;\n" > ender.js.tmp
+	cat ender.js >> ender.js.tmp
+	mv ender.js.tmp ender.js
+	sed -i 's/require(/enderRequire(/g' ender.js
+	sed -i 's/function provide/enderRequire = require;\n\nfunction provide/' ender.js
+# "\n\nenderEquire = require;" >> ender.js.tmp
+#	echo "console.log('enderRequire', enderRequire)" >> ender.js.tmp
+	$(WRAP_DEFINE) ender.js ender.js 'ender.noConflict()'
 #sed -i "s/require/require_one/g" ender.js ender.min.js
-	mv ender.js ender.min.js deps
+	rm ender.min.js
+	mv ender.js deps
 
 clean-deps:
 	rm -rf deps/*

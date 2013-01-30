@@ -1,9 +1,24 @@
 define([
   'ender', 'underscore', 'backbone',
-  'app/js/views/map/map',
-  'reqwest',
+  'reqwest', 'easey_handlers', 'markers',
+  'modestmaps',
 
-], function( $, _, Backbone, Map, Reqwest ) {
+  'hbs!templates/mapContext',
+  'hbs!templates/featureBoxItem',
+  'hbs!templates/featureInfoModal',
+  'hbs!templates/userOptionModal',
+  'hbs!templates/statusPanel',
+  'hbs!templates/featureOptionModal',
+  'hbs!templates/controlPanel'
+
+], function( $, _, Backbone, Reqwest, easey_handlers, markers, MM,
+             mapContextTemplate,
+             featureBoxItemTemplate,
+             featureInfoModalTemplate,
+             userOptionModalTemplate,
+             statusPanelTemplate,
+             featureOptionModalTemplate,
+             controlPanelTemplate) {
 /**
  * TODO document
  */
@@ -202,7 +217,7 @@ var DSpace = function(){
     var ContextPanel = ModalPanel.extend({
 
       el: '#mapContext',
-      template: Handlebars.templates['mapContext'],
+      template: mapContextTemplate,
 
       showFX: function(){
         this.$el.css( { 'left': cursorX, 'top': cursorY });
@@ -335,7 +350,7 @@ var DSpace = function(){
 
           var self = this;
           this.world.on('change', function(event, data){
-            self.recenter();
+            //self.recenter();
           });
 
           /**
@@ -445,7 +460,7 @@ var DSpace = function(){
        */
       createUserLayer: function(){
 
-        var markerLayer = mapbox.markers.layer();
+        var markerLayer = markers.layer();
         this.userLayer = markerLayer;
 
         var center = this.world.user.get('geoLocation');
@@ -488,7 +503,7 @@ var DSpace = function(){
          * Add markers
          * mapbox lib NOT same as ModestMap
          */
-        var markerLayer = mapbox.markers.layer();
+        var markerLayer = markers.layer();
 
         /**
          * define a factory to make markers
@@ -532,7 +547,7 @@ var DSpace = function(){
     var FeatureBoxItem = Backbone.View.extend({
 
       className: 'featureBoxItem',
-      template: Handlebars.templates['featureBoxItem'],
+      template: featureBoxItemTemplate,
 
      /**
       * gets model feature and index
@@ -572,7 +587,7 @@ var DSpace = function(){
 
         var self = this;
         this.world.on('change', function(event, data){
-          self.recenter();
+          //self.recenter();
         });
       },
 
@@ -722,9 +737,9 @@ var DSpace = function(){
          */
         var html; // FIXME put into /templates
         if(this.featureJson.properties.type == 'user'){
-          html =  '<img src="assets/images/tiki-man.png" pointer-events="auto" />';
+          html =  '<img src="design/images/tiki-man.png" pointer-events="auto" />';
         } else {
-          html = '<img src="assets/icons/black-shield-{{index}}.png" pointer-events="auto" />';
+          html = '<img src="design/icons/black-shield-{{index}}.png" pointer-events="auto" />';
         }
         this.template = Handlebars.compile(html);
       },
@@ -754,7 +769,7 @@ var DSpace = function(){
      */
     var Overlay = Backbone.View.extend({
 
-      template: Handlebars.templates['featureInfoModal'],
+      template: featureInfoModalTemplate,
 
       initialize: function() {
 
@@ -785,7 +800,7 @@ var DSpace = function(){
     var OptionsPanel = ModalPanel.extend({
 
       el: '#userOptionModal',
-      template: Handlebars.templates['userOptionModal'],
+      template: userOptionModalTemplate,
 
       showFX: function(){
         this.$el.html( this.template( { ui: this.ui } ) );
@@ -806,7 +821,7 @@ var DSpace = function(){
     var StatusPanel = ModalPanel.extend({
 
       el: '#statusPanel',
-      template: Handlebars.templates['statusPanel'],
+      template: statusPanelTemplate,
 
       events: {
           'click #userModeWalk': 'userModeWalk'
@@ -861,7 +876,7 @@ var DSpace = function(){
     var OverlaysPanel = ModalPanel.extend({
 
       el: '#featureOptionModal',
-      template: Handlebars.templates['featureOptionModal'],
+      template: featureOptionModalTemplate,
 
       showFX: function(){
         this.$el.html( this.template( { ui: this.ui } ));
@@ -884,7 +899,7 @@ var DSpace = function(){
     var ControlPanel = Backbone.View.extend({
 
       el: '#controlPanel',
-      template: Handlebars.templates['controlPanel'],
+      template: controlPanelTemplate,
 
       initialize: function() {
         this.world = this.options.world

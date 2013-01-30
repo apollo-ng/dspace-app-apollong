@@ -5,6 +5,7 @@
  */
 define(['handlebars'], function(Handlebars) {
 
+
   /**
    * Convert Decimal Coordinates to DMS
    */
@@ -130,7 +131,6 @@ define(['handlebars'], function(Handlebars) {
 
   function renderPos(lat, lon) {
     if ( typeof lat  !== 'undefined' && typeof lon !== 'undefined') {
-
       switch(config.user.prefCoordSys) {
       case 'GPS':
         return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
@@ -139,10 +139,12 @@ define(['handlebars'], function(Handlebars) {
       case 'DMS':
         return (dd2dms(lat, 'lat') + " - " + dd2dms(lon, 'lon'));
       case 'DEC':
-        return result3;
+        return ('Lat: ' + lat + ' Lon: ' + lon);
       default:
         return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
       }
+    } else {
+      return ('Position not acquired');
     }
   }
 

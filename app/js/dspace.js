@@ -350,6 +350,7 @@ var DSpace = function(){
 
           var self = this;
           this.world.on('change', function(event, data){
+            // WIP
             //self.recenter();
           });
 
@@ -587,6 +588,7 @@ var DSpace = function(){
 
         var self = this;
         this.world.on('change', function(event, data){
+          // WIP
           //self.recenter();
         });
       },

@@ -56,7 +56,7 @@ Handlebars.registerHelper('setAccBg', function(acc) {
  */
 Handlebars.registerHelper('ms2kmh', function (speed) {
   if ( typeof speed  !== 'undefined') {
-    return ((speed * 3600)/1000 + 'km/h');
+    return (Math.ceil(speed * 3.6) + 'km/h');
   } else {
     return ('0 km/h');
   }
@@ -230,7 +230,7 @@ var config = {
 
   map: {
     tileSet: {
-        template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-tactical/{Z}/{X}/{Y}.png'
+        template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'
     },
     geolat:  48.115293,
     geolon:  11.60218,

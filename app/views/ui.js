@@ -35,6 +35,7 @@ define([
    * Class: UI
    *
    * elements:
+   * * <overlaysPanel>
    * * <FeatureBox>
    * * <MiniMap>
    * * <StatusPanel>
@@ -46,6 +47,10 @@ define([
      * Property: el
      *
      * DOM element which will host UI '#id'
+     *
+     * Property: $el
+     *
+     * Backbone wrapped element to reuse
      */
     el: '#ui',
 
@@ -55,6 +60,20 @@ define([
      * keeps state if UI fullScreen defaulting to false
      */
     fullScreen: false,
+
+    /**
+     * Property: overlaysPanel
+     *
+     * <OverlaysPanel> *ui element* for managing active overlays
+     */
+    overlaysPanel: new panels.Overlays(),
+
+    /**
+     * Property: optionsPanel
+     *
+     * <OptionsPanel> *ui element* for options dialog
+     */
+    optionsPanel: new panels.Options(),
 
     /**
      * Events: events
@@ -69,12 +88,37 @@ define([
       , 'click #userOptions': 'toggleOptionsPanel'
     },
 
+    /**
+     * Method: initialize
+     */
     initialize: function(){
+      var self = this;
+
+      /**
+       * Property: world
+       *
+       * reference to the <World> from init options
+       */
       this.world = this.options.world;
+
+      /**
+       * Property: map
+       *
+       * reference to the <Map> from init options
+       *
+       * passed to <MiniMap>
+       * used to jump <Map>
+       */
+
       this.map = this.options.map;
+
+      /**
+       * Property: aether
+       *
+       * event aggregator from <World>
+       */
       this.aether = this.options.aether;
 
-      var self = this;
 
       /**
        * Event: feature:current
@@ -84,11 +128,6 @@ define([
       this.aether.on('feature:current', function( feature ){
         self.jumpMapToFeature(feature);
       });
-
-      /**
-       * for managing active overlays
-       */
-      this.overlaysPanel = new panels.Overlays();
 
       /**
        * featureBox
@@ -107,10 +146,6 @@ define([
       this.statusPanel = new panels.Status({model: this.world.user});
       this.controlPanel = new panels.Control({world: this.world });
 
-      /**
-       * create OptionsPanel
-       */
-      this.optionsPanel = new panels.Options();
     },
 
     /**

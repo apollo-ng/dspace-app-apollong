@@ -1,4 +1,4 @@
-define(['ender', './dspace', './config', 'models/user'], function($, DSpace, config, User) {
+define(['ender', './dspace', './config'], function($, DSpace, config) {
 
   /**
    * BIG BANG!

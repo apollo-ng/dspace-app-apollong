@@ -11,6 +11,8 @@ define([
    * Class: World
    *
    * Holds main logic of managing *realm*
+   *
+   * (see world.png)
    */
   var World = Backbone.Model.extend({
 

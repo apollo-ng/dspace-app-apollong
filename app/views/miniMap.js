@@ -7,6 +7,8 @@ define([
 ], function(Backbone, MM, easey_handlers, panels) {
 
   /**
+   * Class: MiniMap
+   *
    * UI element for showin mini map
    */
   var MiniMap = panels.Base.extend({

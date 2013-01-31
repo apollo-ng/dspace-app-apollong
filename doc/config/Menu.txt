@@ -50,13 +50,20 @@ File: DSpace  (dspace.js)
 
 Group: Models  {
 
-   File: User  (models/user.js)
    File: World  (models/world.js)
+   File: User  (models/user.js)
+   File: Feature  (models/feature.js)
    }  # Group: Models
 
 Group: Views  {
 
+   File: UI  (views/ui.js)
    File: Map  (views/map.js)
+   File: MiniMap  (views/miniMap.js)
+   File: Overlay  (views/overlay.js)
+   File: Marker  (models/marker.js)
+   File: FeatureBox  (views/featureBox.js)
+   File: FeatureBoxItem  (views/featureBoxItem.js)
    }  # Group: Views
 
 Group: Collections  {

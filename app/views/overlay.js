@@ -1,6 +1,8 @@
 define(['backbone', 'templateMap'], function(Backbone, templates) {
 
   /**
+   * Class: Overlay
+   *
    * binds to FeatureCollection reset events.
    * adds the collection to the listbox
    * draws marker with mapbox

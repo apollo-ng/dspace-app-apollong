@@ -17,12 +17,12 @@ define([
     /**
      * Method: initialize
      *
-     * - creates <User>
-     * - creates featureCollections + sync
-     * - creates map
-     * - creates ui
-     * - renders map
-     * - renders ui
+     * - <createUser>
+     * - <createFeatureCollections> + sync them
+     * - <createMap>
+     * - creates <UI>
+     * - <Map.render>
+     * - <UI.render>
      *
      * Parameters:
      *   config - object with configurations
@@ -54,7 +54,7 @@ define([
 
     /**
      * Method: createUser
-     * creates a user passing it *world* and *config.user*
+     * creates a <User> passing it *<World>* and *config.user*
      * (start code)
      * config: {
      *   user: {
@@ -67,7 +67,9 @@ define([
 
     /**
      * Method: createFeatureCollections
-     * creates FeatureCollections from array in *config.geoFeeds*
+     * creates <FeatureCollection>s from array in *config.geoFeeds*
+     *
+     * *currently sync right away*
      *
      * (start code)
      * config: {
@@ -99,7 +101,7 @@ define([
 
     /**
      * Method: createMap
-     * creates a map passing it *world* and *config.map*
+     * creates a <Map> passing it *<World>* and *config.map*
      * (start code)
      * config: {
      *   map: {

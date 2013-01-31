@@ -1,5 +1,7 @@
 define(['backbone'], function(Backbone) {
   /**
+   * Class: Feature
+   *
    * single geographical featue of interest
    * with option to set from geoJSON feature object
    */

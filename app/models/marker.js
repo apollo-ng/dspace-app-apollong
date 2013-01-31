@@ -1,6 +1,7 @@
 define(['backbone'], function(Backbone) {
 
-  /** @wip
+  /** 
+   * Class: Marker
    *
    * view for Overlay Markers
    * this creates creates a marker-image element and return the reference

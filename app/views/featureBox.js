@@ -4,6 +4,8 @@ define([
   'views/featureBoxItem'
 ], function(Backbone, panels, FeatureBoxItem) {
     /**
+     * Class: FeatureBox
+     *
      * UI element with list of features
      *
      * gets collection FeatureCollection

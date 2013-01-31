@@ -32,6 +32,7 @@ define([
 
 
   /**
+   * Class: UI
    * main UI logic
    */
   var UI = Backbone.View.extend({
@@ -80,6 +81,9 @@ define([
       this.fullScreen = false;
     },
 
+    /**
+     * Method: render
+     */
     render: function(){
       this.featureBox.visible = true;
 

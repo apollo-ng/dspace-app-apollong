@@ -1,15 +1,19 @@
 {
   name: 'node_modules/almond/almond.js',
-  include: 'app/js/main',
-  insertRequire: ['app/js/main'],
+  include: 'app/main',
+  insertRequire: ['app/main'],
   out: 'build/dspace.js',
   wrap: true,
 
   paths: {
     // directories
     "templates"        : "design/templates",
-    "template/helpers" : "app/js/helpers",
-    
+    "template/helpers" : "app/helpers",
+    "models" : "app/models",
+    "collections" : "app/collections",
+    "views" : "app/views",
+    "templateMap" : "app/templateMap",
+
     // dependencies of hbs
     "i18nprecompile"   : "deps/hbs/i18nprecompile",
     "json2"            : "deps/hbs/json2",

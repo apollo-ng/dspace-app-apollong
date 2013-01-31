@@ -46,6 +46,8 @@ Format: 1.52
 # --------------------------------------------------------------------------
 
 
+File: DSpace  (dspace.js)
+
 Group: Models  {
 
    File: User  (models/user.js)

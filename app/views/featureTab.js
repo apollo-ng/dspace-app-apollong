@@ -7,6 +7,11 @@ define([
    * Class: FeatureTab
    *
    * bundles all <Feature>s from a <FeatureCollection> for <FeatureBox>
+   *
+   * Receives:
+   *
+   *   collection - a <FeatureCollection>
+   *   aether - event aggregator from <World>
    */
   var FeatureTab = Backbone.View.extend({
 
@@ -15,9 +20,13 @@ define([
     initialize: function(){
       var self = this;
 
+      /**
+       * Property: aether
+       *
+       * event aggregator from <World>
+       */
       this.aether = this.options.aether;
 
-      //FIXME this.aether = this.options.aether;
       /**
        * Event: collection:reset
        *
@@ -36,8 +45,6 @@ define([
       this.collection.on( 'feature:current', function( feature ){
         self.aether.trigger('feature:current', feature );
       });
-
-      return this;
     },
 
     /*

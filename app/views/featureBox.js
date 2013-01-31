@@ -14,36 +14,75 @@ define([
      */
     var FeatureBox = panels.Base.extend({
 
+      /**
+       * Property: el
+       *
+       * DOM element of this view
+       */
       el: '#featureBox',
+
+      /**
+       * Method: initialize
+       */
       initialize: function(){
 
+      /**
+       * Property: aether
+       *
+       * event aggregator from <World>
+       */
         this.aether = this.options.aether;
 
         var self = this;
 
         /**
-         * Attribute: collections
+         * Property: collections
          *
          * an array of <FeatureCollection>s from a <World>
          */
         this.collections = this.options.collections;
-        this.featureTabs = [];
 
+        /**
+         * Property: featureTabs
+         *
+         * an array of <FeatureTab>s
+         */
+        this.featureTabs = this.initializeTabs();
+
+      },
+
+      /**
+       * Method: initializeTabs
+       *
+       * creates feature tabs for all collections
+       *
+       * Returns:
+       *
+       * featureTabs - an array of <FeatureTab> views
+       */
+      initializeTabs: function(){
+        var tabs = [];
         for(var i=0; i < this.collections.length; i++){
           var collection = this.collections[i];
-          var featureTab = new FeatureTab({
+          var tab = new FeatureTab({
             collection: collection,
             aether: this.aether
           });
-          this.featureTabs.push(featureTab);
+          tabs.push(tab);
         };
+        return tabs;
       },
+
 
       /**
        * Method: render
        *
        * renders a <FeatureBoxItem> view for each model
        * adding *index* to them and appends them to $el
+       *
+       * Returns:
+       *
+       * this.el - rendered DOM element of view
        */
       render: function(){
         var self = this;

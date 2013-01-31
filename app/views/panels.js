@@ -110,8 +110,18 @@ define([
       el: '#mapContext',
       template: templates.mapContext,
 
+      initialize: function() {
+
+        // FIXME: @{chrono|elf-pavlik} (debatable)
+        document.addEventListener('mousemove', function(e) {
+          this.cursorX = e.pageX;
+          this.cursorY = e.pageY;
+        }.bind(this));
+
+      },
+
       showFX: function(){
-        this.$el.css( { 'left': cursorX, 'top': cursorY });
+        this.$el.css( { 'left': this.cursorX, 'top': this.cursorY });
         this.$el.css( { 'display': 'block'});
         this.$el.fadeIn(350);
       },

@@ -1,10 +1,11 @@
 define([
+  'underscore',
   'backbone',
   'collections/cors',
   'models/user',
   'views/map',
   'views/ui'
-], function(Backbone, FeatureCollectionCORS, User, Map, UI) {
+], function(_, Backbone, FeatureCollectionCORS, User, Map, UI) {
 
   var World = Backbone.Model.extend({
 
@@ -13,12 +14,13 @@ define([
      */
     initialize: function(  ){
       var self = this;
-      this.geoFeeds = this.attributes.geoFeeds;
+      this.config = this.get('config');
+      this.geoFeeds = this.config.geoFeeds;
 
       /**
        * create User
        */
-      this.user = new User({world: this});
+      this.user = new User({world: this, config: this.config.user});
 
       /**
        * create FeatureCollections
@@ -43,7 +45,7 @@ define([
       /**
        * create and render Map & UI
        */
-      this.map = new Map({world: this, config: this.get( 'map' )});
+      this.map = new Map({world: this, config: this.config.map});
       this.ui = new UI({world: this, map: this.map});
 
       this.map.render();

@@ -5,6 +5,32 @@ define([
   'views/miniMap'
 ], function(Backbone, panels, FeatureBox, MiniMap) {
 
+
+  // /**
+  //  * X-Browser Fullscreen API Calls
+  //  */
+  // function reqBFS () {
+  //   var e = document.documentElement;
+  //   if (e.requestFullscreen) {
+  //     e.requestFullscreen();
+  //   } else if (e.mozRequestFullScreen) {
+  //     e.mozRequestFullScreen();
+  //   } else if (e.webkitRequestFullScreen) {
+  //     e.webkitRequestFullScreen();
+  //   }
+  // }
+
+  // function exitBFS () {
+  //   if (document.exitFullscreen) {
+  //     document.exitFullscreen();
+  //   } else if (document.mozCancelFullScreen) {
+  //     document.mozCancelFullScreen();
+  //   } else if (document.webkitCancelFullScreen) {
+  //     document.webkitCancelFullScreen();
+  //   }
+  // }
+
+
   /**
    * main UI logic
    */

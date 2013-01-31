@@ -3,7 +3,9 @@
  * according to user prefs (DEC, DMS, GPS, QTH)
  * FIXME: switch according to prefs in user model
  */
-define(['handlebars'], function(Handlebars) {
+define(['handlebars', 'app/config'], function(Handlebars, config) {
+
+  console.log("HELPER CONFIG", config);
 
 
   /**

@@ -10,33 +10,32 @@ define([
  * TODO document
  */
 
-var DSpace = function(){
+// var DSpace = function(){
 
+//   /**
+//    * expects a config object
+//    * FIXME set defautls to override and don't crash if no options ;) -- default in User model ?
+//    */
+//   this.init = function ( config ){
 
-  /**
-   * expects a config object
-   * FIXME set defautls to override and don't crash if no options ;) -- default in User model ?
-   */
-  this.init = function ( config ){
+//     /**
+//      * init() returns an instance of a World
+//      */
+//     return new World( config );
 
-    console.log("DSpace init");
+//   };
 
-    DSpace.World = World;
+//   /**
+//    * returns itself
+//    */
+//   return this;
 
-    /**
-     * init() returns an instance of a World
-     */
-    return new World( config );
+// };
 
+  return {
+    init: function(config) {
+      return new World({ config : config });
+    }
   };
-
-  /**
-   * returns itself
-   */
-  return this;
-
-};
-
-  return DSpace;
 
 });

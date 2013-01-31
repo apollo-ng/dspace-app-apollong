@@ -2,6 +2,8 @@ define(['backbone'], function(User) {
   /**
    * Class: User
    * basic user model
+   *
+   * (see tikiman.png)
    */
   var User = Backbone.Model.extend({
 
@@ -47,6 +49,6 @@ define(['backbone'], function(User) {
     },
 
   });
-  
+
   return User;
 });

@@ -137,6 +137,7 @@
 
 /*Set style of open slide*/
 .accordion section:target {
+  border-top: 1px solid #777; border-bottom: 1px solid #000;
   background:  #3f3e3a;
   background-image: url(../images/panel_bg.png);
  }
@@ -158,8 +159,8 @@
   color: #333;
   cursor: pointer;
   text-shadow: 1px 1px 0px #e0e0e0;
-  border-top: 1px solid #bbb;
-  border-bottom: 1px solid #999;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #777;
   background: rgb(244,241,235);
   background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
@@ -169,7 +170,7 @@
   background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
 }
 
-.accordion section:hover { background: #3f3e3a; }
+.accordion section:hover { background: #3f3e3a;  border-top: 1px solid #999; border-bottom: 1px solid #777;}
 .accordion section h2 a:hover { color: #DBD6CF; }
 .accordion section p { display:none; }
 

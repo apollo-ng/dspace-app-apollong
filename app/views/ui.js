@@ -92,8 +92,9 @@ define([
 
       /**
        * featureBox
+       * FIXME at this moment hardcoded passing second collection on a world
        */
-      this.featureBox = new FeatureBox({ aether: this.aether, map: this.map, collection: this.world.featureCollections[1]});
+      this.featureBox = new FeatureBox({ aether: this.aether, collection: this.world.featureCollections[1]});
 
       /**
        * creates minimap
@@ -104,7 +105,7 @@ define([
        * creates statusPanel
        */
       this.statusPanel = new panels.Status({model: this.world.user});
-      this.controlPanel = new panels.Control({ ui: this, world: this.world });
+      this.controlPanel = new panels.Control({world: this.world });
 
       /**
        * create OptionsPanel

@@ -46,6 +46,8 @@ define([
        *
        * renders a <FeatureBoxItem> view for each model
        * adding *index* to them and appends them to $el
+       * FIXME doplicates <FeatureCollection.toJSON>
+       * FIXME can leak session state to collection
        */
       render: function(){
         var self = this;

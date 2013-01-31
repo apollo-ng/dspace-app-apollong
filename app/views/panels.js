@@ -97,7 +97,7 @@ define([
       template: templates.featureOptionModal,
 
       showFX: function(){
-        this.$el.html( this.template( { ui: this.ui } ));
+        this.$el.html( this.template());
         this.$el.css( { 'display': 'block'});
         this.$el.fadeIn(350);
         this.visible = true;

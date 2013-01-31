@@ -7,14 +7,44 @@ define([
   'views/ui'
 ], function(_, Backbone, FeatureCollectionCORS, User, Map, UI) {
 
-  // Class: World
-
+  /*
+   * Class: World
+   *
+   * Holds main logic of managing
+   *
+   * * FeatureCollections
+   * * Map
+   * * User
+   */
   var World = Backbone.Model.extend({
 
     /**
+     * Method: initialize
      * Genesis ;)
+     *
+     * Parameters:
+     *   config - object with configurations
+     *
+     * (start code)
+     * config: {
+     *   geoFeeds: [
+     *     { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
+     *     { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
+     *     { hub: 'open-reseource.org', type: 'DSNP'}],
+     *   map: {
+     *     tileSet: {
+     *       template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'},
+     *     geolat:  48.115293,
+     *     geolon:  11.60218,
+     *     minZoom: 13,
+     *     maxZoom: 17,
+     *     miniMapZoom: 11,
+     *     defaultZoom: 12
+     *   },
+     *   user: {
+     *     prefCoordSys: 'GPS'}}}
+     * (end code)
      */
-    // Method: initialize
     initialize: function(  ){
       var self = this;
       this.config = this.get('config');

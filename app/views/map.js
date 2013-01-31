@@ -14,19 +14,41 @@ define([
             Marker,
             panels, Overlay) {
 
-  // Class: Map
-  // main UI logic for the Map
-  //
+  /* Class: Map
+   * main UI logic for the Map
+   *
+   * creates:
+   *   * *BaseMap* with default *TileSet*
+   *
+   * listens:
+   *   * world change *mapCenter*
+   */
   var Map = Backbone.View.extend({
 
     el: '#map',
 
+    /**
+     * Event: clicks
+     *
+     * Listens on click events
+     *
+     * * right-click/press -> shows ContextPanel
+     * * click hides ContextPanel
+     */
     events: {
       "click": "hideContextPanel"
       ,"contextmenu": "showContextPanel"
     },
 
-    initialize: function(){
+    /**
+     * Method: initialize
+     *
+     * Parameters:
+     *
+     *   options.world - world which creates map
+     *   options.config - initial configuration
+     */
+    initialize: function( options ){
 
       this.world = this.options.world;
       this.config = this.options.config;
@@ -51,6 +73,7 @@ define([
     },
 
     /**
+     * Method: hideContextPanel
      * Failsafe: A click on the map should clear all modal/context windows
      */
     hideContextPanel: function () {
@@ -58,6 +81,7 @@ define([
     },
 
     /**
+     * Method: showContextPanel
      *  Map right-click/long touch context menu
      */
     showContextPanel: function () {
@@ -65,6 +89,7 @@ define([
     },
 
     /**
+     * Method: render
      * renders the map
      */
     render: function(){

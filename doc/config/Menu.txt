@@ -1,4 +1,4 @@
-Format: 1.51
+Format: 1.52
 
 
 # You can add a title and sub-title to your menu like this:
@@ -62,5 +62,6 @@ Group: Index  {
    Index: Everything
    Class Index: Classes
    Function Index: Functions
+   Event Index: Events
    }  # Group: Index
 

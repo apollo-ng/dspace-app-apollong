@@ -57,6 +57,12 @@ Group: Views  {
    File: Map  (views/map.js)
    }  # Group: Views
 
+Group: Collections  {
+
+   File: FeatureCollection  (collections/base.js)
+   File: FeatureCollectionCORS  (collections/cors.js)
+   }  # Group: Collections
+
 Group: Index  {
 
    Index: Everything

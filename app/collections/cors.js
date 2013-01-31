@@ -1,5 +1,10 @@
 define(['./base', 'reqwest'], function(FeatureCollection, Reqwest) {
 
+  /**
+   * Class: FeatureCollectionCORS
+   *
+   * Gets geoJSON collection over CORS
+   */
   var FeatureCollectionCORS = FeatureCollection.extend({
 
     initialize: function( options ){

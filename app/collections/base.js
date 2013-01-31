@@ -1,5 +1,10 @@
 define(['backbone', 'models/feature'], function(Backbone, Feature) {
 
+  /**
+   * Class: FeatureCollection
+   *
+   * Base class for extending
+   */
   var FeatureCollection = Backbone.Collection.extend({
 
     model: Feature,

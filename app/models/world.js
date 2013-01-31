@@ -10,27 +10,98 @@ define([
   /*
    * Class: World
    *
-   * Holds main logic of managing
-   *
-   * * FeatureCollections
-   * * Map
-   * * User
+   * Holds main logic of managing *realm*
    */
   var World = Backbone.Model.extend({
 
     /**
      * Method: initialize
-     * Genesis ;)
+     *
+     * - creates <User>
+     * - creates featureCollections + sync
+     * - creates map
+     * - creates ui
+     * - renders map
+     * - renders ui
      *
      * Parameters:
      *   config - object with configurations
      *
      * (start code)
      * config: {
+     *   geoFeeds: [],
+     *   map: {},
+     *   user: {}}
+     * (end code)
+     */
+    initialize: function(  ){
+      var self = this;
+      this.config = this.get('config');
+
+      this.user = this.createUser(this.config.user);
+      this.featureCollections = this.createFeatureCollections(this.config.geoFeeds);
+
+      /**
+       * create and render Map & UI
+       */
+      this.map = this.createMap(this.config.map);
+      this.ui = new UI({world: this, map: this.map});
+
+      this.map.render();
+      this.ui.render();
+
+    },
+
+    /**
+     * Method: createUser
+     * creates a user passing it *world* and *config.user*
+     * (start code)
+     * config: {
+     *   user: {
+     *     prefCoordSys: 'GPS'}}
+     * (end code)
+     */
+    createUser: function(config){
+      return new User({world: this, config: config});
+    },
+
+    /**
+     * Method: createFeatureCollections
+     * creates FeatureCollections from array in *config.geoFeeds*
+     *
+     * (start code)
+     * config: {
      *   geoFeeds: [
      *     { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
      *     { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
-     *     { hub: 'open-reseource.org', type: 'DSNP'}],
+     *     { hub: 'open-reseource.org', type: 'DSNP'}]}
+     * (end code)
+     */
+    createFeatureCollections: function( geoFeeds ){
+      var featureCollections = [];
+      for(var i = 0; i < geoFeeds.length; i++){
+        var feed = geoFeeds[i];
+        switch(feed.type){
+        case 'CORS':
+          var featureCollection = new FeatureCollectionCORS(feed);
+          //for now sync it right away!
+          featureCollection.sync()
+
+          featureCollections.push(featureCollection);
+          break;
+        default:
+          console.log('tried creating ' + feed.type + ' collections')
+          break;
+        };
+      };
+      return featureCollections;
+    },
+
+    /**
+     * Method: createMap
+     * creates a map passing it *world* and *config.map*
+     * (start code)
+     * config: {
      *   map: {
      *     tileSet: {
      *       template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'},
@@ -40,50 +111,11 @@ define([
      *     maxZoom: 17,
      *     miniMapZoom: 11,
      *     defaultZoom: 12
-     *   },
-     *   user: {
-     *     prefCoordSys: 'GPS'}}}
+     *   }}
      * (end code)
      */
-    initialize: function(  ){
-      var self = this;
-      this.config = this.get('config');
-      this.geoFeeds = this.config.geoFeeds;
-
-      /**
-       * create User
-       */
-      this.user = new User({world: this, config: this.config.user});
-
-      /**
-       * create FeatureCollections
-       */
-      this.featureCollections = [];
-      for(var i = 0; i < this.geoFeeds.length; i++){
-        var feed = this.geoFeeds[i];
-        switch(feed.type){
-        case 'CORS':
-          var featureCollection = new FeatureCollectionCORS(feed);
-          //for now sync it right away!
-          featureCollection.sync()
-
-          this.featureCollections.push(featureCollection);
-          break;
-        default:
-          console.log('tried creating ' + feed.type + ' collections')
-          break;
-        };
-      };
-
-      /**
-       * create and render Map & UI
-       */
-      this.map = new Map({world: this, config: this.config.map});
-      this.ui = new UI({world: this, map: this.map});
-
-      this.map.render();
-      this.ui.render();
-
+    createMap: function(config){
+      return new Map({world: this, config: config});
     }
   });
 

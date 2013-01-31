@@ -1,4 +1,10 @@
-define(['backbone', 'views/panels'], function(Backbone, panels) {
+define([
+  'backbone',
+  'modestmaps',
+  'easey_handlers',
+
+  'views/panels'
+], function(Backbone, MM, easey_handlers, panels) {
 
   /**
    * UI element for showin mini map

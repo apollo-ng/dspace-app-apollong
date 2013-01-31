@@ -1,4 +1,18 @@
-define(['backbone', 'views/panels'], function(Backbone, panels) {
+define([
+  // deps
+  'backbone',
+  'modestmaps',
+  'markers',
+
+  // models
+  'models/marker',
+
+  // views
+  'views/panels',
+  'views/overlay'
+], function(Backbone, MM, markers,
+            Marker,
+            panels, Overlay) {
 
   /**
    * main UI logic for the Map

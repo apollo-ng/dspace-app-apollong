@@ -33,7 +33,12 @@ define([
 
   /**
    * Class: UI
-   * main UI logic
+   *
+   * elements:
+   * * <FeatureBox>
+   * * <MiniMap>
+   * * <StatusPanel>
+   * * <ControlPanel>
    */
   var UI = Backbone.View.extend({
 
@@ -44,6 +49,18 @@ define([
      */
     el: '#ui',
 
+    /**
+     * Property: fullScreen
+     *
+     * keeps state if UI fullScreen defaulting to false
+     */
+    fullScreen: false,
+
+    /**
+     * Events: events
+     *
+     * delegting events on UI
+     */
     events: {
         'click #toggleFeatureBox': 'boxToggle'
       , 'click #toggleMiniMap': 'miniMapToggle'
@@ -59,6 +76,11 @@ define([
 
       var self = this;
 
+      /**
+       * Event: feature:current
+       *
+       * jumps map to feature set to current
+       */
       this.aether.on('feature:current', function( feature ){
         self.jumpMapToFeature(feature);
       });
@@ -88,13 +110,12 @@ define([
        * create OptionsPanel
        */
       this.optionsPanel = new panels.Options();
-
-      // for now fullscreen off by default FIXME
-      this.fullScreen = false;
     },
 
     /**
      * Method: render
+     *
+     * render all elements and sets them visible
      */
     render: function(){
       this.featureBox.visible = true;
@@ -110,25 +131,44 @@ define([
     },
 
     /**
-     * toggles state (on/off) for elements
+     * Method: boxToggle
+     *
+     * toggles <FeatureBox>
      */
     boxToggle: function() {
       this.featureBox.toggle();
     },
 
-    miniMapToggle: function(event){
+    /**
+     * Method: miniMapToggle
+     *
+     * toggles <MiniMap>
+     */
+    miniMapToggle: function(){
       this.miniMap.toggle();
     },
 
-    toggleOverlaysPanel: function(event){
+    /**
+     * Method: toggleOverlaysPanel
+     *
+     * toggles <OverlaysPanel>
+     */
+    toggleOverlaysPanel: function(){
       this.overlaysPanel.toggle();
     },
 
-    toggleOptionsPanel: function(event) {
+    /**
+     * Method: toggleOptionsPanel
+     *
+     * toggles <OptionsPanel>
+     */
+    toggleOptionsPanel: function() {
       this.optionsPanel.toggle();
     },
 
     /**
+     * Method: fullscreenToggle
+     *
      * toggles fulls creen mode
      */
     fullscreenToggle: function() {
@@ -148,7 +188,7 @@ define([
     /**
      * Method: jumpMapToFeature
      *
-     * delegates to map jumping to given feature
+     * delegates to <Map> jumping to given feature
      *
      * Parameters:
      *

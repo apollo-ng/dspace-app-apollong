@@ -10,6 +10,8 @@ define([
    * Class: MiniMap
    *
    * UI element for showin mini map
+   *
+   * (see minimap.png)
    */
   var MiniMap = panels.Base.extend({
 

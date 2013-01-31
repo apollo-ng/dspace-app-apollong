@@ -1,11 +1,13 @@
 define(['backbone'], function(User) {
   /**
-   * Add basic user model
+   * Class: User
+   * basic user model
    */
-  // Class: User
   var User = Backbone.Model.extend({
 
-    // Method: initialize
+    /**
+     * Method: initialize
+     */
     initialize: function() {
 
       this.world = this.get('world');

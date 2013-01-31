@@ -12,7 +12,9 @@ define(['backbone'], function(Backbone) {
     },
 
     /**
-     * helper method for setting lat: lon: attributes from coordinates array
+     * Method: setLatLon
+     *
+     * setting lat: lon: attributes from coordinates array
      */
     setLatLon: function(){
       var geometry = this.get('geometry');

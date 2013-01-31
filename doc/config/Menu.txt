@@ -53,6 +53,7 @@ Group: Models  {
    File: World  (models/world.js)
    File: User  (models/user.js)
    File: Feature  (models/feature.js)
+   File: Marker  (models/marker.js)
    }  # Group: Models
 
 Group: Views  {
@@ -61,9 +62,9 @@ Group: Views  {
    File: Map  (views/map.js)
    File: MiniMap  (views/miniMap.js)
    File: Overlay  (views/overlay.js)
-   File: Marker  (models/marker.js)
    File: FeatureBox  (views/featureBox.js)
    File: FeatureBoxItem  (views/featureBoxItem.js)
+   File: Panel  (views/panels.js)
    }  # Group: Views
 
 Group: Collections  {

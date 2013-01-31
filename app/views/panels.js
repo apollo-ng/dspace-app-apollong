@@ -3,6 +3,9 @@ define([
   'templateMap'
 ], function(Backbone, templates) {
 
+  /**
+   * Class: Panel
+   */
   var BasePanel = Backbone.View.extend({
 
     /**
@@ -43,11 +46,15 @@ define([
   return {
 
     /**
+     * Class: BasePanel
+     *
      * extensible class for BasePanel elements
      */
     Base: BasePanel,
 
     /**
+     * Class: ControlPanel
+     *
      * UI element to show map controls
      */
     Control: Backbone.View.extend({
@@ -56,11 +63,11 @@ define([
       template: templates.controlPanel,
 
       initialize: function() {
-        this.world = this.options.world
+        this.world = this.options.world;
 
         var self = this;
         this.world.on('change', function(){
-          self.render()
+          self.render();
         });
       },
 
@@ -72,14 +79,16 @@ define([
         var mapData;
         if(mapCenter){
           mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
-        };
+        }
         var templateData = {map: mapData};
         this.$el.html(this.template(templateData));
-        return this.el
+        return this.el;
       }
     }),
 
     /**
+     * Class: OverlaysPanel
+     *
      * UI element for OverlaysPanel
      */
     Overlays: BasePanel.extend({
@@ -103,6 +112,8 @@ define([
     }),
 
     /**
+     * Class: ContextPanel
+     *
      * map ContextPanel
      */
     Context: BasePanel.extend({
@@ -133,6 +144,8 @@ define([
     }),
 
     /**
+     * Class: OptionsPanel
+     *
      * UI element for Options
      */
     Options: BasePanel.extend({
@@ -153,6 +166,8 @@ define([
     }),
 
     /**
+     * Class: StatusPanel
+     *
      * UI element to show current position in botttom left
      * gets model user and binds to all changes
      */
@@ -207,7 +222,5 @@ define([
         return this.el;
       }
     })
-
   };
-
 });

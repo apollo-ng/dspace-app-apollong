@@ -10,6 +10,7 @@ TEMPLATE_OUT = assets/templates/
 
 DOC_BIN=naturaldocs
 DOC_DIR=./doc/app
+DOC_IMG=./doc/images
 DOC_CONFIG_DIR=./doc/config
 DOC_INPUTS=-i ./app
 
@@ -77,4 +78,4 @@ clean-deps:
 
 doc:
 	mkdir -p $(DOC_DIR) $(DOC_CONFIG_DIR)
-	$(DOC_BIN) $(DOC_INPUTS) -o html $(DOC_DIR) -p $(DOC_CONFIG_DIR) -s Default custom-1
+	$(DOC_BIN) $(DOC_INPUTS) -o html $(DOC_DIR) -img $(DOC_IMG) -p $(DOC_CONFIG_DIR) -s Default custom-1

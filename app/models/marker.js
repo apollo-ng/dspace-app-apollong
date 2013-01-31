@@ -7,6 +7,8 @@ define(['backbone'], function(Backbone) {
    * this creates creates a marker-image element and return the reference
    * for modesmap factory the element has to exist on the dom
    * modestmap sets pointer-events to none so we have to override it
+   *
+   * (see marker.png)
    */
   var Marker = Backbone.View.extend({
 

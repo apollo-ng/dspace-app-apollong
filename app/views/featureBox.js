@@ -10,6 +10,8 @@ define([
      *
      * gets collection FeatureCollection
      * gets option map
+     *
+     * (see featureBox.png)
      */
     var FeatureBox = panels.Base.extend({
 

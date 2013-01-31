@@ -4,6 +4,8 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
    * Class: FeatureBoxItem
    *
    * UI element with information about feature
+   *
+   * (see featureBoxItem.png)
    */
   var FeatureBoxItem = Backbone.View.extend({
 

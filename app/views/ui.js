@@ -40,7 +40,7 @@ define([
     el: '#ui',
 
     events: {
-      'click #toggleFeatureBox': 'boxToggle'
+        'click #toggleFeatureBox': 'boxToggle'
       , 'click #toggleMiniMap': 'miniMapToggle'
       , 'click #toggleFullscreen': 'fullscreenToggle'
       , 'click #featureOptions': 'toggleOverlaysPanel'
@@ -50,6 +50,13 @@ define([
     initialize: function(){
       this.world = this.options.world;
       this.map = this.options.map;
+      this.aether = this.options.aether;
+
+      var self = this;
+
+      this.aether.on('feature:current', function( feature ){
+        self.jumpMapToFeature(feature);
+      });
 
       /**
        * for managing active overlays
@@ -59,7 +66,7 @@ define([
       /**
        * featureBox
        */
-      this.featureBox = new FeatureBox({ map: this.map, collection: this.world.featureCollections[1]});
+      this.featureBox = new FeatureBox({ aether: this.aether, map: this.map, collection: this.world.featureCollections[1]});
 
       /**
        * creates minimap
@@ -131,7 +138,20 @@ define([
         this.featureBox.hide();
         this.fullScreen = true;
       }
-    }
+    },
+
+    /**
+     * Method: jumpMapToFeature
+     *
+     * delegates to map jumping to given feature
+     *
+     * Parameters:
+     *
+     *   feature - <Feature>
+     */
+     jumpMapToFeature: function( feature ){
+       this.map.jumpToFeature(feature);
+     }
   });
 
   return UI;

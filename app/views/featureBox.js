@@ -22,6 +22,7 @@ define([
          * for use in callbacks
          */
         this.map = this.options.map;
+        this.aether = this.options.aether;
 
         var self = this;
 
@@ -32,9 +33,8 @@ define([
 
         // listen for focus requests from features and
         // call map for focus
-        // FIXME bind to world.currentFeature()
-        this.collection.on( 'featureboxitem:current', function( event ){
-          self.map.jumpToFeature( event.model );
+        this.collection.on( 'feature:current', function( feature ){
+          self.aether.trigger('feature:current', feature );
         });
       },
 
@@ -46,7 +46,7 @@ define([
          */
         _(this.collection.models).each(function(feature, index){
           feature.set( 'index', index );
-          var featureBoxItem= new FeatureBoxItem({
+          var featureBoxItem = new FeatureBoxItem({
               model: feature
           });
           var renderedTemplate = featureBoxItem.render();

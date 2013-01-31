@@ -41,14 +41,17 @@ define([
       this.user = this.createUser(this.config.user);
       this.featureCollections = this.createFeatureCollections(this.config.geoFeeds);
 
+      var aether = _.extend({}, Backbone.Events);
+
       /**
        * create and render Map & UI
        */
       this.map = this.createMap(this.config.map);
-      this.ui = new UI({world: this, map: this.map});
+      this.ui = new UI({world: this, map: this.map, aether: aether});
 
       this.map.render();
       this.ui.render();
+
 
     },
 

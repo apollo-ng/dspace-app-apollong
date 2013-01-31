@@ -26,11 +26,11 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
     },
 
     /**
-     * sets linked Feature current
-     * FIXME - set on world and then listen on change?
+     * Method: setFeatureCurrent
+     * trigers *feature:current* event on a model (<Feature>)
      */
     setFeatureCurrent: function( event ){
-      this.model.trigger('featureboxitem:current', this );
+      this.model.trigger('feature:current', this.model );
     }
   });
 

@@ -229,17 +229,23 @@ define([
     },
 
     /**
-     *k animates map to focus location
-     * gets feature f
+     * Method: jumpToFeature
+     *
+     * animates map to focus location of passed feature
+     *
+     * Parameters:
+     *
+     *   feature - <Feature>
+     *
      */
-    jumpToFeature: function( f ) {
+    jumpToFeature: function( feature ) {
 
       /**
        * easey interaction library for modestmaps
        */
       var mmCoordinate = this.frame.locationCoordinate({
-        lat: f.get( 'lat' ),
-        lon: f.get( 'lon' ) });
+        lat: feature.get( 'lat' ),
+        lon: feature.get( 'lon' ) });
 
       /**
        * TODO document

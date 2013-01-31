@@ -2,8 +2,10 @@ define(['backbone'], function(User) {
   /**
    * Add basic user model
    */
+  // Class: User
   var User = Backbone.Model.extend({
 
+    // Method: initialize
     initialize: function() {
 
       this.world = this.get('world');
@@ -24,7 +26,7 @@ define(['backbone'], function(User) {
 
     },
 
-    /*
+    /*  Method: _updateGeoLocation
      *  Update user's current geoLocation
      */
     _updateGeoLocation: function(geolocation) {

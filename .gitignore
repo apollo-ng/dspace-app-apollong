@@ -6,3 +6,5 @@ build
 *.swp
 .DStore/
 thumbs.db
+doc/app/
+doc/config/Data/

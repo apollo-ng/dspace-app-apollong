@@ -14,9 +14,9 @@ define([
             Marker,
             panels, Overlay) {
 
-  /**
-   * main UI logic for the Map
-   */
+  // Class: Map
+  // main UI logic for the Map
+  //
   var Map = Backbone.View.extend({
 
     el: '#map',

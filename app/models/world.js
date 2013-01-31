@@ -7,11 +7,14 @@ define([
   'views/ui'
 ], function(_, Backbone, FeatureCollectionCORS, User, Map, UI) {
 
+  // Class: World
+
   var World = Backbone.Model.extend({
 
     /**
      * Genesis ;)
      */
+    // Method: initialize
     initialize: function(  ){
       var self = this;
       this.config = this.get('config');

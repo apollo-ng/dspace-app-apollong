@@ -8,6 +8,11 @@ SIMPLE_DEPS = qwery bean bonzo morpheus reqwest
 TEMPLATE_IN = design/templates/
 TEMPLATE_OUT = assets/templates/
 
+DOC_BIN=naturaldocs
+DOC_DIR=./doc/app
+DOC_CONFIG_DIR=./doc/config
+DOC_INPUTS=-i ./app
+
 default: build
 
 build: deps
@@ -68,4 +73,8 @@ clean-deps:
 	mkdir -p deps/
 
 
-.PHONY: deps build ender
+.PHONY: deps build ender doc
+
+doc:
+	mkdir -p $(DOC_DIR) $(DOC_CONFIG_DIR)
+	$(DOC_BIN) $(DOC_INPUTS) -o html $(DOC_DIR) -p $(DOC_CONFIG_DIR) -s Default custom-1

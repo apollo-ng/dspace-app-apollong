@@ -15,8 +15,8 @@ define([
    */
   var MiniMap = panels.Base.extend({
 
-    el: '#miniMapCanvas',
-    frameId: 'minimap',
+    el: '#miniMap',
+    frameId: 'miniMap',
 
     initialize: function(){
 

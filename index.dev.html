@@ -8,9 +8,9 @@
   <meta name='apple-mobile-web-app-status-bar-style' content='black' />
   <meta name='apple-mobile-web-app-capable' content='yes' />
 
-  <link href='design/css/markers.css' rel='stylesheet' />
-  <link href='design/css/controls.css' rel='stylesheet' />
   <link href='design/css/main.css' rel='stylesheet' />
+  <link href='design/css/ui.css' rel='stylesheet' />
+  <link href='design/css/markers.css' rel='stylesheet' />
 
   <script src='deps/require.js'></script>
   <script>
@@ -25,11 +25,11 @@
         "collections" : "app/collections",
         "views" : "app/views",
         "templateMap" : "app/templateMap",
-     
+
         // dependencies of hbs
         "i18nprecompile"   : "deps/hbs/i18nprecompile",
         "json2"            : "deps/hbs/json2",
-     
+
         // general deps
         "hbs": "deps/hbs",
         "ender": 'deps/ender',
@@ -45,12 +45,12 @@
         "domready": "deps/domready",
         "markers": "deps/markers"
       },
-     
+
       "hbs": {
         "templateExtension" : "handlebars",
-        "disableI18n" : true      
+        "disableI18n" : true
       }
-     
+
     });
 
     require(['app/main']);
@@ -62,10 +62,13 @@
   <div id='map' class='map' oncontextmenu='javascript: return false;'></div>
   <div id='ui'>
     <div id='mapContext' class='uiContext'></div>
-    <div id='miniMapCanvas'><div id='minimap'></div></div>
+
     <div id='controlPanel' class='uiPanel'></div>
     <div id='statusPanel' class='uiPanel'></div>
-    <div id='featureBox'></div>
+     <div id='sidebar'>
+     <div id='miniMap' oncontextmenu='javascript: return false;'></div>
+     <div id='featureBox'></div>
+    </div>
     <div id='featureOptionModal' class='uiModal'></div>
     <div id='userOptionModal' class='uiModal'></div>
     <div id='featureInfoModal' class='uiModal'></div>

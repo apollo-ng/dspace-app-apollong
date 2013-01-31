@@ -1,13 +1,35 @@
-   <!-- FIXME: show User Settings here -->
-   <h2>User Options</h2>
-   <div class='modalContainer'>
-    <div>
-     <h3>Coordinates</h3>
-      <form>
-      <input type='radio' name='userPrefCoords' value='GPS'> GPS ( N 48° 11.123')
-      <input type='radio' name='userPrefCoords' value='QTH'> QTH ( JN58SE )
-      <input type='radio' name='userPrefCoords' value='DMS'> DMS ( N 48° 11' 451")
-      <input type='radio' name='userPrefCoords' value='DEC'> DEC ( N 48.1121212)
-      </form>
-    </div>
-   </div>
+<h1>User Options</h2>
+ <div class='accordion vertical'>
+  <section id='userCoordPrefs'>
+   <h2><a href='#userCoordPrefs'>✩ Preferred Coordinate Presentation</a></h2>
+   <p>
+   Please select your desired presentation of Coordinates:
+   <form>
+    <input type='radio' name='userCoordPrefs' id='ucp_1' value='GPS' checked><label for='ucp_1'> GPS ( N 48° 11.123')</label><br />
+    <input type='radio' name='userCoordPrefs' id='ucp_2' value='QTH'><label for='ucp_2'> QTH ( JN58SE )</label><br />
+    <input type='radio' name='userCoordPrefs' id='ucp_3' value='DMS'><label for='ucp_3'> DMS ( N 48° 11' 451")</label><br />
+    <input type='radio' name='userCoordPrefs' id='ucp_4' value='DEC'><label for='ucp_4'> DEC ( N 48.1121212)</label><br />
+   </form>
+   </p>
+  </section>
+  <section id='userMapPrefs'>
+   <h2><a href='#userMapPrefs'>✩ Map Preferences</a></h2>
+   <p>
+   Please select how the map should behave on geolocation change:
+   <form>
+    <input type='radio' name='userMapPrefs' id='ump_1' value='1' checked><label for='ump_1'>Move Marker when changing location</label><br />
+    <input type='radio' name='userMapPrefs' id='ump_2' value='2'><label for='ump_2'>Move Map when changing location (keep marker in center)</label><br />
+   </form>
+   </p>
+  </section>
+  <section id='userGpsPrefs'>
+   <h2><a href='#userGpsPrefs'>✩ GPS Preferences</a></h2>
+   <p>
+   Please select options for the GPS/Geolocation:
+   <form>
+    <input type='radio' name='userGpsPrefs' id='ugp_1' value='1' checked><label for='ugp_1'>High Accuracy (Consumes more power)</label><br />
+    <input type='radio' name='userGpsPrefs' id='ugp_2' value='2'><label for='ugp_2'>Standard Accuracy (Poor man's client)</label><br />
+   </form>
+   </p>
+  </section>
+</div>

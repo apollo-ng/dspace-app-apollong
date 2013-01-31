@@ -37,6 +37,11 @@ define([
    */
   var UI = Backbone.View.extend({
 
+    /**
+     * Property: el
+     *
+     * DOM element which will host UI '#id'
+     */
     el: '#ui',
 
     events: {

@@ -84,5 +84,6 @@ Group: Index  {
    Class Index: Classes
    Function Index: Functions
    Event Index: Events
+   Property Index: Properties
    }  # Group: Index
 

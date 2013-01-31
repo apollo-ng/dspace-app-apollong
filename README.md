@@ -41,6 +41,12 @@ Clone
 
 * $ git clone git://apollo.open-resource.org/dspace-client
 
+Generate docs (optional)
+
+You need [naturaldocs](http://naturaldocs.org/) to build the docs:
+
+* $ make doc
+
 Install Development- and Runtime Depenencies
 
 * $ npm install

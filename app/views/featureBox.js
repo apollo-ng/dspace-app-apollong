@@ -9,7 +9,6 @@ define([
      * UI element with list of features
      *
      * gets collection FeatureCollection
-     * gets option map
      *
      * (see featureBox.png)
      */
@@ -17,45 +16,48 @@ define([
 
       el: '#featureBox',
       initialize: function(){
-        /*
-         * convienience accessor to map
-         * for use in callbacks
-         */
-        this.map = this.options.map;
+
         this.aether = this.options.aether;
 
         var self = this;
 
-        // poplates box when collections load
+        /**
+         * Event: reset
+         *
+         * listens on collection for *reset* events and renders itself
+         */
         this.collection.on( 'reset', function( event, data ){
           self.render( );
         });
 
-        // listen for focus requests from features and
-        // call map for focus
+        /**
+         * Event: feature:current
+         *
+         * listens on collection for *feature:current* events
+         * then trigger them on ether passing forward future
+         */
         this.collection.on( 'feature:current', function( feature ){
           self.aether.trigger('feature:current', feature );
         });
       },
 
+      /**
+       * Method: render
+       *
+       * renders a <FeatureBoxItem> view for each model
+       * adding *index* to them and appends them to $el
+       */
       render: function(){
         var self = this;
-        /**
-         * Loop through each feature in the model
-         * example how to add more data to the view:
-         */
+
         _(this.collection.models).each(function(feature, index){
           feature.set( 'index', index );
           var featureBoxItem = new FeatureBoxItem({
               model: feature
           });
+
           var renderedTemplate = featureBoxItem.render();
-
-          /**
-           * append to backbone provided $obj
-           */
           self.$el.append(renderedTemplate);
-
         });
       },
 

@@ -45,11 +45,13 @@ Install Development- and Runtime Depenencies
 
 * $ npm install
 
-Start the local development server
+Start the local some development server
 
-* $ node run.js
+* adsf (ruby)
+* simple-http (python)
+* nginx
 
-Point your browser to http://localhost:3333/
+Point your browser to http://localhost:3000/index.dev.html
 
 **Optional**
 

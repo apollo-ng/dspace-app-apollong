@@ -130,10 +130,9 @@ define([
       });
 
       /**
-       * featureBox
-       * FIXME at this moment hardcoded passing second collection on a world
+       * Property: featureBox
        */
-      this.featureBox = new FeatureBox({ aether: this.aether, collection: this.world.featureCollections[1]});
+      this.featureBox = new FeatureBox({ aether: this.aether, collections: this.world.featureCollections});
 
       /**
        * creates minimap
@@ -154,6 +153,7 @@ define([
      * render all elements and sets them visible
      */
     render: function(){
+      this.featureBox.render();
       this.featureBox.visible = true;
 
       this.miniMap.render();

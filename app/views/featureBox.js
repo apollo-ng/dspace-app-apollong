@@ -1,8 +1,8 @@
 define([
   'backbone',
   'views/panels',
-  'views/featureBoxItem'
-], function(Backbone, panels, FeatureBoxItem) {
+  'views/featureTab'
+], function(Backbone, panels, FeatureTab) {
     /**
      * Class: FeatureBox
      *
@@ -22,23 +22,21 @@ define([
         var self = this;
 
         /**
-         * Event: reset
+         * Attribute: collections
          *
-         * listens on collection for *reset* events and renders itself
+         * an array of <FeatureCollection>s from a <World>
          */
-        this.collection.on( 'reset', function( event, data ){
-          self.render( );
-        });
+        this.collections = this.options.collections;
+        this.featureTabs = [];
 
-        /**
-         * Event: feature:current
-         *
-         * listens on collection for *feature:current* events
-         * then trigger them on ether passing forward future
-         */
-        this.collection.on( 'feature:current', function( feature ){
-          self.aether.trigger('feature:current', feature );
-        });
+        for(var i=0; i < this.collections.length; i++){
+          var collection = this.collections[i];
+          var featureTab = new FeatureTab({
+            collection: collection,
+            aether: this.aether
+          });
+          this.featureTabs.push(featureTab);
+        };
       },
 
       /**
@@ -46,21 +44,15 @@ define([
        *
        * renders a <FeatureBoxItem> view for each model
        * adding *index* to them and appends them to $el
-       * FIXME doplicates <FeatureCollection.toJSON>
-       * FIXME can leak session state to collection
        */
       render: function(){
         var self = this;
 
-        _(this.collection.models).each(function(feature, index){
-          feature.set( 'index', index );
-          var featureBoxItem = new FeatureBoxItem({
-              model: feature
-          });
-
-          var renderedTemplate = featureBoxItem.render();
+        _(this.featureTabs).each(function(featureTab, index){
+          var renderedTemplate = featureTab.render();
           self.$el.append(renderedTemplate);
         });
+        return self.el;
       },
 
       showFX: function(){

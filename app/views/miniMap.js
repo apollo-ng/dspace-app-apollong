@@ -18,6 +18,10 @@ define([
     el: '#miniMap',
     frameId: 'miniMap',
 
+    events: {
+      'contextmenu': function(event) { event.preventDefault(); }
+    },
+
     initialize: function(){
 
       this.world = this.options.world;

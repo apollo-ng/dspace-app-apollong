@@ -151,8 +151,7 @@ define(['handlebars'], function(Handlebars) {
 
   /**
    * Handlebar helper function to show coordinates
-   * according to user prefs (DEC, DMS, GPS, QTH)
-   * FIXME: switch according to prefs in user model
+   * according to given prefs (DEC, DMS, GPS, QTH)
    */
   Handlebars.registerHelper('renderPos', renderPos);
 

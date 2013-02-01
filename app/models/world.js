@@ -11,6 +11,8 @@ define([
    * Class: World
    *
    * Holds main logic of managing *realm*
+   *
+   * (see world.png)
    */
   var World = Backbone.Model.extend({
 
@@ -41,7 +43,7 @@ define([
       this.user = this.createUser(this.config.user);
       this.featureCollections = this.createFeatureCollections(this.config.geoFeeds);
 
-      var aether = _.extend({}, Backbone.Events);
+      var aether = _.extend({ user: this.user }, Backbone.Events);
 
       /**
        * create and render Map & UI
@@ -52,6 +54,13 @@ define([
       this.map.render();
       this.ui.render();
 
+
+      this.user.on('change', function() {
+        aether.trigger('user:change', this.user);
+      }.bind(this));
+
+      // fire initial change
+      aether.trigger('user:change', this.user);
 
     },
 
@@ -65,7 +74,9 @@ define([
      * (end code)
      */
     createUser: function(config){
-      return new User({world: this, config: config});
+      var user = User.default();
+      user.setDefaults(config);
+      return user;
     },
 
     /**

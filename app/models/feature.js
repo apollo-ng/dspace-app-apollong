@@ -4,6 +4,8 @@ define(['backbone'], function(Backbone) {
    *
    * single geographical featue of interest
    * with option to set from geoJSON feature object
+   *
+   * (see feature.png)
    */
   var Feature = Backbone.Model.extend({
 

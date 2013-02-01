@@ -26,7 +26,8 @@ define([], function() {
      */
     map: {
       tileSet: {
-        template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'
+        //template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'
+        template: 'http://otile2.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png'
       },
       geolat:  48.115293,
       geolon:  11.60218,
@@ -43,7 +44,7 @@ define([], function() {
      *  Options are: DMS, QTH (To be done: DEC & GPS)
      */
     user: {
-      prefCoordSys: 'GPS'
+      userCoordPrefs: 'GPS'
     }
   };
 

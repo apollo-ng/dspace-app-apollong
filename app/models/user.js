@@ -61,6 +61,12 @@ define([
 
   var defaultUser;
 
+  /**
+   * Function: default
+   *
+   * Global accessor for the first (i.e. only) user.
+   *
+   */
   User.default = function(attrs) {
     if(! defaultUser) {
       var store = backboneLocalStorage.get('users');

@@ -104,8 +104,7 @@ define([
 
       var self = this;
       this.world.on('change', function(event, data){
-        // WIP
-        //self.recenter();
+        self.recenter();
       });
 
       /**

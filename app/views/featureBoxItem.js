@@ -1,4 +1,4 @@
-define(['backbone', 'templateMap', 'template/helpers/renderPos'], function(Backbone, templates, renderPos) {
+define(['backbone', 'templateMap'], function(Backbone, templates) {
 
   /**
    * Class: FeatureBoxItem
@@ -45,17 +45,6 @@ define(['backbone', 'templateMap', 'template/helpers/renderPos'], function(Backb
     },
 
     initialize: function(opts) {
-      opts.aether.on('user:change', this.updateSettings.bind(this));
-      setTimeout(function() {
-        this.updateSettings(opts.aether.user);
-      }.bind(this), 0);
-    },
-
-    updateSettings: function(user) {
-      this.$('*[data-format=position]').forEach(function(e) {
-        var el = this.$(e);
-        el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'), user.get('userCoordPrefs')));
-      }.bind(this));
     },
 
     /**

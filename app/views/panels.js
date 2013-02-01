@@ -67,7 +67,7 @@ define([
       initialize: function() {
         this.world = this.options.world;
 
-        var self = this;
+        this.$el.html(this.template());
       }
 
     }),

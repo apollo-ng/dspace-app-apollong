@@ -103,6 +103,7 @@ define([
         this.$el.animate({ top: -400, duration: 700 });
         this.$el.fadeOut(600);
       }
+
     });
 
   return FeatureBox;

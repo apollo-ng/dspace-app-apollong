@@ -47,8 +47,8 @@ define([
     },
 
     showFX: function(event){
-      this.point = { x: event.clientX, y: event.clientY };
-      this.$el.css( { 'left': this.point.x, 'top': this.point.y });
+      this.point = new MM.Point(event.clientX, event.clientY);
+      this.$el.css( { 'left': event.clientX, 'top': event.clientY });
       this.$el.css( { 'display': 'block'});
       this.$el.fadeIn(350);
     },
@@ -121,8 +121,11 @@ define([
       this.contextPanel = new MapContext({ map: this });
 
       this.contextPanel.on('command add-feature', function(point) {
-        console.log("ADD MARKER AT POINT", point);
-      });
+        var location = this.frame.pointLocation(point);
+        
+        // ui.displayFeatureDetails(new Feature(new 
+        // console.log("ADD MARKER AT POINT", point);
+      }.bind(this));
     },
 
     /**

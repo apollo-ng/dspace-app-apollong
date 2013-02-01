@@ -3,8 +3,10 @@ define([
   'views/panels',
   'views/featureBox',
   'views/miniMap',
-  'views/modal/userOptions'
-], function(Backbone, panels, FeatureBox, MiniMap, UserOptions) {
+  'views/modal/userOptions',
+
+  'template/helpers/renderPos'
+], function(Backbone, panels, FeatureBox, MiniMap, UserOptions, renderPos) {
 
 
   // /**
@@ -106,10 +108,16 @@ define([
 
       this.map = this.options.map;
 
+
+
       /**
        * Property: aether
        *
        * event aggregator from <World>
+       *
+       * Events:
+       *   user:change - fired when <User.default> changes it's parameters
+       *
        */
       this.aether = this.options.aether;
 
@@ -139,6 +147,35 @@ define([
       this.statusPanel = new panels.Status({model: this.world.user});
       this.controlPanel = new panels.Control({world: this.world });
 
+      /**
+       * Update setting display whenever the user changes.
+       */
+      this.aether.on('user:change', this.updateSettings.bind(this));
+      setTimeout(function() {
+        this.updateSettings(this.world.user);
+      }.bind(this), 0);
+
+    },
+
+    /**
+     * Method: updateSettings
+     *
+     * Atomically refreshes view according to user settings.
+     *
+     * Parameters:
+     *   user - <User> object holding new settings
+     *
+     */
+    updateSettings: function(user) {
+      this.$('*[data-format=position]').forEach(function(e) {
+        var el = this.$(e);
+        var renderedPosition = renderPos(
+          el.attr('data-lat'),
+          el.attr('data-lon'),
+          user.get('userCoordPrefs')
+        )
+        el.text(renderedPosition);
+      }.bind(this));
     },
 
     /**

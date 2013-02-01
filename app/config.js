@@ -1,9 +1,17 @@
 define([], function() {
 
   /**
+   * Constant: config
+   *
    * config for initializing DSpace Wrorld
    */
   return {
+
+    /**
+     * Property: geoFeeds
+     *
+     * initial set for populating <FeatureCollection>s
+     */
     geoFeeds: [
       { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
       { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
@@ -11,6 +19,11 @@ define([], function() {
 
     ],
 
+    /**
+     * Property: map
+     *
+     * map defaults
+     */
     map: {
       tileSet: {
         template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'
@@ -24,6 +37,7 @@ define([], function() {
     },
 
     /**
+     * Property: user
      *  FIXME: This is not supposed to be here but should be a part of the user model
      *  und should be follow be a render update of the UI, when changed.
      *  Options are: DMS, QTH (To be done: DEC & GPS)

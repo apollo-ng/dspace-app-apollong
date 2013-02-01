@@ -56,6 +56,8 @@ define([
      * Class: ControlPanel
      *
      * UI element to show map controls
+     *
+     * (see controlPanel.png)
      */
     Control: Backbone.View.extend({
 
@@ -90,6 +92,8 @@ define([
      * Class: OverlaysPanel
      *
      * UI element for OverlaysPanel
+     *
+     * (see overlaysPanel.png)
      */
     Overlays: BasePanel.extend({
 
@@ -97,7 +101,7 @@ define([
       template: templates.featureOptionModal,
 
       showFX: function(){
-        this.$el.html( this.template( { ui: this.ui } ));
+        this.$el.html( this.template());
         this.$el.css( { 'display': 'block'});
         this.$el.fadeIn(350);
         this.visible = true;
@@ -115,6 +119,8 @@ define([
      * Class: ContextPanel
      *
      * map ContextPanel
+     *
+     * (see contextPanel.png)
      */
     Context: BasePanel.extend({
 
@@ -147,6 +153,8 @@ define([
      * Class: OptionsPanel
      *
      * UI element for Options
+     *
+     * (see optionsPanel.png)
      */
     Options: BasePanel.extend({
 
@@ -170,6 +178,8 @@ define([
      *
      * UI element to show current position in botttom left
      * gets model user and binds to all changes
+     *
+     * (see statusPanel.png)
      */
     Status: BasePanel.extend({
 

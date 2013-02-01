@@ -15,7 +15,10 @@ define([
             panels, Overlay) {
 
   /* Class: Map
+   *
    * main UI logic for the Map
+   *
+   * (see map.png)
    *
    * creates:
    *   * *BaseMap* with default *TileSet*

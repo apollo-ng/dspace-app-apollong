@@ -16,8 +16,14 @@ DOC_INPUTS=-i ./app
 
 default: build
 
-build: deps
+build: clean-build deps
+	mkdir -p build/
 	node node_modules/.bin/r.js -o build.js
+	cat index.dev.html | awk -v NEWTEXT='  <script src="dspace.js"></script>' 'BEGIN{n=0} /<!-- BEGIN DEV/ {n=1} {if (n==0) {print $0}} /END DEV -->/ {print NEWTEXT; n=0}' > build/index.html
+	mkdir -p build/design/
+	cp -r design/css/ design/icons/ design/images/ build/design/
+## FIXME: test data not required in the future
+	cp -r test/ build/
 
 deps: clean-deps ender
 # requirejs:
@@ -73,8 +79,10 @@ clean-deps:
 	rm -rf deps/*
 	mkdir -p deps/
 
+clean-build:
+	rm -rf build/
 
-.PHONY: deps build ender doc
+.PHONY: deps build ender doc clean-deps cean-build
 
 doc:
 	mkdir -p $(DOC_DIR) $(DOC_CONFIG_DIR)

@@ -1,8 +1,10 @@
-/**
- * Switch Accuracy BG depending on value
- */
 define(['handlebars'], function(Handlebars) {
 
+/**
+ * Method: setAccBg
+ *
+ * Switch Accuracy BG depending on value
+ */
   function setAccBg(object) {
     if ( typeof acc  !== 'undefined') {
       if ( acc > 0 && acc <= 15 ) {

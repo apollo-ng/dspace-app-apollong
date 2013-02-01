@@ -25,11 +25,6 @@ Format: 1.52
 #   yyyy  - Four digit year.  2006 is "2006"
 #   year  - Four digit year.  2006 is "2006"
 
-# These are indexes you deleted, so Natural Docs will not add them again
-# unless you remove them from this line.
-
-Don't Index: Properties
-
 
 # --------------------------------------------------------------------------
 # 
@@ -52,6 +47,7 @@ Don't Index: Properties
 
 
 File: DSpace  (dspace.js)
+File: config.js  (config.js)
 
 Group: Models  {
 
@@ -61,6 +57,12 @@ Group: Models  {
    File: Marker  (models/marker.js)
    }  # Group: Models
 
+Group: Collections  {
+
+   File: FeatureCollection  (collections/base.js)
+   File: FeatureCollectionCORS  (collections/cors.js)
+   }  # Group: Collections
+
 Group: Views  {
 
    File: UI  (views/ui.js)
@@ -68,15 +70,17 @@ Group: Views  {
    File: MiniMap  (views/miniMap.js)
    File: Overlay  (views/overlay.js)
    File: FeatureBox  (views/featureBox.js)
+   File: FeatureTab  (views/featureTab.js)
    File: FeatureBoxItem  (views/featureBoxItem.js)
    File: Panel  (views/panels.js)
    }  # Group: Views
 
-Group: Collections  {
+Group: Template Helpers  {
 
-   File: FeatureCollection  (collections/base.js)
-   File: FeatureCollectionCORS  (collections/cors.js)
-   }  # Group: Collections
+   File: ms2kmh  (helpers/ms2kmh.js)
+   File: renderAcc  (helpers/renderAcc.js)
+   File: setAccBg  (helpers/setAccBg.js)
+   }  # Group: Template Helpers
 
 Group: Index  {
 
@@ -84,5 +88,8 @@ Group: Index  {
    Class Index: Classes
    Function Index: Functions
    Event Index: Events
+   Property Index: Properties
+   Constant Index: Constants
+   File Index: Files
    }  # Group: Index
 

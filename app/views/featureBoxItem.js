@@ -9,24 +9,44 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
    */
   var FeatureBoxItem = Backbone.View.extend({
 
+    /**
+     * Property: className
+     *
+     * name of a class for DOM element
+     */
     className: 'featureBoxItem',
+
+    /**
+     * Property: template
+     *
+     * handlebars template for rendering
+     */
     template: templates.featureBoxItem,
 
     /**
-     * gets model feature and index
-     * and returns html
+     * Method: render
+     *
+     * Returns:
+     *
+     *   el - DOM element for this view
      */
     render: function(){
       this.$el.html(this.template(this.model.toJSON()));
       return this.el;
     },
 
+    /**
+     * Event: feature:current
+     *
+     * triggers <setFeatureCurrent>
+     */
     events: {
       "click": "setFeatureCurrent"
     },
 
     /**
      * Method: setFeatureCurrent
+     *
      * trigers *feature:current* event on a model (<Feature>)
      */
     setFeatureCurrent: function( event ){

@@ -67,25 +67,9 @@ define([
       initialize: function() {
         this.world = this.options.world;
 
-        var self = this;
-        this.world.on('change', function(){
-          self.render();
-        });
-      },
-
-      /**
-       * sets map.lat and map.lon for template
-       */
-      render: function(){
-        var mapCenter = this.world.get('mapCenter');
-        var mapData;
-        if(mapCenter){
-          mapData = { lat: mapCenter.lat, lon: mapCenter.lon };
-        }
-        var templateData = {map: mapData};
-        this.$el.html(this.template(templateData));
-        return this.el;
+        this.$el.html(this.template());
       }
+
     }),
 
     /**
@@ -122,6 +106,7 @@ define([
      * gets model user and binds to all changes
      *
      * (see statusPanel.png)
+     *
      */
     Status: BasePanel.extend({
 
@@ -135,14 +120,20 @@ define([
 
       initialize: function() {
         var self = this;
-        this.model.on('change', function () {
+
+        /**
+         * Maedneasz: create konwienienz accessors
+         */
+        this.world = this.model;
+
+        this.world.user.on('change', function () {
           self.render();
         });
 
-        /**
-         * create convienience accessors
-         */
-        this.user = this.model;
+        this.world.on('change', function () {
+          self.render();
+        });
+
       },
 
       showFX: function(){
@@ -161,15 +152,19 @@ define([
        */
 
       userModeWalk: function(event) {
-        this.model.set( 'usermode', 'walk' );
+        this.world.user.save( { 'usermode' : 'walk' } );
       },
 
       userModeDrive: function(event) {
-        this.model.set( 'usermode', 'drive' );
+        this.world.user.save( { 'usermode' : 'drive' } );
       },
 
+      /**
+       * sets map.lat and map.lon for template
+       */
       render: function(){
-        var templateData = { user: this.user.toJSON() };
+        var mapCenter = this.world.get('mapCenter');
+        var templateData = { map: mapCenter, user: this.world.user.toJSON() };
         this.$el.html(this.template(templateData));
         return this.el;
       }

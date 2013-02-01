@@ -123,6 +123,7 @@ h3	 { font-size: 18px; }
   height: 180px;
   background: #c0c19f;
   border-top: 1px solid #999;
+  z-index: 9998;
 }
 
 #sidebar {

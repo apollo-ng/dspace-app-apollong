@@ -54,11 +54,9 @@ define([
     },
 
     hideFX: function(){
-      var self = this;
-      this.$el.fadeOut(350, function() { self.$el.hide(); });
+      this.$el.fadeOut(350, this.$el.hide.bind(this.$el));
     }
   });
-
 
   /* Class: Map
    *
@@ -104,9 +102,8 @@ define([
 
       var self = this;
       this.world.on('change', function(event, data){
-        // WIP
-        //self.recenter();
-      });
+        this.recenter();
+      }.bind(this));
 
       /**
        * listens to changes on user and updates related layer
@@ -169,7 +166,6 @@ define([
     recenter: function(){
       var mapCenter = this.world.get('mapCenter');
       if(mapCenter && this.frame){
-        console.log('recenter');
         this.frame.setCenter(mapCenter);
       }
     },
@@ -178,7 +174,6 @@ define([
      * creates frame using ModestMaps library
      */
     createFrame: function(){
-      var self = this;
       var config = this.config;
 
       var template = config.tileSet.template; //FIXME introduce BaseMap
@@ -209,9 +204,9 @@ define([
        * sets current mapCenter and mapZoom
        */
       modestmap.addCallback('drawn', function(m){
-        self.world.set('mapCenter', modestmap.getCenter());
-        self.world.set('mapZoom', modestmap.getZoom());
-      });
+        this.world.set('mapCenter', modestmap.getCenter());
+        this.world.set('mapZoom', modestmap.getZoom());
+      }.bind(this));
 
       return modestmap;
 

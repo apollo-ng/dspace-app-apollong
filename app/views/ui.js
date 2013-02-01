@@ -2,8 +2,9 @@ define([
   'backbone',
   'views/panels',
   'views/featureBox',
-  'views/miniMap'
-], function(Backbone, panels, FeatureBox, MiniMap) {
+  'views/miniMap',
+  'views/modal/userOptions'
+], function(Backbone, panels, FeatureBox, MiniMap, UserOptions) {
 
 
   // /**
@@ -69,13 +70,6 @@ define([
     overlaysPanel: new panels.Overlays(),
 
     /**
-     * Property: optionsPanel
-     *
-     * <OptionsPanel> *ui element* for options dialog
-     */
-    optionsPanel: new panels.Options(),
-
-    /**
      * Events: events
      *
      * delegting events on UI
@@ -85,7 +79,7 @@ define([
       , 'click #toggleMiniMap': 'miniMapToggle'
       , 'click #toggleFullscreen': 'fullscreenToggle'
       , 'click #featureOptions': 'toggleOverlaysPanel'
-      , 'click #userOptions': 'toggleOptionsPanel'
+      , 'click #userOptions': 'toggleUserOptions'
     },
 
     /**
@@ -194,12 +188,18 @@ define([
     },
 
     /**
-     * Method: toggleOptionsPanel
+     * Method: toggleUserOptions
      *
-     * toggles <OptionsPanel>
+     * toggles <UserOptions>
      */
-    toggleOptionsPanel: function() {
-      this.optionsPanel.toggle();
+    toggleUserOptions: function() {
+      if(this.userOptions) {
+        this.userOptions.hide();
+        delete this.userOptions;
+      } else {
+        this.userOptions = new UserOptions({ user: this.world.user });
+        this.userOptions.show();
+      }
     },
 
     /**

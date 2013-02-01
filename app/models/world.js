@@ -67,7 +67,9 @@ define([
      * (end code)
      */
     createUser: function(config){
-      return new User({world: this, config: config});
+      var user = User.default();
+      user.setDefaults(config);
+      return user;
     },
 
     /**

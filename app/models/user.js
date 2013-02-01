@@ -1,18 +1,18 @@
-define(['backbone'], function(User) {
+define([
+  'underscore',
+  'backbone',
+  'backbone-localstorage'
+], function(_, User, backboneLocalStorage) {
   /**
-   * Class: User
-   * basic user model
-   *
-   * (see tikiman.png)
+   * Add basic user model
    */
+  // Class: User
   var User = Backbone.Model.extend({
 
-    /**
-     * Method: initialize
-     */
+    // Method: initialize
     initialize: function() {
 
-      this.world = this.get('world');
+      backboneLocalStorage.setup(this, 'users');
 
       /*
        * Start the geolocation
@@ -30,11 +30,20 @@ define(['backbone'], function(User) {
 
     },
 
+    setDefaults: function(defaults) {
+      for(var key in defaults) {
+        if(! this.get(key)) {
+          this.set(key, defaults[key]);
+        }
+      }
+    },
+
     /*  Method: _updateGeoLocation
      *  Update user's current geoLocation
      */
     _updateGeoLocation: function(geolocation) {
       this.set( 'geoLocation',  geolocation);
+      // this.save();
       if (geolocation.coords.accuracy < 50) {
         // FIXME: do something if this offset gets to crazy
       }
@@ -46,9 +55,19 @@ define(['backbone'], function(User) {
 
     _timeoutHandler: function(geolocation) {
       // FIXME: console.log(geolocation);
-    },
+    }
 
   });
 
+  var defaultUser;
+
+  User.default = function(attrs) {
+    if(! defaultUser) {
+      var store = backboneLocalStorage.get('users');
+      defaultUser = new User(_.extend(store.findAll()[0] || {}, attrs));
+    }
+    return defaultUser;
+  };
+  
   return User;
 });

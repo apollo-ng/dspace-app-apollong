@@ -15,7 +15,7 @@ define([
      */
     show: function() {
       if(this.showFX){
-        this.showFX();
+        this.showFX.apply(this, arguments);
       } else {
         this.$el.show();
       }
@@ -24,7 +24,7 @@ define([
 
     hide: function() {
       if(this.hideFX){
-        this.hideFX();
+        this.hideFX.apply(this, arguments);
       } else {
         this.$el.hide();
       }
@@ -112,64 +112,6 @@ define([
         var self = this;
         this.$el.fadeOut(350, function() { self.$el.hide(); });
         this.visible = false;
-      }
-    }),
-
-    /**
-     * Class: ContextPanel
-     *
-     * map ContextPanel
-     *
-     * (see contextPanel.png)
-     */
-    Context: BasePanel.extend({
-
-      el: '#mapContext',
-      template: templates.mapContext,
-
-      initialize: function() {
-
-        // FIXME: @{chrono|elf-pavlik} (debatable)
-        document.addEventListener('mousemove', function(e) {
-          this.cursorX = e.pageX;
-          this.cursorY = e.pageY;
-        }.bind(this));
-
-      },
-
-      showFX: function(){
-        this.$el.css( { 'left': this.cursorX, 'top': this.cursorY });
-        this.$el.css( { 'display': 'block'});
-        this.$el.fadeIn(350);
-      },
-
-      hideFX: function(){
-        var self = this;
-        this.$el.fadeOut(350, function() { self.$el.hide(); });
-      }
-    }),
-
-    /**
-     * Class: OptionsPanel
-     *
-     * UI element for Options
-     *
-     * (see optionsPanel.png)
-     */
-    Options: BasePanel.extend({
-
-      el: '#userOptionModal',
-      template: templates.userOptionModal,
-
-      showFX: function(){
-        this.$el.html( this.template( { ui: this.ui } ) );
-        this.$el.css( { 'display': 'block'});
-        this.$el.fadeIn(350);
-      },
-
-      hideFX: function(){
-        var self = this;
-        this.$el.fadeOut(350, function() { self.$el.hide(); });
       }
     }),
 

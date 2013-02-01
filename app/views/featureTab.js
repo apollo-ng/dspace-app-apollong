@@ -58,7 +58,8 @@ define([
       _(this.collection.models).each(function(feature, index){
         feature.set( 'index', index );
         var featureBoxItem = new FeatureBoxItem({
-            model: feature
+          model: feature,
+          aether: self.aether
         });
 
         var renderedTemplate = featureBoxItem.render();

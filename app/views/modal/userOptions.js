@@ -22,6 +22,7 @@ define([
 
       initialize: function(options) {
         this.user = options.user;
+        this.aether = options.aether;
         var attrs = this.user.toJSON();
         this.$el.html(this.template());
 

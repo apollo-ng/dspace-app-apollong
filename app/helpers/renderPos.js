@@ -3,9 +3,7 @@
  * according to user prefs (DEC, DMS, GPS, QTH)
  * FIXME: switch according to prefs in user model
  */
-define(['handlebars', 'app/config'], function(Handlebars, config) {
-
-  console.log("HELPER CONFIG", config);
+define(['handlebars'], function(Handlebars) {
 
 
   /**
@@ -131,9 +129,9 @@ define(['handlebars', 'app/config'], function(Handlebars, config) {
     return ('Sector: ' + sector);
   }
 
-  function renderPos(lat, lon) {
+  function renderPos(lat, lon, prefSys) {
     if ( typeof lat  !== 'undefined' && typeof lon !== 'undefined') {
-      switch(config.user.prefCoordSys) {
+      switch(prefSys) {
       case 'GPS':
         return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
       case 'QTH':
@@ -141,6 +139,7 @@ define(['handlebars', 'app/config'], function(Handlebars, config) {
       case 'DMS':
         return (dd2dms(lat, 'lat') + " - " + dd2dms(lon, 'lon'));
       case 'DEC':
+        // FIXME @chron0: print less precise numbers - it blows the FeatureBoxItem!
         return ('Lat: ' + lat + ' Lon: ' + lon);
       default:
         return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));

@@ -197,7 +197,10 @@ define([
         this.userOptions.hide();
         delete this.userOptions;
       } else {
-        this.userOptions = new UserOptions({ user: this.world.user });
+        this.userOptions = new UserOptions({
+          user: this.world.user,
+          aether: this.aether
+        });
         this.userOptions.show();
       }
     },

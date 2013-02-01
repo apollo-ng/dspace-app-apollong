@@ -19,6 +19,8 @@ define([
     frameId: 'miniMap',
 
     events: {
+      // FIXME: change this to 'click' (without killing 'dragging')
+      "dblclick": "jumpMap",
       'contextmenu': function(event) { event.preventDefault(); }
     },
 
@@ -27,16 +29,23 @@ define([
       this.world = this.options.world;
       this.config = this.options.config;
 
-      var self = this;
       this.world.on('change', function(event, data){
-        self.recenter();
-      });
+        this.recenter();
+      }.bind(this));
+    },
+
+    jumpMap: function(event) {
+      console.log('evt', event);
+      var offset = this.$el.offset();
+      console.log('before jumpMap', JSON.stringify(this.world.get('mapCenter')));
+      this.world.set('mapCenter', this.frame.pointLocation(
+        new MM.Point(event.clientX - offset.left , event.clientY - offset.top)
+      ));
+      console.log('after jumpMap', JSON.stringify(this.world.get('mapCenter')));
     },
 
     render: function(){
       var config = this.config;
-
-      var self = this;
 
       var template = config.tileSet.template; //FIXME introduce BaseMap
       var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
@@ -59,14 +68,6 @@ define([
        * show and zoom map
        */
       modestmap.setCenterZoom(location, config.miniMapZoom);
-
-      /**
-       * callbacks on map redraw
-       * sets current mapCenter and mapZoom
-       */
-      modestmap.addCallback('drawn', function(m){
-        self.world.set('mapCenter', modestmap.getCenter());
-      });
 
       this.frame = modestmap;
 

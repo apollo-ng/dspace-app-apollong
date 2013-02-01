@@ -136,7 +136,7 @@ define([
       /**
        * creates statusPanel
        */
-      this.statusPanel = new panels.Status({model: this.world.user});
+      this.statusPanel = new panels.Status({model: this.world});
       this.controlPanel = new panels.Control({world: this.world });
 
     },

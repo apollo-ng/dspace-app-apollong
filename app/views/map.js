@@ -102,7 +102,6 @@ define([
 
       var self = this;
       this.world.on('change', function(event, data){
-        console.log("CHANGE WORLD", JSON.stringify(this.world.get('mapCenter')));
         this.recenter();
       }.bind(this));
 
@@ -167,7 +166,6 @@ define([
     recenter: function(){
       var mapCenter = this.world.get('mapCenter');
       if(mapCenter && this.frame){
-        console.log('recenter');
         this.frame.setCenter(mapCenter);
       }
     },

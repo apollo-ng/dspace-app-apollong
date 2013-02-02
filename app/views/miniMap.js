@@ -76,7 +76,7 @@ define([
     },
 
     showFX: function(){
-      this.$el.animate({ bottom: 10, duration: 600  });
+      this.$el.animate({ bottom: 49, duration: 600  });
       this.$el.fadeIn(600);
     },
     hideFX: function(){

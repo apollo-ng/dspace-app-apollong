@@ -256,11 +256,13 @@ define([
       if(this.fullScreen) {
         this.miniMap.show();
         this.statusPanel.show();
+        this.controlPanel.show();
         this.featureBox.show();
         this.fullScreen = false;
       } else {
         this.miniMap.hide();
         this.statusPanel.hide();
+        this.controlPanel.hide();
         this.featureBox.hide();
         this.fullScreen = true;
       }

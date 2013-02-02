@@ -119,7 +119,7 @@ h3	 { font-size: 18px; }
   position:absolute;
   bottom: 49px;
   right: 0px;
-  width: 240px;
+  width: 245px;
   height: 180px;
   background: #c0c19f;
   border-top: 1px solid #999;
@@ -129,10 +129,10 @@ h3	 { font-size: 18px; }
 
 #sidebar {
   position: absolute;
-  top: 0px;
+  top: 49px;
   right: 0px;
   bottom: 49px;
-  width: 240px;
+  width: 245px;
   overflow: hidden;
   display: block;
   z-index: 9998;

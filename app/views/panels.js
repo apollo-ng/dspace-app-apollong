@@ -1,8 +1,9 @@
 define([
+  'ender',
   'backbone',
   'templateMap',
   'template/helpers/renderPos'
-], function(Backbone, templates, renderPos) {
+], function($, Backbone, templates, renderPos) {
 
   /**
    * Class: Panel
@@ -72,7 +73,18 @@ define([
 
       render: function() {
         this.$el.html(this.template());
-      }
+      },
+
+      show: function() {
+       $('#bottomBaffle').animate({ bottom: 0, duration: 600  });
+       $('#bottomBaffle').fadeIn(600);
+      },
+
+      hide: function(){
+        var self = this;
+       $('#bottomBaffle').animate({ bottom: -75, duration: 600  });
+       $('#bottomBaffle').fadeOut(600);
+      },
 
     }),
 
@@ -158,14 +170,15 @@ define([
         }.bind(this));
       },
 
-      showFX: function(){
-        this.$el.show();
-        this.$el.fadeIn(450);
+      showFX: function() {
+       $('#topBaffle').animate({ top: 0, duration: 600  });
+       $('#topBaffle').fadeIn(600);
       },
 
       hideFX: function(){
         var self = this;
-        this.$el.fadeOut(450, function() { self.$el.hide(); });
+       $('#topBaffle').animate({ top: -75, duration: 600  });
+       $('#topBaffle').fadeOut(600);
       },
 
       /**

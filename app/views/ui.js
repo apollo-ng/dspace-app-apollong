@@ -147,6 +147,11 @@ define([
       this.statusPanel = new panels.Status({model: this.world});
       this.controlPanel = new panels.Control({world: this.world });
 
+      /**
+       *  creates Sidebar
+       */
+      this.sideBar = new panels.SideBar();
+
     },
 
     /**
@@ -154,7 +159,7 @@ define([
      *
      * render all elements and sets them visible
      */
-    render: function(){
+    render: function() {
       this.map.render();
 
       this.featureBox.render();
@@ -168,6 +173,10 @@ define([
 
       this.controlPanel.render();
       this.controlPanel.visible = true;
+
+      this.sideBar.render();
+      this.sideBar.visible = true;
+
     },
 
     reset: function() {

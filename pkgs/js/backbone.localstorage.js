@@ -22,7 +22,11 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     console.log('new store', name);
     this.name = name;
     var store = localStorage.getItem(this.name);
-    this.data = (store && JSON.parse(store)) || {};
+    try {
+      this.data = (store && JSON.parse(store)) || {};
+    } catch() {
+      this.data = {};
+    }
   };
 
   _.extend(Store.prototype, {

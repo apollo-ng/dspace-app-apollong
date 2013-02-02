@@ -1,7 +1,8 @@
 define([
   'backbone',
-  'templateMap'
-], function(Backbone, templates) {
+  'templateMap',
+  'template/helpers/renderPos'
+], function(Backbone, templates, renderPos) {
 
   /**
    * Class: Panel
@@ -129,14 +130,34 @@ define([
          */
         this.world = this.model;
 
-        this.world.user.on('change', function () {
-          self.render();
-        });
+        this.world.user.on('change', this.updateUser.bind(this));
+        this.world.on('change', this.updateMapCenter.bind(this));
 
-        this.world.on('change', function () {
-          self.render();
-        });
+      },
 
+      updateUser: function() {
+        var user = this.world.user.toJSON();
+        this.$('*[data-name="user-location"]').
+          attr('data-lat', user.geoLocation.coords.latitude).
+          attr('data-lon', user.geoLocation.coords.latitude);
+        console.log('update USER', JSON.stringify(user.geoLocation.coords));
+        this.renderPositions();
+      },
+
+      updateMapCenter: function() {
+        var center = this.world.get('mapCenter');
+        this.$('*[data-name="map-center"]').
+          attr('data-lat', center.lat).
+          attr('data-lon', center.lon);
+        this.renderPositions();
+      },
+
+      renderPositions: function() {
+        this.$('*[data-format=position]').forEach(function(e) {
+          console.log('update position', e);
+          var el = this.$(e);
+          el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
+        }.bind(this));
       },
 
       showFX: function(){
@@ -166,9 +187,7 @@ define([
        * sets map.lat and map.lon for template
        */
       render: function(){
-        var mapCenter = this.world.get('mapCenter');
-        var templateData = { map: mapCenter, user: this.world.user.toJSON() };
-        this.$el.html(this.template(templateData));
+        this.$el.html(this.template({user: this.world.user.toJSON() }));
         return this.el;
       }
     })

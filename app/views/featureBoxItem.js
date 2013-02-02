@@ -1,4 +1,6 @@
-define(['backbone', 'templateMap', 'template/helpers/renderPos'], function(Backbone, templates, renderPos) {
+define([
+  'backbone', 'templateMap', 'template/helpers/renderPos'
+], function(Backbone, templates, renderPos) {
 
   /**
    * Class: FeatureBoxItem

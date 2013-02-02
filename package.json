@@ -21,6 +21,7 @@
       "handlebars": "1.0.x"
     , "almond": "*"
     , "zombie": "*"
+    , "mocha": "*"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha test/*.js"

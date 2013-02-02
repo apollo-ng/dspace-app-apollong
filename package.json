@@ -24,6 +24,7 @@
     , "teste": "*"
   },
   "scripts": {
-    "test": "node_modules/.bin/teste"
+    "test": "node_modules/.bin/mocha-phantomjs http://localhost:6654/index.test.html"
   }
 }
+

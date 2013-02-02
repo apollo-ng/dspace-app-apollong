@@ -1,29 +1,45 @@
 require(["ender"], function($){
   mocha.setup('bdd');
 
-  mocha.globals(['provide', '$', 'ender', '_', 'Backbone']);
+  mocha.globals(['provide', '$', 'ender', '_', 'Backbone', 'nodeRequire', 'mapbox', 'mmg', 'mmg_interaction', 'Handlebars', 'easey', 'easey_handlers', 'dspace', 'world']);
 
   var expect = chai.expect;
 
-  describe('something...', function(){
+  describe('dspace', function(){
+
+    var positionCbs = [];
 
     before(function(done){
       navigator.geolocation = {};
-      navigator.geolocation.watchPosition = function(){
-        console.log('WATCH POSITION called');
+      navigator.geolocation.watchPosition = function(callback) {
+        positionCbs.push(callback);
+        setTimeout(function() {
+          callback({ coords: { latitude: 48.115293, longitude: 11.60218 } });
+        }, 0);
       };
       setTimeout(function() {
         done();
-      }, 8000);
+      }, 1000);
     });
 
-    it('always true', function(){
+    it('has 2 feature tabs', function(){
       expect($('.featureTab').length).to.be.equal(2);
     });
 
-    it('always false', function(){
-      expect(false).to.be.true;
+    it("watches the geolocation", function() {
+      expect(positionCbs.length).to.be.equal(1);
     });
+
+    it("displays the tikiman", function() {
+      var tikiman;
+      $('img').forEach(function(img) {
+        if(img.src.match(/\/design\/images\/tiki-man.png$/)) {
+          tikiman = img;
+        }
+      });
+      expect(tikiman).not.to.be.equal(undefined);
+    });
+
   });
 
   if (window.mochaPhantomJS) { mochaPhantomJS.run(); }

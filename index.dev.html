@@ -13,6 +13,7 @@
   <link href='design/css/markers.css' rel='stylesheet' />
 
 <!-- BEGIN DEV -->
+  <script src='test/mocha.js'></script>
   <script src='deps/require.js'></script>
   <script>
     requirejs.config({
@@ -57,7 +58,7 @@
 
     });
 
-    require(['app/main']);
+    require(['app/main', 'test/runner']);
   </script>
 <!-- END DEV -->
 

@@ -66,8 +66,11 @@ define([
 
       initialize: function() {
         this.world = this.options.world;
+        this.render();
+      },
 
-        var self = this;
+      render: function() {
+        this.$el.html(this.template());
       }
 
     }),

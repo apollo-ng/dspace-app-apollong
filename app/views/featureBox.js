@@ -36,11 +36,11 @@ define([
         var self = this;
 
         /**
-         * Property: collections
+         * Property: feeds
          *
-         * an array of <FeatureCollection>s from a <World>
+         * an array of <GeoFeeds>s from a <World>
          */
-        this.collections = this.options.collections;
+        this.feeds = this.options.feeds;
 
         /**
          * Property: featureTabs
@@ -54,18 +54,19 @@ define([
       /**
        * Method: initializeTabs
        *
-       * creates feature tabs for all collections
+       * creates feature tabs for all feeds
        *
        * Returns:
        *
        * featureTabs - an array of <FeatureTab> views
        */
       initializeTabs: function(){
+        console.log("FEEDS", this.feeds);
         var tabs = [];
-        for(var i=0; i < this.collections.length; i++){
-          var collection = this.collections[i];
+        for(var i=0; i < this.feeds.length; i++){
+          var feed = this.feeds[i];
           var tab = new FeatureTab({
-            collection: collection,
+            collection: feed.collection,
             aether: this.aether
           });
           tabs.push(tab);

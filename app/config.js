@@ -43,7 +43,7 @@ define([], function() {
      *  Options are: DMS, QTH (To be done: DEC & GPS)
      */
     user: {
-      prefCoordSys: 'GPS'
+      userCoordPrefs: 'GPS'
     }
   };
 

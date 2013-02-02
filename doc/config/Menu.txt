@@ -70,6 +70,7 @@ Group: Views  {
    File: MiniMap  (views/miniMap.js)
    File: Overlay  (views/overlay.js)
    File: FeatureBox  (views/featureBox.js)
+   File: FeatureTab  (views/featureTab.js)
    File: FeatureBoxItem  (views/featureBoxItem.js)
    File: Panel  (views/panels.js)
    }  # Group: Views

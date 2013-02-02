@@ -25,4 +25,5 @@ define(['backbone', 'models/feature'], function(Backbone, Feature) {
   });
 
   return FeatureCollection;
+
 });

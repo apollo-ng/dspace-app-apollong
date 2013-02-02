@@ -10,7 +10,6 @@ TEMPLATE_OUT = assets/templates/
 
 DOC_BIN=naturaldocs
 DOC_DIR=./doc/app
-DOC_IMG=./doc/images
 DOC_CONFIG_DIR=./doc/config
 DOC_INPUTS=-i ./app
 
@@ -19,7 +18,9 @@ default: build
 build: deps
 	node node_modules/.bin/r.js -o build.js
 
-deps: clean-deps ender
+deps: clean-deps ender local-deps
+
+local-deps:
 # requirejs:
 	cp node_modules/requirejs/require.js deps/
 # require handlebars plugin:
@@ -41,6 +42,7 @@ deps: clean-deps ender
 # backbone-amd fork  
 	cp pkgs/js/backbone-amd/backbone.js deps/backbone.js
 
+	cp pkgs/js/backbone.localstorage.js deps/backbone.localstorage.js
 
 	$(WRAP_DEFINE) node_modules/handlebars/dist/handlebars.js deps/handlebars.js \
 	  this.Handlebars
@@ -56,6 +58,7 @@ deps: clean-deps ender
 
 	$(WRAP_DEFINE) pkgs/js/markers.js deps/markers.js mapbox.markers \
 	  modestmaps:MM
+
 ender: 
 	$(ENDER_BUILD) ender.js
 	sed -i 's/typeof define/typeof defineDoesntExist/g' ender.js
@@ -78,4 +81,5 @@ clean-deps:
 
 doc:
 	mkdir -p $(DOC_DIR) $(DOC_CONFIG_DIR)
-	$(DOC_BIN) $(DOC_INPUTS) -o html $(DOC_DIR) -img $(DOC_IMG) -p $(DOC_CONFIG_DIR) -s Default custom-1
+	$(DOC_BIN) $(DOC_INPUTS) -o html $(DOC_DIR) -p $(DOC_CONFIG_DIR) -s Default custom-1
+

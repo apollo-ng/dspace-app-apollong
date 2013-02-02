@@ -4,6 +4,8 @@ define([
   'modestmaps',
   'markers',
 
+  'templateMap',
+
   // models
   'models/marker',
 
@@ -11,11 +13,56 @@ define([
   'views/panels',
   'views/overlay'
 ], function(Backbone, MM, markers,
-            Marker,
+            templates, Marker,
             panels, Overlay) {
 
+  /**
+   * Class: MapContext
+   *
+   * map Context menu
+   *
+   * (see mapContext.png)
+   */
+  var MapContext = panels.Base.extend({
+
+    el: '#mapContext',
+    template: templates.mapContext,
+
+    events: {
+      'click *[data-command]': 'callCommand'
+    },
+
+    initialize: function() {
+      this.render();
+    },
+
+    callCommand: function(event) {
+      var item = this.$(event.target);
+      this.trigger('command ' + item.attr('data-command'), this.point);
+    },
+
+    render: function() {
+      this.$el.html(this.template());
+      return this.el;
+    },
+
+    showFX: function(event){
+      this.point = { x: event.clientX, y: event.clientY };
+      this.$el.css( { 'left': this.point.x, 'top': this.point.y });
+      this.$el.css( { 'display': 'block'});
+      this.$el.fadeIn(350);
+    },
+
+    hideFX: function(){
+      this.$el.fadeOut(350, this.$el.hide.bind(this.$el));
+    }
+  });
+
   /* Class: Map
+   *
    * main UI logic for the Map
+   *
+   * (see map.png)
    *
    * creates:
    *   * *BaseMap* with default *TileSet*
@@ -55,9 +102,9 @@ define([
 
       var self = this;
       this.world.on('change', function(event, data){
-        // WIP
-        //self.recenter();
-      });
+        console.log("CHANGE WORLD", JSON.stringify(this.world.get('mapCenter')));
+        this.recenter();
+      }.bind(this));
 
       /**
        * listens to changes on user and updates related layer
@@ -69,7 +116,11 @@ define([
       /**
        * contextPanel for right-click / longpress
        */
-      this.contextPanel = new panels.Context({ map: this });
+      this.contextPanel = new MapContext({ map: this });
+
+      this.contextPanel.on('command add-feature', function(point) {
+        console.log("ADD MARKER AT POINT", point);
+      });
     },
 
     /**
@@ -84,8 +135,8 @@ define([
      * Method: showContextPanel
      *  Map right-click/long touch context menu
      */
-    showContextPanel: function () {
-      this.contextPanel.show();
+    showContextPanel: function (event) {
+      this.contextPanel.show(event);
     },
 
     /**
@@ -107,9 +158,9 @@ define([
       /**
        * FIXME keep track on overlays
        */
-      var feeds = this.world.featureCollections;
+      var feeds = this.world.geoFeeds;
       for( var i = feeds.length; i--; ) {
-        var overlay = new Overlay({ collection: feeds[i], map: this });
+        var overlay = new Overlay({ collection: feeds[i].collection, map: this });
       }
     },
 
@@ -125,7 +176,6 @@ define([
      * creates frame using ModestMaps library
      */
     createFrame: function(){
-      var self = this;
       var config = this.config;
 
       var template = config.tileSet.template; //FIXME introduce BaseMap
@@ -156,9 +206,9 @@ define([
        * sets current mapCenter and mapZoom
        */
       modestmap.addCallback('drawn', function(m){
-        self.world.set('mapCenter', modestmap.getCenter());
-        self.world.set('mapZoom', modestmap.getZoom());
-      });
+        this.world.set('mapCenter', modestmap.getCenter());
+        this.world.set('mapZoom', modestmap.getZoom());
+      }.bind(this));
 
       return modestmap;
 

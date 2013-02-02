@@ -43,6 +43,10 @@ require(["ender"], function($){
     it("renders MiniMap", function(){
       expect($('#miniMap').length).to.equal(1);
     });
+
+    it("fails", function() {
+      expect(false).to.equal(true);
+    });
   });
 
   if (window.mochaPhantomJS) { mochaPhantomJS.run(); }

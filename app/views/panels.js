@@ -88,6 +88,33 @@ define([
 
     }),
 
+
+    /**
+     * Class: SideBar
+     *
+     * UI element for Sidebar
+     *
+     * (see overlaysPanel.png)
+     */
+    SideBar: BasePanel.extend({
+
+      el: '#sidebar',
+
+      showFX: function(){
+        this.$el.animate({ right: 0, duration: 600  });
+        this.$el.fadeIn(600);
+        this.visible = true;
+
+      },
+
+      hideFX: function(){
+        var self = this;
+        this.$el.animate({ right: -245, duration: 600  });
+        this.$el.fadeOut(600);
+        this.visible = false;
+      }
+    }),
+
     /**
      * Class: OverlaysPanel
      *

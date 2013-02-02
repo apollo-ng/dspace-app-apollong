@@ -95,11 +95,12 @@ define([
       },
 
       showFX: function(){
-        this.$el.animate({ top: 60, duration: 700  });
+        this.$el.animate({ top: 0, duration: 700  });
         this.$el.fadeIn(600);
       },
 
       hideFX: function(){
+        // FIXME: use $el height for the animation instead of fixed value
         this.$el.animate({ top: -400, duration: 700 });
         this.$el.fadeOut(600);
       }

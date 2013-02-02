@@ -117,13 +117,14 @@ h3	 { font-size: 18px; }
 
 #miniMap {
   position:absolute;
-  bottom: 49px;
+  bottom: 47px;
   right: 0px;
-  width: 245px;
-  height: 180px;
+  width: 244px;
+  height: 178px;
   background: #c0c19f;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
+  border-bottom: 1px solid #999;
   z-index: 9999;
 }
 
@@ -132,7 +133,7 @@ h3	 { font-size: 18px; }
   top: 49px;
   right: 0px;
   bottom: 49px;
-  width: 245px;
+  width: 244px;
   overflow: hidden;
   display: block;
   z-index: 9998;

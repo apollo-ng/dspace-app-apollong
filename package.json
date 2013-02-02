@@ -20,5 +20,9 @@
   , "devDependencies": {
       "handlebars": "1.0.x"
     , "almond": "*"
+    , "zombie": "*"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha test/*.js"
   }
 }

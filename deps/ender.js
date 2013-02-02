@@ -33,6 +33,9 @@ var enderRequire;
     , oldProvide = context['provide']
 
   function require (identifier) {
+    if(typeof(identifier) !== 'string') {
+      throw new Error("Expected string, but got: " + JSON.stringify(arguments));
+    }
     // modules can be required from ender's build system, or found on the window
     var module = modules['$' + identifier] || window[identifier]
     if (!module) throw new Error("Ender Error: Requested module '" + identifier + "' has not been defined.")
@@ -116,8 +119,10 @@ function provide (name, what) {
   // use callback to receive Ender's require & provide and remove them from global
   ender.noConflict = function (callback) {
     context['$'] = old
+    console.log("IN NO CONFLICT")
     if (callback) {
       context['provide'] = oldProvide
+      console.log("NOCONFLICT REPLACING REQUIRE", oldRequire);
       context['require'] = oldRequire
       context['ender'] = oldEnder
       if (typeof callback == 'function') callback(require, provide, this)
@@ -3204,5 +3209,5 @@ function provide (name, what) {
 
 }());
 
-  return ender.noConflict(function() {});
+  return ender.noConflict(true);
 });

@@ -29,8 +29,8 @@ local-deps:
 # requirejs:
 	cp node_modules/requirejs/require.js deps/
 # require handlebars plugin:
-	cp -r pkgs/js/require-handlebars-plugin/hbs deps/
-	cp pkgs/js/require-handlebars-plugin/hbs.js deps/
+	cp -r pkgs/js/hbs/ deps/
+	cp pkgs/js/hbs.js deps/
 #	cp -r pkgs/hbs/* deps/
 
 

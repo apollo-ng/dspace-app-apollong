@@ -93,14 +93,14 @@ define([
        * this.el - rendered DOM element of view
        */
       render: function(){
-        console.log('featureTabs', this.featureTabs);
         this.$el.html(this.template({
           tabs: this.featureTabs
         }));
-        _(this.featureTabs).each(function(featureTab, index){
+        _(this.featureTabs).each(function(featureTab){
           var renderedTemplate = featureTab.render();
           this.$el.append(renderedTemplate);
           featureTab.hide();
+          featureTab.tab = this.$('.featureBoxTabs > .tab[data-tab="' + featureTab.index + '"]');
         }.bind(this));
 
         if(this.featureTabs.length > 0) {
@@ -115,9 +115,13 @@ define([
 
       selectTab: function(index) {
         if(typeof(this.currentTabIndex) !== 'undefined') {
-          this.featureTabs[this.currentTabIndex].hide();
+          var previousTab = this.featureTabs[this.currentTabIndex]
+          previousTab.hide();
+          previousTab.tab.removeClass('active');
         }
-        this.featureTabs[index].show();
+        var currentTab = this.featureTabs[index]
+        currentTab.show();
+        currentTab.tab.addClass('active');
         this.currentTabIndex = index;
         this.trigger('change-tab', this.featureTabs[index].collection);
       },

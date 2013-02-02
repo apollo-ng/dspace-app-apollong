@@ -62,7 +62,6 @@ define([
       if(this.rendered) {
         return;
       }
-      console.log('render featureTab', this.index);
       this.$el.empty();
 
       this.rendered = true;
@@ -77,7 +76,6 @@ define([
     renderFeature: function(feature) {
       this.render();
       var featureIndex = this.featureIndexCounter++;
-      console.log('render feature in featureTab', featureIndex, this.index, feature);
       feature.set( 'index', featureIndex );
       var featureBoxItem = new FeatureBoxItem({
         model: feature,

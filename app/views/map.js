@@ -158,9 +158,9 @@ define([
       /**
        * FIXME keep track on overlays
        */
-      var feeds = this.world.featureCollections;
+      var feeds = this.world.geoFeeds;
       for( var i = feeds.length; i--; ) {
-        var overlay = new Overlay({ collection: feeds[i], map: this });
+        var overlay = new Overlay({ collection: feeds[i].collection, map: this });
       }
     },
 

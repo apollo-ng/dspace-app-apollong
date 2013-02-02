@@ -37,9 +37,12 @@ require(["ender"], function($){
           tikiman = img;
         }
       });
-      expect(tikiman).not.to.be.equal(undefined);
+      expect(tikiman).to.be.ok;
     });
 
+    it("renders MiniMap", function(){
+      expect($('#miniMap').length).to.equal(1);
+    });
   });
 
   if (window.mochaPhantomJS) { mochaPhantomJS.run(); }

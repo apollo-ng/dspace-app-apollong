@@ -59,14 +59,20 @@ define([
 
   });
 
-  var defaultUser;
-
-  User.default = function(attrs) {
-    if(! defaultUser) {
-      var store = backboneLocalStorage.get('users');
-      defaultUser = new User(_.extend(store.findAll()[0] || {}, attrs));
+  /**
+   * Function: User.first
+   *
+   * Fetches attributes for the first <User> instance from
+   * localStorage and creates a new <User>, if it finds any.
+   *
+   * Returns:
+   *   A <User> instance or undefined.
+   */
+  User.first = function() {
+    var attrs = backboneLocalStorage.get('users').findAll()[0];
+    if(attrs) {
+      return new User(attrs);
     }
-    return defaultUser;
   };
   
   return User;

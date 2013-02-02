@@ -19,7 +19,7 @@ define([
     /**
      * Method: initialize
      *
-     * - <createUser>
+     * - <setupUser>
      * - <createFeeds> + sync them
      * - <createMap>
      * - creates <UI>
@@ -40,7 +40,7 @@ define([
       var self = this;
       this.config = this.get('config');
 
-      this.user = this.createUser(this.config.user);
+      this.user = this.setupUser(this.config.user);
       // Property: geoFeeds
       //
       // @elf-pavlik: Document this.
@@ -68,18 +68,13 @@ define([
     },
 
     /**
-     * Method: createUser
-     * creates a <User> passing it *<World>* and *config.user*
-     * (start code)
-     * config: {
-     *   user: {
-     *     prefCoordSys: 'GPS'}}
-     * (end code)
+     * Method: setupUser
+     *
+     * Loads the first (and only) <User> or creates a new one.
+     *
      */
-    createUser: function(config){
-      var user = User.default();
-      user.setDefaults(config);
-      return user;
+    setupUser: function(config){
+      return User.first() || new User();
     },
 
     /**

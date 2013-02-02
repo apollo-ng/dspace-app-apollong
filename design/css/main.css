@@ -117,13 +117,14 @@ h3	 { font-size: 18px; }
 
 #miniMap {
   position:absolute;
-  bottom: 0px;
+  bottom: 49px;
   right: 0px;
   width: 240px;
   height: 180px;
   background: #c0c19f;
   border-top: 1px solid #999;
-  z-index: 9998;
+  border-left: 1px solid #999;
+  z-index: 9999;
 }
 
 #sidebar {
@@ -135,7 +136,7 @@ h3	 { font-size: 18px; }
   overflow: hidden;
   display: block;
   z-index: 9998;
-  border-left: 1px solid #fff;
+  border-left: 1px solid #999;
   background: rgb(255,255,255);
   background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,0.4) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,0.4)));

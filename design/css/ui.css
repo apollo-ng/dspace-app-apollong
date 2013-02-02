@@ -381,6 +381,7 @@ display: block;
   border-top: 1px solid #000;
   bottom: 0px;
   overflow: hidden;
+  z-index: 10000;
 }
 
 #controlPanel div {
@@ -390,84 +391,32 @@ display: block;
 }
 
 #toggleFullscreen {
-  float: left;
+  float: right;
   width: 48px;
   font-size: 25px;
 }
 
 #toggleMiniMap {
-  float: left;
+  float: right;
   width: 48px;
 }
 
 #userMode {
-  float: left;
+  float: right;
   width: 48px;
   font-size: 25px;
 }
 
 #userOptions {
-  float: left;
+  float: right;
   width: 48px;
   font-size: 25px;
 }
 
-#geobar {
-  display: inline-block;
-}
-
-#geobarOptions {
-  float: left;
-  width: 60px;
-  border-right: 1px solid #999;
-}
-
-#geobarContainer {
-  float: left;
-  border: 1px solid #999;
-  border-left: 1px solid #eee;
-  background: #fff;
-  padding-right: 5px;
-  padding-left: 5px;
-}
-
-#geobarContainer input {
-  border: 0;
-  width: 220px;
-  height: 28px;
-}
-
-#geobarButton {
-  float: left;
-  width: 32px;
-  border-left: 1px solid #ddd;
-  -webkit-border-top-right-radius: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  -moz-border-radius-topright: 5px;
-  -moz-border-radius-bottomright: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-#featureOptions {
-  float: right;
-  width: 225px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  -webkit-border-top-left-radius: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
 #toggleFeatureBox {
   float: right;
-  width: 30px;
+  width: 48px;
   font-size: 21px;
-  margin-right: 20px;
 }
 
 /**

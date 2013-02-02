@@ -16,8 +16,8 @@ define(['backbone'], function(Backbone) {
     className: 'markerimage',
 
     events: {
-      "click": "featureInfoModal"
-      ,"contextmenu": "markerContext"
+      "click": "markerClick",
+      "contextmenu": "markerContext"
     },
 
     initialize: function(){
@@ -35,8 +35,8 @@ define(['backbone'], function(Backbone) {
       this.template = Handlebars.compile(html);
     },
 
-    featureInfoModal: function(event) {
-      console.log({ 'marker event': event, featureJson: this.featureJson }) ;
+    markerClick: function() {
+      this.trigger('click');
     },
 
     markerContext: function(event) {

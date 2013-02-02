@@ -49,6 +49,8 @@ local-deps:
 
 	cp pkgs/js/backbone.localstorage.js deps/backbone.localstorage.js
 
+	cp pkgs/js/Math.uuid.js deps/Math.uuid.js
+
 	$(WRAP_DEFINE) node_modules/handlebars/dist/handlebars.js deps/handlebars.js \
 	  this.Handlebars
 

@@ -20,15 +20,18 @@ define([
     },
 
     routes: {
-      '!*path': 'dispatch',
+      '!*path': 'dispatch'
     },
 
     parseRoute: function(path) {
       var routeParts = {};
       path.split(':').forEach(function(part) {
-        var featureRoute = part.match(/^feature\/(.+)$/);
-        if(featureRoute) {
-          routeParts.feature = featureRoute[1]
+        if(part.length === 0) {
+          return;
+        }
+        var match = part.match(/^([^\/]+)\/(.+)$/);
+        if(match) {
+          routeParts[match[1]] = match[2];
         } else {
           routeParts[part] = true;
         }
@@ -49,46 +52,44 @@ define([
     },
 
     dispatch: function(path) {
+      console.log('DISPATCH', path);
       this.reset();
-      var routeParts = this.parseRoute(path);
-      this.parsedRoute = routeParts;
-      console.log('DISPATCH', routeParts);
-      for(var key in routeParts) {
-        if(routeParts[key] === true) {
-          this.processFlag(key);
-        } else {
-          this[key](routeParts[key]);
+      setTimeout(function() {
+        var routeParts = this.parseRoute(path);
+        this.parsedRoute = routeParts;
+        for(var key in routeParts) {
+          if(typeof(this[key]) === 'function') {
+            this[key](routeParts[key]);
+          }
         }
-      }
+      }.bind(this), 0);
     },
 
     reset: function() {
       this.ui.reset();
+      this.world.set('currentModal', undefined);
+      this.world.set('currentFeatureId', undefined);
     },
 
     feature: function(uuid) {
-      console.log('load feature: ' + uuid);
+      this.world.set('currentFeatureId', uuid);
     },
 
-    processFlag: function(flag) {
-      switch(flag) {
-      case 'userOptions':
-        this.ui.showUserOptions();
-        break;
-      default:
-        console.error("Don't know how to handle URI flag: " + flag);
+    modal: function(name) {
+      this.world.set('currentModal', name);
+    },
+
+    jump: function(params) {
+      var newParams = _.extend({}, this.parsedRoute);
+      for(var key in params) {
+        if(params[key]) {
+          newParams[key] = params[key];
+        } else {
+          delete newParams[key];
+        }
       }
-    },
-
-    addFlag: function(flag) {
-      console.log('parsedRoute', JSON.stringify(this.parsedRoute));
-      this.parsedRoute[flag] = true;
-      this.navigate('!' + this.generateRoute(this.parsedRoute), { trigger: true });
-    },
-
-    removeFlag: function(flag) {
-      delete this.parsedRoute[flag];
-      this.navigate('!' + this.generateRoute(this.parsedRoute), { trigger: true });
+      console.log("JUMP", JSON.stringify(newParams));
+      this.navigate('!' + this.generateRoute(newParams), { trigger: true });
     }
 
   });

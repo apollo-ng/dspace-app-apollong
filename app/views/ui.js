@@ -4,8 +4,10 @@ define([
   'views/featureBox',
   'views/map',
   'views/miniMap',
-  'views/modal/userOptions'
-], function(Backbone, panels, FeatureBox, Map, MiniMap, UserOptions) {
+  'views/modal/userOptions',
+  'views/modal/featureDetails',
+  'template/helpers/renderPos'
+], function(Backbone, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
 
 
   // /**
@@ -114,6 +116,13 @@ define([
 
       this.map = new Map({ world: this.world });
 
+      this.map.on('marker-click', function(uuid) {
+        this.dspace.jump({
+          feature: uuid,
+          modal: 'featureDetails'
+        });
+      }.bind(this));
+
       /**
        * Property: aether
        *
@@ -128,8 +137,11 @@ define([
        * jumps map to feature set to current
        */
       this.aether.on('feature:current', function( feature ){
-        self.jumpMapToFeature(feature);
-      });
+        this.dspace.jump({
+          feature: feature.get('uuid'),
+          modal: undefined
+        });
+      }.bind(this));
 
       /**
        * Property: featureBox
@@ -146,6 +158,61 @@ define([
        */
       this.statusPanel = new panels.Status({model: this.world});
       this.controlPanel = new panels.Control({world: this.world });
+
+      this.world.on('change:currentFeatureId', function() {
+        var feature = this.world.getCurrentFeature();
+        if(feature) {
+          console.log('jumping to feature', feature);
+          this.map.jumpToFeature(feature);
+        } else {
+          console.log('no current feature set!', this.world.get('currentFeatureId'), 'in', Object.keys(this.world.featureIndex));
+        }
+      }.bind(this));
+
+      this.world.on('change:currentModal', function() {
+        var modalName = this.world.get('currentModal');
+        if(modalName) {
+          var modal = this.modals[modalName];
+          if(modal) {
+            this.modalName = modalName;
+            modal.apply(this, []);
+            setTimeout(function() {
+              this.$('*[data-format=position]').forEach(function(e) {
+                var el = this.$(e);
+                el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'),
+                                  this.world.user.get('userCoordPrefs')));
+              }.bind(this));
+            }.bind(this), 0);
+          } else {
+            console.log('modal not found', modal);
+          }
+        }
+      }.bind(this));
+
+    },
+
+    modals: {
+
+      'userOptions': function() {
+        this.modal = new UserOptions({
+          user: this.world.user,
+          aether: this.aether
+        });
+        this.modal.show();
+        console.log('show modal user');
+      },
+
+      'featureDetails': function() {
+        var feature = this.world.getCurrentFeature();
+        if(feature) {
+          this.modal = new FeatureDetails({
+            feature: feature
+          });
+          this.modal.show();
+        } else {
+          console.log('show feature details, but no feature');
+        }
+      }
 
     },
 
@@ -171,8 +238,11 @@ define([
     },
 
     reset: function() {
-      //this.map.reset();
-      this.hideUserOptions();
+      if(this.modal) {
+        this.modal.hide();
+        delete this.modal;
+        delete this.modalName;
+      }
     },
 
     /**
@@ -208,12 +278,14 @@ define([
      * toggles <Modal.UserOptions> using <showUserOptions>/<hideUserOptions>
      */
     toggleUserOptions: function() {
-      if(this.userOptions) {
-        //this.hideUserOptions();
-        this.dspace.removeFlag('userOptions');
+      if(this.modalName === 'userOptions') {
+        this.dspace.jump({
+          modal: false
+        });
       } else {
-        this.dspace.addFlag('userOptions');
-        //this.showUserOptions();
+        this.dspace.jump({
+          modal: 'userOptions'
+        });
       }
     },
 
@@ -240,11 +312,27 @@ define([
       if(this.userOptions) {
         return;
       }
-      this.userOptions = new UserOptions({
-        user: this.world.user,
-        aether: this.aether
-      });
-      this.userOptions.show();
+    },
+
+    hideFeatureDetails: function() {
+      if(this.featureDetails) {
+        this.featureDetails.hide();
+        delete this.featureDetails;
+      }
+    },
+
+    showFeatureDetails: function() {
+      if(this.featureDetails) {
+        return;
+      }
+      var feature = this.world.getCurrentFeature();
+      if(feature) {
+        this.featureDetails = new FeatureDetails({
+          feature: feature
+        });
+        this.featureDetails.show();
+        console.log('rendered featureDetails');
+      }
     },
 
     /**
@@ -264,20 +352,8 @@ define([
         this.featureBox.hide();
         this.fullScreen = true;
       }
-    },
+    }
 
-    /**
-     * Method: jumpMapToFeature
-     *
-     * delegates to <Map> jumping to given feature
-     *
-     * Parameters:
-     *
-     *   feature - <Feature>
-     */
-     jumpMapToFeature: function( feature ){
-       this.map.jumpToFeature(feature);
-     }
   });
 
   return UI;

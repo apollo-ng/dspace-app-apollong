@@ -25,6 +25,7 @@
     "underscore": "deps/underscore",
     "backbone": "deps/backbone",
     "backbone-localstorage": "deps/backbone.localstorage",
+    "Math.uuid": "deps/Math.uuid",
 
     "reqwest": "deps/reqwest",
     "handlebars": "deps/handlebars",

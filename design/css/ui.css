@@ -235,27 +235,33 @@
 }
 
 .accordion fieldset {
-margin: 10px;
+  margin: 10px;
 }
 
 .accordion input[type=radio], input.radio {
-height: 16px;
-width: 16px;
-margin-top: 9px;
-margin-left: 9px;
+  height: 16px;
+  width: 16px;
+  margin-top: 9px;
+  margin-left: 9px;
+}
+
+.accordion input[type=text] {
+  height: 32px;
+  line-height: 32px;
+  border: 0;
 }
 
 .accordion select {
-   background: transparent;
-   width: 268px;
-   padding: 5px;
-   font-size: 16px;
-   line-height: 1;
-   border: 0;
-   border-radius: 0;
-   height: 34px;
-   -webkit-appearance: none;
-   }
+  height: 32px;
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+  line-height: 1;
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+}
 
 .accordion .uiRadio {
   float: left;
@@ -268,6 +274,7 @@ margin-left: 9px;
 width: 100%;
   height: 32px;
 display: block;
+  font-size:14px;
   margin-top: 5px;
   margin-right: 10px;
   color: #333;

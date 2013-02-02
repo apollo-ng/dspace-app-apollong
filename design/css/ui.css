@@ -164,19 +164,19 @@
 .accordion { width: 100%; overflow:hidden; }
 
 /*Set style of open slide*/
-.accordion section:target {
+.accordion section.active {
   border-top: 1px solid #777; border-bottom: 1px solid #000;
   background:  #3f3e3a;
   background-image: url(../images/panel_bg.png);
  }
-.accordion section:target:hover {
+.accordion section.active:hover {
   background:  #3f3e3a;
   background-image: url(../images/panel_bg.png);
 }
-.accordion section:target h2 { width:100%; }
-.accordion section:target h2 a{ color: #DBD6CF;   text-shadow: 1px 1px 0px #000;  }
-.accordion section:target h2 a:hover { color: #DBD6CF;   text-shadow: 1px 1px 0px #000;  }
-.accordion section:target p {display:block; padding-left: 10px; color: #DBD6CF; text-shadow: 1px 1px 0px #000; font-size: 12px;}
+.accordion section.active h2 { width:100%; }
+.accordion section.active h2 a{ color: #DBD6CF;   text-shadow: 1px 1px 0px #000;  }
+.accordion section.active h2 a:hover { color: #DBD6CF;   text-shadow: 1px 1px 0px #000;  }
+.accordion section.active p {display:block; padding-left: 10px; color: #DBD6CF; text-shadow: 1px 1px 0px #000; font-size: 12px;}
 .accordion section h2 a {line-height: 48px; display: block; font-size:16px; color: #333; text-decoration:none; }
 
 /*set style of closed slide*/
@@ -213,7 +213,7 @@
 }
 
 /*Set height of the slide*/
-.vertical :target{ height: 260px; width:100%; }
+.vertical .active{ height: 260px; width:100%; }
 
 .vertical section h2 {
   position:relative;

@@ -1,5 +1,7 @@
 mocha.setup('bdd');
 
+mocha.globals(['provide', '$', 'ender']);
+
 function assert(expr, msg) {
   if (!expr) throw new Error(msg || 'failed');
 }

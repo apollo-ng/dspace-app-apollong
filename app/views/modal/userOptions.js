@@ -5,7 +5,7 @@ define([
 ], function(Backbone, panels, templates) {
 
     /**
-     * Class: OptionsPanel
+     * Class: Modal.UserOptions
      *
      * UI element for Options
      *

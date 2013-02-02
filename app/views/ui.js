@@ -97,6 +97,13 @@ define([
       this.world = this.options.world;
 
       /**
+       * Property: dspace
+       *
+       * reference to the global Backbone.Router called <DSpace>
+       */
+      this.dspace = this.options.dspace;
+
+      /**
        * Property: map
        *
        * reference to the <Map> from
@@ -163,6 +170,11 @@ define([
       this.controlPanel.visible = true;
     },
 
+    reset: function() {
+      //this.map.reset();
+      this.hideUserOptions();
+    },
+
     /**
      * Method: boxToggle
      *
@@ -193,19 +205,46 @@ define([
     /**
      * Method: toggleUserOptions
      *
-     * toggles <UserOptions>
+     * toggles <Modal.UserOptions> using <showUserOptions>/<hideUserOptions>
      */
     toggleUserOptions: function() {
       if(this.userOptions) {
-        this.userOptions.hide();
-        delete this.userOptions;
+        //this.hideUserOptions();
+        this.dspace.removeFlag('userOptions');
       } else {
-        this.userOptions = new UserOptions({
-          user: this.world.user,
-          aether: this.aether
-        });
-        this.userOptions.show();
+        this.dspace.addFlag('userOptions');
+        //this.showUserOptions();
       }
+    },
+
+    /**
+     * Method: hideUserOptions
+     *
+     * Hides the <Modal.UserOptions> view and cleans up it's reference.
+     *
+     */
+    hideUserOptions: function() {
+      if(! this.userOptions) {
+        return;
+      }
+      this.userOptions.hide();
+      delete this.userOptions;
+    },
+
+    /**
+     * Method: showUserOptions
+     *
+     * Creates a <Modal.UserOptions> view and displays it.
+     */
+    showUserOptions: function() {
+      if(this.userOptions) {
+        return;
+      }
+      this.userOptions = new UserOptions({
+        user: this.world.user,
+        aether: this.aether
+      });
+      this.userOptions.show();
     },
 
     /**

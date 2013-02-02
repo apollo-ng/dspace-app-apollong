@@ -72,7 +72,7 @@ define([
         for(var i=0; i < this.feeds.length; i++){
           var feed = this.feeds[i];
           var tab = new FeatureTab({
-            collection: feed.collection,
+            feed: feed,
             aether: this.aether
           });
           tab.index = i;
@@ -93,6 +93,7 @@ define([
        * this.el - rendered DOM element of view
        */
       render: function(){
+        console.log('featureTabs', this.featureTabs);
         this.$el.html(this.template({
           tabs: this.featureTabs
         }));
@@ -113,11 +114,12 @@ define([
       },
 
       selectTab: function(index) {
-        if(this.currentTabIndex) {
+        if(typeof(this.currentTabIndex) !== 'undefined') {
           this.featureTabs[this.currentTabIndex].hide();
         }
         this.featureTabs[index].show();
         this.currentTabIndex = index;
+        this.trigger('change-tab', this.featureTabs[index].collection);
       },
 
       showFX: function(){

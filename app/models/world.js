@@ -2,8 +2,9 @@ define([
   'underscore',
   'backbone',
   'geofeeds/geoJson',
+  'geofeeds/remoteStorage',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, User) {
+], function(_, Backbone, GeoJSONFeed, RemoteStorageFeed, User) {
 
   /*
    * Class: World
@@ -109,6 +110,9 @@ define([
       switch(feed.type){
       case 'CORS':
         return new GeoJSONFeed(feed);
+        break;
+      case 'remoteStorage':
+        return new RemoteStorageFeed(feed);
         break;
       default:
         console.log('tried creating ' + feed.type + ' collections')

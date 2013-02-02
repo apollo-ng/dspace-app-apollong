@@ -23,17 +23,20 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
 
       var self = this;
 
-      /*
-       * listens to its FeatureCollection reset event
-       */
-      this.collection.on( 'reset', function( event, data ){
-        self.render( );
-      });
     },
 
-    //FIXME remove old layer if exists!
+    setCollection: function(collection) {
+      this.collection = collection;
+      setTimeout(function() {
+        this.render();
+      }.bind(this), 0);
+    },
+
     render: function(){
-      var maplayer = this.map.addMapLayer( this.collection );
+      if(this.maplayer) {
+        this.maplayer.remove();
+      }
+      this.maplayer = this.map.addMapLayer( this.collection );
     },
   });
 

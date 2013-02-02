@@ -27,6 +27,9 @@ define([
        */
       this.aether = this.options.aether;
 
+      this.feed = this.options.feed;
+      this.collection = this.feed.collection;
+
       /**
        * Event: collection:reset
        *
@@ -45,6 +48,10 @@ define([
       this.collection.on( 'feature:current', function( feature ){
         self.aether.trigger('feature:current', feature );
       });
+
+      this.collection.on('add', function(feature) {
+        this.renderFeature(feature);
+      }.bind(this));
     },
 
     /*
@@ -52,23 +59,32 @@ define([
      * FIXME can leak session state to collection
      */
     render: function(){
-      var self = this;
+      if(this.rendered) {
+        return;
+      }
+      console.log('render featureTab', this.index);
       this.$el.empty();
+
+      this.rendered = true;
 
       this.$el.attr('data-index', this.index);
 
-      _(this.collection.models).each(function(feature, featureIndex){
-        feature.set( 'index', featureIndex );
-        var featureBoxItem = new FeatureBoxItem({
-          model: feature,
-          aether: self.aether
-        });
+      this.featureIndexCounter = 0;
 
-        var renderedTemplate = featureBoxItem.render();
-        self.$el.append(renderedTemplate);
+      return this.el;
+    },
 
+    renderFeature: function(feature) {
+      this.render();
+      var featureIndex = this.featureIndexCounter++;
+      console.log('render feature in featureTab', featureIndex, this.index, feature);
+      feature.set( 'index', featureIndex );
+      var featureBoxItem = new FeatureBoxItem({
+        model: feature,
+        aether: this.aether
       });
-      return self.el;
+      var renderedTemplate = featureBoxItem.render();
+      this.$el.append(renderedTemplate);
     },
 
     hide: function() {

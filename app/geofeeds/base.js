@@ -15,12 +15,17 @@ define([
     initialize: function(options) {
       this.collection = new FeatureCollection();
       _.extend(this, options);
+      this.title = this.makeTitle();
     },
 
     updateCollection: function(collection) {
       // FIXME: don't use "reset", but "update"
       // http://backbonejs.org/#Collection-update
-      this.collection.reset(collection.features);
+      this.collection.update(collection.features);
+    },
+
+    makeTitle: function() {
+      return this.name;
     }
 
   });

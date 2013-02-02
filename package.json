@@ -21,9 +21,10 @@
       "handlebars": "1.0.x"
     , "almond": "*"
     , "zombie": "*"
-    , "teste": "*"
+    , "mocha-phantomjs": "*"
   },
   "scripts": {
-    "test": "node_modules/.bin/teste"
+    "test": "node_modules/.bin/mocha-phantomjs http://localhost:3000/index.test.html"
   }
 }
+

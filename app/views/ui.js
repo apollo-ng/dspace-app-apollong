@@ -167,10 +167,7 @@ define([
       this.world.on('change:currentFeatureId', function() {
         var feature = this.world.getCurrentFeature();
         if(feature) {
-          console.log('jumping to feature', feature);
           this.map.jumpToFeature(feature);
-        } else {
-          console.log('no current feature set!', this.world.get('currentFeatureId'), 'in', Object.keys(this.world.featureIndex));
         }
       }.bind(this));
 

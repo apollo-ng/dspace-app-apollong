@@ -270,7 +270,6 @@ define([
        */
       markerLayer.factory(function(featureJson){
         var marker = new Marker({ featureJson: featureJson });
-        console.log("make marker", marker);
         marker.on('click', function() {
           this.trigger('marker-click', featureJson.uuid);
         }.bind(this));

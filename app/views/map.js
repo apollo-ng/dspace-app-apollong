@@ -11,10 +11,11 @@ define([
 
   // views
   'views/panels',
-  'views/overlay'
+  'views/overlay',
+  'views/modal/addFeature'
 ], function(Backbone, MM, markers,
             templates, Marker,
-            panels, Overlay) {
+            panels, Overlay, AddFeature) {
 
   /**
    * Class: MapContext
@@ -39,6 +40,7 @@ define([
     callCommand: function(event) {
       var item = this.$(event.target);
       this.trigger('command ' + item.attr('data-command'), this.point);
+      this.hide();
     },
 
     render: function() {
@@ -118,8 +120,11 @@ define([
       this.contextPanel = new MapContext({ map: this });
 
       this.contextPanel.on('command add-feature', function(point) {
-        console.log("ADD MARKER AT POINT", point);
-      });
+        var location = this.frame.pointLocation(point);
+        var dialog = new AddFeature(location);
+        dialog.render();
+        dialog.show();
+      }.bind(this));
     },
 
     /**

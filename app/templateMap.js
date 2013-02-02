@@ -5,8 +5,9 @@ define([
   'hbs!templates/userOptionModal',
   'hbs!templates/statusPanel',
   'hbs!templates/featureOptionModal',
-  'hbs!templates/controlPanel'
-], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, featureOptionModal, controlPanel) {
+  'hbs!templates/controlPanel',
+  'hbs!templates/addFeature'
+], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, featureOptionModal, controlPanel, addFeature) {
 
   return {
     mapContext: mapContext,
@@ -15,7 +16,8 @@ define([
     userOptionModal: userOptionModal,
     statusPanel: statusPanel,
     featureOptionModal: featureOptionModal,
-    controlPanel: controlPanel
+    controlPanel: controlPanel,
+    addFeature: addFeature
   };
 
 });

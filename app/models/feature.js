@@ -9,8 +9,19 @@ define(['backbone'], function(Backbone) {
    */
   var Feature = Backbone.Model.extend({
 
-    initialize: function(){
+    initialize: function(location){
+      if(location) {
+        this.set(location);
+      }
       this.setLatLon();
+
+      if(! this.get('properties')) {
+        this.set('properties', {});
+      }
+
+      if(! this.get('geometry')) {
+        this.set('geometry', {});
+      }
     },
 
     /**
@@ -20,6 +31,9 @@ define(['backbone'], function(Backbone) {
      */
     setLatLon: function(){
       var geometry = this.get('geometry');
+      var lat = this.get('lat');
+      var lon = this.get('lon');
+      console.log('setLatLon', this);
       if( typeof geometry !== 'undefined'
           && geometry.coordinates
           && geometry.coordinates.length === 2 ) {
@@ -27,6 +41,8 @@ define(['backbone'], function(Backbone) {
           lat: geometry.coordinates[1]
           , lon: geometry.coordinates[0]
         });
+      } else if(lat && lon) {
+        this.set('geometry', { type: 'Point', coordinates: [lon, lat] });
       }
     }
   });

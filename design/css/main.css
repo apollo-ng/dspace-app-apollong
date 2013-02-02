@@ -74,7 +74,7 @@ input[type="search"] {
 /********************************************************/
 
 html { overflow: hidden; }
-body { color: #282828; background:  #3f3e3a; background-image: url(../images/panel_bg.png); font-size: 0.8em; font-family: "Liberation Sans", "Nimbus Sans L", "FreeSans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+body { color: #282828; overflow: hidden; background:  #3f3e3a; background-image: url(../images/panel_bg.png); font-size: 0.8em; font-family: "Liberation Sans", "Nimbus Sans L", "FreeSans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 a       { color: #A50B00; }
 h1	 { font-size: 24px; color: #fafafa; text-shadow: 1px 1px #777777, -1px -1px #000000; }
 h2	 { font-size: 20px; color: #3f3e3a; text-shadow:#fff 0px 1px 0, #000 0 -1px 0; margin-bottom: 10px;}

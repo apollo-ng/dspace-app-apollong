@@ -37,7 +37,8 @@ define([
 
     callCommand: function(event) {
       var item = this.$(event.target);
-      this.trigger('command ' + item.attr('data-command'), this.point);
+      console.log("trigger command", item.attr('data-command'));
+      this.trigger('command:' + item.attr('data-command'), this.point);
       this.hide();
     },
 
@@ -117,7 +118,7 @@ define([
        */
       this.contextPanel = new MapContext({ map: this });
 
-      this.contextPanel.on('command add-feature', function(point) {
+      this.contextPanel.on('command:add-feature', function(point) {
         var location = this.frame.pointLocation(point);
         var dialog = new AddFeature(location);
         dialog.render();

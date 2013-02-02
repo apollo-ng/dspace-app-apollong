@@ -178,7 +178,7 @@ define([
         var user = this.world.user.toJSON();
         this.$('*[data-name="user-location"]').
           attr('data-lat', user.geoLocation.coords.latitude).
-          attr('data-lon', user.geoLocation.coords.latitude);
+          attr('data-lon', user.geoLocation.coords.longitude);
         this.renderPositions();
       },
 
@@ -193,7 +193,7 @@ define([
       renderPositions: function() {
         this.$('*[data-format=position]').forEach(function(e) {
           var el = this.$(e);
-          el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
+          el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
         }.bind(this));
       },
 

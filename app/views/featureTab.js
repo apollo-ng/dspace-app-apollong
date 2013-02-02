@@ -55,8 +55,10 @@ define([
       var self = this;
       this.$el.empty();
 
-      _(this.collection.models).each(function(feature, index){
-        feature.set( 'index', index );
+      this.$el.attr('data-index', this.index);
+
+      _(this.collection.models).each(function(feature, featureIndex){
+        feature.set( 'index', featureIndex );
         var featureBoxItem = new FeatureBoxItem({
           model: feature,
           aether: self.aether
@@ -68,6 +70,14 @@ define([
       });
       return self.el;
     },
+
+    hide: function() {
+      this.$el.hide();
+    },
+
+    show: function() {
+      this.$el.show();
+    }
 
   });
 

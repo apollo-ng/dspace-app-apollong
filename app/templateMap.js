@@ -7,8 +7,9 @@ define([
   'hbs!templates/featureOptionModal',
   'hbs!templates/controlPanel',
   'hbs!templates/addFeature',
-  'hbs!templates/featureDetails'
-], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, featureOptionModal, controlPanel, addFeature, featureDetails) {
+  'hbs!templates/featureDetails',
+  'hbs!templates/featureBox'
+], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, featureOptionModal, controlPanel, addFeature, featureDetails, featureBox) {
 
   return {
     mapContext: mapContext,
@@ -19,7 +20,8 @@ define([
     featureOptionModal: featureOptionModal,
     controlPanel: controlPanel,
     addFeature: addFeature,
-    featureDetails: featureDetails
+    featureDetails: featureDetails,
+    featureBox: featureBox
   };
 
 });

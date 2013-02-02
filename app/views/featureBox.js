@@ -1,8 +1,10 @@
 define([
+  'ender',
   'backbone',
   'views/panels',
-  'views/featureTab'
-], function(Backbone, panels, FeatureTab) {
+  'views/featureTab',
+  'templateMap'
+], function($, Backbone, panels, FeatureTab, templates) {
     /**
      * Class: FeatureBox
      *
@@ -20,6 +22,11 @@ define([
        * DOM element of this view
        */
       el: '#featureBox',
+      template: templates.featureBox,
+
+      events: {
+        'click *[data-tab]': 'clickTab'
+      },
 
       /**
        * Method: initialize
@@ -68,6 +75,7 @@ define([
             collection: feed.collection,
             aether: this.aether
           });
+          tab.index = i;
           tabs.push(tab);
         };
         return tabs;
@@ -85,13 +93,31 @@ define([
        * this.el - rendered DOM element of view
        */
       render: function(){
-        var self = this;
-
+        this.$el.html(this.template({
+          tabs: this.featureTabs
+        }));
         _(this.featureTabs).each(function(featureTab, index){
           var renderedTemplate = featureTab.render();
-          self.$el.append(renderedTemplate);
-        });
-        return self.el;
+          this.$el.append(renderedTemplate);
+          featureTab.hide();
+        }.bind(this));
+
+        if(this.featureTabs.length > 0) {
+          this.selectTab(0);
+        }
+        return this.el;
+      },
+
+      clickTab: function(event) {
+        this.selectTab($(event.target).attr('data-tab'));
+      },
+
+      selectTab: function(index) {
+        if(this.currentTabIndex) {
+          this.featureTabs[this.currentTabIndex].hide();
+        }
+        this.featureTabs[index].show();
+        this.currentTabIndex = index;
       },
 
       showFX: function(){

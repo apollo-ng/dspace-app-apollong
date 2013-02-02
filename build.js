@@ -13,6 +13,7 @@
     "collections" : "app/collections",
     "views" : "app/views",
     "templateMap" : "app/templateMap",
+    "geofeeds": "app/geofeeds",
 
     // dependencies of hbs
     "i18nprecompile"   : "deps/hbs/i18nprecompile",

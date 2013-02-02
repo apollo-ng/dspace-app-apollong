@@ -15,10 +15,15 @@ DOC_INPUTS=-i ./app
 
 default: build
 
-build: deps
+build: deps init
 	node node_modules/.bin/r.js -o build.js
 
 deps: clean-deps ender local-deps
+
+init:
+	git submodule init
+	git submodule update
+	make local-deps
 
 local-deps:
 # requirejs:

@@ -22,7 +22,11 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     console.log('new store', name);
     this.name = name;
     var store = localStorage.getItem(this.name);
-    this.data = (store && JSON.parse(store)) || {};
+    try {
+      this.data = (store && JSON.parse(store)) || {};
+    } catch(exc) {
+      this.data = {};
+    }
   };
 
   _.extend(Store.prototype, {
@@ -36,7 +40,7 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     // Add a model, giving it a (hopefully)-unique GUID, if it doesn't already
     // have an id of it's own.
     create: function(model) {
-      if (!model.id) model.set(model.idAttribute, guid());
+      if (!model.id) model.id = guid();
       this.data[model.id] = model;
       this.save();
       return model;

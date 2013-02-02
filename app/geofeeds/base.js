@@ -18,7 +18,6 @@ define([
     },
 
     updateCollection: function(collection) {
-      console.log("Update feed", this, collection);
       // FIXME: don't use "reset", but "update"
       // http://backbonejs.org/#Collection-update
       this.collection.reset(collection.features);

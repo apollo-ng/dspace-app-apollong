@@ -61,7 +61,6 @@ define([
        * featureTabs - an array of <FeatureTab> views
        */
       initializeTabs: function(){
-        console.log("FEEDS", this.feeds);
         var tabs = [];
         for(var i=0; i < this.feeds.length; i++){
           var feed = this.feeds[i];

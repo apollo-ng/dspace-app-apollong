@@ -140,7 +140,6 @@ define([
         this.$('*[data-name="user-location"]').
           attr('data-lat', user.geoLocation.coords.latitude).
           attr('data-lon', user.geoLocation.coords.latitude);
-        console.log('update USER', JSON.stringify(user.geoLocation.coords));
         this.renderPositions();
       },
 
@@ -154,7 +153,6 @@ define([
 
       renderPositions: function() {
         this.$('*[data-format=position]').forEach(function(e) {
-          console.log('update position', e);
           var el = this.$(e);
           el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
         }.bind(this));

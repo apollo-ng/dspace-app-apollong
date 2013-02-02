@@ -213,6 +213,9 @@ define([
           this.modal = new FeatureDetails({
             feature: feature
           });
+          this.modal.on('close', function() {
+            this.dspace.jump({ modal: false });
+          }.bind(this));
           this.modal.show();
         } else {
           console.log('show feature details, but no feature');
@@ -247,6 +250,10 @@ define([
     },
 
     reset: function() {
+      this.closeModal();
+    },
+
+    closeModal: function() {
       if(this.modal) {
         this.modal.hide();
         delete this.modal;

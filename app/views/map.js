@@ -54,11 +54,9 @@ define([
     },
 
     hideFX: function(){
-      var self = this;
-      this.$el.fadeOut(350, function() { self.$el.hide(); });
+      this.$el.fadeOut(350, this.$el.hide.bind(this.$el));
     }
   });
-
 
   /* Class: Map
    *
@@ -104,9 +102,9 @@ define([
 
       var self = this;
       this.world.on('change', function(event, data){
-        // WIP
-        //self.recenter();
-      });
+        console.log("CHANGE WORLD", JSON.stringify(this.world.get('mapCenter')));
+        this.recenter();
+      }.bind(this));
 
       /**
        * listens to changes on user and updates related layer
@@ -160,9 +158,9 @@ define([
       /**
        * FIXME keep track on overlays
        */
-      var feeds = this.world.featureCollections;
+      var feeds = this.world.geoFeeds;
       for( var i = feeds.length; i--; ) {
-        var overlay = new Overlay({ collection: feeds[i], map: this });
+        var overlay = new Overlay({ collection: feeds[i].collection, map: this });
       }
     },
 
@@ -178,7 +176,6 @@ define([
      * creates frame using ModestMaps library
      */
     createFrame: function(){
-      var self = this;
       var config = this.config;
 
       var template = config.tileSet.template; //FIXME introduce BaseMap
@@ -209,9 +206,9 @@ define([
        * sets current mapCenter and mapZoom
        */
       modestmap.addCallback('drawn', function(m){
-        self.world.set('mapCenter', modestmap.getCenter());
-        self.world.set('mapZoom', modestmap.getZoom());
-      });
+        this.world.set('mapCenter', modestmap.getCenter());
+        this.world.set('mapZoom', modestmap.getZoom());
+      }.bind(this));
 
       return modestmap;
 

@@ -23,6 +23,7 @@
     "ender": 'deps/ender',
     "underscore": "deps/underscore",
     "backbone": "deps/backbone",
+    "backbone-localstorage": "deps/backbone.localstorage",
 
     "reqwest": "deps/reqwest",
     "handlebars": "deps/handlebars",

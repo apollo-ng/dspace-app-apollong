@@ -1,11 +1,11 @@
 define([
   'underscore',
   'backbone',
-  'collections/cors',
+  'geofeeds/geoJson',
   'models/user',
   'views/map',
   'views/ui'
-], function(_, Backbone, FeatureCollectionCORS, User, Map, UI) {
+], function(_, Backbone, GeoJSONFeed, User, Map, UI) {
 
   /*
    * Class: World
@@ -20,7 +20,7 @@ define([
      * Method: initialize
      *
      * - <createUser>
-     * - <createFeatureCollections> + sync them
+     * - <createFeeds> + sync them
      * - <createMap>
      * - creates <UI>
      * - <Map.render>
@@ -41,7 +41,10 @@ define([
       this.config = this.get('config');
 
       this.user = this.createUser(this.config.user);
-      this.featureCollections = this.createFeatureCollections(this.config.geoFeeds);
+      // Property: geoFeeds
+      //
+      // @elf-pavlik: Document this.
+      this.geoFeeds = this.createFeeds(this.config.geoFeeds);
 
       var aether = _.extend({ user: this.user }, Backbone.Events);
 
@@ -80,7 +83,7 @@ define([
     },
 
     /**
-     * Method: createFeatureCollections
+     * Method: createFeeds
      * creates <FeatureCollection>s from array in *config.geoFeeds*
      *
      * *currently sync right away*
@@ -93,24 +96,27 @@ define([
      *     { hub: 'open-reseource.org', type: 'DSNP'}]}
      * (end code)
      */
-    createFeatureCollections: function( geoFeeds ){
-      var featureCollections = [];
-      for(var i = 0; i < geoFeeds.length; i++){
-        var feed = geoFeeds[i];
-        switch(feed.type){
-        case 'CORS':
-          var featureCollection = new FeatureCollectionCORS(feed);
-          //for now sync it right away!
-          featureCollection.sync()
+    createFeeds: function( feedConfigs ){
+      var feeds = [];
+      feedConfigs.forEach(function(feed) {
+        feed = this.createFeed(feed);
+        if(feed) {
+          feeds.push(feed);
+          feed.watch();
+        }
+      }.bind(this));
+      return feeds;
+    },
 
-          featureCollections.push(featureCollection);
-          break;
-        default:
-          console.log('tried creating ' + feed.type + ' collections')
-          break;
-        };
+    createFeed: function(feed) {
+      switch(feed.type){
+      case 'CORS':
+        return new GeoJSONFeed(feed);
+        break;
+      default:
+        console.log('tried creating ' + feed.type + ' collections')
+        break;
       };
-      return featureCollections;
     },
 
     /**

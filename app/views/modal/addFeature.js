@@ -3,13 +3,12 @@ define([
   'ender',
   'backbone',
   'models/feature',
-  'views/panels',
+  'views/modal/base',
   'templateMap'
-], function(_, $, Backbone, Feature, panels, templates) {
+], function(_, $, Backbone, Feature, BaseModal, templates) {
 
-  return panels.Base.extend({
+  return BaseModal.extend({
 
-    el: '#addFeatureModal',
     template: templates.addFeature,
 
     initialize: function(location) {

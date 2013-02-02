@@ -1,8 +1,8 @@
 define([
   'backbone',
-  'views/panels',
+  'views/modal/base',
   'templateMap',
-], function(Backbone, panels, templates) {
+], function(Backbone, BaseModal, templates) {
 
     /**
      * Class: Modal.UserOptions
@@ -11,9 +11,8 @@ define([
      *
      * (see optionsPanel.png)
      */
-    return panels.Base.extend({
+    return BaseModal.extend({
 
-      el: '#userOptionModal',
       template: templates.userOptionModal,
 
       events: {

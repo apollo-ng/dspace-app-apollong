@@ -6,9 +6,6 @@ describe('just checking', function(){
     this.browser = new zombie.Browser();
     this.browser.visit('http://localhost:3000/index.dev.html')
       .then(done, done)
-      .fail(function(){
-        console.log('fail');
-      });
   });
 
   it('says true', function(){

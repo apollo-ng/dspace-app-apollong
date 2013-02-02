@@ -100,7 +100,7 @@ define([
     initialize: function( options ){
 
       this.world = this.options.world;
-      this.config = this.options.config;
+      this.config = this.world.config.map;
 
       var self = this;
       this.world.on('change', function(event, data){

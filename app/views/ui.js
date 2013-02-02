@@ -2,9 +2,10 @@ define([
   'backbone',
   'views/panels',
   'views/featureBox',
+  'views/map',
   'views/miniMap',
   'views/modal/userOptions'
-], function(Backbone, panels, FeatureBox, MiniMap, UserOptions) {
+], function(Backbone, panels, FeatureBox, Map, MiniMap, UserOptions) {
 
 
   // /**
@@ -98,20 +99,20 @@ define([
       /**
        * Property: map
        *
-       * reference to the <Map> from init options
+       * reference to the <Map> from
        *
        * passed to <MiniMap>
        * used to jump <Map>
        */
 
-      this.map = this.options.map;
+      this.map = new Map({ world: this.world });
 
       /**
        * Property: aether
        *
        * event aggregator from <World>
        */
-      this.aether = this.options.aether;
+      this.aether = this.world.aether;
 
 
       /**
@@ -147,6 +148,8 @@ define([
      * render all elements and sets them visible
      */
     render: function(){
+      this.map.render();
+
       this.featureBox.render();
       this.featureBox.visible = true;
 

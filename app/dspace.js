@@ -1,6 +1,7 @@
 define([
-  'models/world'
-], function(World) {
+  'models/world',
+  'views/ui'
+], function(World, UI) {
 
   /**
    * Class: DSpace
@@ -9,7 +10,10 @@ define([
    */
   return {
     init: function(config) {
-      return new World({ config : config });
+      var world = new World({ config : config });
+      var ui = new UI({ world: world });
+      ui.render();
+      return world;
     }
   };
 

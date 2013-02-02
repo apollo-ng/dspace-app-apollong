@@ -2,10 +2,8 @@ define([
   'underscore',
   'backbone',
   'geofeeds/geoJson',
-  'models/user',
-  'views/map',
-  'views/ui'
-], function(_, Backbone, GeoJSONFeed, User, Map, UI) {
+  'models/user'
+], function(_, Backbone, GeoJSONFeed, User) {
 
   /*
    * Class: World
@@ -21,7 +19,6 @@ define([
      *
      * - <setupUser>
      * - <createFeeds> + sync them
-     * - <createMap>
      * - creates <UI>
      * - <Map.render>
      * - <UI.render>
@@ -46,24 +43,15 @@ define([
       // @elf-pavlik: Document this.
       this.geoFeeds = this.createFeeds(this.config.geoFeeds);
 
-      var aether = _.extend({ user: this.user }, Backbone.Events);
-
-      /**
-       * create and render Map & UI
-       */
-      this.map = this.createMap(this.config.map);
-      this.ui = new UI({world: this, map: this.map, aether: aether});
-
-      this.map.render();
-      this.ui.render();
+      this.aether = _.extend({ user: this.user }, Backbone.Events);
 
 
       this.user.on('change', function() {
-        aether.trigger('user:change', this.user);
+        this.aether.trigger('user:change', this.user);
       }.bind(this));
 
       // fire initial change
-      aether.trigger('user:change', this.user);
+      this.aether.trigger('user:change', this.user);
 
     },
 
@@ -112,28 +100,8 @@ define([
         console.log('tried creating ' + feed.type + ' collections')
         break;
       };
-    },
-
-    /**
-     * Method: createMap
-     * creates a <Map> passing it *<World>* and *config.map*
-     * (start code)
-     * config: {
-     *   map: {
-     *     tileSet: {
-     *       template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'},
-     *     geolat:  48.115293,
-     *     geolon:  11.60218,
-     *     minZoom: 13,
-     *     maxZoom: 17,
-     *     miniMapZoom: 11,
-     *     defaultZoom: 12
-     *   }}
-     * (end code)
-     */
-    createMap: function(config){
-      return new Map({world: this, config: config});
     }
+
   });
 
   return World;

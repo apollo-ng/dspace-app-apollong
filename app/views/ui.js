@@ -126,7 +126,7 @@ define([
       /**
        * Property: featureBox
        */
-      this.featureBox = new FeatureBox({ aether: this.aether, collections: this.world.featureCollections});
+      this.featureBox = new FeatureBox({ aether: this.aether, feeds: this.world.geoFeeds});
 
       /**
        * creates minimap
@@ -136,7 +136,7 @@ define([
       /**
        * creates statusPanel
        */
-      this.statusPanel = new panels.Status({model: this.world.user});
+      this.statusPanel = new panels.Status({model: this.world});
       this.controlPanel = new panels.Control({world: this.world });
 
     },

@@ -3,12 +3,13 @@ var assert = require('assert');
 
 describe('just checking', function(){
   before(function(done){
-    this.browser = new zombie.Browser();
-    this.browser.visit('http://localhost:3000/index.dev.html')
-      .then(done, done)
+    var browser = new zombie.Browser();
+    browser.visit('http://localhost:3000/index.dev.html')
+      .then(done, done);
+    this.browser = browser;
   });
 
-  it('says true', function(){
-    return true;
+  it('works', function(){
+    assert.equal('DSpace', this.browser.query('head > title').innerHTML);
   });
 });

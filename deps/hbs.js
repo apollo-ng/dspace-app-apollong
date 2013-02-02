@@ -9,6 +9,13 @@
 /*jslint evil: true, strict: false, plusplus: false, regexp: false */
 /*global require: false, XMLHttpRequest: false, ActiveXObject: false,
 define: false, process: false, window: false */
+
+if(typeof process !== "undefined" &&
+   process.versions &&
+   !!process.versions.node) {
+  var nodeRequire = require.nodeRequire || require;
+}
+
 define([
 //>>excludeStart('excludeHbs', pragmas.excludeHbs)
   'require', 'handlebars', 'underscore', 'i18nprecompile', 'json2'
@@ -18,6 +25,9 @@ define([
   require, Handlebars, _, precompile, JSON
 //>>excludeEnd('excludeHbs')
 ) {
+  if(typeof(nodeRequire) !== 'undefined') {
+    require.nodeRequire = nodeRequire;
+  }
 //>>excludeStart('excludeHbs', pragmas.excludeHbs)
   var fs, getXhr,
         progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],

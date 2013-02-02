@@ -1,8 +1,9 @@
 define([
+  'ender',
   'backbone',
   'views/modal/base',
   'templateMap',
-], function(Backbone, BaseModal, templates) {
+], function($, Backbone, BaseModal, templates) {
 
     /**
      * Class: Modal.UserOptions
@@ -16,17 +17,18 @@ define([
       template: templates.userOptionModal,
 
       events: {
-        'change input': 'fireChanges'
+        'change input': 'updateUser',
+        'click section > h2 > a': 'setCurrentSection'
       },
 
       initialize: function(options) {
         this.user = options.user;
         this.aether = options.aether;
-        var attrs = this.user.toJSON();
         this.$el.html(this.template());
 
         // deferred, because setting 'checked' attribute will only works
         // after inputs have been rendered.
+        var attrs = this.user.toJSON();
         setTimeout(function() {
           for(var key in attrs) {
             this.$('input[name="' + key + '"]').forEach(function(input) {
@@ -40,24 +42,56 @@ define([
             }.bind(this));
           }
         }.bind(this), 0);
+
+        // update section size, when window size changes.
+        $(window).on('resize', this.updateSectionHeight.bind(this));
       },
 
-      fireChanges: function(event) {
+      /**
+       * Method: updateUser
+       *
+       * Updates a single attribute of the associated <User> from a
+       * a 'change' event.
+       * Saves the user.
+       *
+       * Parameters:
+       *   event - a DOM event, with the changed input as 'target'
+       */
+      updateUser: function(event) {
         var target = this.$(event.target);
         this.user.set(target.attr('name'), target.val());
         this.user.save();
       },
 
-      showFX: function(){
-        this.$el.html( this.template( { ui: this.ui } ) );
-        this.$el.css( { 'display': 'block'});
-        this.$el.fadeIn(350);
+      /**
+       * Method: setCurrentSection
+       *
+       * Collapses all sections, but the one the user clicked.
+       */
+      setCurrentSection: function(event) {
+        var section = $(event.target).closest('section');
+        this.$('section.active').removeClass('active').attr('style', '');
+        section.addClass('active');
+        this.updateSectionHeight();
       },
 
-      hideFX: function(){
-        var self = this;
-        this.$el.fadeOut(350, function() { self.$el.hide(); });
+      /**
+       * Method: updateSectionHeight
+       *
+       * Adjusted the height of the currently opened section.
+       *
+       * This is needed, so the accordion always fills the whole modal space.
+       *
+       * Usually happens in response to a section change (<setCurrentSection>),
+       * or a 'resize' event from the window.
+       *
+       */
+      updateSectionHeight: function() {
+        var sectionCount = this.$('section').length;
+        var height = window.innerHeight - (((sectionCount-1) * 50) + (2 * 49));
+        this.$('section.active').attr('style', 'height:' + height + 'px');
       }
+
     });
 
 });

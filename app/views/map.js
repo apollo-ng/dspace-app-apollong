@@ -6,10 +6,8 @@ define([
 
   'templateMap',
 
-  // models
-  'models/marker',
-
   // views
+  'views/marker',
   'views/panels',
   'views/overlay',
   'views/modal/addFeature'
@@ -238,8 +236,8 @@ define([
        * define a factory to make markers
        */
       markerLayer.factory(function(featureJson){
-        return new Marker({ featureJson: featureJson }).render( );
-      });
+        return new Marker({ featureJson: featureJson }).render();
+      }.bind(this));
       /**
        * display markers MM adds it to DOM
        * .extent() called to redraw map!
@@ -271,8 +269,13 @@ define([
        * define a factory to make markers
        */
       markerLayer.factory(function(featureJson){
-        return new Marker({ featureJson: featureJson }).render( );
-      });
+        var marker = new Marker({ featureJson: featureJson });
+        console.log("make marker", marker);
+        marker.on('click', function() {
+          this.trigger('marker-click', featureJson.uuid);
+        }.bind(this));
+        return marker.render();
+      }.bind(this));
       /**
        * display markers MM adds it to DOM
        * .extent() called to redraw map!

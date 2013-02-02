@@ -53,6 +53,9 @@ define([
       // fire initial change
       this.aether.trigger('user:change', this.user);
 
+      // FIXME: make this more efficient!
+      this.featureIndex = {};
+
     },
 
     /**
@@ -86,9 +89,20 @@ define([
         if(feed) {
           feeds.push(feed);
           feed.watch();
+
+          feed.collection.on('change', function(feature) {
+            this.featureIndex[feature.get('uuid')] = feature;
+          }.bind(this));
         }
       }.bind(this));
       return feeds;
+    },
+
+    getCurrentFeature: function() {
+      var uuid = this.get('currentFeatureId');
+      if(uuid) {
+        return this.featureIndex[uuid];
+      }
     },
 
     createFeed: function(feed) {

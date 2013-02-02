@@ -1,4 +1,7 @@
-define(['backbone'], function(Backbone) {
+define([
+  'backbone',
+  'Math.uuid'
+], function(Backbone, MathUUID) {
   /**
    * Class: Feature
    *
@@ -22,6 +25,11 @@ define(['backbone'], function(Backbone) {
       if(! this.get('geometry')) {
         this.set('geometry', {});
       }
+
+      if(! this.get('uuid')) {
+        this.set('uuid', MathUUID.uuid());
+      }
+
     },
 
     /**
@@ -33,7 +41,6 @@ define(['backbone'], function(Backbone) {
       var geometry = this.get('geometry');
       var lat = this.get('lat');
       var lon = this.get('lon');
-      console.log('setLatLon', this);
       if( typeof geometry !== 'undefined'
           && geometry.coordinates
           && geometry.coordinates.length === 2 ) {

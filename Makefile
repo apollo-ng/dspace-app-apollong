@@ -70,7 +70,7 @@ ender:
 	$(ENDER_BUILD) ender.js
 	sed -i 's/typeof define/typeof defineDoesntExist/g' ender.js
 	sed -i 's/define(/defineDoesntExist(/g' ender.js
-	echo "var enderRequire;\n" > ender.js.tmp
+	echo -e "var enderRequire;\n" > ender.js.tmp
 	cat ender.js >> ender.js.tmp
 	mv ender.js.tmp ender.js
 	sed -i 's/require(/enderRequire(/g' ender.js

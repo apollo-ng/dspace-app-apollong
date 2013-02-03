@@ -12,33 +12,79 @@ define([
         init: function() {
           privClient.release('');
           pubClient.release('');
-
-          privClient.on('change', function(event) {
-            var parts = event.path.split('/');
-            var collectionPath = parts.slice(0, -1).join('/');
-            var w = watchers[collectionPath];
-            if(w) {
-              var action = event.newValue && event.oldValue ? 'update' : (event.newValue ? 'add' : 'remove');
-              var value = event.newValue || event.oldValue;
-              w.forEach(function(watcher) {
-                watcher(action, value);
-              });
-            }
-          });
         },
 
-        watchCollection: function(name, callback) {
-          if(! watchers[name]) {
-            watchers[name] = [];
-          }
-          watchers[name].push(callback);
-          var path = name + '/';
-          privClient.use(path);
-          privClient.getAll(path).then(function(features) {
-            for(var id in features) {
-              callback('add', features[id]);
-            }
-          });
+        getCollection: function(name) {
+          pubClient.use('collections/');
+          pubClient.use('features/', true);
+
+          return pubClient.getObject('collections/' + name).
+            then(function(collection) {
+              if(! collection) {
+                collection = { name: name, features: [], type: 'FeatureCollection' };
+              }
+
+              function reload() {
+                return pubClient.getObject('collections/' + name).
+                  then(function(c) {
+                    if(typeof(c) === 'object') {
+                      collection = c;
+                    }
+                  });
+              }
+
+              if(! watchers[name]) {
+                watchers[name] = [];
+              }
+              return {
+                getFeatures: function() {
+                  return reload().then(function() {
+                    return remoteStorage.util.
+                      asyncMap(collection.features, function(feature) {
+                        // features are expected to be objects, ...
+                        if(typeof(feature) === 'object') {
+                          return feature;
+                        } else {
+                          // ... or relative paths to the actual features.
+                          return pubClient.getObject(feature);
+                        }
+                      });
+                  });
+                },
+
+                addFeature: function(feature) {
+                  if(! feature.id) {
+                    throw "Feature requires an ID";
+                  }
+                  var path = 'features/' + feature.id
+                  for(var i in collection.features) {
+                    if(collection.features[i] === path) {
+                      // already have this feature!
+                      return;
+                    }
+                  }
+                  return reload.then(function() {
+                    return pubClient.storeObject('feature', path, feature);
+                  }).
+                    then(function() {
+                      collection.features.push(path);
+                      return pubClient.storeObject(
+                        'collection', 'collections/' + name, collection
+                      );
+                    }).
+                    then(function() {
+                      console.log('added feature', feature);
+                      watchers[name].forEach(function(watcher) {
+                        watcher('add', feature);
+                      });
+                    });
+                },
+
+                watch: function(callback) {
+                  watchers[name].push(callback);
+                }
+              };
+            });
         }
 
       }

@@ -152,11 +152,13 @@ define([
      *
      */
     updateState: function(attrs, replace) {
-      var newState = this.mergeState(this.state, attrs);
-      log('updateState', this.state, '+', attrs, '->', newState);
-      this.state = newState;
-      this.navigate('!' + this.encodeState(newState), { replace: replace });
-      this.callStateHooks(attrs);
+      setTimeout(function() {
+        var newState = this.mergeState(this.state, attrs);
+        log('updateState', this.state, '+', attrs, '->', newState);
+        this.state = newState;
+        this.navigate('!' + this.encodeState(newState), { replace: replace });
+        this.callStateHooks(attrs);
+      }.bind(this), 0);
     },
 
     /**

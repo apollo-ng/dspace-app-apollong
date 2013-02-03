@@ -98,8 +98,8 @@ define([
           feeds.push(feed);
           feed.watch();
 
-          feed.collection.on('change', function(feature) {
-            this.featureIndex[feature.get('uuid')] = feature;
+          feed.collection.on('add', function(feature) {
+            this.featureIndex[feature.get('id')] = feature;
           }.bind(this));
 
           feed.set('visible', true);
@@ -109,9 +109,9 @@ define([
     },
 
     getCurrentFeature: function() {
-      var uuid = this.get('currentFeatureId');
-      if(uuid) {
-        return this.featureIndex[uuid];
+      var id = this.get('currentFeatureId');
+      if(id) {
+        return this.featureIndex[id];
       }
     },
 
@@ -121,9 +121,7 @@ define([
         return new GeoJSONFeed(feed);
         break;
       case 'remoteStorage':
-        if(this.user.get('remoteStorage')) {
-          return new RemoteStorageFeed(feed);
-        }
+        return new RemoteStorageFeed(feed);
         break;
       default:
         console.log('WARNING: Feed type not implemented: ' + feed.type);

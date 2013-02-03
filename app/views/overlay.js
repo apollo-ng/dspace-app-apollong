@@ -67,7 +67,7 @@ define(['backbone', 'markers', 'views/marker', 'templateMap'], function(Backbone
       markerLayer.factory(function(featureJson){
         var marker = new Marker({ featureJson: featureJson });
         marker.on('click', function() {
-          this.map.trigger('marker-click', featureJson.uuid);
+          this.map.trigger('marker-click', featureJson.id);
         }.bind(this));
         return marker.render();
       }.bind(this));

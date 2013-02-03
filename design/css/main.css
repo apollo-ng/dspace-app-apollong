@@ -169,3 +169,9 @@ h3	 { font-size: 18px; }
 .black-shield-0 { background-image: url(../icons/black-shield-0.png) }
 .black-shield-1 { background-image: url(../icons/black-shield-1.png) }
 .black-shield-2 { background-image: url(../icons/black-shield-2.png) }
+
+#remotestorage-connect {
+    position: absolute;
+    top: -7px;
+    right: 235px;
+}

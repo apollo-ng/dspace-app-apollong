@@ -26,8 +26,8 @@ define([
         this.set('geometry', {});
       }
 
-      if(! this.get('uuid')) {
-        this.set('uuid', MathUUID.uuid());
+      if(! this.get('id')) {
+        this.set('id', MathUUID.uuid());
       }
 
     },

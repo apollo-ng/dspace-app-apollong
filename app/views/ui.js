@@ -121,11 +121,15 @@ define([
        *
        * jumps map to feature set to current
        */
-      this.aether.on('feature:current', function( feature ){
+      this.aether.on('select-feature', function( feature ){
+        var id = feature.get('id');
         this.dspace.updateState({
-          feature: feature.get('uuid'),
+          feature: id,
           modal: undefined
         });
+        if(this.world.get('currentFeatureId') === id) {
+          this.map.jumpToFeature(feature);
+        }
       }.bind(this));
 
 
@@ -141,9 +145,9 @@ define([
 
       this.map = new Map({ world: this.world, dspace: this.dspace });
 
-      this.map.on('marker-click', function(uuid) {
+      this.map.on('marker-click', function(id) {
         this.dspace.updateState({
-          feature: uuid,
+          feature: id,
           modal: 'featureDetails'
         });
       }.bind(this));
@@ -211,11 +215,13 @@ define([
       }.bind(this));
 
       function setupRemoteStorage() {
+        remoteStorage.util.silenceAllLoggers();
         if(this.world.user.get('remoteStorage')) {
           $(document.body).prepend('<div id="remotestorage-connect"></div>');
           remoteStorage.claimAccess('locations', 'rw').
             then(function() {
               remoteStorage.displayWidget('remotestorage-connect');
+              remoteStorage.schedule.disable();
             });
         } else {
           $('#remotestorage-connect').remove();

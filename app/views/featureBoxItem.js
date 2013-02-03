@@ -41,11 +41,6 @@ define([
       return this.el;
     },
 
-    /**
-     * Event: feature:current
-     *
-     * triggers <setFeatureCurrent>
-     */
     events: {
       "click": "setFeatureCurrent"
     },
@@ -70,7 +65,7 @@ define([
      * trigers *feature:current* event on a model (<Feature>)
      */
     setFeatureCurrent: function( event ){
-      this.model.trigger('feature:current', this.model );
+      this.trigger('selected', this.model);
     }
   });
 

@@ -88,12 +88,12 @@ define([
     updatePosition: function() {
       var selectedLocation = this.world.get('selectedLocation');
       if(selectedLocation) {
-        this.model.set(selectedLocation);
-        this.model.setLatLon();
+        this.model.setLatLon(selectedLocation.lat, selectedLocation.lon);
       }
       var span = $(this.$('*[data-format=position]')[0]);
-      span.attr('data-lat', this.model.get('lat'));
-      span.attr('data-lon', this.model.get('lon'));
+      var latlon = this.model.getLatLon();
+      span.attr('data-lat', latlon.lat);
+      span.attr('data-lon', latlon.lon);
       
       // FIXME: move actual renderPos call somewhere else.
       span.html(renderPos(span.attr('data-lat'), span.attr('data-lon'), this.world.user.get('userCoordPrefs')));

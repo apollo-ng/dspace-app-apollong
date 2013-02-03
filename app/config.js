@@ -20,7 +20,8 @@ define([], function() {
 
       { hub: 'open-reseource.org', type: 'DSNP'},
 
-      { name: 'test', type: 'remoteStorage' }
+      { name: 'test', type: 'remoteStorage' },
+      //{ name: 'test', user: 'nil@heahdk.net', type: 'remoteStorage' }
 
     ],
 

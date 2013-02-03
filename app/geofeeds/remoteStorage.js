@@ -1,14 +1,21 @@
 define([
   'underscore',
+  'remoteStorage',
   'remoteStorage-locations',
+  'models/feature',
   './base'
-], function(_, locations, Base) {
+], function(_, remoteStorage, locations, Feature, Base) {
 
   return Base.extend({
 
     watch: function() {
-      locations.watchCollection(
-        this.name, function(action, feature) {
+      // FIXME: move to setup!!
+      remoteStorage.onWidget('disconnect', function() {
+        this.collection.reset();
+      }.bind(this));
+
+      var watchCollection = function(collection) {
+        collection.watch(function(action, feature) {
           switch(action) {
           case 'add':
             console.log('add feature', feature);
@@ -21,8 +28,31 @@ define([
             this.collection.remove(feature);
             break;
           }
-        }.bind(this)
-      );
+        }.bind(this));
+        
+        var initialUpdate = function() {
+          collection.getFeatures().then(function(features) {
+            this.updateCollection({ features: features }, true);
+          }.bind(this));
+        }.bind(this);
+        remoteStorage.onWidget('ready', initialUpdate);
+        initialUpdate();
+
+      }.bind(this);
+
+      if(this.user) {
+        // FIXME: implement getForeignCollection
+        locations.getForeignCollection(this.user, this.name).
+          then(watchCollection);
+      } else {
+        locations.getCollection(this.name).then(function(collection) {
+          this.collection.on('add', function(feature) {
+            collection.addFeature(feature.toJSON());
+          });
+
+          watchCollection(collection);
+        }.bind(this));
+      }
     },
 
     makeTitle: function() {

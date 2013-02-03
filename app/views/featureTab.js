@@ -46,16 +46,6 @@ define([
         this.reset();
       }.bind(this));
 
-      /**
-       * Event: feature:current
-       *
-       * listens on collection for *feature:current* events
-       * then trigger them on ether passing forward future
-       */
-      this.collection.on( 'feature:current', function( feature ){
-        this.aether.trigger('feature:current', feature );
-      }.bind(this));
-
       this.collection.on('add', function(feature) {
         this.renderFeature(feature);
       }.bind(this));
@@ -102,6 +92,9 @@ define([
         model: feature,
         aether: this.aether
       });
+      featureBoxItem.on('selected', function() {
+        this.aether.trigger('select-feature', feature);
+      }.bind(this));
       var renderedTemplate = featureBoxItem.render();
       this.itemWrapper.append(renderedTemplate);
     },

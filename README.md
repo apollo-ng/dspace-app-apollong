@@ -1,4 +1,6 @@
-# DSpace-Client
+# DSpace-Client 
+
+ [![Build Status](https://travis-ci.org/apollo-ng/dspace-client.png?branch=master)](https://travis-ci.org/apollo-ng/dspace-client)
 
 DSpace aims to enable people to find, collect, edit, structure and share any kind of information
 in a real-time, massive-collaboration, augmented-reality-environment (like wikipedia),

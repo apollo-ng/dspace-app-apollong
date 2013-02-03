@@ -1,7 +1,8 @@
 define([
   'backbone',
-  'views/featureBoxItem'
-], function(Backbone, FeatureBoxItem) {
+  'views/featureBoxItem',
+  'templateMap'
+], function(Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab
@@ -16,6 +17,7 @@ define([
   var FeatureTab = Backbone.View.extend({
 
     className: 'featureTab',
+    template: templates.featureTab,
 
     initialize: function(){
       var self = this;
@@ -62,7 +64,13 @@ define([
       if(this.rendered) {
         return;
       }
-      this.$el.empty();
+
+      /**
+       *  Render Overlay Title
+       */
+      this.$el.html(this.template(this));
+
+      this.itemWrapper = this.$('.featureItems');
 
       this.rendered = true;
 
@@ -82,7 +90,7 @@ define([
         aether: this.aether
       });
       var renderedTemplate = featureBoxItem.render();
-      this.$el.append(renderedTemplate);
+      this.itemWrapper.append(renderedTemplate);
     },
 
     hide: function() {

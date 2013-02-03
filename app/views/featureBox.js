@@ -96,6 +96,8 @@ define([
         this.$el.html(this.template({
           tabs: this.featureTabs
         }));
+
+
         _(this.featureTabs).each(function(featureTab){
           var renderedTemplate = featureTab.render();
           this.$el.append(renderedTemplate);

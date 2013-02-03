@@ -98,6 +98,7 @@ define([
     initialize: function( options ){
 
       this.world = this.options.world;
+      this.dspace = this.options.dspace;
       this.config = this.world.config.map;
 
       var self = this;
@@ -118,10 +119,15 @@ define([
       this.contextPanel = new MapContext({ map: this });
 
       this.contextPanel.on('command:add-feature', function(point) {
-        var location = this.frame.pointLocation(point);
-        var dialog = new AddFeature(location);
-        dialog.render();
-        dialog.show();
+        this.dspace.updateState({
+          location: JSON.stringify(this.frame.pointLocation(point)),
+          modal: 'addFeature'
+        });
+        
+        // var location = this.frame.pointLocation(point);
+        // var dialog = new AddFeature(location, { aether: this.world.aether });
+        // dialog.render();
+        // dialog.show();
       }.bind(this));
 
       this.overlays = this.world.geoFeeds.map(function(feed) {
@@ -285,16 +291,19 @@ define([
       if(features) {
         this.frame.addLayer(markerLayer);//.setExtent(markerLayer.extent());
         this.frame.draw();
-        return {
-          remove: function() {
-            this.frame.removeLayer(markerLayer);
-          }.bind(this)
-        };
+        return markerLayer;
       } else {
         this.recenter();
-        return { remove: function() {} };
       }
 
+    },
+
+    removeLayer: function(layer) {
+      var oldLen = this.frame.layers.length;
+      if(layer) {
+        this.frame.removeLayer(layer);
+        this.frame.draw();
+      }
     },
 
     /**

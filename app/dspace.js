@@ -58,7 +58,8 @@ define([
      */
     defaultState: {
       feature: undefined,
-      modal: undefined
+      modal: undefined,
+      location: undefined
     },
 
     /**
@@ -80,13 +81,21 @@ define([
      *
      */
     stateHooks: {
+
       feature: function(uuid) {
-        log('stateHook feature', uuid);
         this.world.set('currentFeatureId', uuid);
       },
+
       modal: function(name) {
-        log('stateHook modal', name);
         this.world.set('currentModal', name);
+      },
+
+      location: function(location) {
+        var loc;
+        try {
+          loc = JSON.parse(location);
+        } catch(exc) {};
+        this.world.set('selectedLocation', loc);
       }
     },
 

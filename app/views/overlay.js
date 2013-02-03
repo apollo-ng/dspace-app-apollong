@@ -28,7 +28,6 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
     },
 
     render: function() {
-      console.log('render overlay');
       if(this.feed.get('visible')) {
         this.show();
       } else {
@@ -37,13 +36,13 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
     },
 
     show: function() {
-      this.maplayer = this.map.addMapLayer(this.feed.collection);
+      this.hide();
+      this.layer = this.map.addMapLayer(this.feed.collection);
     },
 
     hide: function() {
-      if(this.maplayer) {
-        this.maplayer.remove();
-      }
+      this.map.removeLayer(this.layer);
+      delete this.layer;
     }
   });
 

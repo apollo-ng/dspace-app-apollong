@@ -16,6 +16,10 @@ define([
       this.collection = new FeatureCollection();
       _.extend(this, options);
       this.title = this.makeTitle();
+
+      this.collection.on('add', function() {
+        this.trigger('change', this);
+      }.bind(this));
     },
 
     updateCollection: function(collection, reset) {

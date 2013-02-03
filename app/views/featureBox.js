@@ -81,6 +81,12 @@ define([
         return tabs;
       },
 
+      getCurrentCollection: function() {
+        var tab = this.featureTabs[this.currentTabIndex];
+        if(tab) {
+          return tab.collection;
+        }
+      },
 
       /**
        * Method: render

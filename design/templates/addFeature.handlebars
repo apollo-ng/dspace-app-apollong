@@ -1,44 +1,23 @@
-<h3>Properties</h3>
+<h1>Add Feature</h1>
+<p>
+  <label>At Position: <span data-format="position"></span></label>
+</p>
+
 <div>
-<label for="properties.type">
-  Type: <input type="text" name="properties.type">
-</label>
+  <label for="properties.title">
+    Title:
+    <input type="text" name="properties.title">
+  </label>
 </div>
 
 <div>
-<label for="properties.title">
-  Title: <input type="text" name="properties.title">
-</label>
+  <label for="properties.description">
+    Description: <br/>
+    <textarea name="properties.description"></textarea>
+  </label>
 </div>
 
 <div>
-<label for="properties.description">
-  Description: <textarea name="properties.description"></textarea>
-</label>
-</div>
-
-<div>
-<label for="properties.address">
-  Address: <input type="text" name="properties.address">
-</label>
-</div>
-
-<div>
-<label for="properties.zip_code">
-  ZIP code: <input type="text" name="properties.zip_code">
-</label>
-</div>
-
-<h3>Geometry</h3>
-<div>
-<label for="geometry.type">
-  Type: <input type="text" name="geometry.type">
-</label>
-</div>
-
-<div>
-<label for="gemoetry.coordinates">
-  Coordinates:<br/>
-  <textarea name="geometry.coordinates"></textarea>
-</label>
+  <button data-command="create">Create</button>
+  <button data-command="cancel">Cancel</button>
 </div>

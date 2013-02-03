@@ -8,8 +8,9 @@ define([
   'views/miniMap',
   'views/modal/userOptions',
   'views/modal/featureDetails',
+  'views/modal/addFeature',
   'template/helpers/renderPos'
-], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
+], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, AddFeature, renderPos) {
 
 
   // /**
@@ -138,7 +139,7 @@ define([
        * used to jump <Map>
        */
 
-      this.map = new Map({ world: this.world });
+      this.map = new Map({ world: this.world, dspace: this.dspace });
 
       this.map.on('marker-click', function(uuid) {
         this.dspace.updateState({
@@ -152,6 +153,12 @@ define([
        * Property: featureBox
        */
       this.featureBox = new FeatureBox({ aether: this.aether, feeds: this.world.geoFeeds});
+
+      this.listenTo(this.featureBox, 'change-tab', function(collection) {
+        if(this.modal && this.modal.setCollection) {
+          this.modal.setCollection(collection);
+        }
+      }.bind(this));
 
       /**
        * creates minimap
@@ -183,15 +190,21 @@ define([
           if(modal) {
             this.modalName = modalName;
             modal.apply(this, []);
-            setTimeout(function() {
-              this.$('*[data-format=position]').forEach(function(e) {
-                var el = this.$(e);
-                el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'),
-                                  this.world.user.get('userCoordPrefs')));
+            if(this.modal) {
+              console.log('setup close', this.modal);
+              this.listenTo(this.modal, 'close', function() {
+                this.dspace.updateState({ modal: undefined });
               }.bind(this));
-            }.bind(this), 0);
+              setTimeout(function() {
+                this.$('*[data-format=position]').forEach(function(e) {
+                  var el = this.$(e);
+                  el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'),
+                                    this.world.user.get('userCoordPrefs')));
+                }.bind(this));
+              }.bind(this), 0);
+            }
           } else {
-            console.log('modal not found', modal);
+            console.log('modal not found', modalName);
           }
         } else {
           this.closeModal();
@@ -212,7 +225,7 @@ define([
       }
 
       this.world.user.on('change:remoteStorage', setupRemoteStorage.bind(this));
-      setupRemoteStorage.bind(this)();
+      setupRemoteStorage.apply(this, []);
     },
 
     modals: {
@@ -232,13 +245,17 @@ define([
           this.modal = new FeatureDetails({
             feature: feature
           });
-          this.modal.on('close', function() {
-            this.dspace.updateState({ modal: undefined });
-          }.bind(this));
           this.modal.show();
         } else {
           console.log('show feature details, but no feature');
         }
+      },
+
+      'addFeature': function() {
+        this.modal = new AddFeature({ world: this.world });
+        this.modal.setCollection(this.featureBox.getCurrentCollection());
+        this.modal.render();
+        this.modal.show();
       }
 
     },
@@ -272,9 +289,27 @@ define([
       this.closeModal();
     },
 
+    /**
+     * Method: closeModal
+     *
+     * Close the current modal dialog, then <cleanupModal>
+     */
     closeModal: function() {
       if(this.modal) {
         this.modal.hide();
+        this.cleanupModal();
+      }
+    },
+
+    /**
+     * Method: cleanupModal
+     *
+     * Removes all reference to the current modal dialog.
+     *
+     */
+    cleanupModal: function() {
+      if(this.modal) {
+        this.stopListening(this.modal);
         delete this.modal;
         delete this.modalName;
       }

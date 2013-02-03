@@ -17,7 +17,7 @@ define([
 
     initialize: function(options) {
       this.feature = options.feature.toJSON();
-      console.log("FEATURE", this.feature);
+      _.extend(this, options.feature.getLatLon());
     },
 
     close: function() {

@@ -250,9 +250,7 @@ define([
       /**
        * easey interaction library for modestmaps
        */
-      var mmCoordinate = this.frame.locationCoordinate({
-        lat: feature.get( 'lat' ),
-        lon: feature.get( 'lon' ) });
+      var mmCoordinate = this.frame.locationCoordinate(feature.getLatLon());
 
       /**
        * TODO document

@@ -168,7 +168,6 @@ define([
     callStateHooks: function(attrs) {
       setTimeout(function() {
         for(var key in attrs) {
-          console.log('callStateHook', attrs);
           var hook = this.stateHooks[key];
           if(hook) {
             hook(attrs[key]);
@@ -221,7 +220,6 @@ define([
         var kv = part.split('=');
         state[kv[0]] = decodeURIComponent(kv[1]);
       });
-      console.log('decodeState', query, '->', state);
       return state;
     },
     
@@ -239,7 +237,6 @@ define([
         }
       }
       var state = query.join('&');
-      console.log('encodeState', state, '->', query);
       return state;
     }
 

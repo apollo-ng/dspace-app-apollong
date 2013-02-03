@@ -94,6 +94,8 @@ define([
           feed.collection.on('change', function(feature) {
             this.featureIndex[feature.get('uuid')] = feature;
           }.bind(this));
+
+          feed.set('visible', true);
         }
       }.bind(this));
       return feeds;
@@ -112,7 +114,9 @@ define([
         return new GeoJSONFeed(feed);
         break;
       case 'remoteStorage':
-        return new RemoteStorageFeed(feed);
+        if(this.user.get('remoteStorage')) {
+          return new RemoteStorageFeed(feed);
+        }
         break;
       default:
         console.log('tried creating ' + feed.type + ' collections')

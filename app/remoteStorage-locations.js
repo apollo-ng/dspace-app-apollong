@@ -16,7 +16,6 @@ define([
           privClient.on('change', function(event) {
             var parts = event.path.split('/');
             var collectionPath = parts.slice(0, -1).join('/');
-            console.log('try watchers for', collectionPath);
             var w = watchers[collectionPath];
             if(w) {
               var action = event.newValue && event.oldValue ? 'update' : (event.newValue ? 'add' : 'remove');

@@ -37,7 +37,6 @@ define([
 
     callCommand: function(event) {
       var item = this.$(event.target);
-      console.log("trigger command", item.attr('data-command'));
       this.trigger('command:' + item.attr('data-command'), this.point);
       this.hide();
     },
@@ -258,7 +257,6 @@ define([
     },
 
     addMapLayer: function( collection ){
-      console.log('addMapLayer', collection);
       /**
        * Add markers
        * mapbox lib NOT same as ModestMap

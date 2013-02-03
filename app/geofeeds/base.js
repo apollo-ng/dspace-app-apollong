@@ -19,7 +19,6 @@ define([
     },
 
     updateCollection: function(collection, reset) {
-      console.log('updateCollection', collection, reset);
       if(reset) {
         this.collection.reset([]);
       }

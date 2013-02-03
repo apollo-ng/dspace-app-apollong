@@ -75,6 +75,8 @@ define([
         return;
       }
 
+      this.visible = this.feed.get('visible');
+
       /**
        *  Render Overlay Title
        */

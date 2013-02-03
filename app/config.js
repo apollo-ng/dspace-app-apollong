@@ -31,9 +31,10 @@ define([], function() {
      * map defaults
      */
     map: {
-      tileSet: {
-        //template: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png'
-        template: 'http://otile2.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png'
+      
+      tileSets: {
+         dspace: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png',
+         osm: 'http://otile2.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png'
       },
       geolat:  48.115293,
       geolon:  11.60218,
@@ -51,6 +52,7 @@ define([], function() {
      */
     user: {
       userCoordPrefs: 'GPS',
+      mapProvider: 'osm',
       geoLocationOptions: {
 	  interval: 2300,
 	  minacc: 49,

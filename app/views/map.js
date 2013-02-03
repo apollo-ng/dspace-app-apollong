@@ -198,8 +198,14 @@ define([
     createFrame: function(){
       var self = this;
       var config = this.config;
-
-      var template = config.tileSet.template; //FIXME introduce BaseMap
+      
+      //FIXME: this is redundant with miniMap.js
+      var mapProvider = this.world.user.get('mapProvider');
+      if (!mapProvider) {
+        mapProvider = this.world.user.get('config').mapProvider;
+      }
+      
+      var template = config.tileSets[mapProvider]; //FIXME introduce BaseMap
       var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
 
       var modestmap = new MM.Map(

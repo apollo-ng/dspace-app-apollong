@@ -2,9 +2,12 @@ define([
   'underscore',
   'backbone',
   'geofeeds/geoJson',
+  'collections/feature',
+  'models/feature',
   'geofeeds/remoteStorage',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, RemoteStorageFeed, User) {
+], function(_, Backbone, GeoJSONFeed, FeatureCollection, Feature,
+      RemoteStorageFeed, User ) {
 
   /*
    * Class: World
@@ -54,6 +57,29 @@ define([
       // fire initial change
       this.aether.trigger('user:change', this.user);
 
+      /**
+       * this serves features to the userlayer
+       * userlayer view listens on change:geometry and 
+       * updates the position of the user on the map
+       */
+      var avatar = new Feature({
+        id: 'avatar',
+	  type: 'Point',
+          geometry: {
+            coordinates: { }},
+          properties: {
+            type: 'avatar',
+            title: 'aloha o/' } });
+      this.userFeed = new GeoJSONFeed( );
+      this.userFeed.collection = new FeatureCollection([avatar])
+      this.userFeed.set( 'visible', true ); //#fixme ... create special overlay type 
+
+      this.user.on( 'change:geoLocation', function( e ){
+	var location = e.get( 'geoLocation' ) 
+	  avatar.set({ geometry: { coordinates: [location.coords.longitude, location.coords.latitude] }});
+      });
+      this.user.updatePosition( );
+
       // FIXME: make this more efficient!
       this.featureIndex = {};
 
@@ -66,7 +92,8 @@ define([
      *
      */
     setupUser: function(config){
-      return User.first() || new User();
+      return User.first() || new User({ config: config });
+
     },
 
     /**

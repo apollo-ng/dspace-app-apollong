@@ -2,19 +2,16 @@ define([
   // deps
   'backbone',
   'modestmaps',
-  'markers',
 
   'templateMap',
 
   // views
-  'views/marker',
   'views/panels',
   'views/overlay',
   'views/modal/addFeature'
-], function(Backbone, MM, markers,
-            templates, Marker,
+], function(Backbone, MM,
+            templates,
             panels, Overlay, AddFeature) {
-
   /**
    * Class: MapContext
    *
@@ -107,13 +104,6 @@ define([
       }.bind(this));
 
       /**
-       * listens to changes on user and updates related layer
-       */
-      this.world.user.on('change', function () {
-        self.updateUserLayer();
-      });
-
-      /**
        * contextPanel for right-click / longpress
        */
       this.contextPanel = new MapContext({ map: this });
@@ -128,10 +118,6 @@ define([
         // var dialog = new AddFeature(location, { aether: this.world.aether });
         // dialog.render();
         // dialog.show();
-      }.bind(this));
-
-      this.overlays = this.world.geoFeeds.map(function(feed) {
-        return new Overlay({ map: this, feed: feed });
       }.bind(this));
 
     },
@@ -157,17 +143,46 @@ define([
      * renders the map
      */
     render: function(){
+      var self = this;
 
       /**
        * crate frame -- uses MapBox
        */
       this.frame = this.createFrame();
 
-      /**
-       * creates user layer to show current location
-       */
-      this.userLayer = this.createUserLayer();
+      this.overlays = this.world.geoFeeds.map(function(feed) {
+        self.addOverlay( feed ).render( );
+      }.bind(this));
 
+      /**
+       * creates an overlay containing the users avatar
+       * world listens to user and updates the geometry 
+       * when the usercollection changes pushes the 
+       * changed features to the markerlayer and redraw;
+       */
+      this.userLayer = this.addOverlay( this.world.userFeed );
+
+      /**
+       * need frame
+       */
+      var self = this;
+      this.world.userFeed.collection.on( 'change:geometry', function( e ){
+        if( e.id == 'avatar' ) {
+	        self.userLayer.render( );
+	      }
+      });
+
+
+
+    },
+    /**
+     * gets a feed object with instantiated collection 
+     * returns overlay 
+     */
+    addOverlay: function( feed ){
+        return new Overlay({ 
+          map: this, 
+          feed: feed })
     },
 
     recenter: function(){
@@ -181,6 +196,7 @@ define([
      * creates frame using ModestMaps library
      */
     createFrame: function(){
+      var self = this;
       var config = this.config;
 
       var template = config.tileSet.template; //FIXME introduce BaseMap

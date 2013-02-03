@@ -1,4 +1,4 @@
-define(['backbone', 'templateMap'], function(Backbone, templates) {
+define(['backbone', 'markers', 'views/marker', 'templateMap'], function(Backbone, markers, Marker, templates) {
 
   /**
    * Class: Overlay
@@ -7,7 +7,7 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
    * adds the collection to the listbox
    * draws marker with mapbox
    *
-   * gets FeatureCollection as collection
+   * gets feeds and according collections 
    * gets reference to the map
    */
   var Overlay = Backbone.View.extend({
@@ -23,8 +23,10 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
 
       this.feed = this.options.feed;
 
-      this.feed.on('change', this.render.bind(this));
-      setTimeout(this.render.bind(this), 0);
+      var self = this;
+      this.feed.on( 'change', function( event, data ){
+        self.render( );
+      });
     },
 
     render: function() {
@@ -33,6 +35,7 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
       } else {
         this.hide();
       }
+      return this;
     },
 
     show: function() {
@@ -41,12 +44,47 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
     },
 
     hide: function() {
-      this.map.removeLayer(this.layer);
-      delete this.layer;
-    }
+      if(this.layer) {
+        this.layer.destroy();
+      }
+    },
+
+    /** 
+     * create MarkerLayers
+     * get featurecollection
+     * returns mapbox layer 
+     */
+    addMapLayer: function( collection ) {
+      /**
+       * Add markers
+       * mapbox lib NOT same as ModestMap
+       */
+      var markerLayer = markers.layer();
+
+      /**
+       * define a factory to make markers
+       */
+      markerLayer.factory(function(featureJson){
+        var marker = new Marker({ featureJson: featureJson });
+        marker.on('click', function() {
+          this.trigger('marker-click', featureJson.uuid);
+        }.bind(this));
+        return marker.render();
+      }.bind(this));
+      /**
+       * display markers MM adds it to DOM
+       * .extent() called to redraw map!
+       */
+      markerLayer.features( collection.toJSON( ));
+      this.map.frame.addLayer(markerLayer);
+      return markerLayer;
+    },
+    setExtent: function( ){
+      this.map.frame.setExtent( this.layer.extent( ));
+    },
+
   });
-
-
   return Overlay;
+
 
 });

@@ -2,7 +2,7 @@ define([
   'underscore',
   'backbone',
   'backbone-localstorage'
-], function(_, User, backboneLocalStorage) {
+], function(_, Backbone, backboneLocalStorage) {
   /**
    * Add basic user model
    */

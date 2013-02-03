@@ -75,7 +75,6 @@ define([
         if(target.attr('type') === 'checkbox') {
           value = target.attr('checked');
         } else {
-          console.log("PING");
           value = target.val();
         }
         console.log('update user set', key, value);

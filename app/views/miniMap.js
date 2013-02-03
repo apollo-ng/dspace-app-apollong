@@ -27,10 +27,15 @@ define([
     initialize: function(){
 
       this.world = this.options.world;
-      this.config = this.options.config;
+      this.config = this.options.map.config;
+      this.map = this.options.map
 
       this.world.on('change', function(event, data){
         this.recenter();
+      }.bind(this));
+      
+      this.world.user.on('change', function(event, data){
+        this.switchBaseMap();
       }.bind(this));
     },
 
@@ -40,13 +45,23 @@ define([
         new MM.Point(event.clientX - offset.left , event.clientY - offset.top)
       ));
     },
+    
+    /**
+     * changes the basemap
+     */
+    switchBaseMap: function(){
+      //FIXME: this is redundant with Map.js
+      var layer = this.map.createBaseMap();
+      this.frame.setLayerAt(0, layer);
+      //this.frame.removeLayerAt(0);
+      this.frame.draw();
+    },
 
     render: function(){
       var config = this.config;
-
-      var template = config.tileSet.template; //FIXME introduce BaseMap
-      var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
-
+      //FIXME should not get from window
+      var layer = this.map.createBaseMap();
+      
       var modestmap = new MM.Map(
         this.frameId,
         layer,

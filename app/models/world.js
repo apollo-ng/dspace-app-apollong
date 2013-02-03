@@ -95,6 +95,7 @@ define([
       feedConfigs.forEach(function(feed) {
         feed = this.createFeed(feed);
         if(feed) {
+          feed.index = feeds.length;
           feeds.push(feed);
           feed.watch();
 

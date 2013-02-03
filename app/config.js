@@ -18,7 +18,7 @@ define([], function() {
 
       { name: 'Pools', url: '/test/pools-munich.json', type: 'CORS'},
 
-      { hub: 'open-reseource.org', type: 'DSNP'},
+      // { hub: 'open-reseource.org', type: 'DSNP'},
 
       { name: 'test', type: 'remoteStorage' },
       //{ name: 'test', user: 'nil@heahdk.net', type: 'remoteStorage' }
@@ -38,7 +38,7 @@ define([], function() {
       geolat:  48.115293,
       geolon:  11.60218,
       minZoom: 13,
-      maxZoom: 17,
+      maxZoom: 30,
       miniMapZoom: 11,
       defaultZoom: 12
     },

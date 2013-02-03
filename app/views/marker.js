@@ -22,17 +22,6 @@ define(['backbone'], function(Backbone) {
 
     initialize: function(){
       this.featureJson = this.options.featureJson;
-      /**
-       * set icon according to index
-       * set pointer-events active to override layer settings
-       */
-      var html; // FIXME put into /templates
-      if(this.featureJson.properties.type == 'avatar'){
-        html =  '<img src="design/images/tiki-man.png" pointer-events="auto" />';
-      } else {
-        html = '<img src="design/icons/black-shield-{{index}}.png" pointer-events="auto" />';
-      }
-      this.template = Handlebars.compile(html);
     },
 
     markerClick: function() {
@@ -44,7 +33,12 @@ define(['backbone'], function(Backbone) {
     },
 
     render: function( ) {
-      this.$el.html( this.template( this.featureJson ));
+      if(this.featureJson.properties.type == 'avatar'){
+        this.$el.html( '<img src="design/images/tiki-man.png" pointer-events="auto" />');
+      } else {
+        this.$el.addClass('shield-' + this.options.tabIndex);
+        this.$el.addClass('shield-o-' + this.featureJson.index);
+      }
       this.$el.css( 'pointer-events', 'auto' );
       return this.el;
     }

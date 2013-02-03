@@ -3,4 +3,8 @@ node_js:
   - 0.8.9
 script: npm install && node run.js & sleep 3 && npm test
 notifications:
-  irc: "irc.freenode.org#apollo"
+  irc: 
+    channels:
+      - "irc.freenode.org#apollo"
+    on_success: always
+    on_failure: always

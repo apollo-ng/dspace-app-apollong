@@ -1,7 +1,9 @@
 define([
   'views/modal/base',
-  'templateMap'
-], function(BaseModal, templates) {
+  'templateMap',
+  'template/helpers/keyValue'
+  
+], function(BaseModal, templates, keyValue) {
 
 
   /**

@@ -167,7 +167,7 @@ define([
       /**
        * creates minimap
        */
-      this.miniMap = new MiniMap({world: this.world, config: this.map.config});
+      this.miniMap = new MiniMap({world: this.world, map: this.map});
 
       /**
        * creates statusPanel

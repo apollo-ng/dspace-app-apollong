@@ -27,26 +27,51 @@ define([
     initialize: function(){
 
       this.world = this.options.world;
-      this.config = this.options.config;
+      this.config = this.options.map.config;
+      this.map = this.options.map
 
       this.world.on('change', function(event, data){
         this.recenter();
       }.bind(this));
+      /**
+       * Event: user:mapProvider
+       * 
+       * listens to changed user configuration and changes minimap with <MiniMap.switchBaseMap>
+       */
+      this.world.user.on('change:mapProvider', function(event, data){
+        this.switchBaseMap();
+      }.bind(this));
     },
-
+    
+    /**
+     * Method: jumpMap
+     * 
+     * sets <World.mapCenter> which recenters the map via <world:mapCenter> and <Map.recenter>
+     */
     jumpMap: function(event) {
       var offset = this.$el.offset();
       this.world.set('mapCenter', this.frame.pointLocation(
         new MM.Point(event.clientX - offset.left , event.clientY - offset.top)
       ));
     },
+    
+    /**
+     * Method: switchBaseMap
+     * changes the basemap using <Map>.
+     */
+    switchBaseMap: function(){
+      //FIXME: this is redundant with Map.js
+      var layer = this.map.createBaseMap();
+      this.frame.setLayerAt(0, layer);
+      //this.frame.removeLayerAt(0);
+      this.frame.draw();
+    },
 
     render: function(){
       var config = this.config;
-
-      var template = config.tileSet.template; //FIXME introduce BaseMap
-      var layer = new MM.TemplatedLayer(template); //FIXME fix what? @|@
-
+      //FIXME should not get from window
+      var layer = this.map.createBaseMap();
+      
       var modestmap = new MM.Map(
         this.frameId,
         layer,

@@ -18,6 +18,7 @@ define([
 
       events: {
         'change input': 'updateUser',
+        'change select': 'updateUser',
         'click section > h2 > a': 'setCurrentSection'
       },
 
@@ -26,11 +27,15 @@ define([
         this.aether = options.aether;
         this.$el.html(this.template());
 
+        // initialize uiElements from user settings.
+        // FIXME: add other types (selectBox)
+        // FIXME: is this becoming a performance issue?
         // deferred, because setting 'checked' attribute will only works
         // after inputs have been rendered.
         var attrs = this.user.toJSON();
         setTimeout(function() {
           for(var key in attrs) {
+            //initialize all inputs
             this.$('input[name="' + key + '"]').forEach(function(input) {
               if(input.type === 'radio') {
                 if(input.value === attrs[key]) {
@@ -41,6 +46,10 @@ define([
               } else {
                 this.$(input).val(attrs[key]);
               }
+            }.bind(this));
+            //initialize all selects
+            this.$('select[name="' + key + '"]').forEach(function(select) {
+              this.$(select).$('option[value="' + attrs[key] + '"]').attr('selected', 'selected');
             }.bind(this));
           }
         }.bind(this), 0);

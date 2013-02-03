@@ -37,8 +37,8 @@ define([], function() {
       },
       geolat:  48.115293,
       geolon:  11.60218,
-      minZoom: 13,
-      maxZoom: 30,
+      minZoom: 2,
+      maxZoom: 17,
       miniMapZoom: 11,
       defaultZoom: 12
     },

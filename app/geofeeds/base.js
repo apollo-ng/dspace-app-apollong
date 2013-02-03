@@ -20,6 +20,10 @@ define([
       this.collection.on('add', function() {
         this.trigger('change', this);
       }.bind(this));
+
+      this.collection.on('reset', function() {
+        this.trigger('change', this);
+      }.bind(this));
     },
 
     updateCollection: function(collection, reset) {

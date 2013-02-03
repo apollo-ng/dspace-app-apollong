@@ -63,7 +63,7 @@ define([
                       return;
                     }
                   }
-                  return reload.then(function() {
+                  return reload().then(function() {
                     return pubClient.storeObject('feature', path, feature);
                   }).
                     then(function() {

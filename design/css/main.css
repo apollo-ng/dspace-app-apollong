@@ -175,3 +175,40 @@ h3	 { font-size: 18px; }
     top: -7px;
     right: 235px;
 }
+
+
+/*
+ *  Icons: Black Shield
+ */
+.shield-0-clear {
+display: block;
+  background-image: url(../icons/shield-black.png);
+  background-position: 2px 0px;
+}
+
+.shield-0-0 {
+display: block;
+  background-image: url(../icons/shield-black.png);
+  background-position: 32px 0px;
+}
+
+.shield-1-clear {
+display: block;
+  background-image: url(../icons/shield-red.png);
+  background-position: 2px 0px;
+}
+
+.shield-2-clear {
+display: block;
+  background-image: url(../icons/shield-green.png);
+  background-position: 2px 0px;
+}
+
+.shield-3-clear {
+display: block;
+  background-image: url(../icons/shield-blue.png);
+  background-position: 2px 0px;
+}
+
+
+>>>>>>> Moving to icons sprites

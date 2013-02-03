@@ -460,46 +460,52 @@
 }
 
 #featureBox .featureBoxTabs .tab {
+  opacity: 0.8;
   cursor: default;
   float: left;
-  width: 36px;
-  height: 36px;
+  width: 37px;
+  height: 35px;
   overflow: hidden;
-  margin-top: 10px;
+  margin-top: 11px;
   margin-left: 5px;
-  background: #aaa;
+  background: rgb(244,241,235);
+  background-repeat: no-repeat;
+  background-position: 2px -1px;
   border-left: 1px solid #eee;
-  border-right: 1px solid #444;
+  border-right: 1px solid #999;
   border-top: 1px solid #eee;
-  border-bottom: 1px solid #444;
--webkit-border-top-left-radius: 5px;
--webkit-border-top-right-radius: 5px;
--moz-border-radius-topleft: 5px;
--moz-border-radius-topright: 5px;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
+  border-bottom: 1px solid #999;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 #featureBox .featureBoxTabs .active {
+  opacity: 1;
   background: #ccc;
+  background-position: 2px -1px;
+  background-repeat: no-repeat;
   border-bottom: 1px solid #ccc;
 }
 
 #featureBox .overlayOptions {
   width: 100%;
-  height: 60px;
+  height: 63px;
   line-height: 32px;
   background: #ccc;
+  border-bottom: 1px solid #999;
 }
 
 #featureBox .overlayOptions h2 {
   text-align: left;
-  padding-left: 7px;
-  font-size: 18px;
-  height: 32px;
-  line-height: 32px;
+  padding-left: 8px;
+  font-size: 14px;
+  height: 28px;
+  line-height: 28px;
   margin-bottom: 0;
-  border: 1px solid #ccc;
 }
 
 #featureBox .overlayButton {
@@ -507,6 +513,9 @@ border-top-right-radius: 5px;
   float: left;
   height: 24px;
   line-height: 24px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid #999;
   background: rgb(244,241,235);
   background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
@@ -522,9 +531,11 @@ border-top-right-radius: 5px;
 #featureBox .overlayVisibility {
   float: left;
   margin-left: 8px;
-  width: 80px;
+  width: 120px;
   height: 24px;
   line-height: 24px;
+  border: 1px solid #999;
+  text-shadow: 1px 1px 1px #fff;
   background: rgb(244,241,235);
   background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
@@ -550,15 +561,18 @@ border-top-right-radius: 5px;
 
 #featureBox .label, #featureBox .label label {
   float: left;
-  width: 60px;
+  width: 100px;
   height: 24px;
   line-height: 24px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 #featureBox .overlayRemove {
-  width: 110px;
+  width: 90px;
   color: #e8e5de;
   margin-left: 5px;
+  border: 1px solid #666;
   text-shadow: 1px 1px 5px #000;
   background: rgb(109,0,25);
   background: -moz-linear-gradient(top, rgba(109,0,25,1) 0%, rgba(143,2,34,1) 56%, rgba(169,3,41,1) 100%);
@@ -572,6 +586,8 @@ border-top-right-radius: 5px;
 .featureItems {
   display: block;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
   background: -moz-linear-gradient(top, rgba(244,240,235,1) 0%, rgba(255,255,255,0.82) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,240,235,1)), color-stop(100%,rgba(255,255,255,0.82)));
   background: -webkit-linear-gradient(top, rgba(244,240,235,1) 0%,rgba(255,255,255,0.82) 100%);

@@ -432,6 +432,7 @@
   font-size: 21px;
 }
 
+
 /**
  * Overlay Manager
  */
@@ -497,6 +498,13 @@
   line-height: 32px;
   background: #ccc;
   border-bottom: 1px solid #999;
+  background: #cccccc;
+  background: -moz-linear-gradient(top, #cccccc 35%, #f9f7f4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(35%,#cccccc), color-stop(100%,#f9f7f4));
+  background: -webkit-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -o-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -ms-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: linear-gradient(to bottom, #cccccc 35%,#f9f7f4 100%);
 }
 
 #featureBox .overlayOptions h2 {
@@ -515,6 +523,9 @@
   line-height: 24px;
   font-size: 12px;
   font-weight: bold;
+  color: #41403d;
+  text-shadow: 1px 1px 1px #fff;
+  margin-left: 9px;
   border: 1px solid #999;
   background: rgb(244,241,235);
   background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
@@ -523,29 +534,15 @@
   background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
   background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
   background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  -moz-box-shadow: 0 0 1px #666;
+  -webkit-box-shadow: 0 0 1px #666;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
 
 #featureBox .overlayVisibility {
-  float: left;
-  margin-left: 8px;
-  width: 120px;
-  height: 24px;
-  line-height: 24px;
-  border: 1px solid #999;
-  text-shadow: 1px 1px 1px #fff;
-  background: rgb(244,241,235);
-  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
-  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
-  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  width: 60px;
 }
 
 #featureBox .overlayCheckbox {
@@ -561,29 +558,24 @@
 
 #featureBox .label, #featureBox .label label {
   float: left;
-  width: 100px;
+  width: 42px;
   height: 24px;
   line-height: 24px;
   font-size: 12px;
   font-weight: bold;
 }
 
+#featureBox .overlayProps {
+  width: 100px;
+}
+
 #featureBox .overlayRemove {
-  width: 90px;
-  color: #e8e5de;
-  margin-left: 5px;
-  border: 1px solid #666;
-  text-shadow: 1px 1px 5px #000;
-  background: rgb(109,0,25);
-  background: -moz-linear-gradient(top, rgba(109,0,25,1) 0%, rgba(143,2,34,1) 56%, rgba(169,3,41,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(109,0,25,1)), color-stop(56%,rgba(143,2,34,1)), color-stop(100%,rgba(169,3,41,1)));
-  background: -webkit-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: -o-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: -ms-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
+  float: left;
+  width: 40px;
 }
 
 .featureItems {
+  clear: both;
   display: block;
   height: 100%;
   overflow-x: hidden;
@@ -614,7 +606,7 @@
 
 .featureBoxItem h3 {
   height: 30px; line-height: 38px; padding-left: 45px;
-  color:#41403d;
+  color: #41403d;
   text-shadow: 0px -1px #000, 0px 1px #fff;
 }
 

@@ -1,13 +1,14 @@
 <div class='overlayOptions'>
   <h2>{{feed.title}}</h2>
-  <div class='overlayVisibility'>
+  <div class='overlayButton overlayVisibility'>
     <div class='overlayCheckbox'>
       <input type='checkbox' name="visible" id='overlay-visi-{{index}}' {{#visible}}checked{{/visible}}>
     </div>
     <div class='label'>
-      <label for='overlay-visi-{{index}}'>Show on Map</label>
+      <label for='overlay-visi-{{index}}'>Show</label>
     </div>
   </div>
-  <div class='overlayRemove overlayButton'>Remove</div>
+  <div class='overlayButton overlayProps'>Options</div>
+  <div class='overlayButton overlayRemove'>X</div>
 </div>
 <div class='featureItems'></div>

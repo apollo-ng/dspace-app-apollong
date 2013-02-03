@@ -40,7 +40,7 @@ define(['backbone', 'markers', 'views/marker', 'templateMap'], function(Backbone
 
     show: function() {
       this.hide();
-      this.layer = this.map.addMapLayer(this.feed.collection);
+      this.layer = this.addMapLayer(this.feed.collection);
     },
 
     hide: function() {
@@ -77,8 +77,10 @@ define(['backbone', 'markers', 'views/marker', 'templateMap'], function(Backbone
        */
       markerLayer.features( collection.toJSON( ));
       this.map.frame.addLayer(markerLayer);
+      this.map.frame.draw();
       return markerLayer;
     },
+
     setExtent: function( ){
       this.map.frame.setExtent( this.layer.extent( ));
     },

@@ -1,5 +1,6 @@
 define([
   'backbone',
+  'ender',
   'remoteStorage',
   'views/panels',
   'views/featureBox',
@@ -8,7 +9,7 @@ define([
   'views/modal/userOptions',
   'views/modal/featureDetails',
   'template/helpers/renderPos'
-], function(Backbone, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
+], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
 
 
   // /**
@@ -120,11 +121,12 @@ define([
        * jumps map to feature set to current
        */
       this.aether.on('feature:current', function( feature ){
-        this.dspace.jump({
+        this.dspace.updateState({
           feature: feature.get('uuid'),
           modal: undefined
         });
       }.bind(this));
+
 
 
       /**
@@ -139,7 +141,7 @@ define([
       this.map = new Map({ world: this.world });
 
       this.map.on('marker-click', function(uuid) {
-        this.dspace.jump({
+        this.dspace.updateState({
           feature: uuid,
           modal: 'featureDetails'
         });
@@ -150,11 +152,6 @@ define([
        * Property: featureBox
        */
       this.featureBox = new FeatureBox({ aether: this.aether, feeds: this.world.geoFeeds});
-
-      this.featureBox.on('change-tab', function(collection) {
-        console.log('change tab', collection);
-        this.map.setOverlayCollection(collection);
-      }.bind(this));
 
       /**
        * creates minimap
@@ -196,14 +193,26 @@ define([
           } else {
             console.log('modal not found', modal);
           }
+        } else {
+          this.closeModal();
         }
       }.bind(this));
 
-      remoteStorage.claimAccess('locations', 'rw').
-        then(function() {
-          remoteStorage.displayWidget('remotestorage-connect');
-        });
+      function setupRemoteStorage() {
+        if(this.world.user.get('remoteStorage')) {
+          $(document.body).prepend('<div id="remotestorage-connect"></div>');
+          remoteStorage.claimAccess('locations', 'rw').
+            then(function() {
+              remoteStorage.displayWidget('remotestorage-connect');
+            });
+        } else {
+          $('#remotestorage-connect').remove();
+          remoteStorage.flushLocal();
+        }
+      }
 
+      this.world.user.on('change:remoteStorage', setupRemoteStorage.bind(this));
+      setupRemoteStorage.bind(this)();
     },
 
     modals: {
@@ -224,7 +233,7 @@ define([
             feature: feature
           });
           this.modal.on('close', function() {
-            this.dspace.jump({ modal: false });
+            this.dspace.updateState({ modal: undefined });
           }.bind(this));
           this.modal.show();
         } else {
@@ -305,11 +314,11 @@ define([
      */
     toggleUserOptions: function() {
       if(this.modalName === 'userOptions') {
-        this.dspace.jump({
-          modal: false
+        this.dspace.updateState({
+          modal: undefined
         });
       } else {
-        this.dspace.jump({
+        this.dspace.updateState({
           modal: 'userOptions'
         });
       }

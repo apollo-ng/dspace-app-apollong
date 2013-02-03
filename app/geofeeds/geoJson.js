@@ -43,10 +43,6 @@ define([
         failure: function( e ) {
           alert( '#FIXME' ); }
       });
-    },
-
-    makeTitle: function() {
-      return 'CORS: ' + this.name;
     }
 
   });

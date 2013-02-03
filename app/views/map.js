@@ -125,7 +125,10 @@ define([
         dialog.show();
       }.bind(this));
 
-      this.overlay = new Overlay({ map: this });
+      this.overlays = this.world.geoFeeds.map(function(feed) {
+        return new Overlay({ map: this, feed: feed });
+      }.bind(this));
+
     },
 
     /**
@@ -160,10 +163,6 @@ define([
        */
       this.userLayer = this.createUserLayer();
 
-    },
-
-    setOverlayCollection: function(collection) {
-      this.overlay.setCollection(collection);
     },
 
     recenter: function(){
@@ -259,6 +258,7 @@ define([
     },
 
     addMapLayer: function( collection ){
+      console.log('addMapLayer', collection);
       /**
        * Add markers
        * mapbox lib NOT same as ModestMap
@@ -285,7 +285,8 @@ define([
       markerLayer.features(features);
 
       if(features) {
-        this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+        this.frame.addLayer(markerLayer);//.setExtent(markerLayer.extent());
+        this.frame.draw();
         return {
           remove: function() {
             this.frame.removeLayer(markerLayer);

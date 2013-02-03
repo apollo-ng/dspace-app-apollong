@@ -1,6 +1,13 @@
 <div class='overlayOptions'>
-<h2>{{feed.title}}</h2>
-<div class='overlayVisibility'><div class='overlayCheckbox'><input type='checkbox' id='overlay-visi-{{index}}' /></div><div class='label'><label for='overlay-visi-{{index}}'>Show on Map</label></div></div>
-<div class='overlayRemove overlayButton'>Remove</div>
+  <h2>{{feed.title}}</h2>
+  <div class='overlayVisibility'>
+    <div class='overlayCheckbox'>
+      <input type='checkbox' name="visible" id='overlay-visi-{{index}}' {{#feed.visible}}checked{{/feed.visible}}>
+    </div>
+    <div class='label'>
+      <label for='overlay-visi-{{index}}'>Show on Map</label>
+    </div>
+  </div>
+  <div class='overlayRemove overlayButton'>Remove</div>
 </div>
 <div class='featureItems'></div>

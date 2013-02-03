@@ -33,7 +33,7 @@ define([
      *   el - DOM element for this view
      */
     render: function(){
-      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.html(this.template(_.extend(this.model.getLatLon(), this.model.toJSON())));
       return this.el;
     },
 

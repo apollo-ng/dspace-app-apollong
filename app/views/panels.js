@@ -169,16 +169,16 @@ define([
          */
         this.world = this.model;
 
-        this.world.user.on('change', this.updateUser.bind(this));
+        this.world.user.on('location-changed', this.updateUserLocation.bind(this));
         this.world.on('change', this.updateMapCenter.bind(this));
 
       },
 
-      updateUser: function() {
-        var user = this.world.user.toJSON();
+      updateUserLocation: function() {
+        var loc = this.world.user.getLocation();
         this.$('*[data-name="user-location"]').
-          attr('data-lat', user.geoLocation.coords.latitude).
-          attr('data-lon', user.geoLocation.coords.longitude);
+          attr('data-lat', loc.lat).
+          attr('data-lon', loc.lon);
         this.renderPositions();
       },
 

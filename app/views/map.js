@@ -160,13 +160,13 @@ define([
        * when the usercollection changes pushes the 
        * changed features to the markerlayer and redraw;
        */
-      this.userLayer = this.addOverlay( this.world.userFeed );
+      this.userLayer = this.addOverlay( this.world.user.feed );
 
       /**
        * need frame
        */
       var self = this;
-      this.world.userFeed.collection.on( 'change:geometry', function( e ){
+      this.world.user.feed.collection.on( 'change:geometry', function( e ){
         if( e.id == 'avatar' ) {
 	        self.userLayer.render( );
 	      }

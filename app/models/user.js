@@ -1,8 +1,10 @@
 define([
   'underscore',
   'backbone',
-  'backbone-localstorage'
-], function(_, Backbone, backboneLocalStorage) {
+  'backbone-localstorage',
+  'geofeeds/device',
+  'models/feature'
+], function(_, Backbone, backboneLocalStorage, DeviceFeed, Feature) {
   /**
    * Add basic user model
    */
@@ -12,7 +14,28 @@ define([
     // Method: initialize
     initialize: function() {
       backboneLocalStorage.setup(this, 'users');
+
+      this.feed = new DeviceFeed({
+        avatar: new Feature({
+          properties: {
+            type: 'avatar'
+          }
+        })
+      });
+      this.feed.set('visible', true);
+
+      this.feed.avatar.on('position-changed', function(latlon) {
+        this.trigger('location-changed', latlon);
+        this.feed.trigger('change');
+      }.bind(this));
+
+      this.feed.watch();
     }, 
+
+    getLocation: function() {
+      return this.feed.avatar.getLatLon();
+    },
+
     setDefaults: function(defaults) {
       for(var key in defaults) {
         if(! this.get(key)) {
@@ -20,57 +43,6 @@ define([
         }
       }
     },
-
-    /**
-     * get browser geolocation object
-     * set user geoLocation 
-     */
-    updatePosition: function( geoLocation, defaults ) {
-      if( geoLocation && typeof geoLocation.coords == 'object' ) {
-        this.set({ geoLocation: geoLocation });
-        repeat = true;
-      }
-
-    },
-    watchPosition: function( defaults ) {
-	    var options = {
-	      minacc: 49,
-	      maxacc: 1001,
-	      highacc: 'true',
-	      maxage: 600000, // used cached locations 
-	      timeout: 600
-	    };
-      for(var key in this.get('geoLocationOptions')) {
-        if(! options[key]) {
-          options[key] = defaults[key];
-        }
-      }
-
-      var self = this;
-      var watch = navigator.geolocation.watchPosition( 
-        // success
-        function( geoLocation ) {
-		      self.updatePosition( geoLocation );
-        }, 
-        // error 
-        function( e ) {
-          self.fixme( 'geolocation', e ); 
-          self.updatePosition( false );
-        },
-        // geolocation API options 
-        { enableHighAccuracy : options.highacc,
-          minAccuracy: true,
-          maximumAge: options.maxage,
-          timeout: options.timeout } );
-    },
-
-
-    /**
-     * error handler
-     */
-    fixme: function( tag, e ) {
-      console.log( '#FIXME('+tag+'): '+(e.message||e) );
-    }
 
   });
 

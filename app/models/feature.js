@@ -1,7 +1,8 @@
 define([
+  'underscore',
   'backbone',
   'Math.uuid'
-], function(Backbone, MathUUID) {
+], function(_, Backbone, MathUUID) {
   /**
    * Class: Feature
    *
@@ -16,7 +17,6 @@ define([
       if(location) {
         this.set(location);
       }
-      this.setLatLon();
 
       if(! this.get('properties')) {
         this.set('properties', {});
@@ -32,25 +32,19 @@ define([
 
     },
 
-    /**
-     * Method: setLatLon
-     *
-     * setting lat: lon: attributes from coordinates array
-     */
-    setLatLon: function(){
-      var geometry = this.get('geometry');
-      var lat = this.get('lat');
-      var lon = this.get('lon');
-      if( typeof geometry !== 'undefined'
-          && geometry.coordinates
-          && geometry.coordinates.length === 2 ) {
-        this.set({
-          lat: geometry.coordinates[1]
-          , lon: geometry.coordinates[0]
-        });
-      } else if(lat && lon) {
-        this.set('geometry', { type: 'Point', coordinates: [lon, lat] });
-      }
+    getLatLon: function() {
+      var coords = this.get('geometry').coordinates || [];
+      return {
+        lat: coords[1],
+        lon: coords[0]
+      };
+    },
+
+    setLatLon: function(lat, lon) {
+      var geometry = this.get('geometry') || {};
+      geometry.coordinates = [lon, lat];
+      this.set('geometry', geometry);
+      this.trigger('position-changed', this.getLatLon());
     }
   });
 

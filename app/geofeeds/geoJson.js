@@ -37,8 +37,8 @@ define([
       var request = new Reqwest({
         url: this.url,
         type: 'json',
-        success: function( response ) {
-          this.updateCollection(response);
+        success: function( collection ) {
+          this.updateCollection(collection, true);
         }.bind(this),
         failure: function( e ) {
           alert( '#FIXME' ); }

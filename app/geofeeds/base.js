@@ -18,9 +18,11 @@ define([
       this.title = this.makeTitle();
     },
 
-    updateCollection: function(collection) {
-      // FIXME: don't use "reset", but "update"
-      // http://backbonejs.org/#Collection-update
+    updateCollection: function(collection, reset) {
+      console.log('updateCollection', collection, reset);
+      if(reset) {
+        this.collection.reset([]);
+      }
       this.collection.update(collection.features);
     },
 

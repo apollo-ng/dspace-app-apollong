@@ -43,8 +43,8 @@ define([
        * listens on collection for *reset* events and renders itself
        */
       this.collection.on( 'reset', function(){
-        self.render( );
-      });
+        this.reset();
+      }.bind(this));
 
       /**
        * Event: feature:current
@@ -53,8 +53,8 @@ define([
        * then trigger them on ether passing forward future
        */
       this.collection.on( 'feature:current', function( feature ){
-        self.aether.trigger('feature:current', feature );
-      });
+        this.aether.trigger('feature:current', feature );
+      }.bind(this));
 
       this.collection.on('add', function(feature) {
         this.renderFeature(feature);
@@ -101,6 +101,11 @@ define([
       });
       var renderedTemplate = featureBoxItem.render();
       this.itemWrapper.append(renderedTemplate);
+    },
+
+    reset: function() {
+      this.itemWrapper.empty();
+      this.featureIndexCounter = 0;
     },
 
     hide: function() {

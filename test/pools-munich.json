@@ -1,0 +1,248 @@
+{
+  "type": "FeatureCollection",
+  "name": "Pools",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.62876, 48.15471]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Cosimabad",
+        "address": "Cosimastr. 5",
+        "zip_code": "80925",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/hallenbaeder/cosima-wellenbad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.55139, 48.17364]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Olympiabad",
+        "address": "Coubertinplatz 1",
+        "zip_code": "80809",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/hallenbaeder/olympia-schwimmhalle.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.47433, 48.14102]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "yes",
+        "title": "Westbad",
+        "address": "Weinbergstr. 11",
+        "zip_code": "81241",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/freibad-west.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.49910, 48.08628]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Bad Forstenrieder Park",
+        "address": "Stäblistr. 27b",
+        "zip_code": "81476",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/hallenbaeder/bad-forstenrieder-park.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.58815, 48.13196]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Müllersches Volksbad",
+        "address": "Rosenheimerstr.1 ",
+        "zip_code": "81667",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/hallenbaeder/volksbad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.54403, 48.11691]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Südbad",
+        "address": "Valleystr. 37",
+        "zip_code": "81371",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/hallenbaeder/suedbad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.63646, 48.11692]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "yes",
+        "title": "Michaelibad",
+        "address": "Heinrich-Wieland-Str. 24",
+        "zip_code": "81735 München",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/michaeli-freibad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.57624, 48.10223]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Bad Giesing-Harlaching",
+        "address": "Klausener Str. 22",
+        "zip_code": "81547",
+        "website": "",
+        "note": "under construction, Q1-2013"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.56387, 48.16035 ]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "no",
+        "title": "Nordbad",
+        "address": "Schleißheimerstr. 142",
+        "zip_code": "80797",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/hallenbaeder/nordbad.html"
+        
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.53190, 48.16737]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "yes",
+		"outdoor": "yes",
+        "title": "Dantebad",
+        "address": "Postillonstr. 17",
+        "zip_code": "80637",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/dante-winter-warmfreibad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.56909, 48.11992]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "no",
+		"outdoor": "yes",
+        "title": "Schyrenbad",
+        "address": "Claude-Lorrain-Str. 24",
+        "zip_code": "81543",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/schyrenbad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.54510, 48.09638]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "no",
+		"outdoor": "yes",
+        "title": "Maria Einsiedel Naturbad",
+        "address": "Zentralländstr. 28",
+        "zip_code": "81379",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/naturbad-maria-einsiedel.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.57155, 48.17567]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "no",
+		"outdoor": "yes",
+        "title": "Bad Georgenschwaige",
+        "address": "Belgradstr. 195",
+        "zip_code": "80804",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/bad-georgenschwaige.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.60326, 48.13899]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "no",
+		"outdoor": "yes",
+        "title": "Prinzregentenbad",
+        "address": "Prinzregentenstr. 80",
+        "zip_code": "81675",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/prinzregentenbad.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.59239, 48.17099]
+      },
+      "properties": {
+        "type": "Pool",
+		"indoor": "no",
+		"outdoor": "yes",
+        "title": "Ungererbad",
+        "address": "Traubestr. 3",
+        "zip_code": "80805",
+        "website": "http://www.swm.de/privatkunden/m-baeder/schwimmen/freibaeder/ungererbad.html"
+      }
+    }
+  ]
+}

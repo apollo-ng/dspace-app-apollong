@@ -15,6 +15,9 @@ define([], function() {
     geoFeeds: [
       { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
       { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
+      
+      { name: 'Pools', url: '/test/pools.json', type: 'CORS'},
+      
       { hub: 'open-reseource.org', type: 'DSNP'},
 
       { name: 'test', type: 'remoteStorage' }

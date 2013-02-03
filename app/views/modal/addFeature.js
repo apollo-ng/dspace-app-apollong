@@ -8,6 +8,9 @@ define([
   'template/helpers/renderPos'
 ], function(_, $, Backbone, Feature, BaseModal, templates, renderPos) {
 
+  /**
+   * Class: Modal.AddFeature
+   */
   return BaseModal.extend({
 
     template: templates.addFeature,

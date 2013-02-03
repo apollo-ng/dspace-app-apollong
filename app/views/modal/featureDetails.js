@@ -3,6 +3,10 @@ define([
   'templateMap'
 ], function(BaseModal, templates) {
 
+
+  /**
+   * Class: Modal.FeatureDetails
+   */
   var FeatureDetails = BaseModal.extend({
 
     template: templates.featureDetails,

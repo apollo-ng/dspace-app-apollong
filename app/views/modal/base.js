@@ -2,6 +2,10 @@ define([
   'backbone',
   'views/panels'
 ], function(Backbone, panels) {
+
+  /**
+   * Class: Modal.Base
+   */
   return panels.Base.extend({
     el: '#modal',
 

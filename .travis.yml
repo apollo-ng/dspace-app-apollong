@@ -3,4 +3,4 @@ node_js:
   - 0.8.9
 script: npm install && node run.js & sleep 3 && npm test
 notifications:
-  irc: "space.blafasel.de:6697#apollo"
+  irc: "irc.freenode.org#apollo"

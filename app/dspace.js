@@ -23,17 +23,55 @@ define([
    * Also it's a Backbone router.
    *
    * You interact with it through <updateState>.
+   *
+   *
+   * Section: Routing from the outside in
+   *
+   *   * Whenever the URL changes, the backbone router parses it using <routes>.
+   *   * All queries starting with a bang (!) are passed to <dispatch>.
+   *   * <dispatch> parses the query (format: application/x-www-form-urlencoded)
+   *   * the query is merged with the <defaultState> and becomes the new state.
+   *   * <callStateHooks> calls hooks for the entire state
+   *   * The individual <stateHooks> update attributes of the <world>.
+   *   * The <ui> listens for changes in the <world> and updates itself in turn
+   *
+   * Example:
+   *   *Given* the URI path is
+   *   > /#!feature=123&modal=featureDetails
+   *
+   *   1) <dispatch> sets the state to
+   *      > { feature: 123, modal: "featureDetails", location: undefined }
+   *   2) <callStateHooks> calls:
+   *      > stateHooks.feature(123);
+   *      > stateHooks.modal('featureDetails');
+   *      > stateHooks.location(undefined);
+   *   3) The <ui.map> jumps to the feature with uuid "123" (on 'change:currentFeatureId')
+   *   4) The <ui> displays the <Modal.FeatureDetails> (on 'change:currentModal')
+   *
    */
   return Backbone.Router.extend({
 
     initialize: function(config) {
       log('initialize', config);
+      /**
+       * Property: world
+       * The one and only instance of <World>.
+       */
       this.world = new World({ config : config });
+      /**
+       * Property: ui
+       * The one and only instance of <UI>.
+       */
       this.ui = new UI({ world: this.world, dspace: this });
       this.ui.render();
       Backbone.history.start();
     },
 
+    /**
+     * Property: routes
+     *
+     * Routing map for Backbone
+     */
     routes: {
       '!*query': 'dispatch'
     },

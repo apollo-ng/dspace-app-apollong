@@ -99,11 +99,22 @@ define([
       this.config = this.world.config.map;
 
       var self = this;
-      this.world.on('change', function(event, data){
+      
+      /**
+       * Event: world:mapCenter
+       * 
+       * listens to changes of the mapcenter from <MiniMap>
+       */
+      this.world.on('change:mapCenter', function(event, data){
         this.recenter();
       }.bind(this));
       
-      this.world.user.on('change', function(event, data){
+      /**
+       * Event: user:mapProvider
+       * 
+       * listens to changed user configuration and changes basemap with <Map.switchBaseMap>
+       */
+      this.world.user.on('change:mapProvider', function(event, data){
         this.switchBaseMap();
       }.bind(this));
 
@@ -189,7 +200,12 @@ define([
           map: this, 
           feed: feed })
     },
-
+    
+    /**
+     * Method: recenter
+     * 
+     * sets the center of the map from <world>
+     */
     recenter: function(){
       var mapCenter = this.world.get('mapCenter');
       if(mapCenter && this.frame){
@@ -197,6 +213,11 @@ define([
       }
     },
     
+    /**
+     * Method: createBaseMap
+     * 
+     * creates a ModestMaps layer from either <User.attributes.mapProvider> or <User.config>
+     */
     createBaseMap: function(){
       var mapProvider = this.world.user.get('mapProvider');
       if (!mapProvider) {
@@ -208,7 +229,9 @@ define([
     },
     
     /**
-     * changes the basemap
+     * Method: switchBaseMap
+     * 
+     * changes the basemap using ModestMaps library
      */
     switchBaseMap: function(){
       var layer = this.createBaseMap();
@@ -217,6 +240,8 @@ define([
       this.frame.draw();
     },
     /**
+     * Method: createFrame
+     * 
      * creates frame using ModestMaps library
      */
     createFrame: function(){

@@ -33,12 +33,21 @@ define([
       this.world.on('change', function(event, data){
         this.recenter();
       }.bind(this));
-      
-      this.world.user.on('change', function(event, data){
+      /**
+       * Event: user:mapProvider
+       * 
+       * listens to changed user configuration and changes minimap with <MiniMap.switchBaseMap>
+       */
+      this.world.user.on('change:mapProvider', function(event, data){
         this.switchBaseMap();
       }.bind(this));
     },
-
+    
+    /**
+     * Method: jumpMap
+     * 
+     * sets <World.mapCenter> which recenters the map via <world:mapCenter> and <Map.recenter>
+     */
     jumpMap: function(event) {
       var offset = this.$el.offset();
       this.world.set('mapCenter', this.frame.pointLocation(
@@ -47,7 +56,8 @@ define([
     },
     
     /**
-     * changes the basemap
+     * Method: switchBaseMap
+     * changes the basemap using <Map>.
      */
     switchBaseMap: function(){
       //FIXME: this is redundant with Map.js

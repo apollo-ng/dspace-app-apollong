@@ -1,4 +1,4 @@
-Format: 1.52
+Format: 1.51
 
 
 # You can add a title and sub-title to your menu like this:
@@ -54,25 +54,29 @@ Group: Models  {
    File: World  (models/world.js)
    File: User  (models/user.js)
    File: Feature  (models/feature.js)
-   File: Marker  (models/marker.js)
    }  # Group: Models
-
-Group: Collections  {
-
-   File: FeatureCollection  (collections/base.js)
-   File: FeatureCollectionCORS  (collections/cors.js)
-   }  # Group: Collections
 
 Group: Views  {
 
    File: UI  (views/ui.js)
-   File: Map  (views/map.js)
+   File: MapContext  (views/map.js)
+   File: Map  (no auto-title, views/map.js)
    File: MiniMap  (views/miniMap.js)
    File: Overlay  (views/overlay.js)
    File: FeatureBox  (views/featureBox.js)
    File: FeatureTab  (views/featureTab.js)
    File: FeatureBoxItem  (views/featureBoxItem.js)
    File: Panel  (views/panels.js)
+   File: Marker  (views/marker.js)
+
+   Group: Modal  {
+
+      File: AddFeature  (views/modal/addFeature.js)
+      File: Base  (views/modal/base.js)
+      File: FeatureDetails  (views/modal/featureDetails.js)
+      File: UserOptions  (views/modal/userOptions.js)
+      }  # Group: Modal
+
    }  # Group: Views
 
 Group: Template Helpers  {
@@ -81,6 +85,11 @@ Group: Template Helpers  {
    File: renderAcc  (helpers/renderAcc.js)
    File: setAccBg  (helpers/setAccBg.js)
    }  # Group: Template Helpers
+
+File: DeviceFeed  (geofeeds/device.js)
+File: GeoFeeds.Base  (geofeeds/base.js)
+File: FeatureCollection  (collections/feature.js)
+File: GeoFeeds.GeoJSON  (geofeeds/geoJson.js)
 
 Group: Index  {
 

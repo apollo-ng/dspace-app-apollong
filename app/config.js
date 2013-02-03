@@ -49,7 +49,15 @@ define([], function() {
      *  Options are: DMS, QTH (To be done: DEC & GPS)
      */
     user: {
-      userCoordPrefs: 'GPS'
+      userCoordPrefs: 'GPS',
+      geoLocationOptions: {
+	  interval: 2300,
+	  minacc: 49,
+	  maxacc: 1001,
+	  highacc: 'true',
+	  maxage: 600000, // used cached locations 
+	  timeout: 600
+	}
     }
   };
 

@@ -50,17 +50,11 @@ define([
       var watch = navigator.geolocation.watchPosition( 
         // success
         function( geoLocation ) {
-          console.log('have geolocation', geoLocation);
-          // if( geoLocation.coords.accuracy > options.minacc
-	        //     && geoLocation.coords.accuracy < options.maxacc ) {
-		      //   navigator.geolocation.clearWatch( self.watch );
-		        self.updatePosition( geoLocation );
-          //}
+		      self.updatePosition( geoLocation );
         }, 
         // error 
         function( e ) {
           self.fixme( 'geolocation', e ); 
-          navigator.geolocation.clearWatch( self.watch );
           self.updatePosition( false );
         },
         // geolocation API options 

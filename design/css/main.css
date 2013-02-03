@@ -176,39 +176,70 @@ h3	 { font-size: 18px; }
     right: 235px;
 }
 
-
 /*
  *  Icons: Black Shield
  */
-.shield-0-clear {
-display: block;
+.shield-0 {
+  background-repeat: no-repeat;
   background-image: url(../icons/shield-black.png);
   background-position: 2px 0px;
 }
 
 .shield-0-0 {
-display: block;
+  background-repeat: no-repeat;
   background-image: url(../icons/shield-black.png);
-  background-position: 32px 0px;
+  background-position: 5px -36px;
 }
 
-.shield-1-clear {
-display: block;
+.shield-1 {
+  background-repeat: no-repeat;
   background-image: url(../icons/shield-red.png);
   background-position: 2px 0px;
 }
 
-.shield-2-clear {
-display: block;
+.shield-2 {
+  background-repeat: no-repeat;
   background-image: url(../icons/shield-green.png);
   background-position: 2px 0px;
 }
 
-.shield-3-clear {
-display: block;
+.shield-2-0 { background-position: 2px -36px;   }
+.shield-2-1 { background-position: 2px -71px;   }
+.shield-2-2 { background-position: 2px -106px; }
+.shield-2-3 { background-position: 2px -141px; }
+.shield-2-4 { background-position: 2px -176px; }
+.shield-2-5 { background-position: 2px -211px; }
+.shield-2-6 { background-position: 2px -246px; }
+.shield-2-7 { background-position: 2px -281px; }
+.shield-2-8 { background-position: 2px -316px; }
+.shield-2-9 { background-position: 2px -351px; }
+.shield-2-10 { background-position: 2px -386px; }
+.shield-2-11 { background-position: 2px -421px; }
+.shield-2-12 { background-position: 2px -456px; }
+.shield-2-13 { background-position: 2px -491px; }
+.shield-2-14 { background-position: 2px -351px; }
+.shield-2-15 { background-position: 2px -351px; }
+.shield-2-16 { background-position: 2px -351px; }
+.shield-2-17 { background-position: 2px -351px; }
+.shield-2-18 { background-position: 2px -351px; }
+.shield-2-19 { background-position: 2px -351px; }
+.shield-2-20 { background-position: 2px -351px; }
+.shield-2-21 { background-position: 2px -351px; }
+.shield-2-22 { background-position: 2px -351px; }
+.shield-2-23 { background-position: 2px -351px; }
+.shield-2-24 { background-position: 2px -351px; }
+.shield-2-25 { background-position: 2px -351px; }
+.shield-2-26 { background-position: 2px -351px; }
+
+.shield-3 {
+  background-repeat: no-repeat;
   background-image: url(../icons/shield-blue.png);
   background-position: 2px 0px;
 }
 
+.shield-3-0 {
+  background-repeat: no-repeat;
+  background-image: url(../icons/shield-blue.png);
+  background-position: 2px -36px;
+}
 
->>>>>>> Moving to icons sprites

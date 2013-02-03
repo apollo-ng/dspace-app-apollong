@@ -474,7 +474,6 @@
   font-size: 14px;
   font-weight: bold;
   background-color: #ccc;
-  background-repeat: no-repeat;
   border-left: 1px solid #eee;
   border-right: 1px solid #999;
   border-top: 1px solid #eee;
@@ -489,7 +488,6 @@
 
 #featureBox .featureBoxTabs .active {
   opacity: 1;
-  background-repeat: no-repeat;
   border-bottom: 1px solid #ccc;
 }
 
@@ -612,8 +610,7 @@
 }
 
 .featureBoxItem-icon {
-  background-repeat: no-repeat;
-  background-position: 5px -2px;
+margin-left: 3px;
 }
 
 .featureBoxItem-description {

@@ -37,7 +37,8 @@ define([
 
     callCommand: function(event) {
       var item = this.$(event.target);
-      this.trigger('command ' + item.attr('data-command'), this.point);
+      console.log("trigger command", item.attr('data-command'));
+      this.trigger('command:' + item.attr('data-command'), this.point);
       this.hide();
     },
 
@@ -117,12 +118,14 @@ define([
        */
       this.contextPanel = new MapContext({ map: this });
 
-      this.contextPanel.on('command add-feature', function(point) {
+      this.contextPanel.on('command:add-feature', function(point) {
         var location = this.frame.pointLocation(point);
         var dialog = new AddFeature(location);
         dialog.render();
         dialog.show();
       }.bind(this));
+
+      this.overlay = new Overlay({ map: this });
     },
 
     /**
@@ -157,13 +160,10 @@ define([
        */
       this.userLayer = this.createUserLayer();
 
-      /**
-       * FIXME keep track on overlays
-       */
-      var feeds = this.world.geoFeeds;
-      for( var i = feeds.length; i--; ) {
-        var overlay = new Overlay({ collection: feeds[i].collection, map: this });
-      }
+    },
+
+    setOverlayCollection: function(collection) {
+      this.overlay.setCollection(collection);
     },
 
     recenter: function(){
@@ -275,12 +275,27 @@ define([
         }.bind(this));
         return marker.render();
       }.bind(this));
+
+      var features = collection.toJSON();
+
       /**
        * display markers MM adds it to DOM
        * .extent() called to redraw map!
        */
-      markerLayer.features( collection.toJSON( ));
-      this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+      markerLayer.features(features);
+
+      if(features) {
+        this.frame.addLayer(markerLayer).setExtent(markerLayer.extent());
+        return {
+          remove: function() {
+            this.frame.removeLayer(markerLayer);
+          }.bind(this)
+        };
+      } else {
+        this.recenter();
+        return { remove: function() {} };
+      }
+
     },
 
     /**

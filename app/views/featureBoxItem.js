@@ -56,7 +56,7 @@ define([
     updateSettings: function(user) {
       this.$('*[data-format=position]').forEach(function(e) {
         var el = this.$(e);
-        el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'), user.get('userCoordPrefs')));
+        el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'), user.get('userCoordPrefs')));
       }.bind(this));
     },
 

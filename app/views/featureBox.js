@@ -1,8 +1,10 @@
 define([
+  'ender',
   'backbone',
   'views/panels',
-  'views/featureTab'
-], function(Backbone, panels, FeatureTab) {
+  'views/featureTab',
+  'templateMap'
+], function($, Backbone, panels, FeatureTab, templates) {
     /**
      * Class: FeatureBox
      *
@@ -20,6 +22,11 @@ define([
        * DOM element of this view
        */
       el: '#featureBox',
+      template: templates.featureBox,
+
+      events: {
+        'click *[data-tab]': 'clickTab'
+      },
 
       /**
        * Method: initialize
@@ -65,9 +72,10 @@ define([
         for(var i=0; i < this.feeds.length; i++){
           var feed = this.feeds[i];
           var tab = new FeatureTab({
-            collection: feed.collection,
+            feed: feed,
             aether: this.aether
           });
+          tab.index = i;
           tabs.push(tab);
         };
         return tabs;
@@ -85,13 +93,39 @@ define([
        * this.el - rendered DOM element of view
        */
       render: function(){
-        var self = this;
+        this.$el.html(this.template({
+          tabs: this.featureTabs
+        }));
 
-        _(this.featureTabs).each(function(featureTab, index){
+
+        _(this.featureTabs).each(function(featureTab){
           var renderedTemplate = featureTab.render();
-          self.$el.append(renderedTemplate);
-        });
-        return self.el;
+          this.$el.append(renderedTemplate);
+          featureTab.hide();
+          featureTab.tab = this.$('.featureBoxTabs > .tab[data-tab="' + featureTab.index + '"]');
+        }.bind(this));
+
+        if(this.featureTabs.length > 0) {
+          this.selectTab(0);
+        }
+        return this.el;
+      },
+
+      clickTab: function(event) {
+        this.selectTab($(event.target).attr('data-tab'));
+      },
+
+      selectTab: function(index) {
+        if(typeof(this.currentTabIndex) !== 'undefined') {
+          var previousTab = this.featureTabs[this.currentTabIndex]
+          previousTab.hide();
+          previousTab.tab.removeClass('active');
+        }
+        var currentTab = this.featureTabs[index]
+        currentTab.show();
+        currentTab.tab.addClass('active');
+        this.currentTabIndex = index;
+        this.trigger('change-tab', this.featureTabs[index].collection);
       },
 
       showFX: function(){

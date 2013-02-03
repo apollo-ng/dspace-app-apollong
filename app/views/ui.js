@@ -1,5 +1,6 @@
 define([
   'backbone',
+  'remoteStorage',
   'views/panels',
   'views/featureBox',
   'views/map',
@@ -7,7 +8,7 @@ define([
   'views/modal/userOptions',
   'views/modal/featureDetails',
   'template/helpers/renderPos'
-], function(Backbone, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
+], function(Backbone, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
 
 
   // /**
@@ -106,24 +107,6 @@ define([
       this.dspace = this.options.dspace;
 
       /**
-       * Property: map
-       *
-       * reference to the <Map> from
-       *
-       * passed to <MiniMap>
-       * used to jump <Map>
-       */
-
-      this.map = new Map({ world: this.world });
-
-      this.map.on('marker-click', function(uuid) {
-        this.dspace.updateState({
-          feature: uuid,
-          modal: 'featureDetails'
-        });
-      }.bind(this));
-
-      /**
        * Property: aether
        *
        * event aggregator from <World>
@@ -143,10 +126,36 @@ define([
         });
       }.bind(this));
 
+
+
+      /**
+       * Property: map
+       *
+       * reference to the <Map> from
+       *
+       * passed to <MiniMap>
+       * used to jump <Map>
+       */
+
+      this.map = new Map({ world: this.world });
+
+      this.map.on('marker-click', function(uuid) {
+        this.dspace.updateState({
+          feature: uuid,
+          modal: 'featureDetails'
+        });
+      }.bind(this));
+
+
       /**
        * Property: featureBox
        */
       this.featureBox = new FeatureBox({ aether: this.aether, feeds: this.world.geoFeeds});
+
+      this.featureBox.on('change-tab', function(collection) {
+        console.log('change tab', collection);
+        this.map.setOverlayCollection(collection);
+      }.bind(this));
 
       /**
        * creates minimap
@@ -181,7 +190,7 @@ define([
             setTimeout(function() {
               this.$('*[data-format=position]').forEach(function(e) {
                 var el = this.$(e);
-                el.text(renderPos(el.attr('data-lat'), el.attr('data-lon'),
+                el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'),
                                   this.world.user.get('userCoordPrefs')));
               }.bind(this));
             }.bind(this), 0);
@@ -192,6 +201,11 @@ define([
           this.closeModal();
         }
       }.bind(this));
+
+      remoteStorage.claimAccess('locations', 'rw').
+        then(function() {
+          remoteStorage.displayWidget('remotestorage-connect');
+        });
 
     },
 

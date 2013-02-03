@@ -1,7 +1,8 @@
 define([
   'backbone',
-  'views/featureBoxItem'
-], function(Backbone, FeatureBoxItem) {
+  'views/featureBoxItem',
+  'templateMap'
+], function(Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab
@@ -16,6 +17,7 @@ define([
   var FeatureTab = Backbone.View.extend({
 
     className: 'featureTab',
+    template: templates.featureTab,
 
     initialize: function(){
       var self = this;
@@ -26,6 +28,9 @@ define([
        * event aggregator from <World>
        */
       this.aether = this.options.aether;
+
+      this.feed = this.options.feed;
+      this.collection = this.feed.collection;
 
       /**
        * Event: collection:reset
@@ -45,6 +50,10 @@ define([
       this.collection.on( 'feature:current', function( feature ){
         self.aether.trigger('feature:current', feature );
       });
+
+      this.collection.on('add', function(feature) {
+        this.renderFeature(feature);
+      }.bind(this));
     },
 
     /*
@@ -52,22 +61,45 @@ define([
      * FIXME can leak session state to collection
      */
     render: function(){
-      var self = this;
-      this.$el.empty();
+      if(this.rendered) {
+        return;
+      }
 
-      _(this.collection.models).each(function(feature, index){
-        feature.set( 'index', index );
-        var featureBoxItem = new FeatureBoxItem({
-          model: feature,
-          aether: self.aether
-        });
+      /**
+       *  Render Overlay Title
+       */
+      this.$el.html(this.template(this));
 
-        var renderedTemplate = featureBoxItem.render();
-        self.$el.append(renderedTemplate);
+      this.itemWrapper = this.$('.featureItems');
 
-      });
-      return self.el;
+      this.rendered = true;
+
+      this.$el.attr('data-index', this.index);
+
+      this.featureIndexCounter = 0;
+
+      return this.el;
     },
+
+    renderFeature: function(feature) {
+      this.render();
+      var featureIndex = this.featureIndexCounter++;
+      feature.set( 'index', featureIndex );
+      var featureBoxItem = new FeatureBoxItem({
+        model: feature,
+        aether: this.aether
+      });
+      var renderedTemplate = featureBoxItem.render();
+      this.itemWrapper.append(renderedTemplate);
+    },
+
+    hide: function() {
+      this.$el.hide();
+    },
+
+    show: function() {
+      this.$el.show();
+    }
 
   });
 

@@ -1,5 +1,6 @@
 <div id='geoStatus' class='uiDisplay'>⊙</div>
 <div id='userGeoLocation' class='uiDisplay' data-name="user-location" data-format="position"></div>
+<div id='userGeoInfo' class='uiDisplay'><span class='displayTop'>{{ms2kmh user.geoLocation.coords.speed}}</span><span class='displayBottom'>A: {{user.geoLocation.coords.altitude}} m</span></div>
 <div id='userGeoLocAcc' class='uiDisplay {{setAccBg user.geoLocation.coords.accuracy}}'>{{renderAcc user.geoLocation.coords.accuracy}}</div>
-<div id='userGeoInfo' class='uiDisplay'>{{ms2kmh user.geoLocation.coords.speed}} A: {{user.geoLocation.coords.altitude}} m</div>
+<div id='mapCenterInfo' class=uiDisplay>i</div>
 <div id='coordsMapCenter' class='uiDisplay' data-name="map-center" data-format="position"></div>

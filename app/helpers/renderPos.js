@@ -58,7 +58,7 @@ define(['handlebars'], function(Handlebars) {
     days = days * sign;
     if(axis == 'lat') direction = days<0 ? 'S' : 'N';
     if(axis == 'lon') direction = days<0 ? 'W' : 'E';
-    return direction + (days * sign) + 'º ' + mins + "' ";
+    return direction + ' ' + (days * sign) + 'º ' + mins + "'";
   }
 
 
@@ -126,23 +126,24 @@ define(['handlebars'], function(Handlebars) {
     }
     sector = chr.charAt(n[1]) + chr.charAt(n[4]) + num.charAt(n[2]);
     sector += num.charAt(n[5]) + chr.charAt(n[3])+ chr.charAt(n[6]);
-    return ('Sector: ' + sector);
+    return (sector);
   }
 
   function renderPos(lat, lon, prefSys) {
-    if ( typeof lat  !== 'undefined' && typeof lon !== 'undefined') {
+    if ( lat && lon) {
       switch(prefSys) {
       case 'GPS':
-        return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
+        return ('<span class="displayTop">' +dd2gps(lat, 'lat') + '</span><span class="displayBottom">' + dd2gps(lon, 'lon') + '</span>');
       case 'QTH':
-        return (dd2maidenhead(lat, lon));
+        console.log(dd2maidenhead(lat, lon));
+        return ('<span class="displayTop">Sector</span><span class="displayBottom">' + dd2maidenhead(lat, lon) + '</span>');
       case 'DMS':
-        return (dd2dms(lat, 'lat') + " - " + dd2dms(lon, 'lon'));
+        return ('<span class="displayTop">' + dd2dms(lat, 'lat') + '</span><span class="displayBottom">' + dd2dms(lon, 'lon') + '</span>');
       case 'DEC':
         // FIXME @chron0: print less precise numbers - it blows the FeatureBoxItem!
-        return ('Lat: ' + lat + ' Lon: ' + lon);
+        return ('<span class="displayTop">Lat: ' + lat.substr(0, 8)+ '</span><span class="displayBottom">Lon: ' + lon.substr(0, 8) + '</span>');
       default:
-        return (dd2gps(lat, 'lat') + " - " + dd2gps(lon, 'lon'));
+        return ('<span class="displayTop">' + dd2gps(lat, 'lat') + '</span><span class="displayBottom">' + dd2gps(lon, 'lon') + '</span>');
       }
     } else {
       return ('Position not acquired');

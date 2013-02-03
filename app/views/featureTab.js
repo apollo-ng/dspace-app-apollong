@@ -98,6 +98,7 @@ define([
       var featureIndex = this.featureIndexCounter++;
       feature.set( 'index', featureIndex );
       var featureBoxItem = new FeatureBoxItem({
+        tab: this,
         model: feature,
         aether: this.aether
       });

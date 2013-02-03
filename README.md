@@ -1,4 +1,4 @@
-# DSpace-Client 
+# DSpace-Client
 
 * master: [![Build Status](https://travis-ci.org/apollo-ng/dspace-client.png?branch=master)](https://travis-ci.org/apollo-ng/dspace-client)
 * develop: [![Build Status](https://travis-ci.org/apollo-ng/dspace-client.png?branch=develop)](https://travis-ci.org/apollo-ng/dspace-client)
@@ -19,7 +19,7 @@ We work on **develop** branch and keep **master** stable for going live!
 * Github: https://github.com/apollo-ng/dspace-client
 * IRC: #apollo@freenode
 * Mumble: ticonderoga.open-resource.org
-* Mailinglist: dspace-develop@apollo.open-resource.org
+* Mailinglist: dspace-develop@apollo.open-resource.org (subscribe by sending mail to: dspace-develop-subscribe@apollo.open-resource.org)
 * Blog: https://apollo.open-resource.org/tag:dspace
 
 ### Env
@@ -58,19 +58,35 @@ Install Development- and Runtime Depenencies
 
 * $ npm install
 
-Start the local some development server
+ **Optional**
+
+When you want to change dependencies:
+
+* $ make dep
+
+In case this fails, run
+
+* $ git submodule init
+* $ git submodule update
+
+and try again
+
+[gitflow](https://github.com/nvie/gitflow)
+
+* $ git flow init
+
+Start the local development server
+
+* $ node run.js
+
+Point your browser to http://localhost:3000/index.dev.html
+
+Or use any other local webserver, for example:
 
 * adsf (ruby)
 * simple-http (python)
 * nginx
 
-Point your browser to http://localhost:3000/index.dev.html
-
-**Optional**
-
-[gitflow](https://github.com/nvie/gitflow)
-
-* $ git flow init
 
 ### Technologies
 

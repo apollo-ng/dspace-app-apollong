@@ -26,8 +26,14 @@ define([
      * set user geoLocation 
      */
     updatePosition: function( geoLocation, defaults ) {
+      if( geoLocation && typeof geoLocation.coords == 'object' ) {
+        this.set({ geoLocation: geoLocation });
+        repeat = true;
+      }
+
+    },
+    watchPosition: function( defaults ) {
 	    var options = {
-	      interval: 2300,
 	      minacc: 49,
 	      maxacc: 1001,
 	      highacc: 'true',
@@ -40,25 +46,16 @@ define([
         }
       }
 
-      if( geoLocation && typeof geoLocation.coords == 'object' ) {
-        this.set({ geoLocation: geoLocation });
-        repeat = true;
-      }
-
-      var self = this;
-      setTimeout( 
-	      function( ) { self.watchPosition( options ) },
-	      options.interval );
-    },
-    watchPosition: function( options ) {
       var self = this;
       var watch = navigator.geolocation.watchPosition( 
         // success
         function( geoLocation ) {
-          if( geoLocation.coords.accuracy > options.minacc
-	            && geoLocation.coords.accuracy < options.maxacc ) {
-		        navigator.geolocation.clearWatch( self.watch );
-		        self.updatePosition( geoLocation ); }
+          console.log('have geolocation', geoLocation);
+          // if( geoLocation.coords.accuracy > options.minacc
+	        //     && geoLocation.coords.accuracy < options.maxacc ) {
+		      //   navigator.geolocation.clearWatch( self.watch );
+		        self.updatePosition( geoLocation );
+          //}
         }, 
         // error 
         function( e ) {
@@ -77,9 +74,8 @@ define([
     /**
      * error handler
      */
-    fixme: function( e ) {
-      tag = 'geolocation';
-      console.log( '#FIXME('+tag+'): '+e.message );
+    fixme: function( tag, e ) {
+      console.log( '#FIXME('+tag+'): '+(e.message||e) );
     }
 
   });

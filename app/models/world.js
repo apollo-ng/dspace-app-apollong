@@ -42,6 +42,9 @@ define([
       this.config = this.get('config');
 
       this.user = this.setupUser(this.config.user);
+
+      this.user.watchPosition();
+
       // Property: geoFeeds
       //
       // @elf-pavlik: Document this.
@@ -93,7 +96,6 @@ define([
      */
     setupUser: function(config){
       return User.first() || new User({ config: config });
-
     },
 
     /**

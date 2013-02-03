@@ -36,6 +36,8 @@ define([
                 if(input.value === attrs[key]) {
                   this.$(input).attr('checked', true);
                 }
+              } else if(input.type === 'checkbox') {
+                this.$(input).attr('checked', attrs[key]);
               } else {
                 this.$(input).val(attrs[key]);
               }
@@ -59,7 +61,15 @@ define([
        */
       updateUser: function(event) {
         var target = this.$(event.target);
-        this.user.set(target.attr('name'), target.val());
+        var key = target.attr('name');
+        var value;
+        if(target.attr('type') === 'checkbox') {
+          value = target.attr('checked');
+        } else {
+          value = target.val();
+        }
+        console.log('update user set', key, value);
+        this.user.set(key, value);
         this.user.save();
       },
 

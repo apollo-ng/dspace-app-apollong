@@ -1,5 +1,6 @@
 define([
   'backbone',
+  'ender',
   'remoteStorage',
   'views/panels',
   'views/featureBox',
@@ -8,7 +9,7 @@ define([
   'views/modal/userOptions',
   'views/modal/featureDetails',
   'template/helpers/renderPos'
-], function(Backbone, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
+], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, renderPos) {
 
 
   // /**
@@ -197,11 +198,21 @@ define([
         }
       }.bind(this));
 
-      remoteStorage.claimAccess('locations', 'rw').
-        then(function() {
-          remoteStorage.displayWidget('remotestorage-connect');
-        });
+      function setupRemoteStorage() {
+        if(this.world.user.get('remoteStorage')) {
+          $(document.body).prepend('<div id="remotestorage-connect"></div>');
+          remoteStorage.claimAccess('locations', 'rw').
+            then(function() {
+              remoteStorage.displayWidget('remotestorage-connect');
+            });
+        } else {
+          $('#remotestorage-connect').remove();
+          remoteStorage.flushLocal();
+        }
+      }
 
+      this.world.user.on('change:remoteStorage', setupRemoteStorage.bind(this));
+      setupRemoteStorage.bind(this)();
     },
 
     modals: {

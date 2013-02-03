@@ -108,7 +108,7 @@ define([
       var newState = this.mergeState(this.state, attrs);
       log('updateState', this.state, '+', attrs, '->', newState);
       this.state = newState;
-      this.navigate(this.encodeState(newState), { replace: replace });
+      this.navigate('!' + this.encodeState(newState), { replace: replace });
       this.callStateHooks(attrs);
     },
 
@@ -119,12 +119,15 @@ define([
      *
      */
     callStateHooks: function(attrs) {
-      for(var key in attrs) {
-        var hook = this.stateHooks[key];
-        if(hook) {
-          hook(attrs[key]);
+      setTimeout(function() {
+        for(var key in attrs) {
+          console.log('callStateHook', attrs);
+          var hook = this.stateHooks[key];
+          if(hook) {
+            hook(attrs[key]);
+          }
         }
-      }
+      }.bind(this), 0);
     },
 
 
@@ -165,10 +168,14 @@ define([
     decodeState: function(query) {
       var state = {};
       query.split('&').forEach(function(part) {
+        if(part.length === 0) {
+          return;
+        }
         var kv = part.split('=');
         state[kv[0]] = decodeURIComponent(kv[1]);
       });
-      return query;
+      console.log('decodeState', query, '->', state);
+      return state;
     },
     
     /**
@@ -184,7 +191,9 @@ define([
           query.push(key + '=' + encodeURIComponent(state[key]));
         }
       }
-      return query.join('&');
+      var state = query.join('&');
+      console.log('encodeState', state, '->', query);
+      return state;
     }
 
   });

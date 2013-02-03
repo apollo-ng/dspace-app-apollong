@@ -21,23 +21,30 @@ define(['backbone', 'templateMap'], function(Backbone, templates) {
        */
       this.map = this.options.map;
 
-      var self = this;
+      this.feed = this.options.feed;
 
+      this.feed.on('change', this.render.bind(this));
+      setTimeout(this.render.bind(this), 0);
     },
 
-    setCollection: function(collection) {
-      this.collection = collection;
-      setTimeout(function() {
-        this.render();
-      }.bind(this), 0);
+    render: function() {
+      console.log('render overlay');
+      if(this.feed.get('visible')) {
+        this.show();
+      } else {
+        this.hide();
+      }
     },
 
-    render: function(){
+    show: function() {
+      this.maplayer = this.map.addMapLayer(this.feed.collection);
+    },
+
+    hide: function() {
       if(this.maplayer) {
         this.maplayer.remove();
       }
-      this.maplayer = this.map.addMapLayer( this.collection );
-    },
+    }
   });
 
 

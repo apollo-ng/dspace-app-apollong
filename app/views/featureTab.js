@@ -1,8 +1,9 @@
 define([
+  'ender',
   'backbone',
   'views/featureBoxItem',
   'templateMap'
-], function(Backbone, FeatureBoxItem, templates) {
+], function($, Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab
@@ -18,6 +19,10 @@ define([
 
     className: 'featureTab',
     template: templates.featureTab,
+
+    events: {
+      'change input[name="visible"]': 'updateVisible'
+    },
 
     initialize: function(){
       var self = this;
@@ -54,6 +59,11 @@ define([
       this.collection.on('add', function(feature) {
         this.renderFeature(feature);
       }.bind(this));
+    },
+
+    updateVisible: function(event) {
+      this.feed.set('visible', $(event.target).attr('checked'));
+      this.render();
     },
 
     /*

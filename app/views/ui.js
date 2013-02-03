@@ -152,11 +152,6 @@ define([
        */
       this.featureBox = new FeatureBox({ aether: this.aether, feeds: this.world.geoFeeds});
 
-      this.featureBox.on('change-tab', function(collection) {
-        console.log('change tab', collection);
-        this.map.setOverlayCollection(collection);
-      }.bind(this));
-
       /**
        * creates minimap
        */

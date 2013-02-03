@@ -15,6 +15,14 @@ define([
    * Class: DSpace
    *
    * it doesn't matter ;)
+   *
+   *
+   *
+   * DSpace connects the <World> with the <UI>.
+   *
+   * Also it's a Backbone router.
+   *
+   * You interact with it through <updateState>.
    */
   return Backbone.Router.extend({
 

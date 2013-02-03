@@ -117,7 +117,7 @@ define([
       this.map = new Map({ world: this.world });
 
       this.map.on('marker-click', function(uuid) {
-        this.dspace.jump({
+        this.dspace.updateState({
           feature: uuid,
           modal: 'featureDetails'
         });
@@ -137,7 +137,7 @@ define([
        * jumps map to feature set to current
        */
       this.aether.on('feature:current', function( feature ){
-        this.dspace.jump({
+        this.dspace.updateState({
           feature: feature.get('uuid'),
           modal: undefined
         });
@@ -188,6 +188,8 @@ define([
           } else {
             console.log('modal not found', modal);
           }
+        } else {
+          this.closeModal();
         }
       }.bind(this));
 
@@ -211,7 +213,7 @@ define([
             feature: feature
           });
           this.modal.on('close', function() {
-            this.dspace.jump({ modal: false });
+            this.dspace.updateState({ modal: undefined });
           }.bind(this));
           this.modal.show();
         } else {
@@ -292,11 +294,11 @@ define([
      */
     toggleUserOptions: function() {
       if(this.modalName === 'userOptions') {
-        this.dspace.jump({
-          modal: false
+        this.dspace.updateState({
+          modal: undefined
         });
       } else {
-        this.dspace.jump({
+        this.dspace.updateState({
           modal: 'userOptions'
         });
       }

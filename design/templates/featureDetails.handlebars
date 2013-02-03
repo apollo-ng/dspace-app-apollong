@@ -1,4 +1,11 @@
 
 <h1>{{feature.properties.title}}</h1>
 <div data-format="position" data-lat="{{lat}}" data-lon="{{lon}}"></div>
+<div>
+{{#keyValue feature.properties}}
+<ul>
+  <li>{{key}}:{{value}}</li>
+</ul>
+{{/keyValue}}
+</div>
 <button data-command="close">Close</button>

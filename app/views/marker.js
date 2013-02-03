@@ -28,7 +28,6 @@ define(['backbone'], function(Backbone) {
        */
       var html; // FIXME put into /templates
       if(this.featureJson.properties.type == 'avatar'){
-        console.log('TIKIMAN!');
         html =  '<img src="design/images/tiki-man.png" pointer-events="auto" />';
       } else {
         html = '<img src="design/icons/black-shield-{{index}}.png" pointer-events="auto" />';

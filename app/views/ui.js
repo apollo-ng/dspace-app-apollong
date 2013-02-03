@@ -191,7 +191,6 @@ define([
             this.modalName = modalName;
             modal.apply(this, []);
             if(this.modal) {
-              console.log('setup close', this.modal);
               this.listenTo(this.modal, 'close', function() {
                 this.dspace.updateState({ modal: undefined });
               }.bind(this));
@@ -204,7 +203,7 @@ define([
               }.bind(this), 0);
             }
           } else {
-            console.log('modal not found', modalName);
+            console.error('modal not found', modalName);
           }
         } else {
           this.closeModal();
@@ -236,7 +235,6 @@ define([
           aether: this.aether
         });
         this.modal.show();
-        console.log('show modal user');
       },
 
       'featureDetails': function() {
@@ -247,7 +245,6 @@ define([
           });
           this.modal.show();
         } else {
-          console.log('show feature details, but no feature');
         }
       },
 
@@ -401,7 +398,6 @@ define([
           feature: feature
         });
         this.featureDetails.show();
-        console.log('rendered featureDetails');
       }
     },
 

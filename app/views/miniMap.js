@@ -35,13 +35,10 @@ define([
     },
 
     jumpMap: function(event) {
-      console.log('evt', event);
       var offset = this.$el.offset();
-      console.log('before jumpMap', JSON.stringify(this.world.get('mapCenter')));
       this.world.set('mapCenter', this.frame.pointLocation(
         new MM.Point(event.clientX - offset.left , event.clientY - offset.top)
       ));
-      console.log('after jumpMap', JSON.stringify(this.world.get('mapCenter')));
     },
 
     render: function(){

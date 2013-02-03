@@ -61,28 +61,6 @@ define([
       // fire initial change
       this.aether.trigger('user:change', this.user);
 
-      /**
-       * this serves features to the userlayer
-       * userlayer view listens on change:geometry and 
-       * updates the position of the user on the map
-       */
-    //   var avatar = new Feature({
-    //     id: 'avatar',
-	  // type: 'Point',
-    //       geometry: {
-    //         coordinates: { }},
-    //       properties: {
-    //         type: 'avatar',
-    //         title: 'aloha o/' } });
-    //   this.userFeed = new GeoJSONFeed( );
-    //   this.userFeed.collection = new FeatureCollection([avatar])
-
-  //     this.user.on( 'change:geoLocation', function( e ){
-	// var location = e.get( 'geoLocation' ) 
-	//       //avatar.set({ geometry: { coordinates: [location.coords.longitude, location.coords.latitude] }});
-  //     });
-  //     this.user.updatePosition( );
-
       // FIXME: make this more efficient!
       this.featureIndex = {};
 
@@ -148,7 +126,7 @@ define([
         }
         break;
       default:
-        console.log('tried creating ' + feed.type + ' collections')
+        console.log('WARNING: Feed type not implemented: ' + feed.type);
         break;
       };
     }

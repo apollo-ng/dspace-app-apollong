@@ -21,7 +21,6 @@ define([
 
     initialize: function(opts) {
       this.model = new Feature();
-      console.log('addfeature', arguments);
 
       this.world = opts.world;
 
@@ -59,7 +58,6 @@ define([
     runCommand: function(event) {
       var command = $(event.target).attr('data-command');
       var handler = this.commands[command];
-      console.log('run command', command, handler);
       if(handler) {
         handler.apply(this, []);
       } else {

@@ -16,7 +16,6 @@ define([
 
     watch: function() {
       navigator.geolocation.watchPosition(function(position) {
-        console.log('position changed', position);
         if(this.collection.length === 0) {
           this.collection.add(this.avatar);
         }

@@ -19,7 +19,6 @@ define(['underscore', 'backbone'], function(_, Backbone) {
   // Our Store is represented by a single JS object in *localStorage*. Create it
   // with a meaningful name, like the name you'd give a table.
   var Store = function(name) {
-    console.log('new store', name);
     this.name = name;
     var store = localStorage.getItem(this.name);
     try {

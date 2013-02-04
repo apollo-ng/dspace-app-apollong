@@ -21,7 +21,8 @@ define([
     template: templates.featureTab,
 
     events: {
-      'change input[name="visible"]': 'updateVisible'
+      'change input[name="visible"]': 'updateVisible',
+      'change input[name="only"]': 'updateOnly'
     },
 
     initialize: function(){
@@ -53,6 +54,12 @@ define([
 
     updateVisible: function(event) {
       this.feed.set('visible', $(event.target).attr('checked'));
+      this.render();
+    },
+
+    updateOnly: function(event) {
+      this.feed.set('only', $(event.target).attr('checked'));
+      console.log('FIXME: Hide/Restore other markers on map');
       this.render();
     },
 

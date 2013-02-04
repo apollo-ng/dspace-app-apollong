@@ -8,6 +8,14 @@
       <label for='overlay-visi-{{index}}'>Show</label>
     </div>
   </div>
+  <div class='overlayButton overlayOnly'>
+    <div class='overlayCheckbox'>
+      <input type='checkbox' name="only" id='overlay-only-{{index}}' {{#only}}checked{{/only}}>
+    </div>
+    <div class='label'>
+      <label for='overlay-only-{{index}}'>Only</label>
+    </div>
+  </div>
   <div class='overlayButton overlayProps'>Options</div>
   <div class='overlayButton overlayRemove'>&times;</div>
 </div>

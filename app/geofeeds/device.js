@@ -14,12 +14,15 @@ define([
    */
   return BaseFeed.extend({
 
+    name: 'device',
+
     watch: function() {
       navigator.geolocation.watchPosition(function(position) {
+        console.log('setpos', position, this.avatar.toJSON());
+        this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
         if(this.collection.length === 0) {
           this.collection.add(this.avatar);
         }
-        this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
       }.bind(this));
     }
 

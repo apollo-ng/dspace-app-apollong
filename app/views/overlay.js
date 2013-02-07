@@ -71,6 +71,7 @@ define(['backbone', 'markers', 'views/marker', 'templateMap'], function(Backbone
         }.bind(this));
         return marker.render();
       }.bind(this));
+
       /**
        * display markers MM adds it to DOM
        * .extent() called to redraw map!

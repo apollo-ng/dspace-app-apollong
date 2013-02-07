@@ -172,6 +172,7 @@ define([
          * Maedneasz: create konwienienz accessors
          */
         this.world = this.model;
+        this.ui = this.options.ui;
 
         this.world.user.on('location-changed', this.updateUserLocation.bind(this));
         this.world.on('change', this.updateMapCenter.bind(this));
@@ -181,7 +182,7 @@ define([
       createSearch: function(event) {
         event.preventDefault();
         var query = event.target.query.value;
-        var index = this.world.addFeed(new SearchFeed({ query: query }), true);
+        var index = this.world.addFeed(new SearchFeed({ query: query, extent: this.ui.map.frame.getExtent() }), true);
       },
 
       updateUserLocation: function() {

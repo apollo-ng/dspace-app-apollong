@@ -41,8 +41,12 @@ define([
      */
     fetch: function() {
       var xhr = new XMLHttpRequest();
+      var url = 'http://nominatim.openstreetmap.org/search/' + encodeURIComponent(this.query) + '?format=json&polygon_geojson=1';
+      if(this.extent) {
+        url += '&viewbox=' + this.extent.west + ',' + this.extent.north + ',' + this.extent.east + ',' + this.extent.south + '&bounded=1';
+      }
       // FIXME: add current bounding-box via 'viewbox' parameter to improve results.
-      xhr.open('GET', 'http://nominatim.openstreetmap.org/search/' + encodeURIComponent(this.query) + '?format=json&polygon_geojson=1', true);
+      xhr.open('GET', url, true);
       xhr.addEventListener('load', function() {
         var results = JSON.parse(xhr.responseText);
         results.forEach(function(result) {
@@ -67,11 +71,14 @@ define([
         //        implemented.
         return;
       }
+      var displayName = object.display_name;
+      var md = displayName.match(/^([^,]+),(.+)$/);
       return {
         type: 'Feature',
         geometry: object.geojson,
         properties: {
-          title: object.display_name
+          title: md[1],
+          description: md[2]
         }
       }
     }

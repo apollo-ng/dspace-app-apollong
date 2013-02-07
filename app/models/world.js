@@ -44,12 +44,14 @@ define([
 
       this.user = this.setupUser(this.config.user);
 
-      // this.user.watchPosition();
+      // FIXME: make this more efficient!
+      this.featureIndex = {};
 
       // Property: geoFeeds
       //
       // @elf-pavlik: Document this.
-      this.geoFeeds = this.createFeeds(this.config.geoFeeds);
+      this.geoFeeds = [];
+      this.createFeeds(this.config.geoFeeds);
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);
 
@@ -61,9 +63,6 @@ define([
       // fire initial change
       this.aether.trigger('user:change', this.user);
 
-      // FIXME: make this more efficient!
-      this.featureIndex = {};
-
     },
 
     /**
@@ -74,6 +73,30 @@ define([
      */
     setupUser: function(config){
       return User.first() || new User({ config: config });
+    },
+
+    addFeed: function(feed, setCurrent) {
+      feed.index = this.geoFeeds.length;
+      this.geoFeeds.push(feed);
+      feed.watch();
+      this.trigger('add-feed', feed);
+      if(setCurrent) {
+        this.setCurrentFeed(feed.index);
+      }
+
+      feed.collection.on('add', function(feature) {
+        this.featureIndex[feature.get('id')] = feature;
+      }.bind(this));
+
+      feed.set('visible', true);
+      return feed.index;
+    },
+
+    setCurrentFeed: function(index) {
+      this.set('currentFeed', index);
+      setTimeout(function() {
+        this.trigger('select-feed', index);
+      }.bind(this), 0);
     },
 
     /**
@@ -91,22 +114,12 @@ define([
      * (end code)
      */
     createFeeds: function( feedConfigs ){
-      var feeds = [];
       feedConfigs.forEach(function(feed) {
         feed = this.createFeed(feed);
         if(feed) {
-          feed.index = feeds.length;
-          feeds.push(feed);
-          feed.watch();
-
-          feed.collection.on('add', function(feature) {
-            this.featureIndex[feature.get('id')] = feature;
-          }.bind(this));
-
-          feed.set('visible', true);
+          this.addFeed(feed);
         }
       }.bind(this));
-      return feeds;
     },
 
     getCurrentFeature: function() {

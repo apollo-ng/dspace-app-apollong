@@ -40,7 +40,12 @@ define([
        */
         this.aether = this.options.aether;
 
-        var self = this;
+        /**
+         * Property: world
+         *
+         * reference to <World>
+         */
+        this.world = this.options.world;
 
         /**
          * Property: feeds
@@ -54,7 +59,12 @@ define([
          *
          * an array of <FeatureTab>s
          */
-        this.featureTabs = this.initializeTabs();
+        this.featureTabs = [];
+
+        this.initializeTabs();
+
+        this.listenTo(this.world, 'add-feed', this.addTab.bind(this));
+        this.listenTo(this.world, 'select-feed', this.selectTab.bind(this));
 
       },
 
@@ -68,17 +78,20 @@ define([
        * featureTabs - an array of <FeatureTab> views
        */
       initializeTabs: function(){
-        var tabs = [];
-        for(var i=0; i < this.feeds.length; i++){
-          var feed = this.feeds[i];
-          var tab = new FeatureTab({
-            feed: feed,
-            aether: this.aether
-          });
-          tab.index = i;
-          tabs.push(tab);
-        };
-        return tabs;
+        this.feeds.forEach(this.addTab.bind(this));
+      },
+
+      addTab: function(feed) {
+        var tab = new FeatureTab({
+          feed: feed,
+          aether: this.aether
+        });
+        tab.index = this.featureTabs.length,
+        this.featureTabs.push(tab);
+
+        // FIXME: refactor rendering of tabs, so they can be added / removed
+        //        without refreshing the entire <FeatureBox>.
+        setTimeout(this.render.bind(this), 0);
       },
 
       getCurrentCollection: function() {
@@ -103,7 +116,6 @@ define([
           tabs: this.featureTabs
         }));
 
-
         _(this.featureTabs).each(function(featureTab){
           var renderedTemplate = featureTab.render();
           this.$el.append(renderedTemplate);
@@ -118,7 +130,7 @@ define([
       },
 
       clickTab: function(event) {
-        this.selectTab($(event.target).attr('data-tab'));
+        this.world.setCurrentFeed($(event.target).attr('data-tab'));
       },
 
       selectTab: function(index) {

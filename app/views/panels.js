@@ -1,9 +1,12 @@
 define([
   'ender',
   'backbone',
+
+  'geofeeds/search',
+
   'templateMap',
   'template/helpers/renderPos'
-], function($, Backbone, templates, renderPos) {
+], function($, Backbone, SearchFeed, templates, renderPos) {
 
   /**
    * Class: Panel
@@ -159,6 +162,7 @@ define([
       events: {
           'click #userModeWalk': 'userModeWalk'
         , 'click #userModeDrive': 'userModeDrive'
+        , 'submit #searchForm': 'createSearch'
       },
 
       initialize: function() {
@@ -172,6 +176,12 @@ define([
         this.world.user.on('location-changed', this.updateUserLocation.bind(this));
         this.world.on('change', this.updateMapCenter.bind(this));
 
+      },
+
+      createSearch: function(event) {
+        event.preventDefault();
+        var query = event.target.query.value;
+        var index = this.world.addFeed(new SearchFeed({ query: query }), true);
       },
 
       updateUserLocation: function() {

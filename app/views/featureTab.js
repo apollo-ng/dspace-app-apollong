@@ -69,7 +69,7 @@ define([
      */
     render: function(){
       if(this.rendered) {
-        return;
+        return this.el;
       }
 
       this.visible = this.feed.get('visible');
@@ -107,8 +107,10 @@ define([
     },
 
     reset: function() {
-      this.itemWrapper.empty();
-      this.featureIndexCounter = 0;
+      if(this.rendered) {
+        this.itemWrapper.empty();
+        this.featureIndexCounter = 0;
+      }
     },
 
     hide: function() {

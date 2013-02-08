@@ -216,13 +216,10 @@ define([
     /**
      * Method: createBaseMap
      * 
-     * creates a ModestMaps layer from either <User.attributes.mapProvider> or <User.config>
+     * creates a ModestMaps layer from <User.attributes.mapProvider>
      */
     createBaseMap: function(){
       var mapProvider = this.world.user.get('mapProvider');
-      if (!mapProvider) {
-        mapProvider = this.world.user.get('config').mapProvider;
-      }
       var template = this.config.tileSets[mapProvider];
       var layer = new MM.TemplatedLayer(template);
       return layer;
@@ -239,6 +236,7 @@ define([
       this.frame.removeLayerAt(1);
       this.frame.draw();
     },
+
     /**
      * Method: createFrame
      * 

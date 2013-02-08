@@ -71,16 +71,21 @@ define([
       /**
        * Method: initializeTabs
        *
-       * creates feature tabs for all feeds
+       * creates feature tabs for all feeds, using <addTab>.
        *
-       * Returns:
-       *
-       * featureTabs - an array of <FeatureTab> views
        */
       initializeTabs: function(){
         this.feeds.forEach(this.addTab.bind(this));
       },
 
+      /**
+       * Method: addTab
+       *
+       * Adds a new <FeatureTab> representing the given 'feed'.
+       *
+       * Parameters:
+       *   feed - instance of a descendent of <GeoFeeds.Base>
+       */
       addTab: function(feed) {
         var tab = new FeatureTab({
           feed: feed,
@@ -94,6 +99,12 @@ define([
         setTimeout(this.render.bind(this), 0);
       },
 
+      /**
+       * Method: getCurrentCollection
+       *
+       * Determines the currently active tab and returns it's <FeatureCollection>.
+       *
+       */
       getCurrentCollection: function() {
         var tab = this.featureTabs[this.currentTabIndex];
         if(tab) {
@@ -129,10 +140,27 @@ define([
         return this.el;
       },
 
+      /**
+       * Method: clickTab
+       *
+       * Sets the current feed (-index) on the world.
+       * This method handles clicks on the tab icons.
+       */
       clickTab: function(event) {
         this.world.setCurrentFeed($(event.target).attr('data-tab'));
       },
 
+      /**
+       * Method: selectTab
+       *
+       * Make tab at given index active. The tab index starts at 0.
+       *
+       * This method is called initially in <render> (with index set to 0), and
+       * whenever the <World> fires 'select-feed'.
+       *
+       * Fires:
+       *   change-tab - passing the <FeatureCollection> of the newly selected tab
+       */
       selectTab: function(index) {
         if(typeof(this.currentTabIndex) !== 'undefined') {
           var previousTab = this.featureTabs[this.currentTabIndex]
@@ -146,11 +174,13 @@ define([
         this.trigger('change-tab', this.featureTabs[index].collection);
       },
 
+      // no-doc
       showFX: function(){
         this.$el.animate({ top: 0, duration: 700  });
         this.$el.fadeIn(600);
       },
 
+      // no-doc
       hideFX: function(){
         // FIXME: use $el height for the animation instead of fixed value
         this.$el.animate({ top: -400, duration: 700 });

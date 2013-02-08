@@ -6,7 +6,13 @@ define([
   './base'
 ], function(_, remoteStorage, locations, Feature, Base) {
 
+  
+  /**
+   * Class: GeoFeeds.RemoteStorage
+   */
   return Base.extend({
+
+    type: 'RemoteStorage',
 
     watch: function() {
       // FIXME: move to setup!!

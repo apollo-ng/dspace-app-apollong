@@ -1,9 +1,10 @@
 define([
+  'require',
   'ender',
   'backbone',
   'views/featureBoxItem',
   'templateMap'
-], function($, Backbone, FeatureBoxItem, templates) {
+], function(require, $, Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab

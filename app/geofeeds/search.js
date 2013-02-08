@@ -3,11 +3,13 @@ define([
 ], function(BaseFeed) {
 
   /**
-   * Class: SearchFeed
+   * Class: GeoFeeds.Search
    *
    * Represents a search and it's results.
    */
   return BaseFeed.extend({
+
+    type: 'Search',
 
     /**
      * Property: query
@@ -43,7 +45,7 @@ define([
       var xhr = new XMLHttpRequest();
       var url = 'http://nominatim.openstreetmap.org/search/' + encodeURIComponent(this.query) + '?format=json&polygon_geojson=1';
       if(this.extent) {
-        url += '&viewbox=' + this.extent.west + ',' + this.extent.north + ',' + this.extent.east + ',' + this.extent.south + '&bounded=1';
+        url += '&viewbox=' + this.extent.west + ',' + this.extent.north + ',' + this.extent.east + ',' + this.extent.south + '&bounded=0';
       }
       // FIXME: add current bounding-box via 'viewbox' parameter to improve results.
       xhr.open('GET', url, true);
@@ -72,13 +74,22 @@ define([
         return;
       }
       var displayName = object.display_name;
+      // usually the first part is the only thing of interest
       var md = displayName.match(/^([^,]+),(.+)$/);
+      var title = md[1];
+      var description = md[2];
+      // sometimes the first part is the house number.
+      if(/^\d/.test(title)) {
+        md = description.match(/^([^,]+),(.+)$/);
+        title = md[1] + ', ' + title;
+        description = md[2];
+      }
       return {
         type: 'Feature',
         geometry: object.geojson,
         properties: {
-          title: md[1],
-          description: md[2]
+          title: title,
+          description: description
         }
       }
     }

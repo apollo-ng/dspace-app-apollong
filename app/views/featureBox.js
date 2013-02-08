@@ -64,6 +64,7 @@ define([
         this.initializeTabs();
 
         this.listenTo(this.world, 'add-feed', this.addTab.bind(this));
+        this.listenTo(this.world, 'remove-feed', this.removeTab.bind(this));
         this.listenTo(this.world, 'select-feed', this.selectTab.bind(this));
 
       },
@@ -93,10 +94,27 @@ define([
         });
         tab.index = this.featureTabs.length,
         this.featureTabs.push(tab);
+        this.adjustRemovable();
 
         // FIXME: refactor rendering of tabs, so they can be added / removed
         //        without refreshing the entire <FeatureBox>.
         setTimeout(this.render.bind(this), 0);
+      },
+
+      removeTab: function(index) {
+        var tab = this.featureTabs.splice(index, 1)[0];
+        var ftl = this.featureTabs.length;
+        for(var i=index;i<ftl;i++) {
+          this.featureTabs[i].index = i;
+          this.featureTabs[i].reRender();
+        }
+        this.adjustRemovable();
+        this.selectTab(Math.max(index - 1, 0));
+        this.render();
+      },
+
+      adjustRemovable: function() {
+        this.featureTabs[0].setRemovable(this.featureTabs.length !== 1);
       },
 
       /**
@@ -164,8 +182,10 @@ define([
       selectTab: function(index) {
         if(typeof(this.currentTabIndex) !== 'undefined') {
           var previousTab = this.featureTabs[this.currentTabIndex]
-          previousTab.hide();
-          previousTab.tab.removeClass('active');
+          if(previousTab) {
+            previousTab.hide();
+            previousTab.tab.removeClass('active');
+          }
         }
         var currentTab = this.featureTabs[index]
         currentTab.show();

@@ -156,7 +156,7 @@ define([
       /**
        * Property: featureBox
        */
-      this.featureBox = new FeatureBox({ aether: this.aether, feeds: this.world.geoFeeds});
+      this.featureBox = new FeatureBox({ world: this.world, aether: this.aether, feeds: this.world.geoFeeds});
 
       this.listenTo(this.featureBox, 'change-tab', function(collection) {
         if(this.modal && this.modal.setCollection) {
@@ -172,7 +172,7 @@ define([
       /**
        * creates statusPanel
        */
-      this.statusPanel = new panels.Status({model: this.world});
+      this.statusPanel = new panels.Status({model: this.world, ui: this});
       this.controlPanel = new panels.Control({world: this.world });
 
       /**

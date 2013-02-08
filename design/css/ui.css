@@ -342,6 +342,12 @@
   margin-left: 6px;
 }
 
+#statusPanel #searchField {
+    border-radius: 5px;
+    padding: 5px;
+    background: white;
+}
+
 #geoStatus {
   width: 30px;
   font-size: 25px;

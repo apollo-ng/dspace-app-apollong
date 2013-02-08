@@ -1,9 +1,10 @@
 define([
+  'require',
   'ender',
   'backbone',
   'views/featureBoxItem',
   'templateMap'
-], function($, Backbone, FeatureBoxItem, templates) {
+], function(require, $, Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab
@@ -22,7 +23,8 @@ define([
 
     events: {
       'change input[name="visible"]': 'updateVisible',
-      'change input[name="only"]': 'updateOnly'
+      'change input[name="only"]': 'updateOnly',
+      'click .overlayRemove': 'closeTab'
     },
 
     initialize: function(){
@@ -63,13 +65,23 @@ define([
       this.render();
     },
 
+    closeTab: function() {
+      this.aether.trigger('remove-feed', this.index);
+    },
+
+    reRender: function() {
+      this.rendered = false;
+      this.render();
+      this.collection.each(this.renderFeature.bind(this));
+    },
+
     /*
      * FIXME doplicates <FeatureCollection.toJSON>
      * FIXME can leak session state to collection
      */
     render: function(){
       if(this.rendered) {
-        return;
+        return this.el;
       }
 
       this.visible = this.feed.get('visible');
@@ -107,8 +119,10 @@ define([
     },
 
     reset: function() {
-      this.itemWrapper.empty();
-      this.featureIndexCounter = 0;
+      if(this.rendered) {
+        this.itemWrapper.empty();
+        this.featureIndexCounter = 0;
+      }
     },
 
     hide: function() {
@@ -117,6 +131,12 @@ define([
 
     show: function() {
       this.$el.show();
+    },
+
+    setRemovable: function(value) {
+      if(this.rendered) {
+        this.$('.overlayRemove')[0].style.display = (value ? 'block' : 'none');
+      }
     }
 
   });

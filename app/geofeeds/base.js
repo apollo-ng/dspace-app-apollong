@@ -35,7 +35,13 @@ define([
 
     makeTitle: function() {
       return this.name;
-    }
+    },
+
+    /**
+     * Method: watch
+     * stub. to be overwritten by subclasses.
+     */
+    watch: function() {}
 
   });
 

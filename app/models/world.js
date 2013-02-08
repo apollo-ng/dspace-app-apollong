@@ -44,12 +44,14 @@ define([
 
       this.user = this.setupUser(this.config.user);
 
-      // this.user.watchPosition();
+      // FIXME: make this more efficient!
+      this.featureIndex = {};
 
       // Property: geoFeeds
       //
       // @elf-pavlik: Document this.
-      this.geoFeeds = this.createFeeds(this.config.geoFeeds);
+      this.geoFeeds = [];
+      this.createFeeds(this.config.geoFeeds);
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);
 
@@ -61,8 +63,7 @@ define([
       // fire initial change
       this.aether.trigger('user:change', this.user);
 
-      // FIXME: make this more efficient!
-      this.featureIndex = {};
+      this.aether.on('remove-feed', this.removeFeed.bind(this));
 
     },
 
@@ -74,6 +75,59 @@ define([
      */
     setupUser: function(config){
       return User.first() || new User({ config: config });
+    },
+
+    addFeed: function(feed, setCurrent) {
+      feed.index = this.geoFeeds.length;
+      this.geoFeeds.push(feed);
+      feed.watch();
+      this.trigger('add-feed', feed);
+      if(setCurrent) {
+        this.setCurrentFeed(feed.index);
+      }
+
+      this.listenTo(feed.collection, 'add', function(feature) {
+        this.featureIndex[feature.get('id')] = feature;
+      }.bind(this));
+
+      this.listenTo(feed, 'change:only', function() {
+        if(feed.get('only')) {
+          var currentOnly = this.get('currentOnly');
+          if(currentOnly) {
+            currentOnly.set('only', false);
+          }
+          this.set('currentOnly', feed);
+        }
+      }.bind(this));
+
+      feed.set('visible', true);
+      return feed.index;
+    },
+
+    removeFeed: function(index) {
+      var feed = this.geoFeeds[index];
+      // clean up event handler
+      this.stopListening(feed);
+      this.stopListening(feed.collection);
+      // remove feed
+      this.geoFeeds.splice(index, 1);
+      // adjust index for remaining feeds
+      var fl = this.geoFeeds.length;
+      for(var i=index;i<fl;i++) {
+        this.geoFeeds[i].index = i;
+      }
+      // set new current feed, if feed was currently selected
+      if(this.get('currentFeed') === index) {
+        this.setCurrentFeed(Math.max(index - 1, 0));
+      }
+      this.trigger('remove-feed', index);
+    },
+
+    setCurrentFeed: function(index) {
+      this.set('currentFeed', index);
+      setTimeout(function() {
+        this.trigger('select-feed', index);
+      }.bind(this), 0);
     },
 
     /**
@@ -91,22 +145,12 @@ define([
      * (end code)
      */
     createFeeds: function( feedConfigs ){
-      var feeds = [];
       feedConfigs.forEach(function(feed) {
         feed = this.createFeed(feed);
         if(feed) {
-          feed.index = feeds.length;
-          feeds.push(feed);
-          feed.watch();
-
-          feed.collection.on('add', function(feature) {
-            this.featureIndex[feature.get('id')] = feature;
-          }.bind(this));
-
-          feed.set('visible', true);
+          this.addFeed(feed);
         }
       }.bind(this));
-      return feeds;
     },
 
     getCurrentFeature: function() {

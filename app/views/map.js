@@ -135,6 +135,10 @@ define([
         // dialog.show();
       }.bind(this));
 
+      this.world.on('add-feed', function(feed) {
+        this.addOverlay( feed ).render( );
+      }.bind(this));
+
     },
 
     /**

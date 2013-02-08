@@ -16,7 +16,7 @@ define([], function() {
       { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
       { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
 
-      { name: 'Pools', url: '/test/pools-munich.json', type: 'CORS'},
+      // { name: 'Pools', url: '/test/pools-munich.json', type: 'CORS'},
 
       // { hub: 'open-reseource.org', type: 'DSNP'},
 
@@ -39,7 +39,7 @@ define([], function() {
       geolat:  48.115293,
       geolon:  11.60218,
       minZoom: 2,
-      maxZoom: 17,
+      maxZoom: 15,
       miniMapZoom: 11,
       defaultZoom: 12
     },

@@ -24,7 +24,7 @@ based on a very common ground: The map of the area, where people actually are, a
 
 We work on **develop** branch and keep **master** stable for going live!
 
-### [Online Docs](http://apollo-ng.github.com/dspace-client/doc/app)
+### [Online Docs](http://dspace-develop.open-resource.org/doc/)
 
 ### Env
 

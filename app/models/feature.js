@@ -12,7 +12,11 @@ define([
    * (see feature.png)
    */
   var Feature = Backbone.Model.extend({
-
+	/**
+	 * Method: initialize
+	 * 
+	 * initializes a <Feature> from a <location>
+	 */
     initialize: function(location){
       if(location) {
         this.set(location);
@@ -31,7 +35,11 @@ define([
       }
 
     },
-
+	/**
+	 * Method: getLatLon
+	 * 
+	 * retrives latitude and longitude
+	 */
     getLatLon: function() {
       var coords = this.get('geometry').coordinates || [];
       return {
@@ -39,7 +47,11 @@ define([
         lon: coords[0]
       };
     },
-
+	/**
+	 * Method: setLatLon
+	 * 
+	 * sets latitude and longitude
+	 */
     setLatLon: function(lat, lon) {
       var geometry = this.get('geometry') || {};
       geometry.coordinates = [lon, lat];

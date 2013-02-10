@@ -1,6 +1,6 @@
 HANDLEBARS = node_modules/.bin/handlebars
 WRAP_DEFINE = node help/wrap-define.js
-## ender default build supplies $ function to backbone 
+## ender default build supplies $ function to backbone
 ENDER_BUILD = node node_modules/.bin/ender build bonzo bean domready qwery morpheus -o
 
 SIMPLE_DEPS = qwery bean bonzo morpheus reqwest
@@ -44,7 +44,7 @@ local-deps:
 
 # wrapped deps:
 	$(WRAP_DEFINE) node_modules/underscore/underscore.js deps/underscore.js _
-# backbone-amd fork  
+# backbone-amd fork
 	cp pkgs/js/backbone-amd/backbone.js deps/backbone.js
 
 	cp pkgs/js/backbone.localstorage.js deps/backbone.localstorage.js
@@ -68,7 +68,7 @@ local-deps:
 	$(WRAP_DEFINE) pkgs/js/markers.js deps/markers.js mapbox.markers \
 	  modestmaps:MM
 
-ender: 
+ender:
 	$(ENDER_BUILD) ender.js
 	sed -i 's/typeof define/typeof defineDoesntExist/g' ender.js
 	sed -i 's/define(/defineDoesntExist(/g' ender.js

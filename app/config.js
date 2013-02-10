@@ -13,10 +13,10 @@ define([], function() {
      * initial set for populating <FeatureCollection>s
      */
     geoFeeds: [
-      { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
-      { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
+      { name: 'OpenWiFi Munich', url: '/examples/geodata/openwifi-munich.json', type: 'CORS'},
+      { name: 'Hackerspaces Munich', url: '/examples/geodata/hackerspaces-munich.json', type: 'CORS'},
 
-      { name: 'Pools', url: '/test/pools-munich.json', type: 'CORS'},
+      { name: 'Pools', url: '/examples/geodata/pools-munich.json', type: 'CORS'},
 
       // { hub: 'open-reseource.org', type: 'DSNP'},
 

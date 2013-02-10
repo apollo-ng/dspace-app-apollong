@@ -7,6 +7,9 @@ DSpace aims to enable people to find, collect, edit, structure and share any kin
 in a real-time, massive-collaboration, augmented-reality-environment (like wikipedia),
 based on a very common ground: The map of the area, where people actually are, around their Geolocation.
 
+### [Demo](http://dspace-develop.open-resource.org/)
+automatically built from 'develop' branch. May be experimental and unstable.
+
 ### Screenshot
 
 ![Image](https://apollo.open-resource.org/_media/lab:screenshot-dspace-develop.jpg)

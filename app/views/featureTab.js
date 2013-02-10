@@ -1,9 +1,10 @@
 define([
+  'require',
   'ender',
   'backbone',
   'views/featureBoxItem',
   'templateMap'
-], function($, Backbone, FeatureBoxItem, templates) {
+], function(require, $, Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab
@@ -69,7 +70,7 @@ define([
      */
     render: function(){
       if(this.rendered) {
-        return;
+        return this.el;
       }
 
       this.visible = this.feed.get('visible');
@@ -107,9 +108,10 @@ define([
     },
 
     reset: function() {
-      this.render();
-      this.itemWrapper.empty();
-      this.featureIndexCounter = 0;
+      if(this.rendered) {
+        this.itemWrapper.empty();
+        this.featureIndexCounter = 0;
+      }
     },
 
     hide: function() {

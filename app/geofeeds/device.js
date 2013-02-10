@@ -3,7 +3,7 @@ define([
 ], function(BaseFeed) {
 
   /**
-   * Class: DeviceFeed
+   * Class: GeoFeeds.Device
    *
    * Feed watching the device's location.
    * It's 'collection' will only ever contain one feature.
@@ -15,6 +15,7 @@ define([
   return BaseFeed.extend({
 
     name: 'device',
+    type: 'Device',
 
     watch: function() {
       navigator.geolocation.watchPosition(function(position) {

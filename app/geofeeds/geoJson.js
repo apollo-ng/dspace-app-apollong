@@ -17,6 +17,8 @@ define([
 
   return Base.extend({
 
+    type: 'GeoJSON',
+
     /**
      * Method: watch
      *

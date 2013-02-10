@@ -192,6 +192,7 @@ define([
 
     },
     /**
+     * Method: addOverlay
      * gets a feed object with instantiated collection 
      * returns overlay 
      */
@@ -204,7 +205,12 @@ define([
       this.overlays[feed.index] = overlay;
       return overlay;
     },
-
+	
+	/**
+     * Method: removeOverlay
+     * removes Overlay specified by index 
+     * returns overlay 
+     */
     removeOverlay: function(index) {
       console.log('remove overlay', index);
       var overlay = this.overlays.splice(index, 1)[0];

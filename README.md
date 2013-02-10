@@ -11,19 +11,14 @@ based on a very common ground: The map of the area, where people actually are, a
 
 ![Image](https://apollo.open-resource.org/_media/lab:screenshot-dspace-develop.jpg)
 
-
-
 ## Contact
 
 * Website: [https://apollo.open-resource.org/lab:dspace](https://apollo.open-resource.org/lab:dspace)
 * Github: [https://github.com/apollo-ng/dspace-client](https://github.com/apollo-ng/dspace-client)
-* IRC: #apollo@freenode
-* Mumble: ticonderoga.open-resource.org
-* Mailinglist: [dspace-develop@apollo.open-resource.org](mailto://dspace-develop@apollo.open-resource.org) ([subscribe](dspace-develop-subscribe@apollo.open-resource.org))
+* IRC: [#apollo@freenode](http://webchat.freenode.net?channels=apollo)
+* Mumble: [voip.open-resource.org](mumble://voip.open-resource.org)
+* Mailinglist: [dspace-develop@apollo.open-resource.org](mailto://dspace-develop@apollo.open-resource.org) ([subscribe](mailto://dspace-develop-subscribe@apollo.open-resource.org))
 * Blog: [https://apollo.open-resource.org/tag:dspace](https://apollo.open-resource.org/tag:dspace)
-
-
-
 
 ## Dev
 
@@ -51,11 +46,11 @@ We work on **develop** branch and keep **master** stable for going live!
 When your distro fails to supply you with a working nodejs & npm
 environment, you can try [nvm](https://github.com/creationix/nvm)
 
-### Development-Flow
+### Development Flow
 
 #### Clone
 
-    $ git clone git://apollo.open-resource.org/dspace-client
+    $ git clone git@github.com:apollo-ng/dspace-client.git
 
 #### Generate docs (optional)
 
@@ -67,17 +62,14 @@ You need [naturaldocs](http://naturaldocs.org/) to build the docs:
 
     $ npm install
 
-#### Changed Dependencies (optional)
-
-    $ make dep
-
-In case this fails, run
+#### Complete rebuild (optional)
+e.g. when modifying dependencies 
 
     $ git submodule init
     $ git submodule update
-
-and try again
-
+    $ make deps
+    $ make local-deps
+    $ make build
 
 ####[gitflow](https://github.com/nvie/gitflow) (optional)
 
@@ -101,11 +93,18 @@ Or use any other local webserver, for example:
 
 ### Technologies
 
-* ender
-* backbone
-* handlebars
+#### runtime
 * modestmaps
   * markers
   * easey + easey.handlers
+* ender
+* backbone
+* handlebars
+* ...
+
+#### development (build/test)
+* amd
 * mocha
 * phantomjs
+* naturaldocs
+* ...

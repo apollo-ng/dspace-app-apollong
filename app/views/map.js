@@ -135,9 +135,8 @@ define([
         // dialog.show();
       }.bind(this));
 
-      this.world.on('add-feed', function(feed) {
-        this.addOverlay( feed ).render( );
-      }.bind(this));
+      this.world.on('add-feed', this.addOverlay.bind(this));
+      this.world.on('remove-feed', this.removeOverlay.bind(this))
 
     },
 
@@ -162,16 +161,14 @@ define([
      * renders the map
      */
     render: function(){
-      var self = this;
 
       /**
        * crate frame -- uses MapBox
        */
       this.frame = this.createFrame();
 
-      this.overlays = this.world.geoFeeds.map(function(feed) {
-        self.addOverlay( feed ).render( );
-      }.bind(this));
+      this.overlays = [];
+      this.world.geoFeeds.forEach(this.addOverlay.bind(this));
 
       /**
        * creates an overlay containing the users avatar
@@ -185,12 +182,11 @@ define([
       /**
        * need frame
        */
-      var self = this;
       this.world.user.feed.collection.on( 'change:geometry', function( e ){
         if( e.id == 'avatar' ) {
-	        self.userLayer.render( );
+	        this.userLayer.render( );
 	      }
-      });
+      }.bind(this));
 
 
 
@@ -200,9 +196,24 @@ define([
      * returns overlay 
      */
     addOverlay: function( feed ){
-        return new Overlay({ 
-          map: this, 
-          feed: feed })
+      var overlay = new Overlay({ 
+        map: this, 
+        feed: feed
+      });
+      overlay.render();
+      this.overlays[feed.index] = overlay;
+      return overlay;
+    },
+
+    removeOverlay: function(index) {
+      console.log('remove overlay', index);
+      var overlay = this.overlays.splice(index, 1)[0];
+      overlay.hide();
+      console.log('overlays', this.overlays);
+      var ol = this.overlays.length;
+      for(var i=index;i<ol;i++) {
+        this.overlays[i].render();
+      }
     },
     
     /**
@@ -220,13 +231,10 @@ define([
     /**
      * Method: createBaseMap
      * 
-     * creates a ModestMaps layer from either <User.attributes.mapProvider> or <User.config>
+     * creates a ModestMaps layer from <User.attributes.mapProvider>
      */
     createBaseMap: function(){
       var mapProvider = this.world.user.get('mapProvider');
-      if (!mapProvider) {
-        mapProvider = this.world.user.get('config').mapProvider;
-      }
       var template = this.config.tileSets[mapProvider];
       var layer = new MM.TemplatedLayer(template);
       return layer;
@@ -243,6 +251,7 @@ define([
       this.frame.removeLayerAt(1);
       this.frame.draw();
     },
+
     /**
      * Method: createFrame
      * 

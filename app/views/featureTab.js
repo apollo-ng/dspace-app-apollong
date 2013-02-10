@@ -23,7 +23,8 @@ define([
 
     events: {
       'change input[name="visible"]': 'updateVisible',
-      'change input[name="only"]': 'updateOnly'
+      'change input[name="only"]': 'updateOnly',
+      'click .overlayRemove': 'closeTab'
     },
 
     initialize: function(){
@@ -62,6 +63,16 @@ define([
       this.feed.set('only', $(event.target).attr('checked'));
       console.log('FIXME: Hide/Restore other markers on map');
       this.render();
+    },
+
+    closeTab: function() {
+      this.aether.trigger('remove-feed', this.index);
+    },
+
+    reRender: function() {
+      this.rendered = false;
+      this.render();
+      this.collection.each(this.renderFeature.bind(this));
     },
 
     /*
@@ -120,6 +131,12 @@ define([
 
     show: function() {
       this.$el.show();
+    },
+
+    setRemovable: function(value) {
+      if(this.rendered) {
+        this.$('.overlayRemove')[0].style.display = (value ? 'block' : 'none');
+      }
     }
 
   });

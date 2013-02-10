@@ -19,6 +19,8 @@ define([
         this.set('remoteStorage', true);
       }
 
+      this.setDefaults(this.get('config'));
+
       this.feed = new DeviceFeed({
         avatar: new Feature({
           properties: {

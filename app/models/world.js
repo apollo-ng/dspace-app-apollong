@@ -63,6 +63,8 @@ define([
       // fire initial change
       this.aether.trigger('user:change', this.user);
 
+      this.aether.on('remove-feed', this.removeFeed.bind(this));
+
     },
 
     /**
@@ -84,12 +86,41 @@ define([
         this.setCurrentFeed(feed.index);
       }
 
-      feed.collection.on('add', function(feature) {
+      this.listenTo(feed.collection, 'add', function(feature) {
         this.featureIndex[feature.get('id')] = feature;
+      }.bind(this));
+
+      this.listenTo(feed, 'change:only', function() {
+        if(feed.get('only')) {
+          var currentOnly = this.get('currentOnly');
+          if(currentOnly) {
+            currentOnly.set('only', false);
+          }
+          this.set('currentOnly', feed);
+        }
       }.bind(this));
 
       feed.set('visible', true);
       return feed.index;
+    },
+
+    removeFeed: function(index) {
+      var feed = this.geoFeeds[index];
+      // clean up event handler
+      this.stopListening(feed);
+      this.stopListening(feed.collection);
+      // remove feed
+      this.geoFeeds.splice(index, 1);
+      // adjust index for remaining feeds
+      var fl = this.geoFeeds.length;
+      for(var i=index;i<fl;i++) {
+        this.geoFeeds[i].index = i;
+      }
+      // set new current feed, if feed was currently selected
+      if(this.get('currentFeed') === index) {
+        this.setCurrentFeed(Math.max(index - 1, 0));
+      }
+      this.trigger('remove-feed', index);
     },
 
     setCurrentFeed: function(index) {

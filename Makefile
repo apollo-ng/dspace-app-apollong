@@ -15,7 +15,7 @@ DOC_INPUTS=-i ./app
 
 default: build
 
-build: deps init
+build: deps
 	node node_modules/.bin/r.js -o build.js
 
 deps: clean-deps ender local-deps

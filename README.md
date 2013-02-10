@@ -63,13 +63,13 @@ You need [naturaldocs](http://naturaldocs.org/) to build the docs:
     $ npm install
 
 #### Complete rebuild (optional)
-e.g. when modifying dependencies 
+e.g. when modifying dependencies
+(see Makefile)
 
-    $ git submodule init
-    $ git submodule update
+    $ make init
     $ make deps
-    $ make local-deps
     $ make build
+    
 
 ####[gitflow](https://github.com/nvie/gitflow) (optional)
 

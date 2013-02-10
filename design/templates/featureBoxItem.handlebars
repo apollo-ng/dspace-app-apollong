@@ -1,8 +1,10 @@
 <!-- FIXME: manage url with js + fallbacks -->
 <div class='shield-{{tabIndex}} shield-o-{{index}} featureBoxItem-icon' ><h3>{{properties.title}}</h3></div>
 <div class='featureBoxItem-details'>
-<div class='featureBoxItem-description' title="{{properties.description}}">{{truncate properties.description 30}}</div>
+
+<div class='featureBoxItem-description' title="{{properties.description}}">{{#if properties.description}}{{truncate properties.description 30}}{{/if}}</div>
 <div class='clear-after'>
+
 <!-- FIXME: show real distance to mapcenter/geolocation -->
 <div class='featureBoxItem-distance'>5<br />km</div>
 <div class='featureBoxItem-position' data-lat="{{lat}}" data-lon="{{lon}}" data-format="position"></div>

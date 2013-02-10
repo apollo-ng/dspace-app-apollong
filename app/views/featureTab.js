@@ -107,6 +107,7 @@ define([
     },
 
     reset: function() {
+      this.render();
       this.itemWrapper.empty();
       this.featureIndexCounter = 0;
     },

@@ -13,15 +13,23 @@ define([
   var Base = Backbone.Model.extend({
 
     initialize: function(options) {
-      this.collection = new FeatureCollection();
       _.extend(this, options);
+      this.setCollection(new FeatureCollection());
       this.title = this.makeTitle();
+    },
 
-      this.collection.on('add', function() {
+    setCollection: function(collection) {
+      if(this.collection) {
+        this.stopListening(this.collection);
+      }
+
+      this.collection = collection;
+      this.collection.feed = this;
+      this.listenTo(this.collection, 'add', function() {
         this.trigger('change', this);
       }.bind(this));
 
-      this.collection.on('reset', function() {
+      this.listenTo(this.collection, 'reset', function() {
         this.trigger('change', this);
       }.bind(this));
     },

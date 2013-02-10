@@ -1,4 +1,5 @@
-require(["ender"], function($){
+require(["ender", 'app/config'], function($, config){
+
   mocha.setup('bdd');
 
   mocha.globals(['provide', '$', 'ender', '_', 'Backbone', 'nodeRequire', 'mapbox', 'mmg', 'mmg_interaction', 'Handlebars', 'easey', 'easey_handlers', 'dspace', 'world']);
@@ -22,8 +23,8 @@ require(["ender"], function($){
       }, 1000);
     });
 
-    it('has 2 feature tabs', function(){
-      expect($('.featureTab').length).to.be.equal(2);
+    it('has some feature tabs', function(){
+      expect($('.featureTab').length).to.be.above(0);
     });
 
     it("watches the geolocation", function() {
@@ -44,9 +45,6 @@ require(["ender"], function($){
       expect($('#miniMap').length).to.equal(1);
     });
 
-    //it("fails", function() {
-      //expect(false).to.equal(true);
-    //});
   });
 
   if (window.mochaPhantomJS) { mochaPhantomJS.run(); }

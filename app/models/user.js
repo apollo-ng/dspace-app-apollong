@@ -15,6 +15,10 @@ define([
     initialize: function() {
       backboneLocalStorage.setup(this, 'users');
 
+      if(! ('remoteStorage' in this.attributes)) {
+        this.set('remoteStorage', true);
+      }
+
       this.feed = new DeviceFeed({
         avatar: new Feature({
           properties: {

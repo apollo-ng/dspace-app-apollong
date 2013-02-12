@@ -21,7 +21,7 @@ build: deps
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
 	@echo -n "Moving Assets... "
-	@mv build/dspace.js build/assets/dspace-client.js
+#@mv build/dspace.js build/assets/dspace-client.js
 	@cp -r assets/icons build/assets/icons
 	@cp -r assets/images build/assets/images
 	@echo "[OK]"

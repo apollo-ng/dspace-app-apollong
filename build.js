@@ -2,7 +2,7 @@
   name: 'node_modules/almond/almond.js',
   include: 'app/main',
   insertRequire: ['app/main'],
-  out: 'build/dspace.js',
+  out: 'build/assets/dspace-client.js',
   wrap: true,
 
   paths: {

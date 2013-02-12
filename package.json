@@ -19,7 +19,7 @@
     }
   , "devDependencies": {
       "handlebars": "1.0.x"
-    , "csso": "*"
+    , "csso": "1.3.x"
     , "almond": "*"
     , "zombie": "*"
     , "mocha-phantomjs": "*"

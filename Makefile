@@ -26,10 +26,10 @@ build: deps
 	@cp -r assets/images build/assets/images
 	@echo "[OK]"
 	@echo -n "Merging and compressing dspace-client.css... "
-	@cat assets/css/main.css > tmp.css
-	@cat assets/css/ui.css >> tmp.css
-	@node_modules/.bin/csso -i tmp.css -o build/assets/dspace-client.css	
-	@rm tmp.css
+	@cat assets/css/main.css > .tmp.css
+	@cat assets/css/ui.css >> .tmp.css
+	@node_modules/.bin/csso -i .tmp.css -o build/assets/dspace-client.css	
+	@rm .tmp.css
 	@echo "[OK]"
 	@echo ">>> Client build complete"
      

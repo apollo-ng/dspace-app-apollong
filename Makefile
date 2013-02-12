@@ -14,6 +14,8 @@ DOC_DIR=./doc/app
 DOC_CONFIG_DIR=./doc/config
 DOC_INPUTS=-i ./app
 
+MY_HASH:=$(shell git log | head -n1 | awk {'print $$2'})
+
 default: build
 
 build: deps
@@ -21,7 +23,6 @@ build: deps
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
 	@echo -n "Moving Assets... "
-#@mv build/dspace.js build/assets/dspace-client.js
 	@cp -r assets/icons build/assets/icons
 	@cp -r assets/images build/assets/images
 	@echo "[OK]"
@@ -31,6 +32,8 @@ build: deps
 	@node_modules/.bin/csso -i .tmp.css -o build/assets/dspace-client.css	
 	@rm .tmp.css
 	@echo "[OK]"
+	@cp .index.skel build/index.html 
+	@sed -i 's/##HASHTAG##/$(MY_HASH)/g' build/index.html
 	@echo ">>> Client build complete"
      
 

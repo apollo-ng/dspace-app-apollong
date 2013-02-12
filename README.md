@@ -32,8 +32,6 @@ We work on **develop** branch and keep **master** stable for going live!
 ### Env
 
 * Requires [node.js](http://nodejs.org/) 0.8.x & [npm](https://npmjs.org/) 1.x
-* For testing: [phantomjs](http://phantomjs.org/) 1.8.x
-* For generating documentation: [naturaldocs](http://naturaldocs.org/) 
 
 #### Ubuntu
 
@@ -96,7 +94,7 @@ Or use any other local webserver, for example:
 
 ####Run tests
 
-You'll need 'phantomjs' to run the tests, either compile from source or use your distros package
+You'll need [phantomjs](http://phantomjs.org/) 1.8.x to run the tests, either compile from source or use your distros package
 
     $ npm test
 

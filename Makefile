@@ -1,5 +1,5 @@
 HANDLEBARS = node_modules/.bin/handlebars
-WRAP_DEFINE = node help/wrap-define.js
+WRAP_DEFINE = node scripts/wrap-define.js
 ## ender default build supplies $ function to backbone
 ENDER_BUILD = node node_modules/.bin/ender build bonzo bean domready qwery morpheus -o
 
@@ -29,10 +29,10 @@ build: deps
 	@echo -n "Merging and compressing dspace-client.css... "
 	@cat assets/css/main.css > .tmp.css
 	@cat assets/css/ui.css >> .tmp.css
-	@node_modules/.bin/csso -i .tmp.css -o build/assets/dspace-client.css	
+	@node_modules/.bin/csso -i .tmp.css -o build/assets/css/dspace-client.css	
 	@rm .tmp.css
 	@echo "[OK]"
-	@cp .index.skel build/index.html 
+	@cp index.tmpl build/index.html 
 	@sed -i 's/##HASHTAG##/$(MY_HASH)/g' build/index.html
 	@echo ">>> Client build complete"
      

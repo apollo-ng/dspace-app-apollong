@@ -80,9 +80,13 @@ e.g. when modifying dependencies
 
 ####Start the local development server
 
-    $ node run.js
+    $ ./run.js
 
 Point your browser to [http://localhost:3000/](http://localhost:3000/)
+
+If port 3000 is already in use you can use any other port like this:
+
+    $ ./run.js 8080
 
 Or use any other local webserver, for example:
 
@@ -92,7 +96,7 @@ Or use any other local webserver, for example:
 
 ####Run tests
 
-You'll need 'phantomjs' and 'mocha' to run the tests, either compile from source or use your distros package
+You'll need 'phantomjs' to run the tests, either compile from source or use your distros package
 
     $ npm test
 
@@ -112,4 +116,5 @@ You'll need 'phantomjs' and 'mocha' to run the tests, either compile from source
 * mocha
 * phantomjs
 * naturaldocs
+* csso
 * ...

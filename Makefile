@@ -17,7 +17,7 @@ DOC_INPUTS=-i ./app
 default: build
 
 build: deps
-	@echo -n "Building dspace-client.js... "
+	@echo -n "Build & minify dspace-client.js... "
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
 	@echo -n "Moving Assets... "

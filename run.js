@@ -1,9 +1,10 @@
+#!/usr/bin/env node
 /***
  *
  *  DSpace-Development Server
  *
- *  Usage: node run.js [option]
- *  Examples: node run.js 8080 -> Run the Development-Server on port 8080 instead of 3000
+ *  Usage: ./run.js [option]
+ *  Examples: ./run.js 8080 -> Run the Development-Server on port 8080 instead of 3000
  */
 
 var http = require("http"),
@@ -26,7 +27,7 @@ http.createServer(function(request, response) {
 
     }
 
-    if (fs.statSync(filename).isDirectory()) filename += '/index.dev.html';
+    if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
     fs.readFile(filename, "binary", function(err, file) {
 
@@ -59,4 +60,4 @@ http.createServer(function(request, response) {
 
 }).listen(parseInt(port, 10));
 
-console.log("Dev-Server running: http://localhost:" + port + "/index.dev.html");
+console.log("DSpace Development-Server running on http://localhost:" + port + "/");

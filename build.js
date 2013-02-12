@@ -2,12 +2,12 @@
   name: 'node_modules/almond/almond.js',
   include: 'app/main',
   insertRequire: ['app/main'],
-  out: 'build/dspace.js',
+  out: 'build/assets/dspace-client.js',
   wrap: true,
 
   paths: {
     // directories
-    "templates"        : "design/templates",
+    "templates"        : "assets/templates",
     "template/helpers" : "app/helpers",
     "models" : "app/models",
     "collections" : "app/collections",

@@ -6,8 +6,8 @@
  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
  <meta name='apple-mobile-web-app-status-bar-style' content='black'/>
  <meta name='apple-mobile-web-app-capable' content='yes'/>
- <link href='assets/dspace-client.css?0199f2f9e520942474d69abdb1a90352bea15fb3' rel='stylesheet'/>
- <script src='assets/dspace-client.js?0199f2f9e520942474d69abdb1a90352bea15fb3'></script>
+ <link href='assets/dspace-client.css?##HASHTAG##' rel='stylesheet'/>
+ <script src='assets/dspace-client.js?##HASHTAG##'></script>
 </head>
 <body>
  <div id='remotestorage-connect'></div>

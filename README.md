@@ -32,8 +32,6 @@ We work on **develop** branch and keep **master** stable for going live!
 ### Env
 
 * Requires [node.js](http://nodejs.org/) 0.8.x & [npm](https://npmjs.org/) 1.x
-* For testing: [phantomjs](http://phantomjs.org/) 1.8.x
-* For generating documentation: [naturaldocs](http://naturaldocs.org/) 
 
 #### Ubuntu
 
@@ -80,9 +78,13 @@ e.g. when modifying dependencies
 
 ####Start the local development server
 
-    $ node run.js
+    $ ./run.js
 
-Point your browser to [http://localhost:3000/index.dev.html](http://localhost:3000/index.dev.html)
+Point your browser to [http://localhost:3000/](http://localhost:3000/)
+
+If port 3000 is already in use you can use any other port like this:
+
+    $ ./run.js 8080
 
 Or use any other local webserver, for example:
 
@@ -91,6 +93,8 @@ Or use any other local webserver, for example:
 * nginx
 
 ####Run tests
+
+You'll need [phantomjs](http://phantomjs.org/) 1.8.x to run the tests, either compile from source or use your distros package
 
     $ npm test
 
@@ -110,4 +114,5 @@ Or use any other local webserver, for example:
 * mocha
 * phantomjs
 * naturaldocs
+* csso
 * ...

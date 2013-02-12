@@ -8,7 +8,7 @@ define(['zombie'], function(zombie) {
 
     setup: function(env, test) {
       env.browser = new zombie.Browser();
-      env.rootURL = 'http://localhost:3000/index.dev.html';
+      env.rootURL = 'http://localhost:3000/';
       test.result(true);
     },
 
@@ -67,6 +67,6 @@ define(['zombie'], function(zombie) {
 //   });
 
 //   it('we have tikiman', function() {
-//     assert.ok(this.browser.query('img[src="design/images/tiki-man.png"]'));
+//     assert.ok(this.browser.query('img[src="assets/images/tiki-man.png"]'));
 //   });
 // });

@@ -34,7 +34,7 @@ define(['backbone'], function(Backbone) {
 
     render: function( ) {
       if(this.featureJson.properties.type == 'avatar'){
-        this.$el.html( '<img src="design/images/tiki-man.png" pointer-events="auto" />');
+        this.$el.html( '<img src="assets/images/tiki-man.png" pointer-events="auto" />');
       } else {
         this.$el.addClass('shield-' + this.options.tabIndex);
         this.$el.addClass('shield-o-' + this.featureJson.index);

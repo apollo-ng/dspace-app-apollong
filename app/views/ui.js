@@ -127,9 +127,12 @@ define([
           feature: id,
           modal: undefined
         });
-        if(this.world.get('currentFeatureId') === id) {
-          this.map.jumpToFeature(feature);
-        }
+        
+        //if(this.world.get('currentFeatureId') === id) {
+        //  this.map.jumpToFeature(feature);
+        //}
+        
+        this.map.jumpToFeature(feature);
       }.bind(this));
 
 
@@ -182,9 +185,14 @@ define([
 
       this.world.on('change:currentFeatureId', function() {
         var feature = this.world.getCurrentFeature();
-        if(feature) {
-          this.map.jumpToFeature(feature);
-        }
+        
+        //disabled jumps for clicks on the map for now
+        //FIXME: this is not the right place to do that.
+        //Rethink on what events we actually want to move the map
+       
+        //if(feature) {
+        // this.map.jumpToFeature(feature);
+        //}
       }.bind(this));
 
       this.world.on('change:currentModal', function() {

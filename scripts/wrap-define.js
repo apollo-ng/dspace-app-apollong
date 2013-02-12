@@ -1,3 +1,6 @@
+/**
+ * This script is called in the Makefile and does something magic.... (FIXME?)
+ */
 
 var fs = require('fs');
 

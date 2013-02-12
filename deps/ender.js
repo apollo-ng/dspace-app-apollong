@@ -2790,7 +2790,7 @@ function provide (name, what) {
       , thousand = 1000
       , rgbOhex = /^rgb\(|#/
       , relVal = /^([+\-])=([\d\.]+)/
-      , numUnit = /^(?:[\+\-]=)?\d+(?:\.\d+)?(%|in|cm|mm|em|ex|pt|pc|px)$/
+      , numUnit = /^(?:[\+\-]=?)?\d+(?:\.\d+)?(%|in|cm|mm|em|ex|pt|pc|px)$/
       , rotate = /rotate\(((?:[+\-]=)?([\-\d\.]+))deg\)/
       , scale = /scale\(((?:[+\-]=)?([\d\.]+))\)/
       , skew = /skew\(((?:[+\-]=)?([\-\d\.]+))deg, ?((?:[+\-]=)?([\-\d\.]+))deg\)/
@@ -3113,8 +3113,7 @@ function provide (name, what) {
           case 'duration':
           case 'easing':
           case 'bezier':
-            continue;
-            break
+            continue
           }
           var v = getStyle(els[i], k), unit
             , tmp = fun(options[k]) ? options[k](els[i]) : options[k]

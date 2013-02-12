@@ -7,7 +7,7 @@
 
   paths: {
     // directories
-    "templates"        : "design/templates",
+    "templates"        : "assets/templates",
     "template/helpers" : "app/helpers",
     "models" : "app/models",
     "collections" : "app/collections",

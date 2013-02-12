@@ -1,4 +1,4 @@
-Format: 1.51
+Format: 1.52
 
 
 # You can add a title and sub-title to your menu like this:
@@ -90,9 +90,9 @@ File: FeatureCollection  (collections/feature.js)
 
 Group: Geofeeds  {
 
-   File: Base  (geofeeds/base.js)
-   File: Device  (geofeeds/device.js)
-   File: GeoJSON  (geofeeds/geoJson.js)
+   File: Base  (no auto-title, geofeeds/base.js)
+   File: Device  (no auto-title, geofeeds/device.js)
+   File: GeoJSON  (no auto-title, geofeeds/geoJson.js)
    File: RemoteStorage  (geofeeds/remoteStorage.js)
    File: Search  (geofeeds/search.js)
    }  # Group: Geofeeds

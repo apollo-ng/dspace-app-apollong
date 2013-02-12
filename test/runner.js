@@ -34,7 +34,7 @@ require(["ender", 'app/config'], function($, config){
     it("displays the tikiman", function() {
       var tikiman;
       $('img').forEach(function(img) {
-        if(img.src.match(/\/design\/images\/tiki-man.png$/)) {
+        if(img.src.match(/\/assets\/images\/tiki-man.png$/)) {
           tikiman = img;
         }
       });

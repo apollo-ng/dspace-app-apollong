@@ -92,6 +92,8 @@ Or use any other local webserver, for example:
 
 ####Run tests
 
+You'll need phantomjs to run the tests, either compile from source or use your distros package
+
     $ npm test
 
 ### Technologies

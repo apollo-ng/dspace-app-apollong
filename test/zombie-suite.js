@@ -67,6 +67,6 @@ define(['zombie'], function(zombie) {
 //   });
 
 //   it('we have tikiman', function() {
-//     assert.ok(this.browser.query('img[src="design/images/tiki-man.png"]'));
+//     assert.ok(this.browser.query('img[src="assets/images/tiki-man.png"]'));
 //   });
 // });

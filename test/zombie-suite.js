@@ -8,7 +8,7 @@ define(['zombie'], function(zombie) {
 
     setup: function(env, test) {
       env.browser = new zombie.Browser();
-      env.rootURL = 'http://localhost:3000/index.dev.html';
+      env.rootURL = 'http://localhost:3000/';
       test.result(true);
     },
 

@@ -82,7 +82,7 @@ e.g. when modifying dependencies
 
     $ node run.js
 
-Point your browser to [http://localhost:3000/index.dev.html](http://localhost:3000/index.dev.html)
+Point your browser to [http://localhost:3000/](http://localhost:3000/)
 
 Or use any other local webserver, for example:
 

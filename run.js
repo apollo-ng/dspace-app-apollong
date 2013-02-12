@@ -1,3 +1,4 @@
+#!/usr/bin/node
 /***
  *
  *  DSpace-Development Server
@@ -26,7 +27,7 @@ http.createServer(function(request, response) {
 
     }
 
-    if (fs.statSync(filename).isDirectory()) filename += '/index.dev.html';
+    if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
     fs.readFile(filename, "binary", function(err, file) {
 
@@ -59,4 +60,4 @@ http.createServer(function(request, response) {
 
 }).listen(parseInt(port, 10));
 
-console.log("Dev-Server running: http://localhost:" + port + "/index.dev.html");
+console.log("Dev-Server running: http://localhost:" + port + "/");

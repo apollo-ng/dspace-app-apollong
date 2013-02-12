@@ -25,7 +25,7 @@
     , "mocha-phantomjs": "*"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha-phantomjs http://localhost:3000/index.dev.html?test=1"
+    "test": "node_modules/.bin/mocha-phantomjs http://localhost:3000/?test=1"
   }
 }
 

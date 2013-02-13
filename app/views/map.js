@@ -139,6 +139,10 @@ define([
         this.frame.setCenter(this.frame.pointLocation(point));
       }.bind(this));
 
+      this.contextPanel.on('command:where-am-i', function() {
+        this.frame.setCenter(this.world.user.getLocation());
+      }.bind(this));
+
       this.world.on('add-feed', this.addOverlay.bind(this));
       this.world.on('remove-feed', this.removeOverlay.bind(this))
 

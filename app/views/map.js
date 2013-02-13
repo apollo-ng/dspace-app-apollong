@@ -99,19 +99,19 @@ define([
       this.config = this.world.config.map;
 
       var self = this;
-      
+
       /**
        * Event: world:mapCenter
-       * 
+       *
        * listens to changes of the mapcenter from <MiniMap>
        */
       this.world.on('change:mapCenter', function(event, data){
         this.recenter();
       }.bind(this));
-      
+
       /**
        * Event: user:mapProvider
-       * 
+       *
        * listens to changed user configuration and changes basemap with <Map.switchBaseMap>
        */
       this.world.user.on('change:mapProvider', function(event, data){
@@ -128,11 +128,15 @@ define([
           location: JSON.stringify(this.frame.pointLocation(point)),
           modal: 'addFeature'
         });
-        
+
         // var location = this.frame.pointLocation(point);
         // var dialog = new AddFeature(location, { aether: this.world.aether });
         // dialog.render();
         // dialog.show();
+      }.bind(this));
+
+      this.contextPanel.on('command:recenter-here', function(point) {
+        this.frame.setCenter(this.frame.pointLocation(point));
       }.bind(this));
 
       this.world.on('add-feed', this.addOverlay.bind(this));
@@ -172,8 +176,8 @@ define([
 
       /**
        * creates an overlay containing the users avatar
-       * world listens to user and updates the geometry 
-       * when the usercollection changes pushes the 
+       * world listens to user and updates the geometry
+       * when the usercollection changes pushes the
        * changed features to the markerlayer and redraw;
        */
       //FIXME #27
@@ -193,38 +197,38 @@ define([
     },
     /**
      * Method: addOverlay
-     * gets a feed object with instantiated collection 
-     * returns overlay 
+     * gets a feed object with instantiated collection
+     * returns overlay
      */
     addOverlay: function( feed ){
-      var overlay = new Overlay({ 
-        map: this, 
+      var overlay = new Overlay({
+        map: this,
         feed: feed
       });
       overlay.render();
       this.overlays[feed.index] = overlay;
       return overlay;
     },
-	
+
 	/**
      * Method: removeOverlay
-     * removes Overlay specified by index 
-     * returns overlay 
+     * removes Overlay specified by index
+     * returns overlay
      */
     removeOverlay: function(index) {
-      console.log('remove overlay', index);
+      //console.log('remove overlay', index);
       var overlay = this.overlays.splice(index, 1)[0];
       overlay.hide();
-      console.log('overlays', this.overlays);
+      //console.log('overlays', this.overlays);
       var ol = this.overlays.length;
       for(var i=index;i<ol;i++) {
         this.overlays[i].render();
       }
     },
-    
+
     /**
      * Method: recenter
-     * 
+     *
      * sets the center of the map from <world>
      */
     recenter: function(){
@@ -233,10 +237,10 @@ define([
         this.frame.setCenter(mapCenter);
       }
     },
-    
+
     /**
      * Method: createBaseMap
-     * 
+     *
      * creates a ModestMaps layer from <User.attributes.mapProvider>
      */
     createBaseMap: function(){
@@ -245,10 +249,10 @@ define([
       var layer = new MM.TemplatedLayer(template);
       return layer;
     },
-    
+
     /**
      * Method: switchBaseMap
-     * 
+     *
      * changes the basemap using ModestMaps library
      */
     switchBaseMap: function(){
@@ -260,12 +264,12 @@ define([
 
     /**
      * Method: createFrame
-     * 
+     *
      * creates frame using ModestMaps library
      */
     createFrame: function(){
       var config = this.config;
-      
+
       var layer = this.createBaseMap();
 
       var modestmap = new MM.Map(

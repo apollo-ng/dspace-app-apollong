@@ -648,3 +648,48 @@ margin-left: 3px;
   padding-top: 7px;
   padding-right: 5px;
 }
+
+/**
+ *  featureDetails (Modal)
+ */
+
+.featureDetails {
+  width: 100%;
+  margin: 15px auto;
+}
+
+.featureDetails .key {
+  float: left;
+  line-height: 24px;
+  display: block;
+  width: 30%;
+}
+
+.featureDetails .value {
+  float: left;
+  line-height: 24px;
+  display: block;
+  width: 70%px;
+}
+
+.featureDetails p {
+  width: 100%;
+  height: 24px;
+  display: block;
+  font-size:14px;
+  margin-top: 5px;
+  color: #333;
+  cursor: pointer;
+  text-shadow: 1px 1px 0px #e0e0e0;
+  border-bottom: 1px solid #555;
+  background: rgb(244,241,235);
+  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
+  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
+  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}

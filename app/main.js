@@ -15,6 +15,7 @@ define(['ender', './dspace', './config'], function($, DSpace, config) {
   $.domReady(function () {
     window.dspace = new DSpace(config);
     window.world = dspace.world;
+    $('#splash').fadeOut(1000, function() { $('#splash').hide(); });
   });
 
 });

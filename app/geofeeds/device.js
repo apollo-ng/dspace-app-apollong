@@ -45,6 +45,7 @@ define([
               case 3:
                 console.log('The request to get user location timed out.');
               break;
+              // Unkown Error
               default:
                 console.log('An unknown error occurred.');
               break;

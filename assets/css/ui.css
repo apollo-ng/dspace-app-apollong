@@ -601,13 +601,22 @@
 }
 
 .featureBoxItem {
-  list-style-type: none;
   text-align: left;
   z-index: 9999;
+  height: 56px;
+  overflow: hidden;
   cursor: pointer;
   border-top: 1px solid #fff;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #000;
   background: rgb(244,241,235);
+}
+
+.featureBoxItem-details {
+  height: 40px;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+  clear: both;
   background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,1)), color-stop(47%,rgba(232,229,222,1)), color-stop(100%,rgba(221,218,208,1)));
   background: -webkit-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
@@ -616,37 +625,71 @@
   background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
 }
 
-.featureBoxItem h3 {
-  height: 30px; line-height: 38px; padding-left: 45px;
-  color: #41403d;
-  text-shadow: 0px -1px #000, 0px 1px #fff;
-}
 
 .featureBoxItem-icon {
-margin-left: 3px;
+  float: left;
+  width: 38px;
+  height: 32px;
+  margin-top: 5px;
+  margin-left: 2px;
 }
 
 .featureBoxItem-description {
-  font-size: 12px;
-  height: 14px; width: 230px; text-align: left; padding-left: 46px;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
+  float: left;
+  height: 40px;
+  text-align: left;
+  overflow: hidden;
 }
 
-.featureBoxItem-details {
-  height: 40px; width: 230px; text-align: right;  background: transparent url(../icons/layer-item-info.png) no-repeat 5px 0px;
+.featureBoxItem h3 {
+  height: 18px;
+  font-size: 14px;
+  line-height: 18px;
+  margin-top: 3px;
+  text-shadow: 0px -1px #8D8D8D, 0px 1px #FFF5F5;
+}
+
+.featureBoxItem p {
+  font-size: 12px;
+  height: 12px;
+  text-align: left;
+}
+
+.featureBoxItem-geodata {
+  height: 16px;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+  clear: both;
+  background-color: #57554E;
+}
+
+.featureBoxItem-geodata div {
+  color: #fafafa;
+  height: 15px;
+  line-height: 17px;
+  font-size: 10px;
+  text-align: center;
+  text-shadow: 0px -1px #111;
 }
 
 .featureBoxItem-distance {
   float: left;
-  font-size: 10px;
-  padding-left: 12px;
-  text-align: center;
+  font-weight: bold;
+  width: 40px;
 }
 
 .featureBoxItem-position {
+  float: left;
+  padding-left: 5px;
+  border-left: 1px solid #999;
+}
+
+.featureBoxItem-sector {
   float: right;
-  font-size: 10px;
-  padding-top: 7px;
-  padding-right: 5px;
+  width: 50px;
+  font-weight: bold;
+  border-left: 1px solid #999;
 }
 
 /**

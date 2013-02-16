@@ -143,6 +143,15 @@ define([
         this.frame.setCenter(this.world.user.getLocation());
       }.bind(this));
 
+      this.contextPanel.on('command:set-my-location', function(point) {
+        // Stop the Geolocation watcher (device.js: unwatch)
+
+        var loc = this.frame.pointLocation(point);
+        // FIXME: Please refactor the avatar stuff back to user.marker
+        this.world.user.feed.avatar.setLatLon(loc.lat, loc.lon);
+        this.world.user.feed.unwatch();
+      }.bind(this));
+
       this.world.on('add-feed', this.addOverlay.bind(this));
       this.world.on('remove-feed', this.removeOverlay.bind(this))
 

@@ -191,6 +191,7 @@ define([
           attr('data-lat', loc.lat).
           attr('data-lon', loc.lon);
         this.renderPositions();
+        this.renderAccuracy();
       },
 
       updateMapCenter: function() {
@@ -206,6 +207,10 @@ define([
           var el = this.$(e);
           el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
         }.bind(this));
+      },
+
+      renderAccuracy: function() {
+         console.log('FIXME: Update acc value and class according to real accuracy');
       },
 
       showFX: function() {

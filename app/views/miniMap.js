@@ -162,8 +162,6 @@ define([
       
       var topLeftMM     = this.frame.locationPoint(topLeftCoord);
       var bottomRightMM = this.frame.locationPoint(bottomRightCoord);
-      console.log(topLeftMM['x']);
-      console.log(topLeftMM['y']);
       //FIXME: can we get this object without using '$'?
       $('#mmViewport').css({
         width: bottomRightMM['x']-topLeftMM['x'],
@@ -178,7 +176,6 @@ define([
      */
     recenter: function(){
       var mapCenter = this.world.get('mapCenter');
-      console.log(mapCenter);
       
       //The frame might not exist yet
       if(mapCenter && this.frame){

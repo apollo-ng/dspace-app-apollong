@@ -17,6 +17,12 @@ define([
     name: 'device',
     type: 'Device',
 
+
+    /**
+     *  Method: watch
+     *
+     *  initiates the geolocation API watcher process
+     */
     watch: function() {
       if (navigator.geolocation) {
         // Browser has geolocation API - enable Watcher
@@ -70,6 +76,11 @@ define([
       }
     },
 
+    /**
+     *  Method: unwatch
+     *
+     *  clears the geolocation API watcher process
+     */
     unwatch: function() {
       navigator.geolocation.clearWatch(this.watchID);
     },

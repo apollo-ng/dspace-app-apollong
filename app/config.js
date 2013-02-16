@@ -15,14 +15,10 @@ define([], function() {
     geoFeeds: [
       { name: 'OpenWiFi Munich', url: '/examples/geodata/openwifi-munich.json', type: 'CORS'},
       { name: 'Hackerspaces Munich', url: '/examples/geodata/hackerspaces-munich.json', type: 'CORS'},
-
       { name: 'Pools', url: '/examples/geodata/pools-munich.json', type: 'CORS'},
-
-      // { hub: 'open-reseource.org', type: 'DSNP'},
-
       { name: 'test', type: 'remoteStorage' },
+      // { hub: 'open-resource.org', type: 'DSNP'},
       //{ name: 'test', user: 'nil@heahdk.net', type: 'remoteStorage' }
-
     ],
 
     /**
@@ -31,7 +27,6 @@ define([], function() {
      * map defaults
      */
     map: {
-      
       tileSets: {
         dspace: 'http://dspace.ruebezahl.cc:8888/v2/DSpace-Tactical-LQ/{Z}/{X}/{Y}.png',
         osm: 'http://otile2.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png',
@@ -47,21 +42,20 @@ define([], function() {
 
     /**
      * Property: user
-     *  FIXME: This is not supposed to be here but should be a part of the user model
-     *  und should be follow be a render update of the UI, when changed.
-     *  Options are: DMS, QTH (To be done: DEC & GPS)
+     *
+     *  Default configuration for the client
      */
     user: {
       userCoordPrefs: 'GPS',
       mapProvider: 'osm',
       geoLocationOptions: {
-	  interval: 2300,
-	  minacc: 49,
-	  maxacc: 1001,
-	  highacc: 'true',
-	  maxage: 600000, // used cached locations 
-	  timeout: 600
-	}
+        interval: 2300,
+        minacc: 49,
+        maxacc: 1001,
+        highacc: 'true',
+        maxage: 21600,
+        timeout: 60
+	  }
     }
   };
 

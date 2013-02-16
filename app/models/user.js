@@ -36,10 +36,14 @@ define([
       }.bind(this));
 
       this.feed.watch();
-    }, 
+    },
 
     getLocation: function() {
       return this.feed.avatar.getLatLon();
+    },
+
+    setLocation: function(lat, lon) {
+      this.feed.avatar.setLatLon(lat, lon);
     },
 
     setDefaults: function(defaults) {
@@ -67,6 +71,6 @@ define([
       return new User(attrs);
     }
   };
-  
+
   return User;
 });

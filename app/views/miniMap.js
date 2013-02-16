@@ -17,7 +17,7 @@ define([
 
     el: '#miniMap',
     frameId: 'miniMap',
-
+    
     events: {
       // FIXME: change this to 'click' (without killing 'dragging')
       "dblclick": "jumpMap",
@@ -96,14 +96,28 @@ define([
       return modestmap;
 
     },
-
+    
+    
+    /**
+     * Method: showFX
+     * do a fancy minimap fade-in animation.
+     */
     showFX: function(){
-      this.$el.animate({ bottom: 47, duration: 600  });
-      this.$el.fadeIn(600);
+      //this.$el.show()
+      this.$el.animate({ height: 178, duration: MiniMap.fadeDuration });
+      this.$el.fadeIn(MiniMap.fadeDuration);
     },
+    
+    /**
+     * Method: hideFx
+     * do a fancy minimap fade-out animation.
+     */
     hideFX: function(){
-      this.$el.animate({ bottom: -250, duration: 600  });
-      this.$el.fadeOut(600);
+      this.$el.animate({ height: 0, duration: MiniMap.fadeDuration  });
+      this.$el.fadeOut(MiniMap.fadeDuration);
+      setTimeout(function(){
+        this.$el.hide()
+      }, MiniMap.fadeDuration);
     },
 
     recenter: function(){
@@ -112,6 +126,17 @@ define([
         this.frame.setCenter(mapCenter);
       }
     }
+  }, {
+    /*
+     * Class Properties go here
+     * see http://stackoverflow.com/questions/6142985/where-should-i-put-view-related-constants-backbone-js
+     * is this good?
+     */
+     
+     
+     fadeDuration: 600,
+    
+    
   });
 
   return MiniMap;

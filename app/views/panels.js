@@ -162,9 +162,8 @@ define([
       template: templates.statusPanel,
 
       events: {
-          'click #userModeWalk': 'userModeWalk'
-        , 'click #userModeDrive': 'userModeDrive'
-        , 'submit #searchForm': 'createSearch'
+        'click #geoStatus': 'toggleGeoAPI',
+        'submit #searchForm': 'createSearch'
       },
 
       initialize: function() {
@@ -185,6 +184,20 @@ define([
         event.preventDefault();
         var query = event.target.query.value;
         var index = this.world.addFeed(new SearchFeed({ query: query, extent: this.ui.map.frame.getExtent() }), true);
+      },
+
+      toggleGeoAPI: function() {
+        if (this.geoStatus == '1') {
+          this.world.user.feed.unwatch();
+          this.geoStatus = 0;
+          $('#geoStatus').removeClass('enabled');
+          $('#geoStatus').addClass('disabled');
+        } else {
+          this.world.user.feed.watch();
+          $('#geoStatus').removeClass('disabled');
+          $('#geoStatus').addClass('enabled');
+          this.geoStatus = 1;
+        }
       },
 
       updateUserLocation: function() {

@@ -24,10 +24,11 @@ define([
      * handlebars template for rendering
      */
     template: templates.featureBoxItem,
-
+    
     /**
      * Method: render
-     *
+     * 
+     * FIXME: is (re)called even for non-active tabs, potentially expensive due to distance calculation
      * Returns:
      *
      *   el - DOM element for this view
@@ -35,9 +36,12 @@ define([
     render: function(){
       this.$el.html(this.template(_.extend(
         this.model.getLatLon(),
-        { tabIndex: this.options.tab.index },
+        { tabIndex: this.options.tab.index,
+          //FIXME the chain to access the avatar/userMarker is quite long...
+          distance: this.model.distanceTo(this.options.aether.user.feed.avatar)},
         this.model.toJSON()
       )));
+      this.updateSettings(this.options.aether.user);
       return this.el;
     },
 
@@ -47,11 +51,16 @@ define([
 
     initialize: function(opts) {
       opts.aether.on('user:change', this.updateSettings.bind(this));
+      opts.aether.user.on('location-changed', this.render.bind(this));
       setTimeout(function() {
         this.updateSettings(opts.aether.user);
       }.bind(this), 0);
     },
-
+    
+    /**
+     * Method: updateSettings
+     * gets triggered on *user:change* event, to format the coords according to user preferences
+     */
     updateSettings: function(user) {
       this.$('*[data-format=position]').forEach(function(e) {
         var el = this.$(e);
@@ -62,7 +71,7 @@ define([
     /**
      * Method: setFeatureCurrent
      *
-     * trigers *feature:current* event on a model (<Feature>)
+     * triggers *feature:current* event on a model (<Feature>)
      */
     setFeatureCurrent: function( event ){
       this.trigger('selected', this.model);

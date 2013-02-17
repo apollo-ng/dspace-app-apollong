@@ -355,6 +355,26 @@
   line-height: 30px;
 }
 
+#geoStatus.enabled {
+  background: rgb(31,59,8);
+  background: -moz-linear-gradient(top, rgba(31,59,8,1) 0%, rgba(98,125,77,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(31,59,8,1)), color-stop(100%,rgba(98,125,77,1)));
+  background: -webkit-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background: -o-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background: -ms-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+}
+
+#geoStatus.disabled {
+  background: rgb(109,0,25);
+  background: -moz-linear-gradient(top, rgba(109,0,25,1) 0%, rgba(143,2,34,1) 56%, rgba(169,3,41,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(109,0,25,1)), color-stop(56%,rgba(143,2,34,1)), color-stop(100%,rgba(169,3,41,1)));
+  background: -webkit-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
+  background: -o-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
+  background: -ms-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
+  background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
+}
+
 #userGeoLocation {
   height: 32px;
   width: 90px;

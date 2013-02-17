@@ -1,6 +1,7 @@
 define([
+  'ender',
   './base'
-], function(BaseFeed) {
+], function($, BaseFeed) {
 
   /**
    * Class: GeoFeeds.Device
@@ -31,6 +32,7 @@ define([
 
           // successFunction
           function(position) {
+             $('#geoStatus').addClass('enabled');
             this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
             if(this.collection.length === 0) {
               this.collection.add(this.avatar);
@@ -62,6 +64,7 @@ define([
             /* FIXME: this.world.user.feed.avatar.setLatLon(48, 11); */
             // make sure watcher is disabled
             this.world.user.feed.unwatch();
+            $('#geoStatus').addClass('disabled');
           },
           // Geolocation API Settings
           // FIXME: should be coming from the user model
@@ -85,6 +88,7 @@ define([
      */
     unwatch: function() {
       navigator.geolocation.clearWatch(this.watchID);
+      $('#geoStatus').addClass('disabled');
     },
 
   });

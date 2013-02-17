@@ -146,40 +146,6 @@
   background: linear-gradient(to bottom, #3f3e3a 0%,#5e5d59 100%);
 }
 
-.lowAccuracy {
-  background: rgb(109,0,25);
-  background: -moz-linear-gradient(top, rgba(109,0,25,1) 0%, rgba(143,2,34,1) 56%, rgba(169,3,41,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(109,0,25,1)), color-stop(56%,rgba(143,2,34,1)), color-stop(100%,rgba(169,3,41,1)));
-  background: -webkit-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: -o-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: -ms-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-}
-
-.medAccuracy {
-  background: rgb(199,152,16);
-  background: -moz-linear-gradient(top, rgba(199,152,16,1) 0%, rgba(234,185,45,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(199,152,16,1)), color-stop(100%,rgba(234,185,45,1)));
-  background: -webkit-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-  background: -o-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-  background: -ms-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-  background: linear-gradient(to bottom, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-}
-
-.highAccuracy {
-  background: rgb(31,59,8);
-  background: -moz-linear-gradient(top, rgba(31,59,8,1) 0%, rgba(98,125,77,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(31,59,8,1)), color-stop(100%,rgba(98,125,77,1)));
-  background: -webkit-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: -o-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: -ms-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-}
-
-
-
-
-
 
 /*Define Accordion box*/
 .accordion { width: 100%; overflow:hidden; }
@@ -323,50 +289,57 @@
   left: 7px;
   height: 48px;
   overflow: hidden;
-}
-
-#statusPanel div {
-  position: relative;
-  top: 6px;
-  height: 32px;
-  line-height: 30px;
   cursor: default;
+}
+
+.userGeoDisplay {
+  color: #e8e5de;
+  font-size: 10px;
+  border: 1px solid #000;
+  cursor: default;
+  text-shadow: 1px 1px 5px #000;
+  background: #282828;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top, rgba(40,40,40,0.65) 0%,rgba(40,40,40,0.3) 100%);
+  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+#userGeoStatus {
   float: left;
-  text-align: center;
-}
-
-#statusPanel .displayTop, #statusPanel .displayBottom {
-  text-align: left;
-  line-height: 13px;
-  display: block;
-  margin-top: 2px;
-  margin-left: 6px;
-}
-
-#statusPanel #searchField {
-    border-radius: 5px;
-    padding: 5px;
-    background: white;
-}
-
-#geoStatus {
+  margin-top: 7px;
   width: 30px;
   font-size: 25px;
   height: 32px;
   line-height: 30px;
 }
 
-#geoStatus.enabled {
-  background: rgb(31,59,8);
-  background: -moz-linear-gradient(top, rgba(31,59,8,1) 0%, rgba(98,125,77,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(31,59,8,1)), color-stop(100%,rgba(98,125,77,1)));
-  background: -webkit-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: -o-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: -ms-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+#userGeoStatus.enabled {
+  background: #282828;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top, rgba(40,40,40,0.65) 0%,rgba(40,40,40,0.3) 100%);
+  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-#geoStatus.disabled {
+#userGeoStatus.disabled {
+  background: #282828;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top, rgba(40,40,40,0.65) 0%,rgba(40,40,40,0.3) 100%);
+  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+#userGeoStatus.lowAccuracy {
   background: rgb(109,0,25);
   background: -moz-linear-gradient(top, rgba(109,0,25,1) 0%, rgba(143,2,34,1) 56%, rgba(169,3,41,1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(109,0,25,1)), color-stop(56%,rgba(143,2,34,1)), color-stop(100%,rgba(169,3,41,1)));
@@ -376,42 +349,119 @@
   background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
 }
 
+#userGeoStatus.medAccuracy {
+  background: rgb(199,152,16);
+  background: -moz-linear-gradient(top, rgba(199,152,16,1) 0%, rgba(234,185,45,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(199,152,16,1)), color-stop(100%,rgba(234,185,45,1)));
+  background: -webkit-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+  background: -o-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+  background: -ms-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+  background: linear-gradient(to bottom, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+}
+
+#userGeoStatus.highAccuracy {
+  background: rgb(31,59,8);
+  background: -moz-linear-gradient(top, rgba(31,59,8,1) 0%, rgba(98,125,77,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(31,59,8,1)), color-stop(100%,rgba(98,125,77,1)));
+  background: -webkit-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background: -o-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background: -ms-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+}
+
+#userGeoData {
+  float: left;
+  margin-top: 7px;
+  width: 156px;
+}
+
 #userGeoLocation {
-  height: 32px;
-  width: 90px;
+  height: 15px;
+  line-height: 16px;
+  width: 154px;
   font-weight: bold;
+  color: #e8e5de;
+  font-size: 10px;
+  text-align: center;
+  overflow: hidden;
   border-left: 1px solid #444;
-  border-right: 1px solid #000;
+  text-shadow: 1px 1px 5px #000;
 }
 
 #userGeoInfo {
-  width: 60px;
+  height: 15px;
+  line-height: 16px;
   font-weight: bold;
-  border-left: 1px solid #444;
+  color: #e8e5de;
+  font-size: 10px;
+  text-align: left;
+  text-shadow: 1px 1px 5px #000;
 }
 
-#userGeoLocAcc {
-  height: 32px;
-  line-height: 32px;
+#userGeoSpeed {
+  float: left;
+  height: 15px;
+  line-height: 16px;
   width: 50px;
   font-weight: bold;
   border-left: 1px solid #444;
+  border-top: 1px solid #444;
+  text-align: center;
+  text-shadow: 1px 1px 2px #000;
+}
+
+#userGeoAlt {
+  float: left;
+  height: 15px;
+  line-height: 16px;
+  width: 50px;
+  font-weight: bold;
+  border-left: 1px solid #444;
+  border-top: 1px solid #444;
+  text-align: center;
+  text-shadow: 1px 1px 2px #000;
+}
+
+#userGeoLocAcc {
+  float: left;
+  height: 15px;
+  line-height: 16px;
+  width: 50px;
+  font-weight: bold;
+  border-left: 1px solid #444;
+  border-top: 1px solid #444;
+  text-align: center;
   text-shadow: 1px 1px 2px #000;
 }
 
 #mapCenterInfo {
+  float: left;
+  margin-top: 7px;
   width: 30px;
   font-size: 25px;
+  font-weight: thin;
   height: 32px;
   line-height: 32px;
   margin-left: 8px;
 }
+
 #coordsMapCenter {
+  float: left;
+  margin-top: 7px;
   height: 32px;
-  width: 90px;
+  width: 80px;
+  text-align: left;
   font-weight: bold;
   border-left: 1px solid #444;
   border-right: 1px solid #000;
+  overflow: hidden;
+  padding-top: 1px;
+  padding-left: 4px;
+}
+
+#coordsMapCenter span {
+  display: block;
+  line-height: 15px;
 }
 
 /*********************************************************
@@ -749,13 +799,14 @@
 
 .featureBoxItem-position {
   float: left;
-  padding-left: 5px;
+  padding-left: 4px;
   border-left: 1px solid #999;
+  overflow: hidden;
 }
 
 .featureBoxItem-sector {
   float: right;
-  width: 50px;
+  width: 48px;
   font-weight: bold;
   border-left: 1px solid #999;
 }

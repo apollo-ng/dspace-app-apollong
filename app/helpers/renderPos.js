@@ -55,6 +55,9 @@ define(['handlebars'], function(Handlebars) {
 
     days = Math.floor(Abs / 1000000);
     mins = Math.ceil((((Abs/1000000) - days) * 60) * 1000) / 1000;;
+    if (mins < 10) {
+      mins = '0' + mins;
+    }
     days = days * sign;
     if(axis == 'lat') direction = days<0 ? 'S' : 'N';
     if(axis == 'lon') direction = days<0 ? 'W' : 'E';
@@ -66,16 +69,14 @@ define(['handlebars'], function(Handlebars) {
     if ( lat && lon) {
       switch(prefSys) {
       case 'GPS':
-        return ('<span class="displayTop">' +dd2gps(lat, 'lat') + '</span><span class="displayBottom">' + dd2gps(lon, 'lon') + '</span>');
-      case 'QTH':
-        return ('<span class="displayTop">Sector</span><span class="displayBottom">' + "FIXME:dd2maidenhead does not exist anymore!" + '</span>');
+        return ('<span class="lat">' + dd2gps(lat, 'lat') + '</span> <span class="lon">' + dd2gps(lon, 'lon') + '</span>');
       case 'DMS':
-        return ('<span class="displayTop">' + dd2dms(lat, 'lat') + '</span><span class="displayBottom">' + dd2dms(lon, 'lon') + '</span>');
+        return ('<span class="lat">' + dd2dms(lat, 'lat') + '</span> <span class="lon">' + dd2dms(lon, 'lon') + '</span>');
       case 'DEC':
         // FIXME @chron0: print less precise numbers - it blows the FeatureBoxItem!
-        return ('<span class="displayTop">Lat: ' + lat.substr(0, 8)+ '</span><span class="displayBottom">Lon: ' + lon.substr(0, 8) + '</span>');
+        return ('<span class="lat">Lat ' + lat.substr(0, 8)+ '</span> <span class="lon">Lon ' + lon.substr(0, 8) + '</span>');
       default:
-        return ('<span class="displayTop">' + dd2gps(lat, 'lat') + '</span><span class="displayBottom">' + dd2gps(lon, 'lon') + '</span>');
+        return ('<span class="lat">' + dd2gps(lat, 'lat') + '</span> <span class="lon">' + dd2gps(lon, 'lon') + '</span>');
       }
     } else {
       return ('Position not acquired');

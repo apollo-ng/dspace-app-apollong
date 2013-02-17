@@ -5,7 +5,7 @@ define(['handlebars'], function(Handlebars) {
  *
  * Switch Accuracy BG depending on value
  */
-  function setAccBg(object) {
+  function setAccBg(acc) {
     if ( typeof acc  !== 'undefined') {
       if ( acc > 0 && acc <= 15 ) {
         return ('highAccuracy');

@@ -32,11 +32,26 @@ define([
 
           // successFunction
           function(position) {
-             $('#geoStatus').addClass('enabled');
+            $('#userGeoStatus').addClass('enabled');
             this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
             if(this.collection.length === 0) {
               this.collection.add(this.avatar);
             }
+
+            if(position.coords.accuracy > 0 && position.coords.accuracy <=15) {
+              $('#userGeoStatus').removeClass('lowAccuracy');
+              $('#userGeoStatus').removeClass('medAccuracy');
+              $('#userGeoStatus').addClass('highAccuracy');
+            } else if (position.coords.accuracy > 15 && position.coords.accuracy <50) {
+              $('#userGeoStatus').removeClass('lowAccuracy');
+              $('#userGeoStatus').removeClass('highAccuracy');
+              $('#userGeoStatus').addClass('medAccuracy');
+            } else {
+              $('#userGeoStatus').removeClass('highAccuracy');
+              $('#userGeoStatus').removeClass('medAccuracy');
+              $('#userGeoStatus').addClass('lowAccuracy');
+            }
+
             this.position = position;
           }.bind(this),
 
@@ -64,7 +79,7 @@ define([
             /* FIXME: this.world.user.feed.avatar.setLatLon(48, 11); */
             // make sure watcher is disabled
             this.world.user.feed.unwatch();
-            $('#geoStatus').addClass('disabled');
+            $('#userGeoStatus').addClass('disabled');
           },
           // Geolocation API Settings
           // FIXME: should be coming from the user model
@@ -88,7 +103,7 @@ define([
      */
     unwatch: function() {
       navigator.geolocation.clearWatch(this.watchID);
-      $('#geoStatus').addClass('disabled');
+      $('#userGeoStatus').addClass('disabled');
     },
 
   });

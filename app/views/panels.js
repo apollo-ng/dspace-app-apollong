@@ -1,9 +1,7 @@
 define([
   'ender',
   'backbone',
-
   'geofeeds/search',
-
   'templateMap',
   'template/helpers/renderPos',
   'template/helpers/renderAcc',
@@ -162,7 +160,7 @@ define([
       template: templates.statusPanel,
 
       events: {
-        'click #geoStatus': 'toggleGeoAPI',
+        'click #userGeoStatus': 'toggleGeoAPI',
         'submit #searchForm': 'createSearch'
       },
 
@@ -187,16 +185,17 @@ define([
       },
 
       toggleGeoAPI: function() {
-        if (this.geoStatus == '1') {
+        // FIXME: userGeoStatus should be in the user model to have more flexible control over it
+        if (this.userGeoStatus == '1') {
           this.world.user.feed.unwatch();
-          this.geoStatus = 0;
-          $('#geoStatus').removeClass('enabled');
-          $('#geoStatus').addClass('disabled');
+          this.userGeoStatus = 0;
+          $('#userGeoStatus').removeClass('enabled');
+          $('#userGeoStatus').addClass('disabled');
         } else {
           this.world.user.feed.watch();
-          $('#geoStatus').removeClass('disabled');
-          $('#geoStatus').addClass('enabled');
-          this.geoStatus = 1;
+          $('#userGeoStatus').removeClass('disabled');
+          $('#userGeoStatus').addClass('enabled');
+          this.userGeoStatus = 1;
         }
       },
 
@@ -215,9 +214,10 @@ define([
           attr('data-lon', center.lon);
         this.renderPositions();
       },
+
       /**
        * Method: renderPositions
-       * 
+       *
        * rerender everything that can change with a moving user
        */
       renderPositions: function() {
@@ -225,7 +225,7 @@ define([
           var el = this.$(e);
           el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
         }.bind(this));
-        
+
         this.$('*[data-name=user-speed]').forEach(function(e) {
           var el = this.$(e);
           //el.html(this.world.user.feed.position.coords.speed);
@@ -237,7 +237,7 @@ define([
             this.$('[data-name=user-altitude]').html(this.world.user.feed.position.coords.altitude);
           }
         }
-        
+
       },
 
 

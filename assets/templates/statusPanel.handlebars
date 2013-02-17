@@ -1,10 +1,11 @@
-<div id='geoStatus' class='uiDisplay'>⊙</div>
-<div id='userGeoLocation' class='uiDisplay' data-name="user-location" data-format="position"></div>
-<div id='userGeoInfo' class='uiDisplay'><span class='displayTop' data-name="user-speed"></span><span class='displayBottom' data-name='user-altitude'></span></div>
-<div id='userGeoLocAcc' class='uiDisplay {{setAccBg user.feed.position.coords.accuracy}}' data-name="user-accuracy"></div>
-<div id='mapCenterInfo' class=uiDisplay>i</div>
-<div id='coordsMapCenter' class='uiDisplay' data-name="map-center" data-format="position"></div>
-<form id='searchForm'>
-  <input id='searchField' name="query" type="text" placeholder="Search...">
-  <input type="submit" style="opacity:0">
-</form>
+<div id='userGeoStatus' class='uiDisplay'>⊙</div>
+<div id='userGeoData' >
+  <div id='userGeoLocation' class='userGeoDisplay' data-name='user-location' data-format='position'>Geolocation not available</div>
+  <div id='userGeoInfo'>
+    <div id='userGeoSpeed' class='userGeoDisplay' data-name='user-speed'>kmh</div>
+    <div id='userGeoAlt' class='userGeoDisplay' data-name='user-altitude'>--- m</div>
+    <div id='userGeoLocAcc' class='userGeoDisplay' data-name='user-accuracy'>--- m</div>
+  </div>
+</div>
+<div id='mapCenterInfo' class='uiDisplay'>+</div>
+<div id='coordsMapCenter' class='uiDisplay' data-name='map-center' data-format='position'></div>

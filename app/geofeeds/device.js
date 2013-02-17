@@ -16,6 +16,7 @@ define([
 
     name: 'device',
     type: 'Device',
+    position: {},
 
 
     /**
@@ -34,6 +35,7 @@ define([
             if(this.collection.length === 0) {
               this.collection.add(this.avatar);
             }
+            this.position = position;
           }.bind(this),
 
           // errorFunction
@@ -66,7 +68,7 @@ define([
           {
              enableHighAccuracy: true,
              maximumAge: 86400,
-             timeout: 60
+             timeout: 1000 //in ms
           }
         );
       } else {

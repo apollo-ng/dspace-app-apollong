@@ -97,6 +97,84 @@ define([
       } else {
       return d[0]+d[1];
       }
+    },
+    
+    /**
+     * Method: getSector
+     * 
+     * returns the QTH locator for a position
+     * FIXME: this is not really the apropriate location for calculation
+     * FIXME: maybe we need a 'coordinate' model? with access functions for various formats?
+     */
+    getSector: function(feature) {
+        /**
+       * Convert Decimal to Maidenhead (QTH) Locator
+       * to have a human-readable and non-political "boundary"
+       * sector/grid system for our world or any spherical habitat (planet)
+       */
+       
+      var dd2maidenhead = function(lat, lon) {
+        var sector, i, j, div, res, lp;
+        var chr  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var num = "0123456789";
+        var k = 0;
+        var t = new Array(0,0,0);
+        var n    = new Array(0,0,0,0,0,0,0);
+        t[1]  = (lon + 180);
+        t[2]  = (lat  +  90);
+
+        for ( i = 1; i < 3; ++i ) {
+          for ( j = 1; j < 4; ++j ) {
+            if ( j != 3 ) {
+              if ( i == 1 ) {
+                if ( j == 1 ) div = 20;
+                if ( j == 2 ) div = 2;
+              }
+
+              if ( i == 2 ) {
+                if ( j == 1 ) div = 10;
+                if ( j == 2 ) div = 1;
+              }
+
+              res = t[i] / div;
+              t[i] = res;
+
+              if ( t[i] > 0 ) {
+                lp = Math.floor(res);
+              } else {
+                lp = Math.ceil(res);
+              }
+
+              t[i] = (t[i] - lp) * div;
+
+            } else {
+
+              if ( i == 1 ) {
+                div = 12;
+              } else {
+                div = 24;
+              }
+
+              res = t[i] * div;
+              t[i] = res;
+
+              if ( t[i] > 0 ) {
+                lp = Math.floor(res);
+              } else {
+                lp = Math.ceil(res);
+              }
+            }
+
+            ++k;
+            n[k] = lp;
+
+          }
+        }
+        sector = chr.charAt(n[1]) + chr.charAt(n[4]) + num.charAt(n[2]);
+        sector += num.charAt(n[5]) + chr.charAt(n[3])+ chr.charAt(n[6]);
+        return (sector);
+      };
+      return dd2maidenhead(this.getLatLon().lat, this.getLatLon().lon);
     }
   });
 

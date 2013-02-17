@@ -5,7 +5,7 @@ define(['handlebars'], function(Handlebars) {
  *
  *  Accuracy Helper to switch between m/km in view
  */
-  function renderAcc(lat, lon) {
+  function renderAcc(acc) {
     if ( typeof acc  === 'undefined') {
       return ('N/A');
     } else if ( acc >= 1000 ) {

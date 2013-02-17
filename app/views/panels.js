@@ -5,8 +5,10 @@ define([
   'geofeeds/search',
 
   'templateMap',
-  'template/helpers/renderPos'
-], function($, Backbone, SearchFeed, templates, renderPos) {
+  'template/helpers/renderPos',
+  'template/helpers/renderAcc',
+  'template/helpers/ms2kmh',
+], function($, Backbone, SearchFeed, templates, renderPos, renderAcc, ms2kmh) {
 
   /**
    * Class: Panel
@@ -191,7 +193,6 @@ define([
           attr('data-lat', loc.lat).
           attr('data-lon', loc.lon);
         this.renderPositions();
-        this.renderAccuracy();
       },
 
       updateMapCenter: function() {
@@ -201,17 +202,31 @@ define([
           attr('data-lon', center.lon);
         this.renderPositions();
       },
-
+      /**
+       * Method: renderPositions
+       * 
+       * rerender everything that can change with a moving user
+       */
       renderPositions: function() {
         this.$('*[data-format=position]').forEach(function(e) {
           var el = this.$(e);
           el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
         }.bind(this));
+        
+        this.$('*[data-name=user-speed]').forEach(function(e) {
+          var el = this.$(e);
+          //el.html(this.world.user.feed.position.coords.speed);
+        }.bind(this));
+        if (this.world.user.feed.position.coords){
+          this.$('[data-name=user-accuracy]').html(renderAcc(this.world.user.feed.position.coords.accuracy));
+          this.$('[data-name=user-speed]').html(ms2kmh(this.world.user.feed.position.coords.speed));
+          if (this.world.user.feed.position.coords.altitude){
+            this.$('[data-name=user-altitude]').html(this.world.user.feed.position.coords.altitude);
+          }
+        }
+        
       },
 
-      renderAccuracy: function() {
-         console.log('FIXME: Update acc value and class according to real accuracy');
-      },
 
       showFX: function() {
        $('#topBaffle').animate({ top: 0, duration: 600  });

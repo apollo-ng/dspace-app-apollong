@@ -1,5 +1,5 @@
 define([
-  'backbone', 'templateMap', 'template/helpers/renderPos'
+  'backbone', 'templateMap', 'template/helpers/renderPos',
 ], function(Backbone, templates, renderPos) {
 
   /**
@@ -38,7 +38,9 @@ define([
         this.model.getLatLon(),
         { tabIndex: this.options.tab.index,
           //FIXME the chain to access the avatar/userMarker is quite long...
-          distance: this.model.distanceTo(this.options.aether.user.feed.avatar)},
+          distance: this.model.distanceTo(this.options.aether.user.feed.avatar),
+          sector: this.model.getSector(),
+        },
         this.model.toJSON()
       )));
       this.updateSettings(this.options.aether.user);

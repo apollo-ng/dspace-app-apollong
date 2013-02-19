@@ -42,9 +42,9 @@
   position:absolute;
   top: 0px;
   left: 0px;
-  bottom: 49px;
-  right: 244px;
-  z-index:999;
+  bottom: 48px;
+  right: 0px;
+  z-index:999999;
   opacity: 0;
   display: none;
   overflow: hidden;
@@ -315,58 +315,28 @@
   font-size: 25px;
   height: 32px;
   line-height: 30px;
-}
-
-#userGeoStatus.enabled {
-  background: #282828;
-  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
-  background: -webkit-linear-gradient(top, rgba(40,40,40,0.65) 0%,rgba(40,40,40,0.3) 100%);
-  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  background-image: url('../images/sprite.png');
+  background-position: 0px 0px;
 }
 
 #userGeoStatus.disabled {
-  background: #282828;
-  background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
-  background: -webkit-linear-gradient(top, rgba(40,40,40,0.65) 0%,rgba(40,40,40,0.3) 100%);
-  background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  background-position: 0px 0px;
+}
+
+#userGeoStatus.enabled {
+  background-position: -32px 0px;
 }
 
 #userGeoStatus.lowAccuracy {
-  background: rgb(109,0,25);
-  background: -moz-linear-gradient(top, rgba(109,0,25,1) 0%, rgba(143,2,34,1) 56%, rgba(169,3,41,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(109,0,25,1)), color-stop(56%,rgba(143,2,34,1)), color-stop(100%,rgba(169,3,41,1)));
-  background: -webkit-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: -o-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: -ms-linear-gradient(top, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
-  background: linear-gradient(to bottom, rgba(109,0,25,1) 0%,rgba(143,2,34,1) 56%,rgba(169,3,41,1) 100%);
+  background-position: -64px 0px;
 }
 
 #userGeoStatus.medAccuracy {
-  background: rgb(199,152,16);
-  background: -moz-linear-gradient(top, rgba(199,152,16,1) 0%, rgba(234,185,45,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(199,152,16,1)), color-stop(100%,rgba(234,185,45,1)));
-  background: -webkit-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-  background: -o-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-  background: -ms-linear-gradient(top, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
-  background: linear-gradient(to bottom, rgba(199,152,16,1) 0%,rgba(234,185,45,1) 100%);
+  background-position: -96px 0px;
 }
 
 #userGeoStatus.highAccuracy {
-  background: rgb(31,59,8);
-  background: -moz-linear-gradient(top, rgba(31,59,8,1) 0%, rgba(98,125,77,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(31,59,8,1)), color-stop(100%,rgba(98,125,77,1)));
-  background: -webkit-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: -o-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: -ms-linear-gradient(top, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
-  background: linear-gradient(to bottom, rgba(31,59,8,1) 0%,rgba(98,125,77,1) 100%);
+  background-position: -128px 0px;
 }
 
 #userGeoData {
@@ -455,7 +425,7 @@
   border-left: 1px solid #444;
   border-right: 1px solid #000;
   overflow: hidden;
-  padding-top: 1px;
+  padding-top: 0px;
   padding-left: 4px;
 }
 
@@ -584,20 +554,20 @@
 }
 
 #featureBox .featureBoxTabs .tab {
-  opacity: 0.8;
+  opacity: 0.55;
   cursor: default;
   float: left;
-  width: 37px;
+  width: 36px;
   height: 35px;
-  line-height: 26px;
+  line-height: 34px;
   overflow: hidden;
   margin-top: 11px;
-  margin-left: 5px;
+  margin-right: 4px;
   color: #fafafa;
   font-size: 14px;
   font-weight: bold;
   background-color: #ccc;
-  border-left: 1px solid #eee;
+  border-left: 1px solid #999;
   border-right: 1px solid #999;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #999;
@@ -607,11 +577,17 @@
   -moz-border-radius-topright: 5px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  -moz-box-shadow: inset 0px -3px 5px rgba(0,0,0,0.3);
+  -webkit-box-shadow: inset 0px -3px 5px rgba(0,0,0,0.3);
+  box-shadow: inset 0px -3px 5px rgba(0,0,0,0.3);
 }
 
 #featureBox .featureBoxTabs .active {
   opacity: 1;
   border-bottom: 1px solid #ccc;
+-moz-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+-webkit-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
 }
 
 

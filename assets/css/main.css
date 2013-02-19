@@ -253,25 +253,25 @@ h3	 { font-size: 18px; }
 .shield-0 {
   background-repeat: no-repeat;
   background-image: url(../icons/shield-black.png);
-  background-position: 2px 0px;
+  background-position: 2px 3px;
 }
 
 .shield-1 {
   background-repeat: no-repeat;
   background-image: url(../icons/shield-red.png);
-  background-position: 2px 0px;
+  background-position: 2px 3px;
 }
 
 .shield-2 {
   background-repeat: no-repeat;
   background-image: url(../icons/shield-blue.png);
-  background-position: 2px 0px;
+  background-position: 2px 3px;
 }
 
 .shield-3 {
   background-repeat: no-repeat;
   background-image: url(../icons/shield-green.png);
-  background-position: 2px 0px;
+  background-position: 2px 3px;
 }
 
 .shield-o-0 { background-position: 2px -36px;   }

@@ -60,19 +60,19 @@ define([
             switch(error.code) {
               // PERMISSION_DENIED
               case 1:
-                console.log('User denied the request for Geolocation.');
+                alert('Geolocation API: User denied the request for Geolocation.');
               break;
               // POSITION_UNAVAILABLE
               case 2:
-                console.log('Location information is unavailable.');
+                alert('Geolocation API: Location information is unavailable.');
               break;
               // TIMEOUT
               case 3:
-                console.log('The request to get user location timed out.');
+                alert('Geolocation API: The request to get user location timed out.');
               break;
               // Unkown Error
               default:
-                console.log('An unknown error occurred.');
+                alert('Geolocation API: An unknown error occurred.');
               break;
             }
             // set user marker to mapcenter as a fallback
@@ -85,13 +85,14 @@ define([
           // FIXME: should be coming from the user model
           {
              enableHighAccuracy: true,
-             maximumAge: 86400,
-             timeout: 1000 //in ms
+             maximumAge: 86400, // in s
+             timeout: 300000 //in ms
           }
         );
       } else {
         // This browser has no geolocation API
         // set user marker to mapcenter as a fallback
+        $('#userGeoStatus').addClass('disabled');
         /* FIXME: this.world.user.feed.avatar.setLatLon(48, 11); */
       }
     },
@@ -103,6 +104,10 @@ define([
      */
     unwatch: function() {
       navigator.geolocation.clearWatch(this.watchID);
+      $('#userGeoStatus').removeClass('enabled');
+      $('#userGeoStatus').removeClass('lowAccuracy');
+      $('#userGeoStatus').removeClass('medAccuracy');
+      $('#userGeoStatus').removeClass('highAccuracy');
       $('#userGeoStatus').addClass('disabled');
     },
 

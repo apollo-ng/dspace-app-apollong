@@ -585,9 +585,19 @@
 #featureBox .featureBoxTabs .active {
   opacity: 1;
   border-bottom: 1px solid #ccc;
--moz-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
--webkit-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+  box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+}
+
+#featureBox .featureBoxTabs .add {
+  background: #444;
+  opacity: 0.75;
+  width: 28px;
+  color: #e8e5de;
+  font-size: 24px;
+  border-bottom: 1px solid #444;
+  text-shadow: #fff 0px 1px 0, #000 0 -1px 0;
 }
 
 

@@ -3,7 +3,6 @@ define([
   'ender',
   'modestmaps',
   'easey_handlers',
-
   'views/panels'
 ], function(Backbone, $, MM, easey_handlers, panels) {
 
@@ -19,7 +18,8 @@ define([
     el: '#miniMap',
     frameId: 'miniMap',
     zoomDelta: 4,
-    
+    fadeDuration: 450,
+
     events: {
       // FIXME: change this to 'click' (without killing 'dragging')
       //"dblclick": "jumpMap",
@@ -28,6 +28,7 @@ define([
       'contextmenu': function(event) { event.preventDefault(); },
       'mousewheel': "adjustZoomDelta"
     },
+
     /**
      * Method: initialize
      * creates the minimap and initializes some event handlers.
@@ -41,19 +42,20 @@ define([
       this.world.on('change', function(event, data){
         this.recenter();
       }.bind(this));
+
       /**
        * Event: user:mapProvider
-       * 
+       *
        * listens to changed user configuration and changes minimap with <MiniMap.switchBaseMap>
        */
       this.world.user.on('change:mapProvider', function(event, data){
         this.switchBaseMap();
       }.bind(this));
     },
-    
+
     /**
      * Method: jumpMap
-     * 
+     *
      * sets <World.mapCenter> which recenters the map via <world:mapCenter> and <Map.recenter>
      */
     jumpMap: function(event) {
@@ -62,10 +64,10 @@ define([
         new MM.Point(event.clientX - offset.left , event.clientY - offset.top)
       ));
     },
-    
+
     /**
      * Method: adjustZoomDelta
-     * 
+     *
      * changes the zoomDelta (difference between minimap zoom level and big map zoom level).
      * This function is fired by mousewheel events.
      */
@@ -78,7 +80,7 @@ define([
       }
       this.recenter();
     },
-    
+
     /**
      * Method: switchBaseMap
      * changes the basemap using <Map>.
@@ -90,7 +92,7 @@ define([
       //this.frame.removeLayerAt(0);
       this.frame.draw();
     },
-    
+
     /**
      * Method: render
      * creates the ModestMaps object and attaches it to this.frame
@@ -99,7 +101,7 @@ define([
       var config = this.config;
       //FIXME should not get from window
       var layer = this.map.createBaseMap();
-      
+
       var modestmap = new MM.Map(
         this.frameId,
         layer,
@@ -122,33 +124,29 @@ define([
       modestmap.setCenterZoom(location, this.map.frame.zoom()-this.zoomDelta);
       this.frame = modestmap;
       this.drawViewport();
-      
+
       return modestmap;
     },
-    
-    
+
     /**
      * Method: showFX
      * do a fancy minimap fade-in animation.
      */
     showFX: function(){
-      //this.$el.show()
-      this.$el.animate({ height: 178, duration: MiniMap.fadeDuration });
-      this.$el.fadeIn(MiniMap.fadeDuration);
+      this.$el.animate({ height: 178, duration: this.fadeDuration });
+      this.$el.fadeIn(this.fadeDuration);
     },
-    
+
     /**
      * Method: hideFx
      * do a fancy minimap fade-out animation.
      */
     hideFX: function(){
-      this.$el.animate({ height: 0, duration: MiniMap.fadeDuration  });
-      this.$el.fadeOut(MiniMap.fadeDuration);
-      setTimeout(function(){
-        this.$el.hide()
-      }, MiniMap.fadeDuration);
+      this.$el.animate({ height: 0, duration: this.fadeDuration });
+      this.$el.fadeOut(this.fadeDuration);
+
     },
-	
+
     /**
      * Method: drawViewport
      * retrives the visible area of the big map and updates the position of #mmViewport
@@ -159,7 +157,7 @@ define([
         x:this.map.$el.width(),
         y:this.map.$el.height()
       });
-      
+
       var topLeftMM     = this.frame.locationPoint(topLeftCoord);
       var bottomRightMM = this.frame.locationPoint(bottomRightCoord);
       //FIXME: can we get this object without using '$'?
@@ -170,31 +168,22 @@ define([
         top: topLeftMM['y']
       })
     },
+
     /**
      * Method: recenter
      * Sets the center of the minimap to the center of the big map. Calles <drawViewport>.
      */
     recenter: function(){
       var mapCenter = this.world.get('mapCenter');
-      
+
       //The frame might not exist yet
       if(mapCenter && this.frame){
         this.frame.setCenter(mapCenter);
         this.frame.zoom(this.map.frame.zoom()-this.zoomDelta)
         this.drawViewport();
-        
+
       }
     }
-  }, {
-    /**
-     * Class Properties go here
-     * see http://stackoverflow.com/questions/6142985/where-should-i-put-view-related-constants-backbone-js
-     * is this good?
-     */
-     
-     
-     fadeDuration: 600,
-    
   });
 
   return MiniMap;

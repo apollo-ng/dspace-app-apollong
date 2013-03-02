@@ -52,7 +52,6 @@ define([
   return Backbone.Router.extend({
 
     initialize: function(config) {
-      log('initialize', config);
       /**
        * Property: world
        * The one and only instance of <World>.

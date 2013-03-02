@@ -23,26 +23,31 @@ require(["ender", 'app/config'], function($, config){
       }, 1000);
     });
 
-    it('has some feature tabs', function(){
-      expect($('.featureTab').length).to.be.above(0);
-    });
 
-    it("watches the geolocation", function() {
-      expect(positionCbs.length).to.be.equal(1);
-    });
-
-    it("displays the tikiman", function() {
-      var tikiman;
-      $('img').forEach(function(img) {
-        if(img.src.match(/\/assets\/images\/tiki-man.png$/)) {
-          tikiman = img;
-        }
+    describe('user', function(){
+      it("watches the geolocation", function() {
+        expect(positionCbs.length).to.be.equal(1);
       });
-      expect(tikiman).to.be.ok;
+
+      it("displays the tikiman", function() {
+        var tikiman;
+        $('img').forEach(function(img) {
+          if(img.src.match(/\/assets\/images\/tiki-man.png$/)) {
+            tikiman = img;
+          }
+        });
+        expect(tikiman).to.be.ok;
+      });
     });
 
-    it("renders MiniMap", function(){
-      expect($('#miniMap').length).to.equal(1);
+    describe('ui', function(){
+      it("renders MiniMap", function(){
+        expect($('#miniMap').length).to.equal(1);
+      });
+
+      it('has some feature tabs', function(){
+        expect($('.featureTab').length).to.be.above(0);
+      });
     });
 
   });

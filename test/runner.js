@@ -23,12 +23,63 @@ require(["ender", 'app/config'], function($, config){
       }, 1000);
     });
 
-
-    describe('user', function(){
-      it("watches the geolocation", function() {
-        expect(positionCbs.length).to.be.equal(1);
+    describe('init', function(){
+      it("creates world", function(){
+        expect(dspace.world).to.be.ok;
       });
 
+      it("creates ui", function(){
+        expect(dspace.ui).to.be.ok;
+      });
+
+      it("renders ui");
+      it("starts backbone history");
+    });
+
+
+    describe('world', function(){
+      describe('init', function(){
+        it("gets config", function(){
+          expect(dspace.world.config).to.be.ok;
+        });
+
+        it("creates featureIndex", function(){
+          expect(dspace.world.featureIndex).to.be.ok;
+        });
+
+        it("creates feeds", function(){
+          expect(dspace.world.geoFeeds).to.have.length.above(1);
+        });
+
+        it("creates aether", function(){
+          expect(dspace.world.aether).to.be.ok;
+        });
+
+        it("binds on user:change");
+        it("trigers user:change on aether");
+        it("binds on aether:remove-feed");
+      });
+    });
+
+    describe('user', function(){
+      describe('init', function(){
+        it("setups LocalStorage");
+        it("detects remoteStorage");
+        it("sets defaults");
+
+        it("creates DeviceFeed", function(){
+          expect(dspace.world.user.feed).to.be.ok;
+        });
+
+        it("binds to changes of avatar position");
+
+        it("watches the geolocation", function() {
+          expect(positionCbs.length).to.be.equal(1);
+        });
+      });
+    });
+
+    describe('map', function(){
       it("displays the tikiman", function() {
         var tikiman;
         $('img').forEach(function(img) {
@@ -41,8 +92,20 @@ require(["ender", 'app/config'], function($, config){
     });
 
     describe('ui', function(){
-      it("renders MiniMap", function(){
-        expect($('#miniMap').length).to.equal(1);
+      describe('init', function(){
+        it("creates Map");
+        it("creates MiniMap");
+        it("creates StatusPanel");
+        it("creates ControlPanel");
+        it("creates SideBar");
+      });
+
+      describe('render', function(){
+        it("renders Map");
+        it("renders MiniMap and sets visible");
+        it("renders StatusPanel and sets visible");
+        it("renders ControlPanel and sets visible");
+        it("renders SideBar and sets visible");
       });
 
       it('has some feature tabs', function(){

@@ -2,12 +2,13 @@ define([
   'underscore',
   'backbone',
   'geofeeds/geoJson',
+  'geofeeds/spaceApi',
   'collections/feature',
   'models/feature',
   'geofeeds/remoteStorage',
   'geofeeds/device',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, FeatureCollection, Feature,
+], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection, Feature,
             RemoteStorageFeed, DeviceFeed, User ) {
 
   /*
@@ -167,6 +168,9 @@ define([
         break;
       case 'remoteStorage':
         return new RemoteStorageFeed(feed);
+        break;
+      case 'SpaceAPI':
+        return new SpaceApiFeed(feed);
         break;
       default:
         console.log('WARNING: Feed type not implemented: ' + feed.type);

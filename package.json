@@ -21,7 +21,6 @@
       "handlebars": "1.0.8"
     , "csso": "1.3.x"
     , "almond": "*"
-    , "zombie": "*"
     , "mocha-phantomjs": "*"
   },
   "scripts": {

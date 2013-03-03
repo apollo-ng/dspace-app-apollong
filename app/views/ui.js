@@ -80,6 +80,7 @@ define([
       , 'click #toggleFullscreen': 'fullscreenToggle'
       , 'click #addOverlay': 'toggleOverlaysManager'
       , 'click #userOptions': 'toggleUserOptions'
+      , 'click #modal-close': 'closeModal'
     },
 
     /**
@@ -181,33 +182,6 @@ define([
         //}
       }.bind(this));
 
-      this.world.on('change:currentModal', function() {
-        var modalName = this.world.get('currentModal');
-        if(modalName) {
-          var modal = this.modals[modalName];
-          if(modal) {
-            this.modalName = modalName;
-            modal.apply(this, []);
-            if(this.modal) {
-              this.listenTo(this.modal, 'close', function() {
-                this.dspace.updateState({ modal: undefined });
-              }.bind(this));
-              setTimeout(function() {
-                this.$('*[data-format=position]').forEach(function(e) {
-                  var el = this.$(e);
-                  el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'),
-                                    this.world.user.get('userCoordPrefs')));
-                }.bind(this));
-              }.bind(this), 0);
-            }
-          } else {
-            console.error('modal not found', modalName);
-          }
-        } else {
-          this.closeModal();
-        }
-      }.bind(this));
-
       function setupRemoteStorage() {
         remoteStorage.util.silenceAllLoggers();
         if(this.world.user.get('remoteStorage')) {
@@ -246,19 +220,6 @@ define([
           this.modal.show();
         } else {
         }
-      },
-
-      'addFeature': function() {
-        this.modal = new AddFeature({ world: this.world });
-        this.modal.setCollection(this.featureBox.getCurrentCollection());
-        this.modal.render();
-        this.modal.show();
-      },
-
-      'overlayManager': function() {
-        this.modal = new OverlayManager();
-        this.modal.render();
-        this.modal.show();
       }
     },
 
@@ -341,10 +302,8 @@ define([
      * toggles <OverlaysManager>
      */
     toggleOverlaysManager: function(){
-      console.log('overlaypanel');
-      this.overlayManager = new OverlayManager();
-      this.overlayManager.render();
-      this.overlayManager.show();
+      this.modal = new OverlayManager();
+      this.modal.show();
     },
 
     /**
@@ -353,15 +312,9 @@ define([
      * toggles <Modal.UserOptions> using <showUserOptions>/<hideUserOptions>
      */
     toggleUserOptions: function() {
-      if(this.modalName === 'userOptions') {
-        this.dspace.updateState({
-          modal: undefined
-        });
-      } else {
-        this.dspace.updateState({
-          modal: 'userOptions'
-        });
-      }
+      this.modal = new UserOptions({user: this.world.user, aether: this.aether});
+      this.modal.render();
+      this.modal.show();
     },
 
     /**
@@ -407,6 +360,12 @@ define([
         });
         this.featureDetails.show();
       }
+    },
+
+    newFeature: function(point) {
+      this.modal = new AddFeature();
+      //this.modal.setCollection(this.featureBox.getCurrentCollection());
+      this.modal.show();
     },
 
     /**

@@ -21,26 +21,10 @@ define([
 
     initialize: function(opts) {
       this.model = new Feature();
-
-      this.world = opts.world;
-
-      this.listenTo(this.model, 'change',
-                    this.updateInputs.bind(this));
-      this.listenTo(this.world, 'selectedLocation:change',
-                    this.updatePosition.bind(this));
-      this.listenTo(this.world.aether, 'user:change',
-                    this.updatePosition.bind(this));
-
-      setTimeout(this.updatePosition.bind(this), 0);
     },
 
     setCollection: function(collection) {
       this.collection = collection;
-    },
-
-    render: function() {
-      this.$el.html(this.template());
-      setTimeout(this.updateInputs.bind(this), 0);
     },
 
     commands: {
@@ -84,21 +68,6 @@ define([
     findInput: function(name) {
       return this.$('*[name="' + name + '"]');
     },
-
-    updatePosition: function() {
-      var selectedLocation = this.world.get('selectedLocation');
-      if(selectedLocation) {
-        this.model.setLatLon(selectedLocation.lat, selectedLocation.lon);
-      }
-      var span = $(this.$('*[data-format=position]')[0]);
-      var latlon = this.model.getLatLon();
-      span.attr('data-lat', latlon.lat);
-      span.attr('data-lon', latlon.lon);
-      
-      // FIXME: move actual renderPos call somewhere else.
-      span.html(renderPos(span.attr('data-lat'), span.attr('data-lon'), this.world.user.get('userCoordPrefs')));
-    },
-
 
   });
 

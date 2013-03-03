@@ -1,6 +1,5 @@
 define([
   'backbone',
-
   'models/world',
   'views/ui'
 ], function(Backbone, World, UI) {
@@ -43,10 +42,8 @@ define([
    *      > { feature: 123, modal: "featureDetails", location: undefined }
    *   2) <callStateHooks> calls:
    *      > stateHooks.feature(123);
-   *      > stateHooks.modal('featureDetails');
    *      > stateHooks.location(undefined);
    *   3) The <ui.map> jumps to the feature with uuid "123" (on 'change:currentFeatureId')
-   *   4) The <ui> displays the <Modal.FeatureDetails> (on 'change:currentModal')
    *
    */
   return Backbone.Router.extend({
@@ -95,7 +92,6 @@ define([
      */
     defaultState: {
       feature: undefined,
-      modal: undefined,
       location: undefined
     },
 
@@ -121,10 +117,6 @@ define([
 
       feature: function(uuid) {
         this.world.set('currentFeatureId', uuid);
-      },
-
-      modal: function(name) {
-        this.world.set('currentModal', name);
       },
 
       location: function(location) {

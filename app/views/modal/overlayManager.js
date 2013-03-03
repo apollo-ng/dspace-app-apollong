@@ -12,18 +12,6 @@ define([
 
     template: templates.overlayManager,
 
-    events: {
-      'click *[data-command=close]': 'close'
-    },
-
-    close: function() {
-      this.trigger('close');
-    },
-
-    render: function() {
-      this.$el.html(this.template());
-    },
-
   });
 
   return OverlayManager;

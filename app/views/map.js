@@ -125,10 +125,7 @@ define([
       this.contextPanel = new MapContext({ map: this });
 
       this.contextPanel.on('command:add-feature', function(point) {
-        this.dspace.updateState({
-          location: JSON.stringify(this.frame.pointLocation(point)),
-          modal: 'addFeature'
-        });
+        this.dspace.ui.newFeature(this.frame.pointLocation(point));
 
         // var location = this.frame.pointLocation(point);
         // var dialog = new AddFeature(location, { aether: this.world.aether });

@@ -4,13 +4,13 @@ define([
   'hbs!templates/featureInfoModal',
   'hbs!templates/userOptionModal',
   'hbs!templates/statusPanel',
-  'hbs!templates/featureOptionModal',
+  'hbs!templates/overlayManager',
   'hbs!templates/controlPanel',
   'hbs!templates/addFeature',
   'hbs!templates/featureDetails',
   'hbs!templates/featureBox',
   'hbs!templates/featureTab'
-], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, featureOptionModal, controlPanel, addFeature, featureDetails, featureBox, featureTab) {
+], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, overlayManager, controlPanel, addFeature, featureDetails, featureBox, featureTab) {
 
   return {
     mapContext: mapContext,
@@ -18,7 +18,7 @@ define([
     featureInfoModal: featureInfoModal,
     userOptionModal: userOptionModal,
     statusPanel: statusPanel,
-    featureOptionModal: featureOptionModal,
+    overlayManager: overlayManager,
     controlPanel: controlPanel,
     addFeature: addFeature,
     featureDetails: featureDetails,

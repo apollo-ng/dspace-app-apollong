@@ -7,10 +7,11 @@ define([
   'views/map',
   'views/miniMap',
   'views/modal/userOptions',
+  'views/modal/overlayManager',
   'views/modal/featureDetails',
   'views/modal/addFeature',
   'template/helpers/renderPos'
-], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
 
   // /**
@@ -69,13 +70,6 @@ define([
     fullScreen: false,
 
     /**
-     * Property: overlaysPanel
-     *
-     * <OverlaysPanel> *ui element* for managing active overlays
-     */
-    overlaysPanel: new panels.Overlays(),
-
-    /**
      * Events: events
      *
      * delegting events on UI
@@ -84,7 +78,7 @@ define([
         'click #toggleFeatureBox': 'boxToggle'
       , 'click #toggleMiniMap': 'miniMapToggle'
       , 'click #toggleFullscreen': 'fullscreenToggle'
-      , 'click #featureOptions': 'toggleOverlaysPanel'
+      , 'click #addOverlay': 'toggleOverlaysManager'
       , 'click #userOptions': 'toggleUserOptions'
     },
 
@@ -267,8 +261,13 @@ define([
         this.modal.setCollection(this.featureBox.getCurrentCollection());
         this.modal.render();
         this.modal.show();
-      }
+      },
 
+      'overlayManager': function() {
+        this.modal = new OverlayManager();
+        this.modal.render();
+        this.modal.show();
+      }
     },
 
     /**
@@ -345,12 +344,15 @@ define([
     },
 
     /**
-     * Method: toggleOverlaysPanel
+     * Method: toggleOverlaysManager
      *
-     * toggles <OverlaysPanel>
+     * toggles <OverlaysManager>
      */
-    toggleOverlaysPanel: function(){
-      this.overlaysPanel.toggle();
+    toggleOverlaysManager: function(){
+      console.log('overlaypanel');
+      this.overlayManager = new OverlayManager();
+      this.overlayManager.render();
+      this.overlayManager.show();
     },
 
     /**

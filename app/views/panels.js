@@ -121,34 +121,6 @@ define([
     }),
 
     /**
-     * Class: OverlaysPanel
-     *
-     * UI element for OverlaysPanel
-     *
-     * (see overlaysPanel.png)
-     */
-    Overlays: BasePanel.extend({
-
-      el: '#featureOptionModal',
-      template: templates.featureOptionModal,
-      fadeDuration: 450,
-
-      showFX: function(){
-        this.$el.html( this.template());
-        this.$el.css( { 'display': 'block'});
-        this.$el.fadeIn(350);
-        this.visible = true;
-
-      },
-
-      hideFX: function(){
-        var self = this;
-        this.$el.fadeOut(350, function() { self.$el.hide(); });
-        this.visible = false;
-      }
-    }),
-
-    /**
      * Class: StatusPanel
      *
      * UI element to show current position in botttom left

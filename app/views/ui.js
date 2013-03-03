@@ -142,14 +142,6 @@ define([
 
       this.map = new Map({ world: this.world, dspace: this.dspace });
 
-      this.map.on('marker-click', function(id) {
-        this.dspace.updateState({
-          feature: id,
-          modal: 'featureDetails'
-        });
-      }.bind(this));
-
-
       /**
        * Property: featureBox
        */

@@ -25,7 +25,7 @@ define([
     template: templates.mapContext,
 
     events: {
-      'click *[data-command]': 'callCommand'
+      'click *[data-command]': 'callCommand',
     },
 
     initialize: function() {
@@ -80,8 +80,9 @@ define([
      * * click hides ContextPanel
      */
     events: {
-      "click": "hideContextPanel"
-      ,"contextmenu": "showContextPanel"
+      "click": "hideContextPanel",
+      "contextmenu": "showContextPanel",
+      'click .markerimage': 'showFeatureDetails'
     },
 
     /**
@@ -341,6 +342,13 @@ define([
       easey().map(this.frame)
         .to(mmCoordinate)
         .zoom(this.config.maxZoom).optimal();
+    },
+
+    showFeatureDetails: function(event){
+      this.dspace.updateState({
+        feature: event.target.id,
+        modal: 'featureDetails'
+      });
     }
   });
 

@@ -273,6 +273,7 @@ define([
        */
       render: function(){
         this.$el.html(this.template({user: this.world.user.toJSON() }));
+        this.updateMapCenter();
         return this.el;
       }
     })

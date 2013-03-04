@@ -144,11 +144,7 @@ define([
       this.miniMap.visible = true;
 
       this.statusPanel.render();
-      this.statusPanel.visible = true;
-
       this.controlPanel.render();
-      this.controlPanel.visible = true;
-
       this.sideBar.render();
     },
 

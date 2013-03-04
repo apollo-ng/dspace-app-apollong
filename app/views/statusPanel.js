@@ -28,7 +28,6 @@ define([
     },
 
     initialize: function() {
-      var self = this;
 
       /**
        * Maedneasz: create konwienienz accessors
@@ -89,15 +88,12 @@ define([
         el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'), this.world.user.get('userCoordPrefs')));
       }.bind(this));
 
-      this.$('*[data-name=user-speed]').forEach(function(e) {
-        var el = this.$(e);
-        //el.html(this.world.user.feed.position.coords.speed);
-      }.bind(this));
-      if (this.world.user.feed.position.coords){
-        this.$('[data-name=user-accuracy]').html(renderAcc(this.world.user.feed.position.coords.accuracy));
-        this.$('[data-name=user-speed]').html(ms2kmh(this.world.user.feed.position.coords.speed));
-        if (this.world.user.feed.position.coords.altitude){
-          this.$('[data-name=user-altitude]').html(this.world.user.feed.position.coords.altitude);
+      var coords = this.world.user.feed.position.coords;
+      if (coords){
+        this.$('[data-name=user-accuracy]').html(renderAcc(coords.accuracy));
+        this.$('[data-name=user-speed]').html(ms2kmh(coords.speed));
+        if (coords.altitude){
+          this.$('[data-name=user-altitude]').html(coords.altitude);
         }
       }
     },

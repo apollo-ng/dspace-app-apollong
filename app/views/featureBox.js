@@ -33,19 +33,19 @@ define([
        */
       initialize: function(){
 
-      /**
-       * Property: aether
-       *
-       * event aggregator from <World>
-       */
-        this.aether = this.options.aether;
-
         /**
          * Property: world
          *
          * reference to <World>
          */
         this.world = this.options.world;
+
+        /**
+         * Property: aether
+         *
+         * event aggregator from <World>
+         */
+        this.aether = this.world.aether;
 
         /**
          * Property: feeds
@@ -92,7 +92,7 @@ define([
           feed: feed,
           aether: this.aether
         });
-        tab.index = this.featureTabs.length,
+        tab.index = this.featureTabs.length;
         this.featureTabs.push(tab);
         this.adjustRemovable();
 

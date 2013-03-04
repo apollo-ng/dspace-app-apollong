@@ -55,10 +55,6 @@ define([
      * Property: el
      *
      * DOM element which will host UI '#id'
-     *
-     * Property: $el
-     *
-     * Backbone wrapped element to reuse
      */
     el: '#ui',
 
@@ -72,12 +68,12 @@ define([
     /**
      * Events: events
      *
-     * delegting events on UI
+     * delegting DOM events on UI
      */
     events: {
-        'click #toggleFeatureBox': 'boxToggle'
-      , 'click #toggleMiniMap': 'miniMapToggle'
-      , 'click #toggleFullscreen': 'fullscreenToggle'
+        'click #toggleFeatureBox': 'toggleFeatureBox'
+      , 'click #toggleMiniMap': 'toggleMiniMap'
+      , 'click #toggleFullscreen': 'toggleFullscreen'
       , 'click #addOverlay': 'showOverlaysManager'
       , 'click #userOptions': 'showUserOptions'
       , 'click #modal-close': 'closeModal'
@@ -87,7 +83,6 @@ define([
      * Method: initialize
      */
     initialize: function(){
-      var self = this;
 
       /**
        * Property: world
@@ -103,36 +98,26 @@ define([
        */
       this.aether = this.world.aether;
 
-
       /**
        * Event: feature:focus
        *
-       * listens on <aether> and jumps map to feature in focus
+       * listens on <aether> and delegates to <focusOnFeature>
        */
-      this.aether.on('feature:focus', function( feature ){
-        this.map.jumpToFeature(feature);
-      }.bind(this));
+      this.aether.on('feature:focus', this.focusOnFeature.bind(this));
 
       /**
        * Event: feature:uuid:show
        *
-       * listens on <aether> and show details of feature with given uuid
+       * listens on <aether> and delegats to <showFeatureDetails>
        */
-      this.aether.on('feature:uuid:show', function(uuid){
-        var feature = this.world.getFeature(uuid);
-        if(feature) {
-          console.log(feature);
-          this.modal = new FeatureDetails({ feature: feature });
-          this.modal.show();
-        }
-      }.bind(this));
+      this.aether.on('feature:uuid:show', this.showFeatureDetails.bind(this));
 
-      this.aether.on('feature:new', function(location){
-        var feature = this.world.newFeature(location);
-        console.log(feature);
-        this.modal = new FeatureDetails({ feature: feature });
-        this.modal.show();
-      }.bind(this));
+      /**
+       * Event: feature:new
+       *
+       * listens on <aether> and creates to <createFeature>
+       */
+      this.aether.on('feature:new', this.createFeature.bind(this));
 
       /**
        * Property: map
@@ -148,27 +133,25 @@ define([
       /**
        * Property: featureBox
        */
-      this.featureBox = new FeatureBox({ world: this.world, aether: this.aether, feeds: this.world.geoFeeds});
-
-      this.listenTo(this.featureBox, 'change-tab', function(collection) {
-        if(this.modal && this.modal.setCollection) {
-          this.modal.setCollection(collection);
-        }
-      }.bind(this));
+      this.featureBox = new FeatureBox({ world: this.world, feeds: this.world.geoFeeds});
 
       /**
-       * creates minimap
+       * Property: miniMap
        */
       this.miniMap = new MiniMap({world: this.world, map: this.map});
 
       /**
-       * creates statusPanel
+       * Property: statusPanel
        */
       this.statusPanel = new panels.Status({model: this.world, ui: this});
+
+      /**
+       * Property: controlPanel
+       */
       this.controlPanel = new panels.Control({world: this.world });
 
       /**
-       *  creates Sidebar
+       * Property: sideBar
        */
       this.sideBar = new panels.SideBar();
 
@@ -217,51 +200,41 @@ define([
 
     },
 
-    reset: function() {
-      this.closeModal();
+    /**
+     * Method: focusOnFeature
+     *
+     * focuses map on given feature
+     */
+    focusOnFeature: function(feature){
+      this.map.jumpToFeature(feature);
     },
 
     /**
-     * Method: closeModal
+     * Method: showFeatureDetails
      *
-     * Close the current modal dialog, then <cleanupModal>
+     * opens modal showing details of feature with given uuid
+     *
+     * Receives:
+     *
+     *   uuid - id of feature to look up in <World.featureIndex>
      */
-    closeModal: function() {
-      if(this.modal) {
-        this.modal.hide();
-        this.cleanupModal();
+    showFeatureDetails: function(uuid){
+      var feature = this.world.getFeature(uuid);
+      if(feature) {
+        this.modal = new FeatureDetails({ feature: feature });
+        this.modal.show();
       }
     },
 
     /**
-     * Method: cleanupModal
+     * Method: createFeature
      *
-     * Removes all reference to the current modal dialog.
-     *
+     * gets new feature from <World.newFeature> and shows it in modal
      */
-    cleanupModal: function() {
-      if(this.modal) {
-        this.stopListening(this.modal);
-        delete this.modal;
-      }
-    },
-
-    /**
-     * Method: boxToggle
-     *
-     * toggles <FeatureBox>
-     */
-    boxToggle: function() {
-      this.featureBox.toggle();
-    },
-
-    /**
-     * Method: miniMapToggle
-     *
-     * toggles <MiniMap>
-     */
-    miniMapToggle: function(){
-      this.miniMap.toggle();
+    createFeature: function(location){
+      var feature = this.world.newFeature(location);
+      this.modal = new FeatureDetails({ feature: feature });
+      this.modal.show();
     },
 
     /**
@@ -285,11 +258,42 @@ define([
     },
 
     /**
-     * Method: fullscreenToggle
+     * Method: closeModal
+     *
+     * Close the current modal dialog and clean up after it
+     */
+    closeModal: function() {
+      if(this.modal) {
+        this.modal.hide();
+        this.stopListening(this.modal);
+        delete this.modal;
+      }
+    },
+
+    /**
+     * Method: toggleFeatureBox
+     *
+     * toggles <FeatureBox>
+     */
+    toggleFeatureBox: function() {
+      this.featureBox.toggle();
+    },
+
+    /**
+     * Method: toggleMiniMap
+     *
+     * toggles <MiniMap>
+     */
+    toggleMiniMap: function(){
+      this.miniMap.toggle();
+    },
+
+    /**
+     * Method: toggleFullscreen
      *
      * toggles fulls creen mode
      */
-    fullscreenToggle: function() {
+    toggleFullscreen: function() {
       if(this.fullScreen) {
         this.miniMap.show();
         this.statusPanel.show();

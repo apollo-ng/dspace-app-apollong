@@ -3,8 +3,7 @@ define([
   'ender',
   'modestmaps',
   'easey_handlers',
-  'views/panels'
-], function(Backbone, $, MM, easey_handlers, panels) {
+], function(Backbone, $, MM, easey_handlers) {
 
   /**
    * Class: MiniMap
@@ -13,10 +12,9 @@ define([
    *
    * (see minimap.png)
    */
-  var MiniMap = panels.Base.extend({
+  var MiniMap = Backbone.View.extend({
 
     el: '#miniMap',
-    frameId: 'miniMap',
     zoomDelta: 4,
     fadeDuration: 450,
 
@@ -37,7 +35,7 @@ define([
 
       this.world = this.options.world;
       this.config = this.options.map.config;
-      this.map = this.options.map
+      this.map = this.options.map;
 
       this.world.on('change', function(event, data){
         this.recenter();
@@ -89,7 +87,6 @@ define([
       //FIXME: this is redundant with Map.js
       var layer = this.map.createBaseMap();
       this.frame.setLayerAt(0, layer);
-      //this.frame.removeLayerAt(0);
       this.frame.draw();
     },
 
@@ -98,12 +95,10 @@ define([
      * creates the ModestMaps object and attaches it to this.frame
      */
     render: function(){
-      var config = this.config;
-      //FIXME should not get from window
       var layer = this.map.createBaseMap();
 
       var modestmap = new MM.Map(
-        this.frameId,
+        this.el.id,
         layer,
         null,
         [new easey_handlers.TouchHandler()
@@ -115,13 +110,12 @@ define([
       /**
        *  setup boundaries
        */
-      var location = new MM.Location(config.geolat, config.geolon);
+      var location = new MM.Location(this.config.geolat, this.config.geolon);
 
       /**
        * show and zoom map
        */
-      //modestmap.setCenterZoom(location, config.miniMapZoom);
-      modestmap.setCenterZoom(location, this.map.frame.zoom()-this.zoomDelta);
+      modestmap.setCenterZoom(location, this.map.frame.zoom() - this.zoomDelta);
       this.frame = modestmap;
       this.drawViewport();
 
@@ -129,22 +123,31 @@ define([
     },
 
     /**
-     * Method: showFX
+     * Method: show
      * do a fancy minimap fade-in animation.
      */
-    showFX: function(){
+    show: function(){
       this.$el.animate({ height: 178, duration: this.fadeDuration });
       this.$el.fadeIn(this.fadeDuration);
+      this.visible = true;
     },
 
     /**
-     * Method: hideFx
+     * Method: hide
      * do a fancy minimap fade-out animation.
      */
-    hideFX: function(){
+    hide: function(){
       this.$el.animate({ height: 0, duration: this.fadeDuration });
       this.$el.fadeOut(this.fadeDuration);
+      this.visible = false;
+    },
 
+    toggle: function(){
+      if(this.visible){
+        this.hide();
+      } else {
+        this.show();
+      }
     },
 
     /**
@@ -160,13 +163,14 @@ define([
 
       var topLeftMM     = this.frame.locationPoint(topLeftCoord);
       var bottomRightMM = this.frame.locationPoint(bottomRightCoord);
+
       //FIXME: can we get this object without using '$'?
       $('#mmViewport').css({
-        width: bottomRightMM['x']-topLeftMM['x'],
-        height: bottomRightMM['y']-topLeftMM['y'],
-        left: topLeftMM['x'],
-        top: topLeftMM['y']
-      })
+        width: bottomRightMM.x - topLeftMM.x,
+        height: bottomRightMM.y - topLeftMM.y,
+        left: topLeftMM.x,
+        top: topLeftMM.y
+      });
     },
 
     /**
@@ -179,9 +183,8 @@ define([
       //The frame might not exist yet
       if(mapCenter && this.frame){
         this.frame.setCenter(mapCenter);
-        this.frame.zoom(this.map.frame.zoom()-this.zoomDelta)
+        this.frame.zoom(this.map.frame.zoom()-this.zoomDelta);
         this.drawViewport();
-
       }
     }
   });

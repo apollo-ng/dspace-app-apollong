@@ -1,10 +1,9 @@
 define([
   'ender',
   'backbone',
-  'views/panels',
-  'views/featureTab',
+  'views/box/featureTab',
   'templateMap'
-], function($, Backbone, panels, FeatureTab, templates) {
+], function($, Backbone, FeatureTab, templates) {
     /**
      * Class: FeatureBox
      *
@@ -14,7 +13,7 @@ define([
      *
      * (see featureBox.png)
      */
-    var FeatureBox = panels.Base.extend({
+    var FeatureBox = Backbone.View.extend({
 
       /**
        * Property: el
@@ -33,19 +32,19 @@ define([
        */
       initialize: function(){
 
-      /**
-       * Property: aether
-       *
-       * event aggregator from <World>
-       */
-        this.aether = this.options.aether;
-
         /**
          * Property: world
          *
          * reference to <World>
          */
         this.world = this.options.world;
+
+        /**
+         * Property: aether
+         *
+         * event aggregator from <World>
+         */
+        this.aether = this.world.aether;
 
         /**
          * Property: feeds
@@ -92,7 +91,7 @@ define([
           feed: feed,
           aether: this.aether
         });
-        tab.index = this.featureTabs.length,
+        tab.index = this.featureTabs.length;
         this.featureTabs.push(tab);
         this.adjustRemovable();
 
@@ -192,19 +191,6 @@ define([
         currentTab.tab.addClass('active');
         this.currentTabIndex = index;
         this.trigger('change-tab', this.featureTabs[index].collection);
-      },
-
-      // no-doc
-      showFX: function(){
-        this.$el.animate({ top: 0, duration: 700  });
-        this.$el.fadeIn(600);
-      },
-
-      // no-doc
-      hideFX: function(){
-        // FIXME: use $el height for the animation instead of fixed value
-        this.$el.animate({ top: -400, duration: 700 });
-        this.$el.fadeOut(600);
       }
     });
 

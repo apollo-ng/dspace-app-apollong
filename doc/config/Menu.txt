@@ -56,24 +56,48 @@ Group: Models  {
    File: Feature  (models/feature.js)
    }  # Group: Models
 
+Group: Geofeeds  {
+
+   File: Base  (no auto-title, geofeeds/base.js)
+   File: Device  (no auto-title, geofeeds/device.js)
+   File: GeoJSON  (no auto-title, geofeeds/geoJson.js)
+   File: RemoteStorage  (geofeeds/remoteStorage.js)
+   File: Search  (geofeeds/search.js)
+   File: SpaceAPI  (geofeeds/spaceApi.js)
+   }  # Group: Geofeeds
+
+File: FeatureCollection  (collections/feature.js)
+
 Group: Views  {
 
    File: UI  (views/ui.js)
-   File: MapContext  (views/map.js)
-   File: Map  (no auto-title, views/map.js)
-   File: MiniMap  (views/miniMap.js)
-   File: Overlay  (views/overlay.js)
-   File: FeatureBox  (views/featureBox.js)
-   File: FeatureTab  (views/featureTab.js)
-   File: FeatureBoxItem  (views/featureBoxItem.js)
-   File: Panel  (views/panels.js)
-   File: Marker  (views/marker.js)
+   File: StatusPanel  (views/statusPanel.js)
+
+   Group: Map  {
+
+      File: Map  (views/map/map.js)
+      File: Marker  (views/map/marker.js)
+      File: MiniMap  (views/map/miniMap.js)
+      File: Overlay  (views/map/overlay.js)
+      }  # Group: Map
+
+   File: ContextMenu  (views/contextMenu.js)
+
+   Group: Box  {
+
+      File: FeatureBox  (views/box/featureBox.js)
+      File: FeatureBoxItem  (views/box/featureBoxItem.js)
+      File: FeatureTab  (views/box/featureTab.js)
+      }  # Group: Box
+
+   File: SideBar  (views/sideBar.js)
 
    Group: Modal  {
 
-      File: AddFeature  (views/modal/addFeature.js)
       File: Base  (views/modal/base.js)
+      File: AddFeature  (views/modal/addFeature.js)
       File: FeatureDetails  (views/modal/featureDetails.js)
+      File: OverlayManager  (views/modal/overlayManager.js)
       File: UserOptions  (views/modal/userOptions.js)
       }  # Group: Modal
 
@@ -85,17 +109,6 @@ Group: Template Helpers  {
    File: renderAcc  (helpers/renderAcc.js)
    File: setAccBg  (helpers/setAccBg.js)
    }  # Group: Template Helpers
-
-File: FeatureCollection  (collections/feature.js)
-
-Group: Geofeeds  {
-
-   File: Base  (no auto-title, geofeeds/base.js)
-   File: Device  (no auto-title, geofeeds/device.js)
-   File: GeoJSON  (no auto-title, geofeeds/geoJson.js)
-   File: RemoteStorage  (geofeeds/remoteStorage.js)
-   File: Search  (geofeeds/search.js)
-   }  # Group: Geofeeds
 
 Group: Index  {
 

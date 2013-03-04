@@ -3,26 +3,28 @@ define([
 ], function(Backbone) {
 
   /**
-   * Class: Modal.Base
+   * Class: WidgetModal
    */
   return Backbone.View.extend({
-    el: '#modal',
-
-    data: {},
-
-    render: function() {
-      var content = this.template(this.data);
-      this.$el.find('#modal-content').html(content);
-    },
+    el: '#widgetModal',
 
     show: function(){
-      this.render();
       this.$el.css( { 'display': 'block'});
       this.$el.fadeIn(350);
+      this.visible = true;
     },
 
     hide: function(){
       this.$el.fadeOut(350, function(){ this.$el.hide(); }.bind(this));
+      this.visible = false;
+    },
+
+    toggle: function(){
+      if(this.visible){
+        this.hide();
+      } else {
+        this.show();
+      }
     }
   });
 });

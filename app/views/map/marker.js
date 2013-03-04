@@ -15,29 +15,17 @@ define(['backbone'], function(Backbone) {
     tagName: 'div',
     className: 'markerimage',
 
-    events: {
-      "click": "markerClick",
-      "contextmenu": "markerContext"
-    },
-
     initialize: function(){
       this.featureJson = this.options.featureJson;
     },
 
-    markerClick: function() {
-      this.trigger('click');
-    },
-
-    markerContext: function(event) {
-      console.log({ 'marker context (right-click)': event, featureJson: this.featureJson }) ;
-    },
-
     render: function( ) {
-      if(this.featureJson.properties.type == 'avatar'){
+      if(this.featureJson.properties.type === 'avatar'){
         this.$el.html( '<img src="assets/images/tiki-man.png" pointer-events="auto" />');
       } else {
         this.$el.addClass('shield-' + this.options.tabIndex);
         this.$el.addClass('shield-o-' + this.featureJson.index);
+        this.$el.attr('id', this.featureJson.id);
       }
       this.$el.css( 'pointer-events', 'auto' );
       return this.el;

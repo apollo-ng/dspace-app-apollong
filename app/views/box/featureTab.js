@@ -1,10 +1,9 @@
 define([
-  'require',
   'ender',
   'backbone',
-  'views/featureBoxItem',
+  'views/box/featureBoxItem',
   'templateMap'
-], function(require, $, Backbone, FeatureBoxItem, templates) {
+], function($, Backbone, FeatureBoxItem, templates) {
 
   /**
    * Class: FeatureTab
@@ -111,9 +110,6 @@ define([
         model: feature,
         aether: this.aether
       });
-      featureBoxItem.on('selected', function() {
-        this.aether.trigger('select-feature', feature);
-      }.bind(this));
       var renderedTemplate = featureBoxItem.render();
       this.itemWrapper.append(renderedTemplate);
     },

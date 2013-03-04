@@ -1,59 +1,10 @@
 define([
-  // deps
   'backbone',
   'modestmaps',
-
   'templateMap',
-
-  // views
-  'views/panels',
-  'views/overlay',
-  'views/modal/addFeature'
-], function(Backbone, MM,
-            templates,
-            panels, Overlay, AddFeature) {
-  /**
-   * Class: MapContext
-   *
-   * map Context menu
-   *
-   * (see mapContext.png)
-   */
-  var MapContext = panels.Base.extend({
-
-    el: '#mapContext',
-    template: templates.mapContext,
-
-    events: {
-      'click *[data-command]': 'callCommand'
-    },
-
-    initialize: function() {
-      this.render();
-    },
-
-    callCommand: function(event) {
-      var item = this.$(event.target);
-      this.trigger('command:' + item.attr('data-command'), this.point);
-      this.hide();
-    },
-
-    render: function() {
-      this.$el.html(this.template());
-      return this.el;
-    },
-
-    showFX: function(event){
-      this.point = { x: event.clientX, y: event.clientY };
-      this.$el.css( { 'left': this.point.x, 'top': this.point.y });
-      this.$el.css( { 'display': 'block'});
-      this.$el.fadeIn(350);
-    },
-
-    hideFX: function(){
-      this.$el.fadeOut(350, this.$el.hide.bind(this.$el));
-    }
-  });
+  'views/map/mapContext',
+  'views/map/overlay',
+], function(Backbone, MM, templates, MapContext, Overlay) {
 
   /* Class: Map
    *
@@ -80,8 +31,9 @@ define([
      * * click hides ContextPanel
      */
     events: {
-      "click": "hideContextPanel"
-      ,"contextmenu": "showContextPanel"
+      "click": "hideMapContext",
+      "contextmenu": "showMapContext",
+      'click .markerimage': 'showFeature'
     },
 
     /**
@@ -95,10 +47,8 @@ define([
     initialize: function( options ){
 
       this.world = this.options.world;
-      this.dspace = this.options.dspace;
+      this.aether = this.world.aether;
       this.config = this.world.config.map;
-
-      var self = this;
 
       /**
        * Event: world:mapCenter
@@ -119,31 +69,24 @@ define([
       }.bind(this));
 
       /**
-       * contextPanel for right-click / longpress
+       * mapContext for right-click / longpress
        */
-      this.contextPanel = new MapContext({ map: this });
+      this.mapContext = new MapContext({ map: this });
 
-      this.contextPanel.on('command:add-feature', function(point) {
-        this.dspace.updateState({
-          location: JSON.stringify(this.frame.pointLocation(point)),
-          modal: 'addFeature'
-        });
-
-        // var location = this.frame.pointLocation(point);
-        // var dialog = new AddFeature(location, { aether: this.world.aether });
-        // dialog.render();
-        // dialog.show();
+      this.mapContext.on('command:add-feature', function(point) {
+        var location = this.frame.pointLocation(point);
+        this.aether.trigger('feature:new', location);
       }.bind(this));
 
-      this.contextPanel.on('command:recenter-here', function(point) {
+      this.mapContext.on('command:recenter-here', function(point) {
         this.frame.setCenter(this.frame.pointLocation(point));
       }.bind(this));
 
-      this.contextPanel.on('command:where-am-i', function() {
+      this.mapContext.on('command:where-am-i', function() {
         this.frame.setCenter(this.world.user.getLocation());
       }.bind(this));
 
-      this.contextPanel.on('command:set-my-location', function(point) {
+      this.mapContext.on('command:set-my-location', function(point) {
         // Stop the Geolocation watcher (device.js: unwatch)
 
         var loc = this.frame.pointLocation(point);
@@ -153,24 +96,8 @@ define([
       }.bind(this));
 
       this.world.on('add-feed', this.addOverlay.bind(this));
-      this.world.on('remove-feed', this.removeOverlay.bind(this))
+      this.world.on('remove-feed', this.removeOverlay.bind(this));
 
-    },
-
-    /**
-     * Method: hideContextPanel
-     * Failsafe: A click on the map should clear all modal/context windows
-     */
-    hideContextPanel: function () {
-      this.contextPanel.hide();
-    },
-
-    /**
-     * Method: showContextPanel
-     *  Map right-click/long touch context menu
-     */
-    showContextPanel: function (event) {
-      this.contextPanel.show(event);
     },
 
     /**
@@ -200,14 +127,31 @@ define([
        * need frame
        */
       this.world.user.feed.collection.on( 'change:geometry', function( e ){
-        if( e.id == 'avatar' ) {
-	        this.userLayer.render( );
-	      }
+        if( e.id === 'avatar' ) {
+          this.userLayer.render( );
+        }
       }.bind(this));
 
 
 
     },
+
+    /**
+     * Method: hideMapContext
+     * Failsafe: A click on the map should clear all modal/context windows
+     */
+    hideMapContext: function () {
+      this.mapContext.hide();
+    },
+
+    /**
+     * Method: showMapContext
+     *  Map right-click/long touch context menu
+     */
+    showMapContext: function (event) {
+      this.mapContext.show(event);
+    },
+
     /**
      * Method: addOverlay
      * gets a feed object with instantiated collection
@@ -223,7 +167,7 @@ define([
       return overlay;
     },
 
-	/**
+     /**
      * Method: removeOverlay
      * removes Overlay specified by index
      * returns overlay
@@ -341,6 +285,10 @@ define([
       easey().map(this.frame)
         .to(mmCoordinate)
         .zoom(this.config.maxZoom).optimal();
+    },
+
+    showFeature: function(event){
+      this.aether.trigger('feature:uuid:show', event.target.id);
     }
   });
 

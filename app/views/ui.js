@@ -15,12 +15,7 @@ define([
   /**
    * Class: UI
    *
-   * elements:
-   * * <overlaysPanel>
-   * * <FeatureBox>
-   * * <MiniMap>
-   * * <StatusPanel>
-   * * <ControlPanel>
+   * main view with all interaction elements
    */
   var UI = Backbone.View.extend({
 
@@ -230,6 +225,11 @@ define([
       this.miniMap.toggle();
     },
 
+    /**
+     * Method: showBuffles
+     *
+     * shows top and bottom Buffles
+     */
     showBuffles: function(){
       var fadeDuration = 450;
       $('#topBaffle').animate({ height: 47, duration: fadeDuration });
@@ -238,6 +238,11 @@ define([
       $('#bottomBaffle').fadeIn(fadeDuration);
     },
 
+    /**
+     * Method: hideBuffles
+     *
+     * hides and bottom Buffles
+     */
     hideBuffles: function(){
       var fadeDuration = 450;
       $('#topBaffle').animate({ height: 0, duration: fadeDuration });
@@ -273,9 +278,9 @@ define([
     createSearch: function(event) {
       event.preventDefault();
       var query = event.target.query.value;
-      var index = this.world.addFeed(new SearchFeed({ query: query, extent: this.map.frame.getExtent() }), true);
+      var searchFeed = new SearchFeed({ query: query, extent: this.map.frame.getExtent() });
+      var index = this.world.addFeed(searchFeed, true);
     }
-
   });
 
   return UI;

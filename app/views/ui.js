@@ -2,7 +2,6 @@ define([
   'backbone',
   'ender',
   'geofeeds/search',
-  'views/panels',
   'views/statusPanel',
   'views/sideBar',
   'views/box/featureBox',
@@ -11,7 +10,7 @@ define([
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails'
-], function(Backbone, $, SearchFeed, panels, StatusPanel, SideBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, SearchFeed, StatusPanel, SideBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI

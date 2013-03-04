@@ -2,10 +2,9 @@ define([
   'backbone',
   'modestmaps',
   'templateMap',
-  'views/panels',
   'views/contextMenu',
   'views/map/overlay',
-], function(Backbone, MM, templates, panels, ContextMenu, Overlay) {
+], function(Backbone, MM, templates, ContextMenu, Overlay) {
 
   /* Class: Map
    *

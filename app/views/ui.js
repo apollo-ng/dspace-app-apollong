@@ -3,13 +3,14 @@ define([
   'ender',
   'views/panels',
   'views/statusPanel',
+  'views/sideBar',
   'views/box/featureBox',
   'views/map/map',
   'views/map/miniMap',
   'views/modal/userOptions',
   'views/modal/overlayManager',
-  'views/modal/featureDetails',
-], function(Backbone, $, panels, StatusPanel, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+  'views/modal/featureDetails'
+], function(Backbone, $, panels, StatusPanel, SideBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -125,7 +126,7 @@ define([
       /**
        * Property: sideBar
        */
-      this.sideBar = new panels.SideBar();
+      this.sideBar = new SideBar();
     },
 
     /**
@@ -149,8 +150,6 @@ define([
       this.controlPanel.visible = true;
 
       this.sideBar.render();
-      this.sideBar.visible = true;
-
     },
 
     /**

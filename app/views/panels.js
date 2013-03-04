@@ -1,7 +1,7 @@
 define([
   'ender',
   'backbone',
-  'templateMap',
+  'templateMap'
 ], function($, Backbone, templates) {
 
   /**
@@ -116,33 +116,6 @@ define([
       render: function() {
         this.$el.html(this.template());
       },
-    }),
-
-    /**
-     * Class: SideBar
-     *
-     * UI element for Sidebar
-     *
-     * (see overlaysPanel.png)
-     */
-    SideBar: BasePanel.extend({
-
-      el: '#sidebar',
-      fadeDuration: 450,
-
-      showFX: function(){
-        this.$el.animate({ width: 245, duration: this.fadeDuration });
-        this.$el.fadeIn(this.fadeDuration);
-        this.visible = true;
-
-      },
-
-      hideFX: function(){
-        var self = this;
-        this.$el.animate({ width: 0, duration: this.fadeDuration });
-        this.$el.fadeOut(this.fadeDuration);
-        this.visible = false;
-      }
     }),
   };
 });

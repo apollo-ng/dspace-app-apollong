@@ -172,6 +172,8 @@ define([
      */
     newFeature: function(location){
       var feature = new Feature();
+      var properties = {type: "", title: "", description: ""};
+      feature.set('properties', properties);
       feature.setLatLon(location.lat, location.lon);
       return feature;
     },

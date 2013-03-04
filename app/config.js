@@ -13,12 +13,9 @@ define([], function() {
      * initial set for populating <FeatureCollection>s
      */
     geoFeeds: [
-      { name: 'Hackerspaces Munich', url: '/examples/geodata/hackerspaces-munich.json', type: 'CORS'},
-      { name: 'Pools', url: '/examples/geodata/pools-munich.json', type: 'CORS'},
-      { name: 'Hackerspaces', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},
+      { name: 'Hackerspaces (SpaceAPI)', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},
+      { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'CORS'},
       { name: 'test', type: 'remoteStorage' },
-      // { hub: 'open-resource.org', type: 'DSNP'},
-      //{ name: 'test', user: 'nil@heahdk.net', type: 'remoteStorage' }
     ],
 
     /**

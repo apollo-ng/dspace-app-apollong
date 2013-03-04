@@ -3,8 +3,9 @@ define([
   'modestmaps',
   'templateMap',
   'views/panels',
+  'views/contextMenu',
   'views/map/overlay',
-], function(Backbone, MM, templates, panels, Overlay) {
+], function(Backbone, MM, templates, panels, ContextMenu, Overlay) {
 
   /* Class: Map
    *
@@ -31,8 +32,8 @@ define([
      * * click hides ContextPanel
      */
     events: {
-      "click": "hideContextPanel",
-      "contextmenu": "showContextPanel",
+      "click": "hideContextMenu",
+      "contextmenu": "showContextMenu",
       'click .markerimage': 'showFeature'
     },
 
@@ -69,24 +70,24 @@ define([
       }.bind(this));
 
       /**
-       * contextPanel for right-click / longpress
+       * contextMenu for right-click / longpress
        */
-      this.contextPanel = new panels.MapContext({ map: this });
+      this.contextMenu = new ContextMenu({ map: this });
 
-      this.contextPanel.on('command:add-feature', function(point) {
+      this.contextMenu.on('command:add-feature', function(point) {
         var location = this.frame.pointLocation(point);
         this.aether.trigger('feature:new', location);
       }.bind(this));
 
-      this.contextPanel.on('command:recenter-here', function(point) {
+      this.contextMenu.on('command:recenter-here', function(point) {
         this.frame.setCenter(this.frame.pointLocation(point));
       }.bind(this));
 
-      this.contextPanel.on('command:where-am-i', function() {
+      this.contextMenu.on('command:where-am-i', function() {
         this.frame.setCenter(this.world.user.getLocation());
       }.bind(this));
 
-      this.contextPanel.on('command:set-my-location', function(point) {
+      this.contextMenu.on('command:set-my-location', function(point) {
         // Stop the Geolocation watcher (device.js: unwatch)
 
         var loc = this.frame.pointLocation(point);
@@ -98,22 +99,6 @@ define([
       this.world.on('add-feed', this.addOverlay.bind(this));
       this.world.on('remove-feed', this.removeOverlay.bind(this));
 
-    },
-
-    /**
-     * Method: hideContextPanel
-     * Failsafe: A click on the map should clear all modal/context windows
-     */
-    hideContextPanel: function () {
-      this.contextPanel.hide();
-    },
-
-    /**
-     * Method: showContextPanel
-     *  Map right-click/long touch context menu
-     */
-    showContextPanel: function (event) {
-      this.contextPanel.show(event);
     },
 
     /**
@@ -143,14 +128,31 @@ define([
        * need frame
        */
       this.world.user.feed.collection.on( 'change:geometry', function( e ){
-        if( e.id == 'avatar' ) {
-	        this.userLayer.render( );
-	      }
+        if( e.id === 'avatar' ) {
+          this.userLayer.render( );
+        }
       }.bind(this));
 
 
 
     },
+
+    /**
+     * Method: hideContextMenu
+     * Failsafe: A click on the map should clear all modal/context windows
+     */
+    hideContextMenu: function () {
+      this.contextMenu.hide();
+    },
+
+    /**
+     * Method: showContextMenu
+     *  Map right-click/long touch context menu
+     */
+    showContextMenu: function (event) {
+      this.contextMenu.show(event);
+    },
+
     /**
      * Method: addOverlay
      * gets a feed object with instantiated collection
@@ -166,7 +168,7 @@ define([
       return overlay;
     },
 
-	/**
+     /**
      * Method: removeOverlay
      * removes Overlay specified by index
      * returns overlay

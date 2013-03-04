@@ -119,11 +119,6 @@ define([
       this.statusPanel = new StatusPanel({model: this.world, ui: this});
 
       /**
-       * Property: controlPanel
-       */
-      this.controlPanel = new panels.Control({world: this.world });
-
-      /**
        * Property: sideBar
        */
       this.sideBar = new SideBar();
@@ -144,8 +139,6 @@ define([
       this.miniMap.visible = true;
 
       this.statusPanel.render();
-      this.controlPanel.render();
-      this.sideBar.render();
     },
 
     /**

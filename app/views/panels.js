@@ -94,28 +94,6 @@ define([
       hideFX: function(){
         this.$el.fadeOut(350, this.$el.hide.bind(this.$el));
       }
-    }),
-
-    /**
-     * Class: ControlPanel
-     *
-     * UI element to show map controls
-     *
-     * (see controlPanel.png)
-     */
-    Control: Backbone.View.extend({
-
-      el: '#controlPanel',
-      template: templates.controlPanel,
-
-      initialize: function() {
-        this.world = this.options.world;
-        this.render();
-      },
-
-      render: function() {
-        this.$el.html(this.template());
-      },
-    }),
+    })
   };
 });

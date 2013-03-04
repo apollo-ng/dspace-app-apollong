@@ -5,48 +5,6 @@ define([
   'views/panels',
   'views/map/overlay',
 ], function(Backbone, MM, templates, panels, Overlay) {
-  /**
-   * Class: MapContext
-   *
-   * map Context menu
-   *
-   * (see mapContext.png)
-   */
-  var MapContext = panels.Base.extend({
-
-    el: '#mapContext',
-    template: templates.mapContext,
-
-    events: {
-      'click *[data-command]': 'callCommand',
-    },
-
-    initialize: function() {
-      this.render();
-    },
-
-    callCommand: function(event) {
-      var item = this.$(event.target);
-      this.trigger('command:' + item.attr('data-command'), this.point);
-      this.hide();
-    },
-
-    render: function() {
-      this.$el.html(this.template());
-      return this.el;
-    },
-
-    showFX: function(event){
-      this.point = { x: event.clientX, y: event.clientY };
-      this.$el.css( { 'left': this.point.x, 'top': this.point.y });
-      this.$el.css( { 'display': 'block'});
-      this.$el.fadeIn(350);
-    },
-
-    hideFX: function(){
-      this.$el.fadeOut(350, this.$el.hide.bind(this.$el));
-    }
-  });
 
   /* Class: Map
    *
@@ -113,7 +71,7 @@ define([
       /**
        * contextPanel for right-click / longpress
        */
-      this.contextPanel = new MapContext({ map: this });
+      this.contextPanel = new panels.MapContext({ map: this });
 
       this.contextPanel.on('command:add-feature', function(point) {
         var location = this.frame.pointLocation(point);

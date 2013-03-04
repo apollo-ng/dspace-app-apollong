@@ -4,9 +4,8 @@ define([
   'backbone',
   'models/feature',
   'views/modal/base',
-  'templateMap',
-  'template/helpers/renderPos'
-], function(_, $, Backbone, Feature, BaseModal, templates, renderPos) {
+  'templateMap'
+], function(_, $, Backbone, Feature, BaseModal, templates) {
 
   /**
    * Class: Modal.AddFeature
@@ -48,7 +47,7 @@ define([
         console.error("No command handler installed for: ", command);
       }
     },
-    
+
     updateInputs: function() {
       var properties = this.model.get('properties');
       this.findInput('properties.title').val(properties.title);

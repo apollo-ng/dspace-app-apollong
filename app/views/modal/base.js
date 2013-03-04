@@ -24,6 +24,5 @@ define([
     hide: function(){
       this.$el.fadeOut(350, function(){ this.$el.hide(); }.bind(this));
     }
-
   });
 });

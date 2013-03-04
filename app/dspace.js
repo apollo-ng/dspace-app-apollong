@@ -28,6 +28,5 @@ define([
       this.ui = new UI({ world: this.world });
       this.ui.render();
     }
-
   });
 });

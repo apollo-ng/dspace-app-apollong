@@ -39,7 +39,7 @@ define([
      * delegting DOM events on UI
      */
     events: {
-        'click #toggleFeatureBox': 'toggleFeatureBox'
+        'click #toggleSideBar': 'toggleSideBar'
       , 'click #toggleMiniMap': 'toggleMiniMap'
       , 'click #toggleFullscreen': 'toggleFullscreen'
       , 'click #addOverlay': 'showOverlaysManager'
@@ -212,8 +212,8 @@ define([
      *
      * toggles <FeatureBox>
      */
-    toggleFeatureBox: function() {
-      this.featureBox.toggle();
+    toggleSideBar: function() {
+      this.sideBar.toggle();
     },
 
     /**

@@ -73,6 +73,8 @@ define([
      * Method: renderPositions
      *
      * rerender everything that can change with a moving user
+     *
+     * FIXME: tidy up!
      */
     renderPositions: function() {
       this.$('*[data-format=position]').forEach(function(e) {

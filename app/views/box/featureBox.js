@@ -191,29 +191,6 @@ define([
         currentTab.tab.addClass('active');
         this.currentTabIndex = index;
         this.trigger('change-tab', this.featureTabs[index].collection);
-      },
-
-      // no-doc
-      show: function(){
-        this.$el.animate({ top: 0, duration: 700  });
-        this.$el.fadeIn(600);
-        this.visible = true;
-      },
-
-      // no-doc
-      hide: function(){
-        // FIXME: use $el height for the animation instead of fixed value
-        this.$el.animate({ top: -400, duration: 700 });
-        this.$el.fadeOut(600);
-        this.visible = false;
-      },
-
-      toggle: function(){
-        if(this.visible){
-          this.hide();
-        } else {
-          this.show();
-        }
       }
     });
 

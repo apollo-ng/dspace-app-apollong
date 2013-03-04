@@ -111,9 +111,6 @@ define([
         model: feature,
         aether: this.aether
       });
-      featureBoxItem.on('selected', function() {
-        this.aether.trigger('select-feature', feature);
-      }.bind(this));
       var renderedTemplate = featureBoxItem.render();
       this.itemWrapper.append(renderedTemplate);
     },

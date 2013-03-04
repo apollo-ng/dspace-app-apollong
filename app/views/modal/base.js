@@ -9,8 +9,11 @@ define([
   return panels.Base.extend({
     el: '#modal',
 
+    data: {},
+
     render: function() {
-      this.$el.find('#modal-content').html(this.template());
+      var content = this.template(this.data);
+      this.$el.find('#modal-content').html(content);
     },
 
     showFX: function(){

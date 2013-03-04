@@ -97,13 +97,6 @@ define([
       this.world = this.options.world;
 
       /**
-       * Property: dspace
-       *
-       * reference to the global Backbone.Router called <DSpace>
-       */
-      this.dspace = this.options.dspace;
-
-      /**
        * Property: aether
        *
        * event aggregator from <World>
@@ -112,25 +105,22 @@ define([
 
 
       /**
-       * Event: feature:current
+       * Event: feature:focus
        *
-       * jumps map to feature set to current
+       * listens on <aether> and jumps map to feature in focus
        */
-      this.aether.on('select-feature', function( feature ){
-        var id = feature.get('id');
-        this.dspace.updateState({
-          feature: id,
-          modal: undefined
-        });
-        
-        //if(this.world.get('currentFeatureId') === id) {
-        //  this.map.jumpToFeature(feature);
-        //}
-        
+      this.aether.on('feature:focus', function( feature ){
         this.map.jumpToFeature(feature);
       }.bind(this));
 
-
+      this.aether.on('feature:uuid:show', function(uuid){
+        var feature = this.world.getFeature(uuid);
+        if(feature) {
+          console.log(feature);
+          this.modal = new FeatureDetails({ feature: feature });
+          this.modal.show();
+        }
+      }.bind(this));
 
       /**
        * Property: map
@@ -141,7 +131,7 @@ define([
        * used to jump <Map>
        */
 
-      this.map = new Map({ world: this.world, dspace: this.dspace });
+      this.map = new Map({ world: this.world });
 
       /**
        * Property: featureBox
@@ -342,26 +332,6 @@ define([
       }
     },
 
-    hideFeatureDetails: function() {
-      if(this.featureDetails) {
-        this.featureDetails.hide();
-        delete this.featureDetails;
-      }
-    },
-
-    showFeatureDetails: function() {
-      if(this.featureDetails) {
-        return;
-      }
-      var feature = this.world.getCurrentFeature();
-      if(feature) {
-        this.featureDetails = new FeatureDetails({
-          feature: feature
-        });
-        this.featureDetails.show();
-      }
-    },
-
     newFeature: function(point) {
       this.modal = new AddFeature();
       //this.modal.setCollection(this.featureBox.getCurrentCollection());
@@ -388,7 +358,6 @@ define([
         this.fullScreen = true;
       }
     }
-
   });
 
   return UI;

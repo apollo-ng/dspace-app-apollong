@@ -12,19 +12,10 @@ define([
 
     template: templates.featureDetails,
 
-    events: {
-      'click *[data-command=close]': 'close'
-    },
-
     initialize: function(options) {
-      this.feature = options.feature.toJSON();
-      _.extend(this, options.feature.getLatLon());
-    },
-
-    close: function() {
-      this.trigger('close');
+      this.data.feature = options.feature.toJSON();
+      _.extend(this.data, options.feature.getLatLon());
     }
-
   });
 
   return FeatureDetails;

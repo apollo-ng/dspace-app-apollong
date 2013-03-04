@@ -40,7 +40,6 @@ define([
      * (end code)
      */
     initialize: function(  ){
-      var self = this;
       this.config = this.get('config');
 
       this.user = this.setupUser(this.config.user);
@@ -55,7 +54,6 @@ define([
       this.createFeeds(this.config.geoFeeds);
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);
-
 
       this.user.on('change', function() {
         this.aether.trigger('user:change', this.user);
@@ -154,11 +152,8 @@ define([
       }.bind(this));
     },
 
-    getCurrentFeature: function() {
-      var id = this.get('currentFeatureId');
-      if(id) {
-        return this.featureIndex[id];
-      }
+    getFeature: function(uuid) {
+      return this.featureIndex[uuid];
     },
 
     createFeed: function(feed) {

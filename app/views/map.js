@@ -82,7 +82,7 @@ define([
     events: {
       "click": "hideContextPanel",
       "contextmenu": "showContextPanel",
-      'click .markerimage': 'showFeatureDetails'
+      'click .markerimage': 'showFeature'
     },
 
     /**
@@ -96,10 +96,8 @@ define([
     initialize: function( options ){
 
       this.world = this.options.world;
-      this.dspace = this.options.dspace;
+      this.aether = this.world.aether;
       this.config = this.world.config.map;
-
-      var self = this;
 
       /**
        * Event: world:mapCenter
@@ -341,11 +339,8 @@ define([
         .zoom(this.config.maxZoom).optimal();
     },
 
-    showFeatureDetails: function(event){
-      this.dspace.updateState({
-        feature: event.target.id,
-        modal: 'featureDetails'
-      });
+    showFeature: function(event){
+      this.aether.trigger('feature:uuid:show', event.target.id);
     }
   });
 

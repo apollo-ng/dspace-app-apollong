@@ -4,13 +4,14 @@ define([
   'geofeeds/search',
   'views/statusPanel',
   'views/sideBar',
+  'views/widgetModal',
   'views/box/featureBox',
   'views/map/map',
   'views/map/miniMap',
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails'
-], function(Backbone, $, SearchFeed, StatusPanel, SideBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, SearchFeed, StatusPanel, SideBar, WidgetModal, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -46,6 +47,7 @@ define([
       , 'click #userOptions': 'showUserOptions'
       , 'click #modal-close': 'closeModal'
       , 'submit #searchForm': 'createSearch'
+      , 'contextmenu #widgetBar': 'toggleWidgetModal'
     },
 
     /**
@@ -118,6 +120,11 @@ define([
        * Property: sideBar
        */
       this.sideBar = new SideBar();
+
+      /**
+       * Property: widgetModal
+       */
+      this.widgetModal = new WidgetModal();
     },
 
     /**
@@ -268,6 +275,15 @@ define([
         this.sideBar.hide();
         this.fullScreen = true;
       }
+    },
+
+    /**
+     * Method: toggleWidgetModal
+     *
+     * toggles <WidgetModal>
+     */
+    toggleWidgetModal: function(){
+      this.widgetModal.toggle();
     },
 
     /**

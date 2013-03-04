@@ -99,19 +99,6 @@ define([
     },
 
     /**
-     *  help the system making decisions based
-     *  on the user's mode of movement
-     */
-
-    userModeWalk: function(event) {
-      this.world.user.save( { 'usermode' : 'walk' } );
-    },
-
-    userModeDrive: function(event) {
-      this.world.user.save( { 'usermode' : 'drive' } );
-    },
-
-    /**
      * sets map.lat and map.lon for template
      */
     render: function(){
@@ -122,4 +109,4 @@ define([
   });
 
   return StatusPanel;
-})
+});

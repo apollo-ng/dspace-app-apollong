@@ -7,6 +7,8 @@ define([
   /**
    * Class: DSpace
    *
+   * "The map is not the territory" - Alfred Korzybski
+   *
    * DSpace connects the <World> with the <UI>.
    *
    * FIXME: possibly remove router

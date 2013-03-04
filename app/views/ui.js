@@ -78,8 +78,8 @@ define([
         'click #toggleFeatureBox': 'boxToggle'
       , 'click #toggleMiniMap': 'miniMapToggle'
       , 'click #toggleFullscreen': 'fullscreenToggle'
-      , 'click #addOverlay': 'toggleOverlaysManager'
-      , 'click #userOptions': 'toggleUserOptions'
+      , 'click #addOverlay': 'showOverlaysManager'
+      , 'click #userOptions': 'showUserOptions'
       , 'click #modal-close': 'closeModal'
     },
 
@@ -113,6 +113,11 @@ define([
         this.map.jumpToFeature(feature);
       }.bind(this));
 
+      /**
+       * Event: feature:uuid:show
+       *
+       * listens on <aether> and show details of feature with given uuid
+       */
       this.aether.on('feature:uuid:show', function(uuid){
         var feature = this.world.getFeature(uuid);
         if(feature) {
@@ -120,6 +125,13 @@ define([
           this.modal = new FeatureDetails({ feature: feature });
           this.modal.show();
         }
+      }.bind(this));
+
+      this.aether.on('feature:new', function(location){
+        var feature = this.world.newFeature(location);
+        console.log(feature);
+        this.modal = new FeatureDetails({ feature: feature });
+        this.modal.show();
       }.bind(this));
 
       /**
@@ -160,18 +172,7 @@ define([
        */
       this.sideBar = new panels.SideBar();
 
-      this.world.on('change:currentFeatureId', function() {
-        var feature = this.world.getCurrentFeature();
-        
-        //disabled jumps for clicks on the map for now
-        //FIXME: this is not the right place to do that.
-        //Rethink on what events we actually want to move the map
-       
-        //if(feature) {
-        // this.map.jumpToFeature(feature);
-        //}
-      }.bind(this));
-
+      // FIXME: move to extension
       function setupRemoteStorage() {
         remoteStorage.util.silenceAllLoggers();
         if(this.world.user.get('remoteStorage')) {
@@ -189,28 +190,6 @@ define([
 
       this.world.user.on('change:remoteStorage', setupRemoteStorage.bind(this));
       setupRemoteStorage.apply(this, []);
-    },
-
-    modals: {
-
-      'userOptions': function() {
-        this.modal = new UserOptions({
-          user: this.world.user,
-          aether: this.aether
-        });
-        this.modal.show();
-      },
-
-      'featureDetails': function() {
-        var feature = this.world.getCurrentFeature();
-        if(feature) {
-          this.modal = new FeatureDetails({
-            feature: feature
-          });
-          this.modal.show();
-        } else {
-        }
-      }
     },
 
     /**
@@ -264,7 +243,6 @@ define([
       if(this.modal) {
         this.stopListening(this.modal);
         delete this.modal;
-        delete this.modalName;
       }
     },
 
@@ -289,9 +267,9 @@ define([
     /**
      * Method: toggleOverlaysManager
      *
-     * toggles <OverlaysManager>
+     * displays <OverlaysManager> modal
      */
-    toggleOverlaysManager: function(){
+    showOverlaysManager: function(){
       this.modal = new OverlayManager();
       this.modal.show();
     },
@@ -299,42 +277,10 @@ define([
     /**
      * Method: toggleUserOptions
      *
-     * toggles <Modal.UserOptions> using <showUserOptions>/<hideUserOptions>
-     */
-    toggleUserOptions: function() {
-      this.modal = new UserOptions({user: this.world.user, aether: this.aether});
-      this.modal.render();
-      this.modal.show();
-    },
-
-    /**
-     * Method: hideUserOptions
-     *
-     * Hides the <Modal.UserOptions> view and cleans up it's reference.
-     *
-     */
-    hideUserOptions: function() {
-      if(! this.userOptions) {
-        return;
-      }
-      this.userOptions.hide();
-      delete this.userOptions;
-    },
-
-    /**
-     * Method: showUserOptions
-     *
-     * Creates a <Modal.UserOptions> view and displays it.
+     * shows <UserOptions> modal 
      */
     showUserOptions: function() {
-      if(this.userOptions) {
-        return;
-      }
-    },
-
-    newFeature: function(point) {
-      this.modal = new AddFeature();
-      //this.modal.setCollection(this.featureBox.getCurrentCollection());
+      this.modal = new UserOptions({user: this.world.user, aether: this.aether});
       this.modal.show();
     },
 

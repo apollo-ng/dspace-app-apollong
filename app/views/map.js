@@ -123,12 +123,8 @@ define([
       this.contextPanel = new MapContext({ map: this });
 
       this.contextPanel.on('command:add-feature', function(point) {
-        this.dspace.ui.newFeature(this.frame.pointLocation(point));
-
-        // var location = this.frame.pointLocation(point);
-        // var dialog = new AddFeature(location, { aether: this.world.aether });
-        // dialog.render();
-        // dialog.show();
+        var location = this.frame.pointLocation(point);
+        this.aether.trigger('feature:new', location);
       }.bind(this));
 
       this.contextPanel.on('command:recenter-here', function(point) {
@@ -149,7 +145,7 @@ define([
       }.bind(this));
 
       this.world.on('add-feed', this.addOverlay.bind(this));
-      this.world.on('remove-feed', this.removeOverlay.bind(this))
+      this.world.on('remove-feed', this.removeOverlay.bind(this));
 
     },
 

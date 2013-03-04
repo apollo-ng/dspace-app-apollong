@@ -13,7 +13,7 @@ define([
   var MapContext = Backbone.View.extend({
 
     el: '#mapContext',
-    template: templates.contextMenu,
+    template: templates.mapContext,
 
     events: {
       'click *[data-command]': 'callCommand',

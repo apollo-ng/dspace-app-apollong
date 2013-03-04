@@ -1,5 +1,5 @@
 define([
-  'hbs!templates/contextMenu',
+  'hbs!templates/mapContext',
   'hbs!templates/featureBoxItem',
   'hbs!templates/featureInfoModal',
   'hbs!templates/userOptionModal',
@@ -8,10 +8,10 @@ define([
   'hbs!templates/featureDetails',
   'hbs!templates/featureBox',
   'hbs!templates/featureTab'
-], function(contextMenu, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, overlayManager, featureDetails, featureBox, featureTab) {
+], function(mapContext, featureBoxItem, featureInfoModal, userOptionModal, statusPanel, overlayManager, featureDetails, featureBox, featureTab) {
 
   return {
-    contextMenu: contextMenu,
+    mapContext: mapContext,
     featureBoxItem: featureBoxItem,
     featureInfoModal: featureInfoModal,
     userOptionModal: userOptionModal,

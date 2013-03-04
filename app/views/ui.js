@@ -2,13 +2,14 @@ define([
   'backbone',
   'ender',
   'views/panels',
+  'views/statusPanel',
   'views/box/featureBox',
   'views/map/map',
   'views/map/miniMap',
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails',
-], function(Backbone, $, panels, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, panels, StatusPanel, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -114,7 +115,7 @@ define([
       /**
        * Property: statusPanel
        */
-      this.statusPanel = new panels.Status({model: this.world, ui: this});
+      this.statusPanel = new StatusPanel({model: this.world, ui: this});
 
       /**
        * Property: controlPanel

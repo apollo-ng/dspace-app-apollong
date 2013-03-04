@@ -1,6 +1,7 @@
 define([
   'backbone',
   'ender',
+  'geofeeds/search',
   'views/panels',
   'views/statusPanel',
   'views/sideBar',
@@ -10,7 +11,7 @@ define([
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails'
-], function(Backbone, $, panels, StatusPanel, SideBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, SearchFeed, panels, StatusPanel, SideBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -50,6 +51,7 @@ define([
       , 'click #addOverlay': 'showOverlaysManager'
       , 'click #userOptions': 'showUserOptions'
       , 'click #modal-close': 'closeModal'
+      , 'submit #searchForm': 'createSearch'
     },
 
     /**
@@ -116,7 +118,7 @@ define([
       /**
        * Property: statusPanel
        */
-      this.statusPanel = new StatusPanel({model: this.world, ui: this});
+      this.statusPanel = new StatusPanel({world: this.world, ui: this});
 
       /**
        * Property: sideBar
@@ -262,7 +264,19 @@ define([
         this.sideBar.hide();
         this.fullScreen = true;
       }
+    },
+
+    /**
+     * Method: createSearch
+     *
+     * EXPERIMENTAL - may move to extension!
+     */
+    createSearch: function(event) {
+      event.preventDefault();
+      var query = event.target.query.value;
+      var index = this.world.addFeed(new SearchFeed({ query: query, extent: this.map.frame.getExtent() }), true);
     }
+
   });
 
   return UI;

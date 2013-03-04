@@ -13,7 +13,6 @@ define([], function() {
      * initial set for populating <FeatureCollection>s
      */
     geoFeeds: [
-      { name: 'OpenWiFi Munich', url: '/examples/geodata/openwifi-munich.json', type: 'CORS'},
       { name: 'Hackerspaces Munich', url: '/examples/geodata/hackerspaces-munich.json', type: 'CORS'},
       { name: 'Pools', url: '/examples/geodata/pools-munich.json', type: 'CORS'},
       { name: 'Hackerspaces', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},

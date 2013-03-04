@@ -1,12 +1,11 @@
 define([
   'ender',
   'backbone',
-  'geofeeds/search',
   'templateMap',
   'template/helpers/renderPos',
   'template/helpers/renderAcc',
   'template/helpers/ms2kmh',
-], function($, Backbone, SearchFeed, templates, renderPos, renderAcc, ms2kmh) {
+], function($, Backbone, templates, renderPos, renderAcc, ms2kmh) {
 
   /**
    * Class: StatusPanel
@@ -24,7 +23,6 @@ define([
 
     events: {
       'click #userGeoStatus': 'toggleGeoAPI',
-      'submit #searchForm': 'createSearch'
     },
 
     initialize: function() {
@@ -32,18 +30,12 @@ define([
       /**
        * Maedneasz: create konwienienz accessors
        */
-      this.world = this.model;
+      this.world = this.options.world;
       this.ui = this.options.ui;
 
       this.world.user.on('location-changed', this.updateUserLocation.bind(this));
       this.world.on('change', this.updateMapCenter.bind(this));
 
-    },
-
-    createSearch: function(event) {
-      event.preventDefault();
-      var query = event.target.query.value;
-      var index = this.world.addFeed(new SearchFeed({ query: query, extent: this.ui.map.frame.getExtent() }), true);
     },
 
     toggleGeoAPI: function() {

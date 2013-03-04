@@ -4,13 +4,13 @@ define([
 ], function(Backbone, templates) {
 
   /**
-   * Class: ContextMenu
+   * Class: MapContext
    *
    * map Context menu
    *
    * (see mapContext.png)
    */
-  var ContextMenu = Backbone.View.extend({
+  var MapContext = Backbone.View.extend({
 
     el: '#mapContext',
     template: templates.contextMenu,
@@ -46,5 +46,5 @@ define([
     }
   });
 
-  return ContextMenu;
+  return MapContext;
 });

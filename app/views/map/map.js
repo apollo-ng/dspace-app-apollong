@@ -2,9 +2,9 @@ define([
   'backbone',
   'modestmaps',
   'templateMap',
-  'views/contextMenu',
+  'views/map/mapContext',
   'views/map/overlay',
-], function(Backbone, MM, templates, ContextMenu, Overlay) {
+], function(Backbone, MM, templates, MapContext, Overlay) {
 
   /* Class: Map
    *
@@ -31,8 +31,8 @@ define([
      * * click hides ContextPanel
      */
     events: {
-      "click": "hideContextMenu",
-      "contextmenu": "showContextMenu",
+      "click": "hideMapContext",
+      "contextmenu": "showMapContext",
       'click .markerimage': 'showFeature'
     },
 
@@ -69,24 +69,24 @@ define([
       }.bind(this));
 
       /**
-       * contextMenu for right-click / longpress
+       * mapContext for right-click / longpress
        */
-      this.contextMenu = new ContextMenu({ map: this });
+      this.mapContext = new MapContext({ map: this });
 
-      this.contextMenu.on('command:add-feature', function(point) {
+      this.mapContext.on('command:add-feature', function(point) {
         var location = this.frame.pointLocation(point);
         this.aether.trigger('feature:new', location);
       }.bind(this));
 
-      this.contextMenu.on('command:recenter-here', function(point) {
+      this.mapContext.on('command:recenter-here', function(point) {
         this.frame.setCenter(this.frame.pointLocation(point));
       }.bind(this));
 
-      this.contextMenu.on('command:where-am-i', function() {
+      this.mapContext.on('command:where-am-i', function() {
         this.frame.setCenter(this.world.user.getLocation());
       }.bind(this));
 
-      this.contextMenu.on('command:set-my-location', function(point) {
+      this.mapContext.on('command:set-my-location', function(point) {
         // Stop the Geolocation watcher (device.js: unwatch)
 
         var loc = this.frame.pointLocation(point);
@@ -137,19 +137,19 @@ define([
     },
 
     /**
-     * Method: hideContextMenu
+     * Method: hideMapContext
      * Failsafe: A click on the map should clear all modal/context windows
      */
-    hideContextMenu: function () {
-      this.contextMenu.hide();
+    hideMapContext: function () {
+      this.mapContext.hide();
     },
 
     /**
-     * Method: showContextMenu
+     * Method: showMapContext
      *  Map right-click/long touch context menu
      */
-    showContextMenu: function (event) {
-      this.contextMenu.show(event);
+    showMapContext: function (event) {
+      this.mapContext.show(event);
     },
 
     /**

@@ -1,10 +1,9 @@
 define([
   'ender',
   'backbone',
-  'views/panels',
   'views/box/featureTab',
   'templateMap'
-], function($, Backbone, panels, FeatureTab, templates) {
+], function($, Backbone, FeatureTab, templates) {
     /**
      * Class: FeatureBox
      *
@@ -14,7 +13,7 @@ define([
      *
      * (see featureBox.png)
      */
-    var FeatureBox = panels.Base.extend({
+    var FeatureBox = Backbone.View.extend({
 
       /**
        * Property: el
@@ -195,16 +194,26 @@ define([
       },
 
       // no-doc
-      showFX: function(){
+      show: function(){
         this.$el.animate({ top: 0, duration: 700  });
         this.$el.fadeIn(600);
+        this.visible = true;
       },
 
       // no-doc
-      hideFX: function(){
+      hide: function(){
         // FIXME: use $el height for the animation instead of fixed value
         this.$el.animate({ top: -400, duration: 700 });
         this.$el.fadeOut(600);
+        this.visible = false;
+      },
+
+      toggle: function(){
+        if(this.visible){
+          this.hide();
+        } else {
+          this.show();
+        }
       }
     });
 

@@ -3,8 +3,7 @@ define([
   'ender',
   'modestmaps',
   'easey_handlers',
-  'views/panels'
-], function(Backbone, $, MM, easey_handlers, panels) {
+], function(Backbone, $, MM, easey_handlers) {
 
   /**
    * Class: MiniMap
@@ -13,7 +12,7 @@ define([
    *
    * (see minimap.png)
    */
-  var MiniMap = panels.Base.extend({
+  var MiniMap = Backbone.View.extend({
 
     el: '#miniMap',
     frameId: 'miniMap',
@@ -129,22 +128,31 @@ define([
     },
 
     /**
-     * Method: showFX
+     * Method: show
      * do a fancy minimap fade-in animation.
      */
-    showFX: function(){
+    show: function(){
       this.$el.animate({ height: 178, duration: this.fadeDuration });
       this.$el.fadeIn(this.fadeDuration);
+      this.visible = true;
     },
 
     /**
-     * Method: hideFx
+     * Method: hide
      * do a fancy minimap fade-out animation.
      */
-    hideFX: function(){
+    hide: function(){
       this.$el.animate({ height: 0, duration: this.fadeDuration });
       this.$el.fadeOut(this.fadeDuration);
+      this.visible = false;
+    },
 
+    toggle: function(){
+      if(this.visible){
+        this.hide();
+      } else {
+        this.show();
+      }
     },
 
     /**

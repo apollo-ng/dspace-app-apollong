@@ -2,14 +2,12 @@ define([
   'backbone',
   'ender',
   'views/panels',
-  'views/featureBox',
-  'views/map',
-  'views/miniMap',
+  'views/box/featureBox',
+  'views/map/map',
+  'views/map/miniMap',
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails',
-  'views/modal/addFeature',
-  'template/helpers/renderPos'
 ], function(Backbone, $, panels, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**

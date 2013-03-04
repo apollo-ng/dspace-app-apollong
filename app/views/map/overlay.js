@@ -1,4 +1,9 @@
-define(['backbone', 'markers', 'views/marker', 'templateMap'], function(Backbone, markers, Marker, templates) {
+define([
+  'backbone',
+  'markers',
+  'views/map/marker',
+  'templateMap'
+], function(Backbone, markers, Marker, templates) {
 
   /**
    * Class: Overlay

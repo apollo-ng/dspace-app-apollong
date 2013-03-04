@@ -2,7 +2,7 @@ define([
   'ender',
   'backbone',
   'views/panels',
-  'views/featureTab',
+  'views/box/featureTab',
   'templateMap'
 ], function($, Backbone, panels, FeatureTab, templates) {
     /**

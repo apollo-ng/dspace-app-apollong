@@ -111,7 +111,6 @@ define([
 
       el: '#controlPanel',
       template: templates.controlPanel,
-      fadeDuration: 450,
 
       initialize: function() {
         this.world = this.options.world;
@@ -121,18 +120,6 @@ define([
       render: function() {
         this.$el.html(this.template());
       },
-
-      show: function() {
-       $('#bottomBaffle').animate({ height: 47, duration: this.fadeDuration });
-       $('#bottomBaffle').fadeIn(this.fadeDuration);
-      },
-
-      hide: function(){
-        var self = this;
-       $('#bottomBaffle').animate({ height: 0, duration: this.fadeDuration });
-       $('#bottomBaffle').fadeOut(this.fadeDuration);
-      },
-
     }),
 
 
@@ -176,7 +163,6 @@ define([
 
       el: '#statusPanel',
       template: templates.statusPanel,
-      fadeDuration: 450,
 
       events: {
         'click #userGeoStatus': 'toggleGeoAPI',
@@ -205,7 +191,7 @@ define([
 
       toggleGeoAPI: function() {
         // FIXME: userGeoStatus should be in the user model to have more flexible control over it
-        if (this.userGeoStatus == '1') {
+        if (this.userGeoStatus === '1') {
           this.world.user.feed.unwatch();
           this.userGeoStatus = 0;
           $('#userGeoStatus').removeClass('enabled');
@@ -256,18 +242,6 @@ define([
             this.$('[data-name=user-altitude]').html(this.world.user.feed.position.coords.altitude);
           }
         }
-      },
-
-
-      showFX: function() {
-        $('#topBaffle').animate({ height: 47, duration: this.fadeDuration });
-        $('#topBaffle').fadeIn(this.fadeDuration);
-      },
-
-      hideFX: function(){
-        var self = this;
-        $('#topBaffle').animate({ height: 0, duration: this.fadeDuration });
-        $('#topBaffle').fadeOut(this.fadeDuration);
       },
 
       /**

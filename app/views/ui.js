@@ -240,6 +240,22 @@ define([
       this.miniMap.toggle();
     },
 
+    showBuffles: function(){
+      var fadeDuration = 450;
+      $('#topBaffle').animate({ height: 47, duration: fadeDuration });
+      $('#topBaffle').fadeIn(fadeDuration);
+      $('#bottomBaffle').animate({ height: 47, duration: fadeDuration });
+      $('#bottomBaffle').fadeIn(fadeDuration);
+    },
+
+    hideBuffles: function(){
+      var fadeDuration = 450;
+      $('#topBaffle').animate({ height: 0, duration: fadeDuration });
+      $('#topBaffle').fadeOut(fadeDuration);
+      $('#bottomBaffle').animate({ height: 0, duration: fadeDuration });
+      $('#bottomBaffle').fadeOut(fadeDuration);
+    },
+
     /**
      * Method: toggleFullscreen
      *
@@ -248,14 +264,12 @@ define([
     toggleFullscreen: function() {
       if(this.fullScreen) {
         this.miniMap.show();
-        this.statusPanel.show();
-        this.controlPanel.show();
+        this.showBuffles();
         this.sideBar.show();
         this.fullScreen = false;
       } else {
         this.miniMap.hide();
-        this.statusPanel.hide();
-        this.controlPanel.hide();
+        this.hideBuffles();
         this.sideBar.hide();
         this.fullScreen = true;
       }

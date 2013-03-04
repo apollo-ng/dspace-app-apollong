@@ -1,7 +1,6 @@
 define([
   'backbone',
   'ender',
-  'remoteStorage',
   'views/panels',
   'views/featureBox',
   'views/map',
@@ -11,7 +10,7 @@ define([
   'views/modal/featureDetails',
   'views/modal/addFeature',
   'template/helpers/renderPos'
-], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, panels, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -128,25 +127,6 @@ define([
        * Property: sideBar
        */
       this.sideBar = new panels.SideBar();
-
-      // FIXME: move to extension
-      function setupRemoteStorage() {
-        remoteStorage.util.silenceAllLoggers();
-        if(this.world.user.get('remoteStorage')) {
-          $(document.body).prepend('<div id="remotestorage-connect"></div>');
-          remoteStorage.claimAccess('locations', 'rw').
-            then(function() {
-              remoteStorage.displayWidget('remotestorage-connect');
-              remoteStorage.schedule.disable();
-            });
-        } else {
-          $('#remotestorage-connect').remove();
-          remoteStorage.flushLocal();
-        }
-      }
-
-      this.world.user.on('change:remoteStorage', setupRemoteStorage.bind(this));
-      setupRemoteStorage.apply(this, []);
     },
 
     /**

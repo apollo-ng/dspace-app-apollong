@@ -4,3 +4,6 @@
 [submodule "pkgs/js/backbone-amd"]
 	path = pkgs/js/backbone-amd
 	url = https://github.com/nilclass/backbone-amd.git
+[submodule "pkgs/android/client"]
+	path = pkgs/android/client
+	url = https://github.com/apollo-ng/android.git

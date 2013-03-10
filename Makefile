@@ -21,12 +21,21 @@ MY_HASH:=$(shell git log | head -n1 | awk {'print $$2'})
 
 default: build
 
-android-debugapk: 
-	@install -d android
-	@cp -r pkgs/android/client/* android/
-	@cd android && $(ANDROID_BIN) update project -p . --subprojects -t $(ANDROID_API)
+
+android-debugapk: android-clean android-deps build
 	@cp -r build/* android/assets
 	@cd android && ant clean && ant debug
+android-deps: android/build.xml
+android-clean:
+	-rm -r android
+android/build.xml:
+	@git submodule init pkgs/android/client
+	@git submodule update pkgs/android/client
+	@install -d android
+	cp -r pkgs/android/client/* android
+	$(ANDROID_BIN) update project -p android/ --subprojects -t $(ANDROID_API)
+	#@cp -r pkgs/android/client/* android/
+
 
 build: deps
 	@echo -n "Build & minify dspace-client.js... "

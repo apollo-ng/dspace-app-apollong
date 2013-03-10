@@ -59,6 +59,15 @@ You need [naturaldocs](http://naturaldocs.org/) to build the docs:
 
     $ make doc
 
+#### Generate the Android App (optional)
+
+You need the android SDK [android-sdk-update-manager](https://developer.android.com/sdk/index.html) and a Java Compiler [ant]
+
+    $ make android-debugapk 
+
+You can set ANDROID path and API Version
+    $ make android-debugapk ANDROID_BIN=/home/dspace/android-sdk-linux/tools/android ANDROID_API=android-13
+
 #### Install Development- and Runtime Depenencies
 
     $ npm install

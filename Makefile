@@ -40,6 +40,7 @@ android/build.xml:
 
 build: deps
 	@echo -n "Build & minify dspace-client.js... "
+	@rm -r build/
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
 	@echo -n "Moving Assets... "
@@ -49,7 +50,6 @@ build: deps
 	@echo -n "Merging and compressing dspace-client.css... "
 	@cat assets/css/main.css > .tmp.css
 	@cat assets/css/ui.css >> .tmp.css
-	@rm -r build/
 	@install -d build/assets/css
 	@node_modules/.bin/csso -i .tmp.css -o build/assets/css/dspace-client.css	
 	@rm .tmp.css

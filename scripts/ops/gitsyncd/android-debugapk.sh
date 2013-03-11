@@ -29,6 +29,9 @@ git fetch
 git status -uno
 test=$(git status -uno | grep "can be fast-forwarded");
 if [[ "x$test" != "x" ]]; then
+  git config user.email "dspace@dspace.ruebezahl.cc"
+  git config user.name "dspace auto deploy"
+  git stash
   git pull
   npm install 
   make android-debugapk ANDROID_BIN=/home/dspace/android-sdk-linux/tools/android

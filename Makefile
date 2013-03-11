@@ -25,6 +25,9 @@ default: build
 android-debugapk: android-clean android-deps build
 	@cp -r build/* android/assets
 	@cd android && ant clean && ant debug
+	@install -d build/apk
+	@cp android/bin/*-debug.apk build/apk
+
 android-deps: android/build.xml
 android-clean:
 	-rm -r android
@@ -34,8 +37,6 @@ android/build.xml:
 	@install -d android
 	cp -r pkgs/android/client/* android
 	$(ANDROID_BIN) update project -p android/ --subprojects -t $(ANDROID_API)
-	#@cp -r pkgs/android/client/* android/
-
 
 build: deps
 	@echo -n "Build & minify dspace-client.js... "

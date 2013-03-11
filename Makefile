@@ -23,7 +23,7 @@ default: build
 
 
 android-debugapk: android-clean android-deps build
-	@cp -r build/* android/assets
+	@cp -r build/* android/assets/www
 	@cd android && ant clean && ant debug
 	@install -d build/apk
 	@cp android/bin/*-debug.apk build/apk

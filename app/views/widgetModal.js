@@ -2,7 +2,7 @@ define([
   'backbone',
   'remoteStorage',
   'hbs!templates/widgetModal'
-], function(Backbone, remoteStorage) {
+], function(Backbone, remoteStorage, widgetModalTemplate) {
 
   // SEE http://remotestoragejs.com/doc/code/files/lib/widget/default-js.html
   // FOR AN INCOMPLETE REFERENCE OF THE REMOTESTORAGE WIDGET VIEW API.
@@ -49,6 +49,8 @@ define([
    */
   return Backbone.View.extend({
     el: '#widgetModal',
+
+    template: widgetModalTemplate,
 
     events: {
       'submit #connect-form': 'connectStorage',

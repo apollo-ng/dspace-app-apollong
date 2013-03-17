@@ -1,0 +1,15 @@
+<h2>State: {{state}}</h2>
+{{#showForm}}
+<form id="connect-form">
+  User address:
+  <input style="border:groove 12px black; padding:4px;" type="email" name="userAddress">
+  <input style="border:groove 12px green; padding:4px;" type="submit" value="Connect">
+</form>
+{{/showForm}}
+
+{{#showSync}}
+<button data-command="sync" style="border:groove 12px green; padding:4px;">Sync</button>
+{{/showSync}}
+{{#showDisconnect}}
+  <button data-command="disconnect" style="border:groove 12px green; padding:4px;">Disconnect</button>
+{{/showDisconnect}}

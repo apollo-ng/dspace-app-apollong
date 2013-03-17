@@ -1,6 +1,7 @@
 define([
   'backbone',
-  'remoteStorage'
+  'remoteStorage',
+  'hbs!templates/widgetModal'
 ], function(Backbone, remoteStorage) {
 
   // SEE http://remotestoragejs.com/doc/code/files/lib/widget/default-js.html
@@ -49,7 +50,22 @@ define([
   return Backbone.View.extend({
     el: '#widgetModal',
 
+    initialize: function() {
+      widgetView.on('state', _.bind(this.refresh, this));
+    },
+
+    refresh: function() {
+      var state = widgetView.state;
+      this.$el.html(this.template({
+        state: state,
+        showForm: (state === 'initial' || state === 'typing'),
+        showSync: (state === 'connected'),
+        showDisconnect: (state === 'connected' || state === 'busy')
+      }));
+    },
+
     show: function(){
+      this.refresh();
       this.$el.css( { 'display': 'block'});
       this.$el.fadeIn(350);
       this.visible = true;

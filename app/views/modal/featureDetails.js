@@ -1,8 +1,10 @@
 define([
+  'underscore',
   'views/modal/base',
-  'templateMap',
+  'hbs!templates/featureDetails',
+  'hbs!templates/featureDetailsEdit'
   
-], function(BaseModal, templates) {
+], function(_, BaseModal, showTemplate, editTemplate) {
 
 
   /**
@@ -10,12 +12,45 @@ define([
    */
   var FeatureDetails = BaseModal.extend({
 
-    template: templates.featureDetails,
+    events: {
+      'click *[data-command="save"]': 'saveAction'
+    },
 
     initialize: function(options) {
-      this.data.feature = options.feature.toJSON();
-      _.extend(this.data, options.feature.getLatLon());
+      this.feature = options.feature;
+
+      // actual 'data' attribute (used by BaseModal) is generated dynamically.
+      this._data = {};
+
+      switch(options.mode) {
+      case 'new':
+        this._data.isNew = true;
+      case 'edit':
+        this.template = editTemplate;
+        break;
+      case 'show':
+      default:
+        this.template = showTemplate;
+      }
+
+      this.__defineGetter__('data', function() {
+        return _.extend(
+          { feature: options.feature.toJSON() },
+          this._data,
+          options.feature.getLatLon()
+        );
+      });
+    },
+
+    saveAction: function() {
+      var properties = {};
+      this.$('#feature-form input').forEach(function(input) {
+        properties[input.name] = input.value;
+      });
+      console.log('save', properties);
+      this.feature.save({ properties: properties });
     }
+
   });
 
   return FeatureDetails;

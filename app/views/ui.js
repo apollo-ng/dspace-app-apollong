@@ -177,7 +177,10 @@ define([
      */
     createFeature: function(location){
       var feature = this.world.newFeature(location);
-      this.modal = new FeatureDetails({ feature: feature });
+      this.modal = new FeatureDetails({
+        feature: feature,
+        mode: 'new'
+      });
       this.modal.show();
     },
 

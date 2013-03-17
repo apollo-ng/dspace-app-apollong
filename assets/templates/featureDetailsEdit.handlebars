@@ -1,0 +1,15 @@
+
+<h1>
+  {{#if isNew}}Create{{else}}Edit{{/if}} Feature: {{feature.properties.title}}
+</h1>
+<div data-format="position" data-lat="{{lat}}" data-lon="{{lon}}"></div>
+<button style="font-weight: bold; border:ridge 0.8em #ccf;" data-command="save">Save</button>
+<div class='featureDetails'>
+<form id="feature-form">
+{{#keyValue feature.properties}}
+<p>
+  <input style="border:ridge 0.76253em #f0f;" type="text" name="{{key}}" value="{{value}}" placeholder="{{key}}">
+</p>
+{{/keyValue}}
+</form>
+</div>

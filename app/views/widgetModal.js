@@ -18,6 +18,22 @@ define([
       console.log("REMOTESTORAGE STATE", state);
       this.state = state;
       this.emit('state', state);
+    },
+
+    redirectTo: function(url) {
+      document.location = url;
+    },
+
+    setUserAddress: function(userAddress) {
+      // TODO: implement this if necessary.
+    },
+
+    getLocation: function() {
+      return document.location.href;
+    },
+
+    setLocation: function(url) {
+      document.location = url;
     }
 
   }, events);

@@ -50,6 +50,12 @@ define([
   return Backbone.View.extend({
     el: '#widgetModal',
 
+    events: {
+      'submit #connect-form': 'connectStorage',
+      'click *[data-command="sync"]': 'syncCommand',
+      'click *[data-command="disconnect"]': 'disconnectCommand',
+    },
+
     initialize: function() {
       remoteStorage.claimAccess('locations', 'rw').
         then(function() {
@@ -57,6 +63,20 @@ define([
         });
 
       widgetView.on('state', _.bind(this.refresh, this));
+    },
+
+    connectStorage: function(event) {
+      event.preventDefault();
+      widgetView.emit('connect', event.target.userAddress.value);
+      return false;
+    },
+
+    syncCommand: function() {
+      widgetView.emit('sync');
+    },
+
+    disconnectCommand: function() {
+      widgetView.emit('disconnect');
     },
 
     refresh: function() {

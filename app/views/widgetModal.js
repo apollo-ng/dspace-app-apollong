@@ -51,6 +51,11 @@ define([
     el: '#widgetModal',
 
     initialize: function() {
+      remoteStorage.claimAccess('locations', 'rw').
+        then(function() {
+          remoteStorage.displayWidget();
+        });
+
       widgetView.on('state', _.bind(this.refresh, this));
     },
 

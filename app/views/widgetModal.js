@@ -3,7 +3,11 @@ define([
   'remoteStorage'
 ], function(Backbone, remoteStorage) {
 
-  var widgetView = {};
+  var events = remoteStorage.util.getEventEmitter(
+    'connect', 'disconnect', 'sync', 'reconnect'
+  );
+
+  var widgetView = remoteStorage.util.extend({}, events);
 
   remoteStorage.widget.setView(widgetView);
 

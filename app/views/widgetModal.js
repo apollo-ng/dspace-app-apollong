@@ -1,6 +1,11 @@
 define([
   'backbone',
-], function(Backbone) {
+  'remoteStorage'
+], function(Backbone, remoteStorage) {
+
+  var widgetView = {};
+
+  remoteStorage.widget.setView(widgetView);
 
   /**
    * Class: WidgetModal

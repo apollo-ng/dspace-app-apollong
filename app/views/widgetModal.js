@@ -3,6 +3,9 @@ define([
   'remoteStorage'
 ], function(Backbone, remoteStorage) {
 
+  // SEE http://remotestoragejs.com/doc/code/files/lib/widget/default-js.html
+  // FOR AN INCOMPLETE REFERENCE OF THE REMOTESTORAGE WIDGET VIEW API.
+
   var events = remoteStorage.util.getEventEmitter(
     'connect', 'disconnect', 'sync', 'reconnect',
     'state' // << used internally to link widgetView -> widgetModal

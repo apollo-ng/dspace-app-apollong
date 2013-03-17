@@ -4,10 +4,23 @@ define([
 ], function(Backbone, remoteStorage) {
 
   var events = remoteStorage.util.getEventEmitter(
-    'connect', 'disconnect', 'sync', 'reconnect'
+    'connect', 'disconnect', 'sync', 'reconnect',
+    'state' // << used internally to link widgetView -> widgetModal
   );
 
-  var widgetView = remoteStorage.util.extend({}, events);
+  var widgetView = remoteStorage.util.extend({
+    display: function() {
+      this.state = 'initial';
+    },
+
+    setState: function(state) {
+      // TODO: change appearance of icon (spinning, offline etc)
+      console.log("REMOTESTORAGE STATE", state);
+      this.state = state;
+      this.emit('state', state);
+    }
+
+  }, events);
 
   remoteStorage.widget.setView(widgetView);
 

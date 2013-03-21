@@ -108,6 +108,43 @@ require(["ender", 'app/config'], function($, config){
         it("renders SideBar and sets visible");
       });
 
+      describe('interaction', function(){
+        it("toggles MiniMap", function(){
+          var miniMap = dspace.ui.miniMap;
+          $('#toggleMiniMap').click();
+          expect(miniMap.visible).to.not.be.ok;
+          $('#toggleMiniMap').click();
+          expect(miniMap.visible).to.be.ok;
+        });
+
+        it("toggles SideBar", function(){
+          var sideBar = dspace.ui.sideBar;
+          $('#toggleSideBar').click();
+          expect(sideBar.visible).to.not.be.ok;
+          $('#toggleSideBar').click();
+          expect(sideBar.visible).to.be.ok;
+        });
+
+        it("toggles UserOptions", function(){
+          var ui = dspace.ui;
+          $('#userOptions').click();
+          expect(ui.modal).to.be.ok;
+          $('#modal-close').click();
+          expect(ui.modal).to.not.be.ok;
+        });
+
+        it("toggles OverlayManager", function(){
+          var ui = dspace.ui;
+          $('#addOverlay').click();
+          expect(ui.modal).to.be.ok;
+          $('#modal-close').click();
+          expect(ui.modal).to.not.be.ok;
+        });
+
+        it("toggles FeatureDetails");
+        it("toggles fullscreen");
+      });
+
       it('has some feature tabs', function(){
         expect($('.featureTab').length).to.be.above(0);
       });

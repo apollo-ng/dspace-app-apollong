@@ -1,52 +1,22 @@
 define([
   'backbone',
   'ender',
-  'remoteStorage',
-  'views/panels',
-  'views/featureBox',
-  'views/map',
-  'views/miniMap',
+  'geofeeds/search',
+  'views/statusPanel',
+  'views/sideBar',
+  'views/widgetModal',
+  'views/box/featureBox',
+  'views/map/map',
+  'views/map/miniMap',
   'views/modal/userOptions',
-  'views/modal/featureDetails',
-  'views/modal/addFeature',
-  'template/helpers/renderPos'
-], function(Backbone, $, remoteStorage, panels, FeatureBox, Map, MiniMap, UserOptions, FeatureDetails, AddFeature, renderPos) {
-
-
-  // /**
-  //  * X-Browser Fullscreen API Calls
-  //  */
-  // function reqBFS () {
-  //   var e = document.documentElement;
-  //   if (e.requestFullscreen) {
-  //     e.requestFullscreen();
-  //   } else if (e.mozRequestFullScreen) {
-  //     e.mozRequestFullScreen();
-  //   } else if (e.webkitRequestFullScreen) {
-  //     e.webkitRequestFullScreen();
-  //   }
-  // }
-
-  // function exitBFS () {
-  //   if (document.exitFullscreen) {
-  //     document.exitFullscreen();
-  //   } else if (document.mozCancelFullScreen) {
-  //     document.mozCancelFullScreen();
-  //   } else if (document.webkitCancelFullScreen) {
-  //     document.webkitCancelFullScreen();
-  //   }
-  // }
-
+  'views/modal/overlayManager',
+  'views/modal/featureDetails'
+], function(Backbone, $, SearchFeed, StatusPanel, SideBar, WidgetModal, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
    *
-   * elements:
-   * * <overlaysPanel>
-   * * <FeatureBox>
-   * * <MiniMap>
-   * * <StatusPanel>
-   * * <ControlPanel>
+   * main view with all interaction elements
    */
   var UI = Backbone.View.extend({
 
@@ -54,10 +24,6 @@ define([
      * Property: el
      *
      * DOM element which will host UI '#id'
-     *
-     * Property: $el
-     *
-     * Backbone wrapped element to reuse
      */
     el: '#ui',
 
@@ -69,30 +35,25 @@ define([
     fullScreen: false,
 
     /**
-     * Property: overlaysPanel
-     *
-     * <OverlaysPanel> *ui element* for managing active overlays
-     */
-    overlaysPanel: new panels.Overlays(),
-
-    /**
      * Events: events
      *
-     * delegting events on UI
+     * delegting DOM events on UI
      */
     events: {
-        'click #toggleFeatureBox': 'boxToggle'
-      , 'click #toggleMiniMap': 'miniMapToggle'
-      , 'click #toggleFullscreen': 'fullscreenToggle'
-      , 'click #featureOptions': 'toggleOverlaysPanel'
-      , 'click #userOptions': 'toggleUserOptions'
+        'click #toggleSideBar': 'toggleSideBar'
+      , 'click #toggleMiniMap': 'toggleMiniMap'
+      , 'click #toggleFullscreen': 'toggleFullscreen'
+      , 'click #addOverlay': 'showOverlaysManager'
+      , 'click #userOptions': 'showUserOptions'
+      , 'click #modal-close': 'closeModal'
+      , 'submit #searchForm': 'createSearch'
+      , 'contextmenu #widgetBar': 'toggleWidgetModal'
     },
 
     /**
      * Method: initialize
      */
     initialize: function(){
-      var self = this;
 
       /**
        * Property: world
@@ -102,40 +63,32 @@ define([
       this.world = this.options.world;
 
       /**
-       * Property: dspace
-       *
-       * reference to the global Backbone.Router called <DSpace>
-       */
-      this.dspace = this.options.dspace;
-
-      /**
        * Property: aether
        *
        * event aggregator from <World>
        */
       this.aether = this.world.aether;
 
+      /**
+       * Event: feature:focus
+       *
+       * listens on <aether> and delegates to <focusOnFeature>
+       */
+      this.aether.on('feature:focus', this.focusOnFeature.bind(this));
 
       /**
-       * Event: feature:current
+       * Event: feature:uuid:show
        *
-       * jumps map to feature set to current
+       * listens on <aether> and delegats to <showFeatureDetails>
        */
-      this.aether.on('select-feature', function( feature ){
-        var id = feature.get('id');
-        this.dspace.updateState({
-          feature: id,
-          modal: undefined
-        });
-        
-        //if(this.world.get('currentFeatureId') === id) {
-        //  this.map.jumpToFeature(feature);
-        //}
-        
-        this.map.jumpToFeature(feature);
-      }.bind(this));
+      this.aether.on('feature:uuid:show', this.showFeatureDetails.bind(this));
 
-
+      /**
+       * Event: feature:new
+       *
+       * listens on <aether> and creates to <createFeature>
+       */
+      this.aether.on('feature:new', this.createFeature.bind(this));
 
       /**
        * Property: map
@@ -146,129 +99,32 @@ define([
        * used to jump <Map>
        */
 
-      this.map = new Map({ world: this.world, dspace: this.dspace });
-
-      this.map.on('marker-click', function(id) {
-        this.dspace.updateState({
-          feature: id,
-          modal: 'featureDetails'
-        });
-      }.bind(this));
-
+      this.map = new Map({ world: this.world });
 
       /**
        * Property: featureBox
        */
-      this.featureBox = new FeatureBox({ world: this.world, aether: this.aether, feeds: this.world.geoFeeds});
-
-      this.listenTo(this.featureBox, 'change-tab', function(collection) {
-        if(this.modal && this.modal.setCollection) {
-          this.modal.setCollection(collection);
-        }
-      }.bind(this));
+      this.featureBox = new FeatureBox({ world: this.world, feeds: this.world.geoFeeds});
 
       /**
-       * creates minimap
+       * Property: miniMap
        */
       this.miniMap = new MiniMap({world: this.world, map: this.map});
 
       /**
-       * creates statusPanel
+       * Property: statusPanel
        */
-      this.statusPanel = new panels.Status({model: this.world, ui: this});
-      this.controlPanel = new panels.Control({world: this.world });
+      this.statusPanel = new StatusPanel({world: this.world, ui: this});
 
       /**
-       *  creates Sidebar
+       * Property: sideBar
        */
-      this.sideBar = new panels.SideBar();
+      this.sideBar = new SideBar();
 
-      this.world.on('change:currentFeatureId', function() {
-        var feature = this.world.getCurrentFeature();
-        
-        //disabled jumps for clicks on the map for now
-        //FIXME: this is not the right place to do that.
-        //Rethink on what events we actually want to move the map
-       
-        //if(feature) {
-        // this.map.jumpToFeature(feature);
-        //}
-      }.bind(this));
-
-      this.world.on('change:currentModal', function() {
-        var modalName = this.world.get('currentModal');
-        if(modalName) {
-          var modal = this.modals[modalName];
-          if(modal) {
-            this.modalName = modalName;
-            modal.apply(this, []);
-            if(this.modal) {
-              this.listenTo(this.modal, 'close', function() {
-                this.dspace.updateState({ modal: undefined });
-              }.bind(this));
-              setTimeout(function() {
-                this.$('*[data-format=position]').forEach(function(e) {
-                  var el = this.$(e);
-                  el.html(renderPos(el.attr('data-lat'), el.attr('data-lon'),
-                                    this.world.user.get('userCoordPrefs')));
-                }.bind(this));
-              }.bind(this), 0);
-            }
-          } else {
-            console.error('modal not found', modalName);
-          }
-        } else {
-          this.closeModal();
-        }
-      }.bind(this));
-
-      function setupRemoteStorage() {
-        remoteStorage.util.silenceAllLoggers();
-        if(this.world.user.get('remoteStorage')) {
-          $(document.body).prepend('<div id="remotestorage-connect"></div>');
-          remoteStorage.claimAccess('locations', 'rw').
-            then(function() {
-              remoteStorage.displayWidget('remotestorage-connect');
-              remoteStorage.schedule.disable();
-            });
-        } else {
-          $('#remotestorage-connect').remove();
-          remoteStorage.flushLocal();
-        }
-      }
-
-      this.world.user.on('change:remoteStorage', setupRemoteStorage.bind(this));
-      setupRemoteStorage.apply(this, []);
-    },
-
-    modals: {
-
-      'userOptions': function() {
-        this.modal = new UserOptions({
-          user: this.world.user,
-          aether: this.aether
-        });
-        this.modal.show();
-      },
-
-      'featureDetails': function() {
-        var feature = this.world.getCurrentFeature();
-        if(feature) {
-          this.modal = new FeatureDetails({
-            feature: feature
-          });
-          this.modal.show();
-        } else {
-        }
-      },
-
-      'addFeature': function() {
-        this.modal = new AddFeature({ world: this.world });
-        this.modal.setCollection(this.featureBox.getCurrentCollection());
-        this.modal.render();
-        this.modal.show();
-      }
-
+      /**
+       * Property: widgetModal
+       */
+      this.widgetModal = new WidgetModal();
     },
 
     /**
@@ -286,156 +142,161 @@ define([
       this.miniMap.visible = true;
 
       this.statusPanel.render();
-      this.statusPanel.visible = true;
-
-      this.controlPanel.render();
-      this.controlPanel.visible = true;
-
-      this.sideBar.render();
-      this.sideBar.visible = true;
-
-    },
-
-    reset: function() {
-      this.closeModal();
     },
 
     /**
-     * Method: closeModal
+     * Method: focusOnFeature
      *
-     * Close the current modal dialog, then <cleanupModal>
+     * focuses map on given feature
      */
-    closeModal: function() {
-      if(this.modal) {
-        this.modal.hide();
-        this.cleanupModal();
+    focusOnFeature: function(feature){
+      this.map.jumpToFeature(feature);
+    },
+
+    /**
+     * Method: showFeatureDetails
+     *
+     * opens modal showing details of feature with given uuid
+     *
+     * Receives:
+     *
+     *   uuid - id of feature to look up in <World.featureIndex>
+     */
+    showFeatureDetails: function(uuid){
+      var feature = this.world.getFeature(uuid);
+      if(feature) {
+        this.modal = new FeatureDetails({ feature: feature });
+        this.modal.show();
       }
     },
 
     /**
-     * Method: cleanupModal
+     * Method: createFeature
      *
-     * Removes all reference to the current modal dialog.
-     *
+     * gets new feature from <World.newFeature> and shows it in modal
      */
-    cleanupModal: function() {
-      if(this.modal) {
-        this.stopListening(this.modal);
-        delete this.modal;
-        delete this.modalName;
-      }
+    createFeature: function(location){
+      var feature = this.world.newFeature(location);
+      this.modal = new FeatureDetails({ feature: feature });
+      this.modal.show();
     },
 
     /**
-     * Method: boxToggle
+     * Method: toggleOverlaysManager
      *
-     * toggles <FeatureBox>
+     * displays <OverlaysManager> modal
      */
-    boxToggle: function() {
-      this.featureBox.toggle();
-    },
-
-    /**
-     * Method: miniMapToggle
-     *
-     * toggles <MiniMap>
-     */
-    miniMapToggle: function(){
-      this.miniMap.toggle();
-    },
-
-    /**
-     * Method: toggleOverlaysPanel
-     *
-     * toggles <OverlaysPanel>
-     */
-    toggleOverlaysPanel: function(){
-      this.overlaysPanel.toggle();
+    showOverlaysManager: function(){
+      this.modal = new OverlayManager();
+      this.modal.show();
     },
 
     /**
      * Method: toggleUserOptions
      *
-     * toggles <Modal.UserOptions> using <showUserOptions>/<hideUserOptions>
-     */
-    toggleUserOptions: function() {
-      if(this.modalName === 'userOptions') {
-        this.dspace.updateState({
-          modal: undefined
-        });
-      } else {
-        this.dspace.updateState({
-          modal: 'userOptions'
-        });
-      }
-    },
-
-    /**
-     * Method: hideUserOptions
-     *
-     * Hides the <Modal.UserOptions> view and cleans up it's reference.
-     *
-     */
-    hideUserOptions: function() {
-      if(! this.userOptions) {
-        return;
-      }
-      this.userOptions.hide();
-      delete this.userOptions;
-    },
-
-    /**
-     * Method: showUserOptions
-     *
-     * Creates a <Modal.UserOptions> view and displays it.
+     * shows <UserOptions> modal 
      */
     showUserOptions: function() {
-      if(this.userOptions) {
-        return;
-      }
+      this.modal = new UserOptions({user: this.world.user, aether: this.aether});
+      this.modal.show();
     },
 
-    hideFeatureDetails: function() {
-      if(this.featureDetails) {
-        this.featureDetails.hide();
-        delete this.featureDetails;
-      }
-    },
-
-    showFeatureDetails: function() {
-      if(this.featureDetails) {
-        return;
-      }
-      var feature = this.world.getCurrentFeature();
-      if(feature) {
-        this.featureDetails = new FeatureDetails({
-          feature: feature
-        });
-        this.featureDetails.show();
+    /**
+     * Method: closeModal
+     *
+     * Close the current modal dialog and clean up after it
+     */
+    closeModal: function() {
+      if(this.modal) {
+        this.modal.hide();
+        this.stopListening(this.modal);
+        delete this.modal;
       }
     },
 
     /**
-     * Method: fullscreenToggle
+     * Method: toggleFeatureBox
+     *
+     * toggles <FeatureBox>
+     */
+    toggleSideBar: function() {
+      this.sideBar.toggle();
+    },
+
+    /**
+     * Method: toggleMiniMap
+     *
+     * toggles <MiniMap>
+     */
+    toggleMiniMap: function(){
+      this.miniMap.toggle();
+    },
+
+    /**
+     * Method: showBuffles
+     *
+     * shows top and bottom Buffles
+     */
+    showBuffles: function(){
+      var fadeDuration = 450;
+      $('#topBaffle').animate({ height: 47, duration: fadeDuration });
+      $('#topBaffle').fadeIn(fadeDuration);
+      $('#bottomBaffle').animate({ height: 47, duration: fadeDuration });
+      $('#bottomBaffle').fadeIn(fadeDuration);
+    },
+
+    /**
+     * Method: hideBuffles
+     *
+     * hides and bottom Buffles
+     */
+    hideBuffles: function(){
+      var fadeDuration = 450;
+      $('#topBaffle').animate({ height: 0, duration: fadeDuration });
+      $('#topBaffle').fadeOut(fadeDuration);
+      $('#bottomBaffle').animate({ height: 0, duration: fadeDuration });
+      $('#bottomBaffle').fadeOut(fadeDuration);
+    },
+
+    /**
+     * Method: toggleFullscreen
      *
      * toggles fulls creen mode
      */
-    fullscreenToggle: function() {
+    toggleFullscreen: function() {
       if(this.fullScreen) {
         this.miniMap.show();
-        this.statusPanel.show();
-        this.controlPanel.show();
+        this.showBuffles();
         this.sideBar.show();
         this.fullScreen = false;
       } else {
         this.miniMap.hide();
-        this.statusPanel.hide();
-        this.controlPanel.hide();
+        this.hideBuffles();
         this.sideBar.hide();
         this.fullScreen = true;
       }
-    }
+    },
 
+    /**
+     * Method: toggleWidgetModal
+     *
+     * toggles <WidgetModal>
+     */
+    toggleWidgetModal: function(){
+      this.widgetModal.toggle();
+    },
+
+    /**
+     * Method: createSearch
+     *
+     * EXPERIMENTAL - may move to extension!
+     */
+    createSearch: function(event) {
+      event.preventDefault();
+      var query = event.target.query.value;
+      var searchFeed = new SearchFeed({ query: query, extent: this.map.frame.getExtent() });
+      var index = this.world.addFeed(searchFeed, true);
+    }
   });
 
   return UI;

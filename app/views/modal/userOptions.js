@@ -25,7 +25,10 @@ define([
       initialize: function(options) {
         this.user = options.user;
         this.aether = options.aether;
-        this.$el.html(this.template());
+      },
+
+      render: function(){
+        this.$el.find('#modal-content').html(this.template());
 
         // initialize uiElements from user settings.
         // FIXME: add other types (selectBox)

@@ -24,7 +24,21 @@ define([
      * handlebars template for rendering
      */
     template: templates.featureBoxItem,
-    
+
+    events: {
+      "click": "focusOnFeature"
+    },
+
+    initialize: function(options) {
+      this.aether = this.options.aether;
+
+      this.aether.on('user:change', this.updateSettings.bind(this));
+      this.aether.user.on('location-changed', this.render.bind(this));
+      setTimeout(function() {
+        this.updateSettings(this.aether.user);
+      }.bind(this), 0);
+    },
+
     /**
      * Method: render
      * 
@@ -47,18 +61,6 @@ define([
       return this.el;
     },
 
-    events: {
-      "click": "setFeatureCurrent"
-    },
-
-    initialize: function(opts) {
-      opts.aether.on('user:change', this.updateSettings.bind(this));
-      opts.aether.user.on('location-changed', this.render.bind(this));
-      setTimeout(function() {
-        this.updateSettings(opts.aether.user);
-      }.bind(this), 0);
-    },
-    
     /**
      * Method: updateSettings
      * gets triggered on *user:change* event, to format the coords according to user preferences
@@ -71,12 +73,12 @@ define([
     },
 
     /**
-     * Method: setFeatureCurrent
+     * Method: focusOnFeature
      *
-     * triggers *feature:current* event on a model (<Feature>)
+     * triggers *feature:focus* event on <aether>
      */
-    setFeatureCurrent: function( event ){
-      this.trigger('selected', this.model);
+    focusOnFeature: function(){
+      this.aether.trigger('feature:focus', this.model);
     }
   });
 

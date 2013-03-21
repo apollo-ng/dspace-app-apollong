@@ -40,7 +40,6 @@ define([
      * (end code)
      */
     initialize: function(  ){
-      var self = this;
       this.config = this.get('config');
 
       this.user = this.setupUser(this.config.user);
@@ -55,7 +54,6 @@ define([
       this.createFeeds(this.config.geoFeeds);
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);
-
 
       this.user.on('change', function() {
         this.aether.trigger('user:change', this.user);
@@ -154,13 +152,37 @@ define([
       }.bind(this));
     },
 
-    getCurrentFeature: function() {
-      var id = this.get('currentFeatureId');
-      if(id) {
-        return this.featureIndex[id];
-      }
+    /**
+     * Method getFeature
+     *
+     * returns <Feature> with given uuid
+     */
+    getFeature: function(uuid) {
+      return this.featureIndex[uuid];
     },
 
+    /**
+     * Method newFeature
+     *
+     * returns new feature with location set from parameter
+     *
+     * Receives
+     *
+     *  location - an instance of MM.Location
+     */
+    newFeature: function(location){
+      var feature = new Feature();
+      var properties = {type: "", title: "", description: ""};
+      feature.set('properties', properties);
+      feature.setLatLon(location.lat, location.lon);
+      return feature;
+    },
+
+    /**
+     * Method: createFeed
+     *
+     * creates <GeoFeed> instances based on type from feed definition
+     */
     createFeed: function(feed) {
       switch(feed.type){
       case 'CORS':
@@ -177,7 +199,6 @@ define([
         break;
       };
     }
-
   });
 
   return World;

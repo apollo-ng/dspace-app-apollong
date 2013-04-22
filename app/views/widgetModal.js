@@ -59,10 +59,8 @@ define([
     },
 
     initialize: function() {
-      remoteStorage.claimAccess('locations', 'rw').
-        then(function() {
-          remoteStorage.displayWidget();
-        });
+      remoteStorage.claimAccess('locations', 'rw');
+      remoteStorage.displayWidget();
 
       widgetView.on('state', _.bind(this.refresh, this));
     },

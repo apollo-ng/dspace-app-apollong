@@ -200,8 +200,12 @@ define([
      * shows <UserOptions> modal 
      */
     showUserOptions: function() {
-      this.modal = new UserOptions({user: this.world.user, aether: this.aether});
-      this.modal.show();
+      if(this.modal instanceof UserOptions) {
+        this.closeModal();
+      } else {
+        this.modal = new UserOptions({user: this.world.user, aether: this.aether});
+        this.modal.show();
+      }
     },
 
     /**

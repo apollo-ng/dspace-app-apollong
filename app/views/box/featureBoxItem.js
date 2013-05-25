@@ -48,11 +48,14 @@ define([
      *   el - DOM element for this view
      */
     render: function(){
+      var distance = this.model.formatDistance(
+        //FIXME the chain to access the avatar/userMarker is quite long...
+        this.model.distanceTo(this.options.aether.user.feed.avatar)
+      );
       this.$el.html(this.template(_.extend(
         this.model.getLatLon(),
         { tabIndex: this.options.tab.index,
-          //FIXME the chain to access the avatar/userMarker is quite long...
-          distance: this.model.distanceTo(this.options.aether.user.feed.avatar),
+          distance: distance,
           sector: this.model.getSector(),
         },
         this.model.toJSON()

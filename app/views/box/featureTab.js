@@ -51,6 +51,10 @@ define([
       this.collection.on('add', function(feature) {
         this.renderFeature(feature);
       }.bind(this));
+
+      this.collection.sortByDistanceTo(this.aether.user.feed.avatar);
+
+      this.collection.on('sort', this.reRender.bind(this));
     },
 
     updateVisible: function(event) {

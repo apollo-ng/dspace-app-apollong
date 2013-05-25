@@ -183,6 +183,71 @@ define([
       };
       return dd2maidenhead(this.getLatLon().lat, this.getLatLon().lon);
     }
+  }, {
+
+    /**
+     * Static method: fromGPXRoute
+     *
+     * Takes a GPX route XML source (either as a String or parsed XML) and returns
+     * an Array of Feature objects representing the way points.
+     */
+    fromGPXRoute: function(gpxRoute) {
+      if(typeof(gpxRoute) === 'string') {
+        gpxRoute = (new DOMParser()).parseFromString(gpxRoute, 'application/xml');
+      }
+      console.log('parse route', gpxRoute);
+      return Array.prototype.slice.call(gpxRoute.getElementsByTagName('rtept')).
+        map(this._gpxRoutePointToFeature);
+    },
+
+    /**
+     * Static method: fromGPXRoute
+     *
+     * Takes a GPX route XML source (either as a String or parsed XML) and returns
+     * an Array of Feature objects representing the way points.
+     */
+    fromGPXTrack: function(gpxRoute) {
+      if(typeof(gpxRoute) === 'string') {
+        gpxRoute = (new DOMParser()).parseFromString(gpxRoute, 'application/xml');
+      }
+      console.log('parse route', gpxRoute);
+      return Array.prototype.slice.call(gpxRoute.getElementsByTagName('trkpt')).
+        map(this._gpxTrackPointToFeature);
+    },
+
+    _gpxRoutePointToFeature: function(routePoint) {
+      return new Feature({
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            parseFloat(routePoint.getAttribute('lon')),
+            parseFloat(routePoint.getAttribute('lat'))          
+          ]
+        },
+        properties: {
+          type: 'route-point',
+          name: routePoint.getElementsByTagName('name')[0].textContent,
+          title: routePoint.getElementsByTagName('desc')[0].textContent
+        }
+      });
+    },
+
+    _gpxTrackPointToFeature: function(trackPoint) {
+      return new Feature({
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            parseFloat(trackPoint.getAttribute('lon')),
+            parseFloat(trackPoint.getAttribute('lat'))          
+          ]
+        },
+        properties: {
+          type: 'track-point'
+        }
+      });
+    }
+
+
   });
 
   return Feature;

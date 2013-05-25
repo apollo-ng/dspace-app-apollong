@@ -3,11 +3,12 @@ define([
   'backbone',
   'geofeeds/geoJson',
   'geofeeds/spaceApi',
+  'geofeeds/gpxRoute',
   'collections/feature',
   'models/feature',
   'geofeeds/device',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection,
+], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, GPXRouteFeed, FeatureCollection,
             Feature, DeviceFeed, User ) {
 
   /*

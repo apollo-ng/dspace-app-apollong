@@ -13,6 +13,7 @@ define([], function() {
      * initial set for populating <FeatureCollection>s
      */
     geoFeeds: [
+      { name: 'Routing example', url: '/examples/gpx-routes/test-track.gpx', type: 'GPXRoute'},
       { name: 'Hackerspaces (SpaceAPI)', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},
       { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'CORS'}
     ],
@@ -30,8 +31,10 @@ define([], function() {
         osm: 'http://otile2.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png',
         osmTransport: 'http://b.tile2.opencyclemap.org/transport/{Z}/{X}/{Y}.png'
       },
-      geolat:  48.115293,
-      geolon:  11.60218,
+      geolat: 52.53439,
+      geolon: 13.37036,
+//      geolat:  48.115293,
+//      geolon:  11.60218,
       minZoom: 2,
       maxZoom: 16,
       miniMapZoom: 11,

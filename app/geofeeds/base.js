@@ -16,6 +16,10 @@ define([
       _.extend(this, options);
       this.setCollection(new FeatureCollection());
       this.title = this.makeTitle();
+
+      if(typeof(this.initFeed) === 'function') {
+        this.initFeed();
+      }
     },
 
     setCollection: function(collection) {

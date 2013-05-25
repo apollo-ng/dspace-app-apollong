@@ -3,7 +3,7 @@ define([
   'markers',
   'views/map/marker',
   'hbs!templates/featureInfoModal'
-], function(Backbone, markers, Marker, FeatureInfoModalTemplate) {
+], function(Backbone, markers, Marker, RouteLayer, FeatureInfoModalTemplate) {
 
   /**
    * Class: Overlay
@@ -44,8 +44,19 @@ define([
     },
 
     show: function() {
+      if(! this.i) {
+        this.i = 1;
+      }
+      if(this.i >= 5) { return; }
+      this.i++;
       this.hide();
-      this.layer = this.addMapLayer(this.feed.collection);
+      if(this.feed.type === 'GPXRoute') {
+        this.layer = this.makeRouteLayer();
+      } else {
+        this.layer = this.makeMarkerLayer();
+      }
+      this.map.frame.addLayer(this.layer);
+      this.map.frame.draw();
     },
 
     hide: function() {
@@ -59,7 +70,7 @@ define([
      * get featurecollection
      * returns mapbox layer 
      */
-    addMapLayer: function( collection ) {
+    makeMarkerLayer: function() {
       /**
        * Add markers
        * mapbox lib NOT same as ModestMap
@@ -78,10 +89,12 @@ define([
        * display markers MM adds it to DOM
        * .extent() called to redraw map!
        */
-      markerLayer.features( collection.toJSON( ));
-      this.map.frame.addLayer(markerLayer);
-      this.map.frame.draw();
+      markerLayer.features( this.feed.collection.toJSON( ));
       return markerLayer;
+    },
+
+    makeRouteLayer: function() {
+      return new RouteLayer(this.feed);
     },
 
     setExtent: function( ){

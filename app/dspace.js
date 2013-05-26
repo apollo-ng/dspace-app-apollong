@@ -102,7 +102,11 @@ define([
      * List of plugin definitions that have been evaluated.
      * See <plugin> for details.
      */
-    plugins: {},
+    plugins: [],
+
+    // internal { pluginName : definition } map. Contains all plugins that
+    // have been loaded, but not necessarily initialized.
+    _plugins: {},
 
     /**
      * Method: plugin
@@ -132,7 +136,7 @@ define([
      *   (end code)
      */
     plugin: function(pluginName, definition) {
-      this.plugins[pluginName] = definition;
+      this._plugins[pluginName] = definition;
     },
 
     /**
@@ -144,7 +148,7 @@ define([
      * _loadPlugin) and the plugin has to be declared via <plugin>.
      */
     initPlugin: function(pluginName) {
-      var definition = this.plugins[pluginName];
+      var definition = this._plugins[pluginName];
       if(! definition) {
         console.error("Can't initialize undeclared plugin: " + pluginName);
         return;
@@ -152,6 +156,8 @@ define([
       for(var key in definition.hooks) {
         this.attachHook(key, definition.hooks[key]);
       }
+      // make plugin known to the rest of the world.
+      this.plugins.push(definition);
     },
 
     /**

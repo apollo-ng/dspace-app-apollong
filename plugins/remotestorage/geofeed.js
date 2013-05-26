@@ -3,7 +3,7 @@ define([
   'remoteStorage',
   'remoteStorage-locations',
   'models/feature',
-  './base'
+  'geofeeds/base'
 ], function(_, remoteStorage, locations, Feature, Base) {
 
   
@@ -14,12 +14,13 @@ define([
 
     type: 'RemoteStorage',
 
-    watch: function() {
-      // FIXME: move to setup!!
+    initFeed: function() {
       remoteStorage.on('disconnect', function() {
         this.collection.reset();
       }.bind(this));
+    },
 
+    watch: function() {
       var watchCollection = function(collection) {
         collection.watch(function(action, feature) {
           switch(action) {

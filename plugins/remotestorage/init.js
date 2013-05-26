@@ -1,5 +1,5 @@
 
-define(['./settingsModal'], function(SettingsModal) {
+define(['./settingsModal', './geofeed'], function(SettingsModal, RemoteStorageFeed) {
 
   dspace.plugin({
     name: 'remotestorage',
@@ -8,6 +8,11 @@ define(['./settingsModal'], function(SettingsModal) {
     version: '0.1',
 
     hooks: {
+
+      load: function(world) {
+        world.addFeedType('remoteStorage', RemoteStorageFeed);
+      },
+
       widgetBarIcon: {
         src: 'assets/images/remoteStorageIcon.svg',
         modal: SettingsModal

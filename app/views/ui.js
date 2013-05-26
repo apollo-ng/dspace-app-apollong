@@ -45,7 +45,7 @@ define([
       , 'click #toggleFullscreen': 'toggleFullscreen'
       , 'click #addOverlay': 'showOverlaysManager'
       , 'click #userOptions': 'showUserOptions'
-      , 'click #modal-close': 'closeModal'
+      , 'click #closeModal': 'closeModal'
       , 'submit #searchForm': 'createSearch'
       , 'click #remotestorage-connect-icon': 'toggleWidgetModal'
     },

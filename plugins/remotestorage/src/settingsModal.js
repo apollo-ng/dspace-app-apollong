@@ -85,8 +85,6 @@ define([
         origToggle.call(this);
         this.render();
       };
-
-      widgetView.setState('initial');
     },
 
     connectStorage: function(event) {

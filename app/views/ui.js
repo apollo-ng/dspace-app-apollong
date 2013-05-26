@@ -47,7 +47,7 @@ define([
       , 'click #userOptions': 'showUserOptions'
       , 'click #modal-close': 'closeModal'
       , 'submit #searchForm': 'createSearch'
-      , 'contextmenu #widgetBar': 'toggleWidgetModal'
+      , 'click #remotestorage-connect-icon': 'toggleWidgetModal'
     },
 
     /**

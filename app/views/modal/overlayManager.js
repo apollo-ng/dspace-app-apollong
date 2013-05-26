@@ -19,7 +19,7 @@ define([
     //     human readable name of type
     //   * category:
     //     column to display collections in ("private" or "public")
-    //   * listCollection(callback):
+    //   * listCollections(callback):
     //     a method to asynchronously get a list of collections of given type
     //
     // and optionally:
@@ -49,7 +49,6 @@ define([
     },
 
     createOverlay: function(attributes) {
-      console.log('create overlay', JSON.stringify(attributes));
       var feed = this.options.world.createFeed(attributes);
       this.options.world.addFeed(feed, true);
     },

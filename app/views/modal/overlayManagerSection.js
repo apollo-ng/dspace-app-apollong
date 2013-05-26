@@ -26,11 +26,11 @@ define([
     },
 
     openCollection: function(event) {
-      this.options.manager.createOverlay({
-        type: $(event.target).attr('data-type'),
-        name: $(event.target).attr('data-name')
-      });
-      this.options.manager.close();
+      var colName = $(event.target).attr('data-name');
+      this.options.typeDefinition.getCollection(colName, function(col) {
+        this.options.manager.createOverlay(col);
+        this.options.manager.close();
+      }.bind(this));
     },
 
 

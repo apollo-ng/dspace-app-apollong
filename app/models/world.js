@@ -50,7 +50,28 @@ define([
       //
       // @elf-pavlik: Document this.
       this.geoFeeds = [];
-      this.createFeeds(this.config.geoFeeds);
+
+      setTimeout(function() {
+
+        var feedList = this.config.geoFeeds;
+        var feedsByName = feedList.reduce(function(byName, feed) {
+          byName[feed.name] = feed;
+          return byName;
+        }, {});
+
+        // load geoFeeds config option as section for overlay manager
+        dspace.ui.overlayManager.registerType({
+          name: "Hardcoded",
+          category: 'public',
+          writable: false,
+          listCollections: function(callback) {
+            callback(feedList);
+          },
+          getCollection: function(name, callback) {
+            callback(feedsByName[name]);
+          }
+        });
+      }.bind(this), 0);
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);
 

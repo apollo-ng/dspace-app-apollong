@@ -1,0 +1,18 @@
+
+HOOKS
+-----
+
+The following hooks are defined:
+
+* load  - Calls given function once app is loaded
+  (defined in: app/main.js
+
+* style - Adds a stylesheet URL to the page
+  (defined in: app/views/ui.js)
+
+* widgetBarIcon - Adds an icon to the widget bar.
+  (defined in: app/views/widgetBar.js)
+
+* widgetBarElement - Adds an arbitrary element to the widget bar.
+  (defined in: app/views/widgetBar.js)
+

@@ -27,6 +27,90 @@ define([
        */
       this.ui = new UI({ world: this.world });
       this.ui.render();
+    },
+
+    /**
+     * Method: loadPlugins
+     *
+     * Takes a list of plugin names and loads them asynchronously.
+     */
+    loadPlugins: function() {
+      var pluginNames = Array.prototype.slice.call(arguments);
+      require(pluginNames.map(function(pluginName) {
+        return 'plugins/' + pluginName + '/init';
+      }), function() {
+        console.debug("All plugins loaded.");
+      });
+    },
+
+    /**
+     * Property: plugins
+     *
+     * List of plugin definitions that have been evaluated.
+     * See <plugin> for details.
+     */
+    plugins: [],
+
+    /**
+     * Method: plugin
+     *
+     * Used to implement a plugin.
+     *
+     * Example:
+     *   (start code)
+     *   dspace.plugin({
+     *     name: "Hello",
+     *     description: "Prints a nice greeting to the console.",
+     *     version: '0.1',
+     *
+     *     hooks: {
+     *       load: function() {
+     *         console.log('Hello World !');
+     *       }
+     *     }
+     *   });
+     *   (end code)
+     */
+    plugin: function(definition) {
+
+      this.plugins.push(definition);
+
+      for(var key in definition.hooks) {
+        this.attachHook(key, definition.hooks[key]);
+      }
+
+    },
+
+    /**
+     * Property: hooks
+     *
+     * Used to store hooks.
+     * Use <declareHook> to add hooks, <attachHook> to bind to them.
+     */
+    hooks: {},
+
+    /**
+     * Method: declareHook
+     *
+     * Declare a new hook.
+     */
+    declareHook: function(key, handler) {
+      this.hooks[key] = handler;
+    },
+
+    /**
+     * Method: attachHook
+     *
+     * Attach given `value' to the hook identified by `key'.
+     * This calls the hook's handler function passed to <declareHook>.
+     */
+    attachHook: function(key, value) {
+      var hook = this.hooks[key];
+      if(typeof(hook) === 'undefined') {
+        throw new Error("Unknown hook: " + key);
+      }
+      hook(value);
     }
+
   });
 });

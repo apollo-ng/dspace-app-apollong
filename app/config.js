@@ -18,6 +18,8 @@ define([], function() {
       { name: 'test', type: 'remoteStorage' },
     ],
 
+    plugins: ['remotestorage'],
+
     /**
      * Property: map
      *

@@ -27,6 +27,10 @@ define([
        */
       this.ui = new UI({ world: this.world });
       this.ui.render();
+
+      if(config.plugins) {
+        this.loadPlugins.apply(this, config.plugins);
+      }
     },
 
     /**
@@ -36,6 +40,7 @@ define([
      */
     loadPlugins: function() {
       var pluginNames = Array.prototype.slice.call(arguments);
+      console.debug("Loading plugins: " + pluginNames.join(', '));
       require(pluginNames.map(function(pluginName) {
         return 'plugins/' + pluginName + '/init';
       }), function() {

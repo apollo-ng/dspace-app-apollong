@@ -44,11 +44,6 @@ define([
     },
 
     show: function() {
-      if(! this.i) {
-        this.i = 1;
-      }
-      if(this.i >= 5) { return; }
-      this.i++;
       this.hide();
       if(! this.layer) {
         if(this.feed.type === 'GPXRoute') {

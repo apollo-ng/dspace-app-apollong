@@ -16,6 +16,14 @@ define([
 
     type: 'GPXRoute',
 
+    /**
+     * Property: dontSort
+     *
+     * Set to `true', so the featureTab doesn't sort the features by distance to our
+     * current location.
+     */
+    dontSort: true,
+
     initFeed: function() {
       this.__defineGetter__('initUrl', function() {
         return this.url + 'router.cgi?' +

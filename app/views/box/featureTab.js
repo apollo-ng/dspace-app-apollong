@@ -52,7 +52,9 @@ define([
         this.renderFeature(feature);
       }.bind(this));
 
-      this.collection.sortByDistanceTo(this.aether.user.feed.avatar);
+      if(! this.feed.dontSort) {
+        this.collection.sortByDistanceTo(this.aether.user.feed.avatar);
+      }
 
       this.collection.on('sort', this.reRender.bind(this));
     },

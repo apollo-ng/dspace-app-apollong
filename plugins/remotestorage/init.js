@@ -13,6 +13,8 @@ define([
 
     hooks: {
 
+      style: 'plugins/remotestorage/assets/style.css',
+
       load: function(world) {
         world.addFeedType('remoteStorage', RemoteStorageFeed);
 
@@ -25,7 +27,8 @@ define([
 
       widgetBarIcon: {
         src: 'assets/images/remoteStorageIcon.svg',
-        modal: SettingsModal
+        modal: SettingsModal,
+        classNames: 'remotestorage-icon'
       }
     }
   });

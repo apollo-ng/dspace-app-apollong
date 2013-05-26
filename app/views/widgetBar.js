@@ -30,11 +30,14 @@ define([
     },
 
     renderIcon: function(options) {
-      var wrapper = $('<div>').attr('class', 'widgetIcon');
+      var wrapper = $('<div>');
+      wrapper.attr('class', 'widgetIcon ' + (options.classNames || ''));
       wrapper.append($('<img>').attr('src', options.src));
 
       if(options.modal) {
-        var modal = new options.modal();
+        var modal = new options.modal({
+          widgetBarIcon: wrapper
+        });
 
         options.action = function() {
           modal.toggle();

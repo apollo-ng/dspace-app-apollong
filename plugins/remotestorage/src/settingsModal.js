@@ -66,17 +66,27 @@ define([
     },
 
     postInit: function() {
+
       remoteStorage.widget.setView(widgetView);
       remoteStorage.claimAccess('locations', 'rw');
       remoteStorage.displayWidget();
 
-      widgetView.on('state', _.bind(this.render, this));
+      widgetView.on('state', function(state) {
+        if(state === 'busy' || state === 'authing') {
+          this.widgetBarIcon.addClass('busy');
+        } else {
+          this.widgetBarIcon.removeClass('busy');
+        }
+        this.render();
+      }.bind(this));
 
       var origToggle = this.toggle;
       this.toggle = function() {
         origToggle.call(this);
         this.render();
       };
+
+      widgetView.setState('initial');
     },
 
     connectStorage: function(event) {

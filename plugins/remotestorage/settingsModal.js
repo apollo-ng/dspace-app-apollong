@@ -1,7 +1,7 @@
 
 define([
   'views/widgetModal',
-  'remoteStorage',
+  './remotestorage',
   'hbs!./templates/settingsModal'
 ], function(WidgetModal, remoteStorage, SettingsTemplate) {
 

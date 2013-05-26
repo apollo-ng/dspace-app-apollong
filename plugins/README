@@ -1,4 +1,23 @@
 
+WHAT'S A PLUGIN?
+----------------
+
+A Plugin is a bunch of code that addresses a single concern. It carries
+metainformation (such as author, name, description, version etc.) and
+can hook into various places of DSpace.
+
+See plugins/hello/init.js for a minimal implementation of a plugin.
+
+Also take a look at app/dspace.js to learn about the Plugin API.
+
+HOW DO I LOAD PLUGINS?
+----------------------
+
+All plugins in the config.plugins are loaded when DSpace starts. To explicitly
+load additional plugins (e.g. if your plugin depends on another one), check
+dspace.plugins first (it contains a list of plugins already loaded), then
+call dspace.loadPlugins('one-plugin', 'other-plugin', ...) to trigger the load.
+
 HOOKS
 -----
 

@@ -19,10 +19,17 @@ define([
     },
 
     setState: function(state) {
+      try {
       // TODO: change appearance of icon (spinning, offline etc)
       console.log("REMOTESTORAGE STATE", state);
+      dspace.remotestorage.isConnected = (
+        state === 'connected' || state === 'busy'
+      );
       this.state = state;
       this.emit('state', state);
+      } catch(exc) {
+        console.error('error in setState', exc.stack);
+      }
     },
 
     redirectTo: function(url) {

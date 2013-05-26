@@ -122,6 +122,11 @@ define([
        * Property: widgetBar
        */
       this.widgetBar = new WidgetBar();
+
+      /**
+       * Property: overlayManager
+       */
+      this.overlayManager = new OverlayManager();
     },
 
     /**
@@ -187,7 +192,7 @@ define([
      * displays <OverlaysManager> modal
      */
     showOverlaysManager: function(){
-      this.modal = new OverlayManager();
+      this.modal = this.overlayManager;
       this.modal.show();
     },
 

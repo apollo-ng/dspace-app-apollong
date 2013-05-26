@@ -17,6 +17,7 @@ define([
     initialize: function() {
       setTimeout(function() {
         dspace.declareHook('widgetBarIcon', this.addIcon.bind(this));
+        dspace.declareHook('widgetBarElement', this.addElement.bind(this));
       }.bind(this));
     },
 

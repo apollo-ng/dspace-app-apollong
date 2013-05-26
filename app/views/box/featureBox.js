@@ -141,7 +141,8 @@ define([
        */
       render: function(){
         this.$el.html(this.template({
-          tabs: this.featureTabs
+          tabs: this.featureTabs,
+          empty: this.featureTabs.length === 0
         }));
 
         _(this.featureTabs).each(function(featureTab){

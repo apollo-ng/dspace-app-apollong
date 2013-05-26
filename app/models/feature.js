@@ -227,7 +227,7 @@ define([
         properties: {
           type: 'route-point',
           name: routePoint.getElementsByTagName('name')[0].textContent,
-          title: routePoint.getElementsByTagName('desc')[0].textContent
+          description: routePoint.getElementsByTagName('desc')[0].textContent
         }
       });
     },

@@ -25,7 +25,6 @@ define([
         collection.watch(function(action, feature) {
           switch(action) {
           case 'add':
-            console.log('add feature', feature);
             this.collection.add(feature);
             break;
           case 'update':

@@ -93,12 +93,14 @@ function provide (name, what) {
 
   Ender.prototype.$ = ender // handy reference to self
 
+  // dev tools secret sauce
+  Ender.prototype.splice = function () { throw new Error('Not implemented') }
 
   function ender(s, r) {
     return new Ender(s, r)
   }
 
-  ender['_VERSION'] = '0.4.3-dev'
+  ender['_VERSION'] = '0.4.5'
 
   ender.fn = Ender.prototype // for easy compat to jQuery plugins
 

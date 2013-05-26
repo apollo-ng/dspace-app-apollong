@@ -1,15 +1,24 @@
-<h2>State: {{state}}</h2>
+<h2>Remote-Storage Plugin</h2>
+<h3>Status: {{state}}</h3>
+<div class="uiWidgetActions">
 {{#showForm}}
 <form id="connect-form">
-  User address:
-  <input style="border:groove 12px black; padding:4px;" type="email" name="userAddress">
-  <input style="border:groove 12px green; padding:4px;" type="submit" value="Connect">
+ <p>Please enter your User-Address and click connect. Read more about remote-storage on the <a href="http://remotestorage.io/" target="_new">project's site</a>.</p>
+ <div class="uiOption">
+  <label>User address</label>
+  <input type="email" name="userAddress" placeholder="useraddress@example.net"/><input type="submit" value="Connect" />
+ </div>
 </form>
 {{/showForm}}
 
-{{#showSync}}
-<button data-command="sync" style="border:groove 12px green; padding:4px;">Sync</button>
-{{/showSync}}
+
 {{#showDisconnect}}
-  <button data-command="disconnect" style="border:groove 12px green; padding:4px;">Disconnect</button>
+<p>Available Actions:</p>
+<div class="uiOption">
+ {{#showSync}}
+  <button class="first" data-command="sync">Sync</button>
+ {{/showSync}}
+ <button class="last" data-command="disconnect">Disconnect</button>
+</div>
 {{/showDisconnect}}
+</div>

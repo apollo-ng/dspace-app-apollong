@@ -58,6 +58,17 @@ define([
       'click *[data-command="disconnect"]': 'disconnectCommand',
     },
 
+    stateNames: {
+      initial: 'Not connected',
+      typing: 'Not connected',
+      authing: 'Authenticating',
+      connected: 'Connected (Idle)',
+      busy:	'Connected (Syncing)',
+      offline: 'Connected (Offline)',
+      error: 'Connected (Sync Error)',
+      unauthorized:	'Unauthorized'
+    },
+
     initialize: function() {
       remoteStorage.claimAccess('locations', 'rw');
       remoteStorage.displayWidget();
@@ -82,7 +93,7 @@ define([
     refresh: function() {
       var state = widgetView.state;
       this.$el.html(this.template({
-        state: state,
+        state: this.stateNames[state],
         showForm: (state === 'initial' || state === 'typing'),
         showSync: (state === 'connected'),
         showDisconnect: (state === 'connected' || state === 'busy')

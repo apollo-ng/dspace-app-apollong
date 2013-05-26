@@ -17,10 +17,7 @@ define([
     },
 
     getCollection: function(name, callback) {
-      locations.getCollection(name).then(function(col) {
-        _.extend(col, { name: name, type: 'RemoteStorage' });
-        callback(col);
-      });
+      callback({ name: name, type: 'RemoteStorage' });
     }
 
   };

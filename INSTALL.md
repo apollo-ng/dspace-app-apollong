@@ -49,7 +49,11 @@ You need [naturaldocs](http://naturaldocs.org/) to build the docs:
 
     $ make build
 
-You'll find a deployable client in the build/ direcory
+You'll find a deployable client in the build/ direcory. For pure development
+purposes this step is not necessary, as the development server will serve
+the files in their local uncompressed/unminfied form to ease debugging.
+
+When you want to put the client into production you want to use build/.
 
 #### [gitflow](https://github.com/nvie/gitflow) (optional)
 

@@ -44,4 +44,4 @@ automatically built from 'develop' branch. May be experimental and unstable.
 
 ## Development & Deployment
 
-Please refer to [INSTALL.md]
+Please refer to [INSTALL.md](INSTALL.md)

@@ -23,7 +23,7 @@
 
 .uiButton:hover {
   color: #fafafa;
-  text-shadow: 1px 1px 0px #000
+  text-shadow: 1px 1px 0px #000;
   background: rgb(60,60,57);
   background: -moz-linear-gradient(top, rgba(60,60,57,0.5) 0%, rgba(56,55,52,0.73) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(60,60,57,0.5)), color-stop(100%,rgba(56,55,52,0.73)));
@@ -185,7 +185,7 @@
   -webkit-box-sizing: content-box; /* 2 */
   box-sizing: content-box;
   font: 14px arial,sans-serif;
-  color: ##444;
+  color: #444;
   border: 1px solid #444;
   height: 28px;
   background: #444;
@@ -668,7 +668,7 @@ text-shadow: none;
   margin-top: 7px;
   width: 30px;
   font-size: 25px;
-  font-weight: thin;
+  font-weight: lighter;
   height: 32px;
   line-height: 32px;
   margin-left: 8px;
@@ -1059,7 +1059,7 @@ text-shadow: none;
   float: left;
   line-height: 24px;
   display: block;
-  width: 70%px;
+  width: 70%;
 }
 
 .featureDetails p {

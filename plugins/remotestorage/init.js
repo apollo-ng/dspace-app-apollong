@@ -1,5 +1,8 @@
 
-define(['./settingsModal', './geofeed'], function(SettingsModal, RemoteStorageFeed) {
+define([
+  './src/settingsModal',
+  './src/geofeed'
+], function(SettingsModal, RemoteStorageFeed) {
 
   dspace.plugin('remotestorage', {
     name: 'remotestorage',

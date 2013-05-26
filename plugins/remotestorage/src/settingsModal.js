@@ -1,8 +1,8 @@
 
 define([
   'views/widgetModal',
-  './remotestorage',
-  'hbs!./templates/settingsModal'
+  '../lib/remotestorage',
+  'hbs!../templates/settingsModal'
 ], function(WidgetModal, remoteStorage, SettingsTemplate) {
 
   // SEE http://remotestoragejs.com/doc/code/files/lib/widget/default-js.html

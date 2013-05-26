@@ -1,7 +1,7 @@
 define([
   'underscore',
-  './remotestorage',
-  './remotestorage-locations',
+  '../lib/remotestorage',
+  '../lib/remotestorage-locations',
   'models/feature',
   'geofeeds/base'
 ], function(_, remoteStorage, locations, Feature, Base) {

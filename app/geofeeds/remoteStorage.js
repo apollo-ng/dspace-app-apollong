@@ -16,7 +16,7 @@ define([
 
     watch: function() {
       // FIXME: move to setup!!
-      remoteStorage.onWidget('disconnect', function() {
+      remoteStorage.on('disconnect', function() {
         this.collection.reset();
       }.bind(this));
 
@@ -41,7 +41,7 @@ define([
             this.updateCollection({ features: features }, true);
           }.bind(this));
         }.bind(this);
-        remoteStorage.onWidget('ready', initialUpdate);
+        remoteStorage.on('ready', initialUpdate);
         initialUpdate();
 
       }.bind(this);

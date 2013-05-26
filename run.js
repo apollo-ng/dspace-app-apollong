@@ -46,6 +46,8 @@ http.createServer(function(request, response) {
         response.setHeader( 'Content-Type',  'text/javascript' ); }
       else if( filetype == 'css' ) {
         response.setHeader( 'Content-Type',  'text/css' ); }
+      else if( filetype == 'svg' ) {
+        response.setHeader( 'Content-Type',  'image/svg+xml' ); }
 
       // set CORS
       response.setHeader('Access-Control-Allow-Origin',  "*");

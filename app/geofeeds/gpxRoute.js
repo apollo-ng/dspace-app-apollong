@@ -50,6 +50,7 @@ define([
     },
 
     fetch: function() {
+      console.debug('start routing from', this.from, 'to', this.to);
       new Reqwest({
         url: this.initUrl,
         type: 'text',
@@ -67,6 +68,7 @@ define([
     },
 
     _fetchResults: function() {
+      console.debug('fetch route & track points');
       new Reqwest({
         url: this.routeUrl,
         type: 'xml',
@@ -87,17 +89,20 @@ define([
     },
 
     _receiveTrack: function(source) {
+      console.debug('received track points');
       this.trackFeatures = Feature.fromGPXTrack(source)
       this._received();
     },
 
     _receiveRoute: function(source) {
+      console.debug('received route points');
       this.routeFeatures = Feature.fromGPXRoute(source);
       this._received();
     },
 
     _received: function() {
       if(this.routeFeatures && this.trackFeatures) {
+        console.debug('routing done.');
         this.trackCollection.reset(this.trackFeatures);
         this.updateCollection({ features: this.routeFeatures }, true);
         delete this.routeFeatures;

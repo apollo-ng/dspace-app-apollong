@@ -211,6 +211,15 @@ define([
       SpaceAPI: SpaceApiFeed
     },
 
+    navigateTo: function(location) {
+      this.addFeed(this.createFeed({
+        type: 'GPXRoute',
+        from: this.user.feed.avatar.getLatLon(),
+        to: location,
+        url: this.config.user.routinoURL
+      }), true);
+    },
+
     /**
      * Method: createFeed
      *

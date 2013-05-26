@@ -94,6 +94,12 @@ define([
         this.world.user.feed.unwatch();
       }.bind(this));
 
+      this.mapContext.on('command:navigate-here', function(point) {
+        console.log('navigate-here!!!');
+        var loc = this.frame.pointLocation(point);
+        this.world.navigateTo(loc);
+      }.bind(this));
+
       this.world.on('add-feed', this.addOverlay.bind(this));
       this.world.on('remove-feed', this.removeOverlay.bind(this));
 

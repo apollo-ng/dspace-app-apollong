@@ -1200,3 +1200,12 @@ text-shadow: none;
   min-height: 300px;
   background: #999;
 }
+
+#userPlugins .plugin {
+  padding: 5px;
+  border: 1px solid #000;
+  margin: 15px;
+  color: #444;
+  background: rgb(244,241,235);
+}
+

@@ -127,6 +127,18 @@ define([
        * Property: overlayManager
        */
       this.overlayManager = new OverlayManager();
+
+      setTimeout(function() {
+
+        dspace.declareHook('style', function(url) {
+          $(document.body).append(
+            $('<link>').
+              attr('rel', 'stylesheet').
+              attr('href', url)
+          );
+        });
+
+      }, 0);
     },
 
     /**

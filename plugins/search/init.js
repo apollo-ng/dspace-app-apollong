@@ -8,6 +8,9 @@ define(['./searchbox'], function(Searchbox) {
     authors: ['Niklas E. Cathor <nilclass@riseup.net>'],
 
     hooks: {
+
+      style: 'plugins/search/assets/style.css',
+
       widgetBarElement: new Searchbox()
     }
   });

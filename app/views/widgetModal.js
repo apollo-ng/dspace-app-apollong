@@ -1,107 +1,37 @@
 define([
   'backbone',
-  'remoteStorage',
   'hbs!templates/widgetModal'
-], function(Backbone, remoteStorage, widgetModalTemplate) {
-
-  // SEE http://remotestoragejs.com/doc/code/files/lib/widget/default-js.html
-  // FOR AN INCOMPLETE REFERENCE OF THE REMOTESTORAGE WIDGET VIEW API.
-
-  var events = remoteStorage.util.getEventEmitter(
-    'connect', 'disconnect', 'sync', 'reconnect',
-    'state' // << used internally to link widgetView -> widgetModal
-  );
-
-  var widgetView = remoteStorage.util.extend({
-    display: function() {
-      this.state = 'initial';
-    },
-
-    setState: function(state) {
-      // TODO: change appearance of icon (spinning, offline etc)
-      console.log("REMOTESTORAGE STATE", state);
-      this.state = state;
-      this.emit('state', state);
-    },
-
-    redirectTo: function(url) {
-      document.location = url;
-    },
-
-    setUserAddress: function(userAddress) {
-      // TODO: implement this if necessary.
-    },
-
-    getLocation: function() {
-      return document.location.href;
-    },
-
-    setLocation: function(url) {
-      document.location = url;
-    }
-
-  }, events);
-
-  remoteStorage.widget.setView(widgetView);
+], function(Backbone, widgetModalTemplate) {
 
   /**
    * Class: WidgetModal
+   *
+   * A base class for all WidgetModals, usually implemented by plugins.
    */
   return Backbone.View.extend({
     el: '#widgetModal',
 
     template: widgetModalTemplate,
 
-    events: {
-      'submit #connect-form': 'connectStorage',
-      'click *[data-command="sync"]': 'syncCommand',
-      'click *[data-command="disconnect"]': 'disconnectCommand',
-    },
-
-    stateNames: {
-      initial: 'Not connected',
-      typing: 'Not connected',
-      authing: 'Authenticating',
-      connected: 'Connected (Idle)',
-      busy:	'Connected (Syncing)',
-      offline: 'Connected (Offline)',
-      error: 'Connected (Sync Error)',
-      unauthorized:	'Unauthorized'
-    },
-
     initialize: function() {
-      remoteStorage.claimAccess('locations', 'rw');
-      remoteStorage.displayWidget();
+      if(typeof(this.preInit) === 'function') {
+        this.preInit();
+      }
 
-      widgetView.on('state', _.bind(this.refresh, this));
+      // access to the icon.
+      this.widgetBarIcon = this.options.widgetBarIcon;
+
+      if(typeof(this.postInit) === 'function') {
+        this.postInit();
+      }
     },
 
-    connectStorage: function(event) {
-      event.preventDefault();
-      widgetView.emit('connect', event.target.userAddress.value);
-      return false;
-    },
-
-    syncCommand: function() {
-      widgetView.emit('sync');
-    },
-
-    disconnectCommand: function() {
-      widgetView.emit('disconnect');
-    },
-
-    refresh: function() {
-      var state = widgetView.state;
-      this.$el.html(this.template({
-        state: this.stateNames[state],
-        showForm: (state === 'initial' || state === 'typing'),
-        showSync: (state === 'connected'),
-        showDisconnect: (state === 'connected' || state === 'busy')
-      }));
+    render: function() {
+      this.$el.html(this.template(this.templateAssigns()));
     },
 
     show: function(){
-      this.refresh();
+      this.render();
       this.$el.css( { 'display': 'block'});
       this.$el.fadeIn(350);
       this.visible = true;
@@ -119,5 +49,6 @@ define([
         this.show();
       }
     }
+
   });
 });

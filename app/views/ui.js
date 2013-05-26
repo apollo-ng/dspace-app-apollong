@@ -4,14 +4,14 @@ define([
   'geofeeds/search',
   'views/statusPanel',
   'views/sideBar',
-  'views/widgetModal',
+  'views/widgetBar',
   'views/box/featureBox',
   'views/map/map',
   'views/map/miniMap',
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails'
-], function(Backbone, $, SearchFeed, StatusPanel, SideBar, WidgetModal, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, SearchFeed, StatusPanel, SideBar, WidgetBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -47,7 +47,6 @@ define([
       , 'click #userOptions': 'showUserOptions'
       , 'click #closeModal': 'closeModal'
       , 'submit #searchForm': 'createSearch'
-      , 'click #remotestorage-connect-icon': 'toggleWidgetModal'
     },
 
     /**
@@ -122,9 +121,9 @@ define([
       this.sideBar = new SideBar();
 
       /**
-       * Property: widgetModal
+       * Property: widgetBar
        */
-      this.widgetModal = new WidgetModal();
+      this.widgetBar = new WidgetBar();
     },
 
     /**
@@ -282,15 +281,6 @@ define([
         this.sideBar.hide();
         this.fullScreen = true;
       }
-    },
-
-    /**
-     * Method: toggleWidgetModal
-     *
-     * toggles <WidgetModal>
-     */
-    toggleWidgetModal: function(){
-      this.widgetModal.toggle();
     },
 
     /**

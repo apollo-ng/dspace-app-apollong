@@ -5,11 +5,10 @@ define([
   'geofeeds/spaceApi',
   'collections/feature',
   'models/feature',
-  'geofeeds/remoteStorage',
   'geofeeds/device',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection, Feature,
-            RemoteStorageFeed, DeviceFeed, User ) {
+], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection,
+            Feature, DeviceFeed, User ) {
 
   /*
    * Class: World
@@ -178,26 +177,30 @@ define([
       return feature;
     },
 
+    addFeedType: function(type, constructor) {
+      if(this.feedConstructors[type]) {
+        console.log("WARNING: adding already declared feed type " + type);
+      }
+      this.feedConstructors[type] = constructor;
+    },
+
+    feedConstructors: {
+      CORS: GeoJSONFeed,
+      SpaceAPI: SpaceApiFeed
+    },
+
     /**
      * Method: createFeed
      *
      * creates <GeoFeed> instances based on type from feed definition
      */
     createFeed: function(feed) {
-      switch(feed.type){
-      case 'CORS':
-        return new GeoJSONFeed(feed);
-        break;
-      case 'remoteStorage':
-        return new RemoteStorageFeed(feed);
-        break;
-      case 'SpaceAPI':
-        return new SpaceApiFeed(feed);
-        break;
-      default:
+      var constructor = this.feedConstructors[feed.type];
+      if(constructor) {
+        return new constructor(feed);
+      } else {
         console.log('WARNING: Feed type not implemented: ' + feed.type);
-        break;
-      };
+      }
     }
   });
 

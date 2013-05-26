@@ -1,13 +1,14 @@
-# Development & Installation
+# Development & Deployment
 
-[Online Docs](http://dspace-develop.open-resource.org/doc/)
-
-## Setting up a local Development & Build Environment
+## Setting up local development & build environment
 
 ### Basic System dependencies
 
   * [node.js](http://nodejs.org/) 0.8.x
   * [npm](https://npmjs.org/) 1.x
+
+Please make sure not to have NodeJS > 0.8.x, as it will break the building
+process (see issue #85).
 
 #### Ubuntu
 
@@ -25,7 +26,7 @@ environment, you can try [nvm](https://github.com/creationix/nvm)
 
 ### Install DSpace-Client
 
-#### Clone
+#### Clone the repo
 
     $ git clone git@github.com:apollo-ng/dspace-client.git
     $ cd dspace-client
@@ -36,11 +37,11 @@ You need [naturaldocs](http://naturaldocs.org/) to build the docs:
 
     $ make doc
 
-#### Install DSpace-Client Development- and Runtime Depenencies
+#### Install Node packages
 
     $ npm install
 
-#### Initialize setup and build dependencies
+#### Initialize & build dependencies
 
     $ make init
     $ make deps
@@ -80,3 +81,8 @@ Or use any other local webserver, for example:
 You'll need [phantomjs](http://phantomjs.org/) 1.8.x to run the tests, either compile from source or use your distros package
 
     $ npm test
+
+
+## DSpace-Client code documentation
+
+[Online Docs](http://dspace-develop.open-resource.org/doc/)

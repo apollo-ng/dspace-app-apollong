@@ -33,7 +33,11 @@ define([
           // successFunction
           function(position) {
             $('#userGeoStatus').addClass('enabled');
-            this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
+            var prevLatLon = this.avatar.getLatLon();
+            if(prevLatLon.lat !== position.coords.latitude ||
+               prevLatLon.lon !== position.coords.longitude) {
+              this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
+            }
             if(this.collection.length === 0) {
               this.collection.add(this.avatar);
             }

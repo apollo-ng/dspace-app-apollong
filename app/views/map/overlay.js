@@ -2,6 +2,7 @@ define([
   'backbone',
   'markers',
   'views/map/marker',
+  'views/map/layers/route',
   'hbs!templates/featureInfoModal'
 ], function(Backbone, markers, Marker, RouteLayer, FeatureInfoModalTemplate) {
 

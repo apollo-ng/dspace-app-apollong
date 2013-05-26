@@ -208,7 +208,8 @@ define([
 
     feedConstructors: {
       CORS: GeoJSONFeed,
-      SpaceAPI: SpaceApiFeed
+      SpaceAPI: SpaceApiFeed,
+      GPXRoute: GPXRouteFeed
     },
 
     navigateTo: function(location) {

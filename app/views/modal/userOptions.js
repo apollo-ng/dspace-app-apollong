@@ -28,7 +28,7 @@ define([
       },
 
       render: function(){
-        this.$el.find('#modal-content').html(this.template());
+        this.$el.find('#modalContent').html(this.template());
 
         // initialize uiElements from user settings.
         // FIXME: add other types (selectBox)

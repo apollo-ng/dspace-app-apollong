@@ -12,7 +12,7 @@ define([
 
     render: function() {
       var content = this.template(this.data);
-      this.$el.find('#modal-content').html(content);
+      this.$el.find('#modalContent').html(content);
     },
 
     show: function(){

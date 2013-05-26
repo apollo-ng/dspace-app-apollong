@@ -1,10 +1,27 @@
-   <!-- FIXME: show available FeatureCollections here -->
-   <h2>Please select an Overlay</h2>
-   <div class='modalContainer'>
-   This is a placeholder for a list of available FeatureCollections, that will be loaded into
-   the FeatureBox, when selected by the user.
+<!-- FIXME: show available FeatureCollections here -->
+<h1>Overlay Manager</h1>
+<div id="geoBar">
+ <input type="search" name="query" id="geobarQuery" placeholder="Search..." x-webkit-speech=""/><input type="submit" value="Go" />
+</div>
+<div id="overlayManagerContent" class="modalContainer">
+ <div id="geoBarQueryResults">
+  FIXME: This would be a good place to put geoBar Query Results into. It should be hidden, when no queries were submitted
+ </div>
+ <div id="overlayBrowser">
+  <h2>Browse through available Overlays</h2>
+  <div id="omc_public">
+   <h3>Public</h3>
    <ul>
-    <li>Overlay Title</li>
-    <li>Overlay Title 2</li>
+    <li>Overlay 1</li>
+    <li>Overlay 2</li>
    </ul>
-   </div>
+  </div>
+  <div id="omc_private">
+   <h3>Private</h3>
+   <ul>
+    <li>Overlay A</li>
+    <li>Overlay B</li>
+   </ul>
+  </div>
+ </div>
+</div>

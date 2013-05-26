@@ -1,17 +1,19 @@
 
 <h1>{{feature.properties.title}}</h1>
-<div data-format="position" data-lat="{{lat}}" data-lon="{{lon}}"></div>
-<div id="featureDetailsMap">Insert a map here with a fairly low zoomlevel on the Feature to get rid of the Minimap</div>
-<div class='featureDetails'>
- {{#keyValue feature.properties}}
- <p>
-  <span class='key'>{{key}}</span>
-  <span class='value'>{{value}}</span>
- </p>
- {{/keyValue}}
-</div>
-<div class="uiOption">
+<div class="modalContainer">
+ <div data-format="position" data-lat="{{lat}}" data-lon="{{lon}}"></div>
+ <div id="featureDetailsMap">Insert a map here with a fairly low zoomlevel on the Feature to get rid of the Minimap</div>
+ <div class='featureDetails'>
+  {{#keyValue feature.properties}}
+  <p>
+   <span class='key'>{{key}}</span>
+   <span class='value'>{{value}}</span>
+  </p>
+  {{/keyValue}}
+ </div>
+ <div class="uiOption">
  <button class="first" data-command="featureLike">Like</button>
  <button data-command="featureDislike">Dislike</button>
  <button class="last" data-command="disconnect">Start Navigation</button>
+ </div>
 </div>

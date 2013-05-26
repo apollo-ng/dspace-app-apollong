@@ -186,7 +186,7 @@ h3	 { font-size: 18px; }
   border-top: 1px solid #999;
   border-left: 1px solid #999;
   border-bottom: 1px solid #999;
-  z-index: 999999;
+  z-index: 99999;
 }
 
 #mmViewport {

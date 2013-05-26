@@ -2,8 +2,8 @@ define([
   'ender',
   'backbone',
   'views/box/featureBoxItem',
-  'templateMap'
-], function($, Backbone, FeatureBoxItem, templates) {
+  'hbs!templates/featureTab'
+], function($, Backbone, FeatureBoxItem, FeatureTabTemplate) {
 
   /**
    * Class: FeatureTab
@@ -18,7 +18,7 @@ define([
   var FeatureTab = Backbone.View.extend({
 
     className: 'featureTab',
-    template: templates.featureTab,
+    template: FeatureTabTemplate,
 
     events: {
       'change input[name="visible"]': 'updateVisible',

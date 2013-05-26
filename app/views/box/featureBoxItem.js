@@ -1,6 +1,8 @@
 define([
-  'backbone', 'templateMap', 'template/helpers/renderPos',
-], function(Backbone, templates, renderPos) {
+  'backbone',
+  'hbs!templates/featureBoxItem',
+  'template/helpers/renderPos',
+], function(Backbone, FeatureBoxItemTemplate, renderPos) {
 
   /**
    * Class: FeatureBoxItem
@@ -23,7 +25,7 @@ define([
      *
      * handlebars template for rendering
      */
-    template: templates.featureBoxItem,
+    template: FeatureBoxItemTemplate,
 
     events: {
       "click": "focusOnFeature"

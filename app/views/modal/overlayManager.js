@@ -1,15 +1,15 @@
 define([
   'ender',
   'views/modal/base',
-  'templateMap'
-], function($, BaseModal, templates) {
+  'hbs!templates/overlayManager'
+], function($, BaseModal, OverlayManagerTemplate) {
 
   /**
    * Class: Modal.OverlayManager
    */
   var OverlayManager = BaseModal.extend({
 
-    template: templates.overlayManager,
+    template: OverlayManagerTemplate,
 
     sections: [],
 

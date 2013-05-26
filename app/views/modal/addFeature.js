@@ -4,10 +4,9 @@ define([
   'backbone',
   'models/feature',
   'views/modal/base',
-  'templateMap',
   'template/helpers/renderPos',
   'hbs!templates/addFeature'
-], function(_, $, Backbone, Feature, BaseModal, templates, renderPos, addFeatureTemplate) {
+], function(_, $, Backbone, Feature, BaseModal, renderPos, addFeatureTemplate) {
 
   /**
    * Class: Modal.AddFeature

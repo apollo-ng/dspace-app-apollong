@@ -2,8 +2,8 @@ define([
   'ender',
   'backbone',
   'views/box/featureTab',
-  'templateMap'
-], function($, Backbone, FeatureTab, templates) {
+  'hbs!templates/featureBox'
+], function($, Backbone, FeatureTab, FeatureBoxTemplate) {
     /**
      * Class: FeatureBox
      *
@@ -21,7 +21,7 @@ define([
        * DOM element of this view
        */
       el: '#featureBox',
-      template: templates.featureBox,
+      template: FeatureBoxTemplate,
 
       events: {
         'click *[data-tab]': 'clickTab'

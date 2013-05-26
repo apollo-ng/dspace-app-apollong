@@ -2,8 +2,8 @@ define([
   'ender',
   'backbone',
   'views/modal/base',
-  'templateMap',
-], function($, Backbone, BaseModal, templates) {
+  'hbs!templates/userOptionModal'
+], function($, Backbone, BaseModal, UserOptionModalTemplate) {
 
     /**
      * Class: Modal.UserOptions
@@ -14,7 +14,7 @@ define([
      */
     return BaseModal.extend({
 
-      template: templates.userOptionModal,
+      template: UserOptionModalTemplate,
 
       events: {
         'change input': 'updateUser',

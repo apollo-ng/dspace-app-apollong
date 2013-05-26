@@ -1,11 +1,11 @@
 define([
   'ender',
   'backbone',
-  'templateMap',
+  'hbs!templates/statusPanel',
   'template/helpers/renderPos',
   'template/helpers/renderAcc',
   'template/helpers/ms2kmh',
-], function($, Backbone, templates, renderPos, renderAcc, ms2kmh) {
+], function($, Backbone, StatusPanelTemplate, renderPos, renderAcc, ms2kmh) {
 
   /**
    * Class: StatusPanel
@@ -19,7 +19,7 @@ define([
   var StatusPanel =  Backbone.View.extend({
 
     el: '#statusPanel',
-    template: templates.statusPanel,
+    template: StatusPanelTemplate,
 
     events: {
       'click #userGeoStatus': 'toggleGeoAPI',

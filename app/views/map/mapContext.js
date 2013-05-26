@@ -1,7 +1,7 @@
 define([
   'backbone',
-  'templateMap'
-], function(Backbone, templates) {
+  'hbs!templates/mapContext'
+], function(Backbone, MapContextTemplate) {
 
   /**
    * Class: MapContext
@@ -13,7 +13,7 @@ define([
   var MapContext = Backbone.View.extend({
 
     el: '#mapContext',
-    template: templates.mapContext,
+    template: MapContextTemplate,
 
     events: {
       'click *[data-command]': 'callCommand',

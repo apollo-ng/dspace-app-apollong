@@ -2,8 +2,8 @@ define([
   'backbone',
   'markers',
   'views/map/marker',
-  'templateMap'
-], function(Backbone, markers, Marker, templates) {
+  'hbs!templates/featureInfoModal'
+], function(Backbone, markers, Marker, FeatureInfoModalTemplate) {
 
   /**
    * Class: Overlay
@@ -17,7 +17,7 @@ define([
    */
   var Overlay = Backbone.View.extend({
 
-    template: templates.featureInfoModal,
+    template: FeatureInfoModalTemplate,
 
     initialize: function() {
 

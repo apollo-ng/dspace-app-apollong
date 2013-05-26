@@ -27,6 +27,9 @@ define([
      */
     watch: function() {
       if (navigator.geolocation) {
+        if(this.watchID) {
+          this.unwatch();
+        }
         // Browser has geolocation API - enable Watcher
         this.watchID = navigator.geolocation.watchPosition(
 

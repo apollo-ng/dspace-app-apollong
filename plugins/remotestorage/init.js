@@ -26,7 +26,7 @@ define([
       },
 
       widgetBarIcon: {
-        src: 'assets/images/remoteStorageIcon.svg',
+        src: 'plugins/remotestorage/assets/remoteStorageIcon.svg',
         modal: SettingsModal,
         classNames: 'remotestorage-icon'
       }

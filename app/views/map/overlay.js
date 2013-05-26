@@ -50,10 +50,12 @@ define([
       if(this.i >= 5) { return; }
       this.i++;
       this.hide();
-      if(this.feed.type === 'GPXRoute') {
-        this.layer = this.makeRouteLayer();
-      } else {
-        this.layer = this.makeMarkerLayer();
+      if(! this.layer) {
+        if(this.feed.type === 'GPXRoute') {
+          this.layer = this.makeRouteLayer();
+        } else {
+          this.layer = this.makeMarkerLayer();
+        }
       }
       this.map.frame.addLayer(this.layer);
       this.map.frame.draw();

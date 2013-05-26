@@ -19,17 +19,22 @@ MY_HASH:=$(shell git log | head -n1 | awk {'print $$2'})
 default: build
 
 build: deps
+	@echo -n "Cleaning up build/... "
+	@rm -r build/
+	@echo "[OK]"
 	@echo -n "Build & minify dspace-client.js... "
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
-	@echo -n "Moving Assets... "
-	@cp -r assets/icons build/assets/icons
-	@cp -r assets/images build/assets/images
+	@echo -n "Copying Assets... "
+	@cp -r assets/icons build/assets/
+	@cp -r assets/images build/assets/
 	@echo "[OK]"
+	@echo -n "Copying Plugin Assets... "
+	@for x in `ls plugins` ; do [ -d "plugins/$$x" ] && [ -d "plugins/$$x/assets" ] && mkdir -p "build/plugins/$$x" && cp -r "plugins/$$x/assets" "build/plugins/$$x" ; done
+	@echo  "[OK]"
 	@echo -n "Merging and compressing dspace-client.css... "
 	@cat assets/css/main.css > .tmp.css
 	@cat assets/css/ui.css >> .tmp.css
-	@rm -r build/
 	@install -d build/assets/css
 	@node_modules/.bin/csso -i .tmp.css -o build/assets/css/dspace-client.css	
 	@rm .tmp.css

@@ -1,7 +1,6 @@
 .uiPanel {
   position: absolute;
   z-index: 99;
-  width: 100%;
   height: 47px;
   text-align: center;
 }
@@ -72,6 +71,239 @@
   color: #e8e5de;
   text-shadow: 1px 1px 5px #000;
 }
+
+.uiWidgetModal {
+  position: absolute;
+  bottom: 48px;
+  left: 0px;
+  right: 0px;
+  z-index: 9999999;
+  height: 178px;
+  overflow: visible;
+  opacity: 0;
+  display: none;
+  background: #3f3e3a;
+  color: #fafafa;
+  border-left: 1px solid #666;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #666;
+  font-size: 12px;
+}
+
+.uiWidgetModal h2 {
+  text-align: left;
+  width: 100%;
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 48px;
+  height: 48px;
+  border-bottom: 1px solid #000;
+  color: #e8e5de;
+  text-shadow: 1px 1px 5px #000;
+  background: #3f3e3a url(../images/panel_bg.png);
+  border-bottom: 1px solid #666;
+  margin-bottom: 0px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.uiWidgetModal h3 {
+  margin-top: 0px;
+  text-align: left;
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+  padding-left: 10px;
+  color: #444;
+  background: #ccc;
+  background: -moz-linear-gradient(top, #cccccc 35%, #f9f7f4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(35%,#cccccc), color-stop(100%,#f9f7f4));
+  background: -webkit-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -o-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -ms-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: linear-gradient(to bottom, #cccccc 35%,#f9f7f4 100%);
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.uiWidgetModal .uiWidgetActions {
+  margin: 10px;
+  margin-top: 12px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.uiWidgetModal .uiWidgetActions p {
+  margin-bottom: 12px;
+}
+
+.uiWidgetModal label {
+  margin-left: 10px;
+  color: #333;
+  cursor: pointer;
+  text-shadow: 1px 1px 0px #fff;
+}
+
+.uiWidgetModal input[type=email] {
+  outline: none;
+  line-height: 20px;
+  height: 20px;
+  width: 180px;
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+  font: 14px arial,sans-serif;
+  color: ##444;
+  border: 1px solid #444;
+  height: 28px;
+  background: #444;
+  color: #e8e5de;
+  border: 1px solid #222;
+  padding-left: 4px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0 0 1.5em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+  box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+}
+
+
+.uiWidgetModal input[type=submit] {
+  outline: none;
+  height: 28px;
+  line-height: 20px;
+  background: #ccc;
+  width: 80px;
+  cursor: pointer;
+  border: 1px solid #444;
+  color: #444;
+  background: rgb(244,241,235);
+  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
+  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
+  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+  text-shadow: 1px 1px 0px #fff;
+-moz-box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 3px 0 rgba(0,0,0,0.4);
+-webkit-box-shadow: 0 0 1.5em 0 rgba(0, 0, 0, 0.35), inset 0 0 3px 0 rgba(0,0,0,0.4);
+box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 3px 0 rgba(0,0,0,0.4);
+
+}
+
+.uiWidgetModal input[type=submit]:hover {
+background: rgb(68,68,68);
+background: -moz-linear-gradient(left, rgba(68,68,68,1) 0%, rgba(14,14,14,1) 100%);
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(68,68,68,1)), color-stop(100%,rgba(14,14,14,1)));
+background: -webkit-linear-gradient(left, rgba(68,68,68,1) 0%,rgba(14,14,14,1) 100%);
+background: -o-linear-gradient(left, rgba(68,68,68,1) 0%,rgba(14,14,14,1) 100%);
+background: -ms-linear-gradient(left, rgba(68,68,68,1) 0%,rgba(14,14,14,1) 100%);
+background: linear-gradient(to right, rgba(68,68,68,1) 0%,rgba(14,14,14,1) 100%);
+color: #fafafa;
+text-shadow: none;
+}
+
+.uiWidgetModal .first {
+  outline: none;
+  margin-left: 10px;
+  line-height: 20px;
+  font: 14px arial,sans-serif;
+  color: #444;
+  border: 1px solid #444;
+  height: 28px;
+  text-shadow: 1px 1px 0px #fff;
+  background: rgb(244,241,235);
+  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
+  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
+  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  border: 1px solid #222;
+  padding-left: 4px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0 0 1.5em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+  box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+}
+
+.uiWidgetModal .last {
+  outline: none;
+  line-height: 20px;
+  font: 14px arial,sans-serif;
+  color: #444;
+  border: 1px solid #444;
+  height: 28px;
+  text-shadow: 1px 1px 0px #fff;
+  background: rgb(244,241,235);
+  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
+  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
+  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  border: 1px solid #222;
+  padding-left: 4px;
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -moz-box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0 0 1.5em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+  box-shadow: 0 0 1.1em 0 rgba(0, 0, 0, 0.35), inset 0 0 5px 0 rgba(0,0,0,0.6);
+}
+
+.uiWidgetModal p {
+  margin: 0;
+  padding: 0;
+}
+
+.uiWidgetModal .uiOption {
+  height: 48px;
+  line-height: 48px;
+  font-size: 14px;
+  color: #333;
+  text-shadow: 1px 1px 0px #e0e0e0;
+  border-bottom: 1px solid #555;
+  background: #ccc;
+  background: -moz-linear-gradient(top, #cccccc 35%, #f9f7f4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(35%,#cccccc), color-stop(100%,#f9f7f4));
+  background: -webkit-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -o-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -ms-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: linear-gradient(to bottom, #cccccc 35%,#f9f7f4 100%);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 
 .uiContext {
   position:absolute;

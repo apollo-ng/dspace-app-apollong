@@ -47,7 +47,7 @@ define([
       , 'click #userOptions': 'showUserOptions'
       , 'click #modal-close': 'closeModal'
       , 'submit #searchForm': 'createSearch'
-      , 'contextmenu #widgetBar': 'toggleWidgetModal'
+      , 'click #remotestorage-connect-icon': 'toggleWidgetModal'
     },
 
     /**
@@ -177,7 +177,10 @@ define([
      */
     createFeature: function(location){
       var feature = this.world.newFeature(location);
-      this.modal = new FeatureDetails({ feature: feature });
+      this.modal = new FeatureDetails({
+        feature: feature,
+        mode: 'new'
+      });
       this.modal.show();
     },
 
@@ -197,8 +200,12 @@ define([
      * shows <UserOptions> modal 
      */
     showUserOptions: function() {
-      this.modal = new UserOptions({user: this.world.user, aether: this.aether});
-      this.modal.show();
+      if(this.modal instanceof UserOptions) {
+        this.closeModal();
+      } else {
+        this.modal = new UserOptions({user: this.world.user, aether: this.aether});
+        this.modal.show();
+      }
     },
 
     /**

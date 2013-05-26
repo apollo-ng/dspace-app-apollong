@@ -37,25 +37,63 @@ define([
      * Method: loadPlugins
      *
      * Takes a list of plugin names and loads them asynchronously.
+     *
      */
     loadPlugins: function() {
       var pluginNames = Array.prototype.slice.call(arguments);
-      pluginNames.forEach(this.loadPlugin.bind(this));
+      var loaded = [];
+      var loadedCount = 0;
+      pluginNames.forEach(
+        this._loadPlugin.bind(this, function(error, name, index) {
+          loaded[index] = { error: error, name: name };
+          loadedCount++;
+          if(loadedCount === pluginNames.length) {
+            this._allPluginsLoaded(loaded);
+          }
+        }.bind(this))
+      );
+    },
+
+    // loads a plugin's code, but doesn't initialize the plugin.
+    _loadPlugin: function(callback, pluginName, index) {
+      console.log("Loading plugin[" + index + "]: " + pluginName);
+      require(this.pluginLoadPaths(pluginName),
+              this._pluginLoaded.bind(this, pluginName, callback, index),
+              this._pluginFailed.bind(this, pluginName, callback, index));
+    },
+
+    // success callback for loading plugins
+    _pluginLoaded: function(pluginName, callback, index) {
+      console.log("Plugin[" + index + "] loaded: " + pluginName);
+      callback(null, pluginName, index);
+    },
+
+    // error callback for loading plugins
+    _pluginFailed: function(pluginName, callback, index, error) {
+      console.error("Plugin[" + index + "] failed to load: " + pluginName,
+                    error);
+      callback(error, pluginName, index);
+    },
+
+    // callback called when all plugin code has been loaded
+    _allPluginsLoaded: function(loadedPlugins) {
+      loadedPlugins.forEach(function(loadedPlugin) {
+        if(loadedPlugin.error) {
+          // ignore error, it has already been logged.
+        } else {
+          this.initPlugin(loadedPlugin.name);
+        }
+      }.bind(this));
     },
 
     /**
-     * Method: loadPlugin
+     * Method: pluginLoadPaths
      *
-     * Takes the name of a single plugin and attempts to load it.
-     *
-     * Plugins are expected to be found in the directory "plugins/NAME/" and
-     * bring at least a "init.js" file.
+     * List of paths to load via require() in order to load given plugin.
+     * Currently only returns ["plugins/PLUGIN-NAME/init"].
      */
-    loadPlugin: function(pluginName) {
-      console.log("Loading plugin: " + pluginName);
-      require(['plugins/' + pluginName + '/init'], function() {
-        console.log("Plugin loaded: " + pluginName);
-      }.bind(this));
+    pluginLoadPaths: function(pluginName) {
+      return ['plugins/' + pluginName + '/init'];
     },
 
     /**
@@ -64,16 +102,23 @@ define([
      * List of plugin definitions that have been evaluated.
      * See <plugin> for details.
      */
-    plugins: [],
+    plugins: {},
 
     /**
      * Method: plugin
      *
      * Used to implement a plugin.
      *
+     * Parmeters:
+     *   pluginName - name of the plugin. MUST be the exact name of the
+     *                plugin's directory.
+     *   definition - an Object carrying meta-information (name, description,
+     *                version, authors) and hooks containing the plugin's
+     *                implementation.
+     *
      * Example:
      *   (start code)
-     *   dspace.plugin({
+     *   dspace.plugin('hello', {
      *     name: "Hello",
      *     description: "Prints a nice greeting to the console.",
      *     version: '0.1',
@@ -86,14 +131,27 @@ define([
      *   });
      *   (end code)
      */
-    plugin: function(definition) {
+    plugin: function(pluginName, definition) {
+      this.plugins[pluginName] = definition;
+    },
 
-      this.plugins.push(definition);
-
+    /**
+     * Method: initPlugin
+     *
+     * Perform initialization of the plugin with the given name.
+     * This means attaching all it's hooks.
+     * In order for this to work, the plugin code has to be loaded (see
+     * _loadPlugin) and the plugin has to be declared via <plugin>.
+     */
+    initPlugin: function(pluginName) {
+      var definition = this.plugins[pluginName];
+      if(! definition) {
+        console.error("Can't initialize undeclared plugin: " + pluginName);
+        return;
+      }
       for(var key in definition.hooks) {
         this.attachHook(key, definition.hooks[key]);
       }
-
     },
 
     /**

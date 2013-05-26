@@ -1,5 +1,5 @@
 define([
-  'remoteStorage'
+  './remotestorage'
 ], function(remoteStorage) {
 
   remoteStorage.defineModule('locations', function(privClient, pubClient) {

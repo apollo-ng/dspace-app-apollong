@@ -1,17 +1,16 @@
 define([
   'backbone',
   'ender',
-  'geofeeds/search',
   'views/statusPanel',
   'views/sideBar',
-  'views/widgetModal',
+  'views/widgetBar',
   'views/box/featureBox',
   'views/map/map',
   'views/map/miniMap',
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails'
-], function(Backbone, $, SearchFeed, StatusPanel, SideBar, WidgetModal, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, StatusPanel, SideBar, WidgetBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -46,8 +45,6 @@ define([
       , 'click #addOverlay': 'showOverlaysManager'
       , 'click #userOptions': 'showUserOptions'
       , 'click #closeModal': 'closeModal'
-      , 'submit #searchForm': 'createSearch'
-      , 'click #remotestorage-connect-icon': 'toggleWidgetModal'
     },
 
     /**
@@ -122,9 +119,26 @@ define([
       this.sideBar = new SideBar();
 
       /**
-       * Property: widgetModal
+       * Property: widgetBar
        */
-      this.widgetModal = new WidgetModal();
+      this.widgetBar = new WidgetBar();
+
+      /**
+       * Property: overlayManager
+       */
+      this.overlayManager = new OverlayManager();
+
+      setTimeout(function() {
+
+        dspace.declareHook('style', function(url) {
+          $(document.body).append(
+            $('<link>').
+              attr('rel', 'stylesheet').
+              attr('href', url)
+          );
+        });
+
+      }, 0);
     },
 
     /**
@@ -190,7 +204,7 @@ define([
      * displays <OverlaysManager> modal
      */
     showOverlaysManager: function(){
-      this.modal = new OverlayManager();
+      this.modal = this.overlayManager;
       this.modal.show();
     },
 
@@ -282,28 +296,8 @@ define([
         this.sideBar.hide();
         this.fullScreen = true;
       }
-    },
-
-    /**
-     * Method: toggleWidgetModal
-     *
-     * toggles <WidgetModal>
-     */
-    toggleWidgetModal: function(){
-      this.widgetModal.toggle();
-    },
-
-    /**
-     * Method: createSearch
-     *
-     * EXPERIMENTAL - may move to extension!
-     */
-    createSearch: function(event) {
-      event.preventDefault();
-      var query = event.target.query.value;
-      var searchFeed = new SearchFeed({ query: query, extent: this.map.frame.getExtent() });
-      var index = this.world.addFeed(searchFeed, true);
     }
+
   });
 
   return UI;

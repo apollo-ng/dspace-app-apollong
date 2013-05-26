@@ -14,7 +14,6 @@
     "views" : "app/views",
     "templateMap" : "app/templateMap",
     "geofeeds": "app/geofeeds",
-    "remoteStorage-locations": "app/remoteStorage-locations",
 
     // dependencies of hbs
     "i18nprecompile"   : "deps/hbs/i18nprecompile",
@@ -27,7 +26,6 @@
     "backbone": "deps/backbone",
     "backbone-localstorage": "deps/backbone.localstorage",
     "Math.uuid": "deps/Math.uuid",
-    "remoteStorage": "deps/remotestorage",
 
     "reqwest": "deps/reqwest",
     "handlebars": "deps/handlebars",

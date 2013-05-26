@@ -760,31 +760,6 @@ text-shadow: none;
   color: #ccc;
 }
 
-/* FIXME: Implement API for external Feed styles for the interface */
-#remotestorage-connect {
-  position: relative;
-  bottom: 7px;
-  left: 70px;
-  z-index: 999999;
-}
-
-#searchWidget {
-  float: left;
-  width: 165px;
-  padding-left: 8px;
-  text-align: left;
-  padding-top: 8px;
-}
-
-#geobarQuery {
-  width: 150px;
-  height: 29px;
-  background: #444;
-  color: #e8e5de;
-  border: 1px solid #222;
-  padding-left: 4px;
-}
-
 /**
  * Overlay Manager
  */

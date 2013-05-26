@@ -71,12 +71,23 @@
    </p>
   </section>
 
-  <section id='userMiscPrefs'>
-   <h2><a>✩&nbsp; Various Preferences</a></h2>
-   <label>
-     <input type="checkbox" name="remoteStorage">
-     Enable remoteStorage integration (experimental);
-   </label>
+  <section id='userPlugins'>
+   <h2><a>✩&nbsp; Plugins</a></h2>
+   {{#plugins}}
+   <div class='plugin'>
+     <h3>{{name}}</h3>
+     <p>{{description}}</p>
+     <label>Version: {{version}}</label>
+     <p>
+       <strong>Authors:</strong>
+       <ul>
+         {{#authors}}
+         <li>{{.}}</li>
+         {{/authors}}
+       </ul>
+     </p>
+   </div>
+   {{/plugins}}
   </section>
 
  </div>

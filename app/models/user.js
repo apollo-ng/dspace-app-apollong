@@ -15,10 +15,6 @@ define([
     initialize: function() {
       backboneLocalStorage.setup(this, 'users');
 
-      if(! ('remoteStorage' in this.attributes)) {
-        this.set('remoteStorage', true);
-      }
-
       this.setDefaults(this.get('config'));
 
       this.feed = new DeviceFeed({

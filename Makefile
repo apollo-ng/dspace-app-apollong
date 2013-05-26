@@ -73,8 +73,6 @@ local-deps:
 
 	@cp pkgs/js/Math.uuid.js deps/Math.uuid.js
 
-	@cp pkgs/js/remotestorage.amd-0.7.2.js deps/remotestorage.js
-
 	@$(WRAP_DEFINE) node_modules/handlebars/dist/handlebars.js deps/handlebars.js \
 	  this.Handlebars > /dev/null
 

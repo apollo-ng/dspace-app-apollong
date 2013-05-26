@@ -11,6 +11,9 @@ define([], function() {
     this.feed = feed;
 
     this.__defineGetter__('features', function() {
+      return this.feed.collection.models;
+    });
+    this.__defineGetter__('tracks', function() {
       return this.feed.trackCollection.models;
     });
 
@@ -29,6 +32,13 @@ define([], function() {
      * A MM.Map object. Set by MM.Map#addLayer automatically.
      */
     map: undefined,
+
+    /**
+     * Property: color
+     *
+     * Color for rendering this route.
+     */
+    color: 'blue',
 
     /**
      * Method: draw
@@ -53,15 +63,13 @@ define([], function() {
 
       var context = this.canvas.getContext('2d');
 
-      context.strokeStyle = 'blue';
+      context.strokeStyle = this.color;
       context.lineWidth = 2;
 
-      var features = this.features;
-      var featuresLength = features.length;
       context.beginPath();
-      for(var i=0;i<featuresLength;i++) {
+      this.tracks.forEach(function(trackPoint, i) {
         // convert location to screen coordinates
-        var point = this.map.locationPoint(features[i].getLatLon());
+        var point = this.map.locationPoint(trackPoint.getLatLon());
         // make coordinates relative to the canvas
         point.x -= mapRect.left;
         point.y -= mapRect.top;
@@ -70,8 +78,23 @@ define([], function() {
         } else {
           context.lineTo(point.x, point.y);
         }
-      }
+      }.bind(this));
       context.stroke();
+
+      context.strokeStyle = 'black';
+      context.fillStyle = this.color;
+
+      var lastIndex = this.features.length - 1;
+      this.features.forEach(function(feature, i) {
+        var point = this.map.locationPoint(feature.getLatLon());
+        context.beginPath();
+        if(i == 0 || i === lastIndex) {
+          context.arc(point.x, point.y, 5, 5, -Math.PI, Math.PI);
+        } else {
+          context.arc(point.x, point.y, 3, 3, -Math.PI, Math.PI);
+        }
+        context.fill();
+      }.bind(this));
     },
 
     /**

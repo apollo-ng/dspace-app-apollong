@@ -1,7 +1,7 @@
 {
   name: 'node_modules/almond/almond.js',
-  include: 'app/main',
-  insertRequire: ['app/main'],
+  include: ['app/main', 'plugins/hello/init', 'plugins/remotestorage/init', 'plugins/search/init'],
+  insertRequire: [ 'app/main' ],
   out: 'build/assets/dspace-client.js',
   wrap: true,
 

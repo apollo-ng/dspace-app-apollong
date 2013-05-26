@@ -1100,16 +1100,17 @@ text-shadow: none;
 }
 
 .featureLocation {
- height: 32px;
+  height: 32px;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #000;
 }
 
 .featureLocation div {
- float: left;
- height: 32px;
- font-size: 18px;
- color: #e8e5de;
- margin: 10px;
- border: 1px solid red;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  font-size: 18px;
+  color: #e8e5de;
 }
 
 /*

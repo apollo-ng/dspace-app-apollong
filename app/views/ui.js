@@ -1,7 +1,6 @@
 define([
   'backbone',
   'ender',
-  'geofeeds/search',
   'views/statusPanel',
   'views/sideBar',
   'views/widgetBar',
@@ -11,7 +10,7 @@ define([
   'views/modal/userOptions',
   'views/modal/overlayManager',
   'views/modal/featureDetails'
-], function(Backbone, $, SearchFeed, StatusPanel, SideBar, WidgetBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
+], function(Backbone, $, StatusPanel, SideBar, WidgetBar, FeatureBox, Map, MiniMap, UserOptions, OverlayManager, FeatureDetails, AddFeature, renderPos) {
 
   /**
    * Class: UI
@@ -46,7 +45,6 @@ define([
       , 'click #addOverlay': 'showOverlaysManager'
       , 'click #userOptions': 'showUserOptions'
       , 'click #closeModal': 'closeModal'
-      , 'submit #searchForm': 'createSearch'
     },
 
     /**
@@ -281,19 +279,8 @@ define([
         this.sideBar.hide();
         this.fullScreen = true;
       }
-    },
-
-    /**
-     * Method: createSearch
-     *
-     * EXPERIMENTAL - may move to extension!
-     */
-    createSearch: function(event) {
-      event.preventDefault();
-      var query = event.target.query.value;
-      var searchFeed = new SearchFeed({ query: query, extent: this.map.frame.getExtent() });
-      var index = this.world.addFeed(searchFeed, true);
     }
+
   });
 
   return UI;

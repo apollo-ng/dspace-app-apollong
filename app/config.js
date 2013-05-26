@@ -17,7 +17,7 @@ define([], function() {
       { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'CORS'}
     ],
 
-    plugins: ['hello', 'remotestorage'],
+    plugins: ['hello', 'remotestorage', 'search'],
 
     /**
      * Property: map

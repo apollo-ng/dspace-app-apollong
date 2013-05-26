@@ -1,5 +1,5 @@
 define([
-  './base'
+  'geofeeds/base'
 ], function(BaseFeed) {
 
   /**

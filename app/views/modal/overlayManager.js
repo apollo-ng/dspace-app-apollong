@@ -1,8 +1,9 @@
 define([
   'ender',
   'views/modal/base',
+  'views/modal/overlayManagerSection',
   'hbs!templates/overlayManager'
-], function($, BaseModal, OverlayManagerTemplate) {
+], function($, BaseModal, OverlayManagerSection, OverlayManagerTemplate) {
 
   /**
    * Class: Modal.OverlayManager
@@ -11,37 +12,46 @@ define([
 
     template: OverlayManagerTemplate,
 
-    sections: [],
+    types: [],
 
-    addSection: function(title, widget, category) {
-      this.sections.push({
-        title: title,
-        widget: widget,
-        category: category
-      });
+    // a type must have at least:
+    //   * name:
+    //     human readable name of type
+    //   * category:
+    //     column to display collections in ("private" or "public")
+    //   * listCollection(callback):
+    //     a method to asynchronously get a list of collections of given type
+    //
+    // and optionally:
+    //   * writable:
+    //     boolean, whether this collection is writable
+    //   * createCollection(name, callback):
+    //     method to create a new collection (only if writable == true)
+    registerType: function(definition) {
+      this.types.push(definition);
     },
 
     render: function() {
       var content = this.template(this.data);
-      this.$el.find('#modalContent').html(content);
-      this.sections.forEach(function(section) {
-        this.$el.find('#omc_' + section.category).
-          append(this.renderSection(section));
+      var contentContainer = this.$el.find('#modalContent');
+      contentContainer.html(content);
+      var categoryContainers = {
+        'public': contentContainer.find('#omc_public'),
+        'private': contentContainer.find('#omc_private')
+      };
+      this.types.forEach(function(typeDef) {
+        var section = new OverlayManagerSection({
+          typeDefinition: typeDef,
+          manager: this
+        });
+        categoryContainers[typeDef.category].append(section.render());
       }.bind(this));
-    },
-
-    renderSection: function(section) {
-      var div = $("<div>");
-      div.attr('class', 'overlaySection');
-      div.append($('<h3>').text(section.title));
-      div.append(new section.widget({ manager: this }).render());
-      return div;
     },
 
     createOverlay: function(attributes) {
       console.log('create overlay', JSON.stringify(attributes));
       var feed = this.options.world.createFeed(attributes);
-      this.options.world.addFeed(feed);
+      this.options.world.addFeed(feed, true);
     },
 
     close: function() {

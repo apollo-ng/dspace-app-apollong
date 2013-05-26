@@ -2,8 +2,8 @@
 define([
   './src/settingsModal',
   './src/geofeed',
-  './src/browseWidget'
-], function(SettingsModal, RemoteStorageFeed, BrowseWidget) {
+  './src/overlayType'
+], function(SettingsModal, RemoteStorageFeed, OverlayType) {
 
   dspace.plugin('remotestorage', {
     name: 'remotestorage',
@@ -18,11 +18,7 @@ define([
       load: function(world) {
         world.addFeedType('RemoteStorage', RemoteStorageFeed);
 
-        dspace.ui.overlayManager.addSection(
-          "Remote Storage",
-          BrowseWidget,
-          'private'
-        );
+        dspace.ui.overlayManager.registerType(OverlayType);
       },
 
       widgetBarIcon: {

@@ -11,7 +11,7 @@ define([], function() {
     this.feed = feed;
 
     this.__defineGetter__('features', function() {
-      return this.feed.collection.models;
+      return this.feed.trackCollection.models;
     });
 
     this.canvas = document.createElement('canvas');
@@ -57,7 +57,7 @@ define([], function() {
       context.lineWidth = 2;
 
       var features = this.features;
-      var featuresLength = this.features.length;
+      var featuresLength = features.length;
       context.beginPath();
       for(var i=0;i<featuresLength;i++) {
         // convert location to screen coordinates
@@ -84,9 +84,9 @@ define([], function() {
       if(this.canvas.parentElement) {
         this.canvas.parentElement.removeChild(this.canvas);
       }
-      this.canvas = this.parent = document.createElement('canvas');
       this.map.removeLayer(this);
-    },
+      this.canvas = this.parent = document.createElement('canvas');
+   },
 
     /**
      * Method: extent

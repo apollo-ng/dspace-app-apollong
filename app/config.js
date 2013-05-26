@@ -13,7 +13,6 @@ define([], function() {
      * initial set for populating <FeatureCollection>s
      */
     geoFeeds: [
-      { name: 'Routing example', url: '/examples/gpx-routes/test-track.gpx', type: 'GPXRoute'},
       { name: 'Hackerspaces (SpaceAPI)', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},
       { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'CORS'}
     ],

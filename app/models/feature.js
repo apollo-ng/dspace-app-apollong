@@ -206,12 +206,12 @@ define([
      * Takes a GPX route XML source (either as a String or parsed XML) and returns
      * an Array of Feature objects representing the way points.
      */
-    fromGPXTrack: function(gpxRoute) {
-      if(typeof(gpxRoute) === 'string') {
-        gpxRoute = (new DOMParser()).parseFromString(gpxRoute, 'application/xml');
+    fromGPXTrack: function(gpxTrack) {
+      if(typeof(gpxTrack) === 'string') {
+        gpxTrack = (new DOMParser()).parseFromString(gpxTrack, 'application/xml');
       }
-      console.log('parse route', gpxRoute);
-      return Array.prototype.slice.call(gpxRoute.getElementsByTagName('trkpt')).
+      console.log('parse track', gpxTrack);
+      return Array.prototype.slice.call(gpxTrack.getElementsByTagName('trkpt')).
         map(this._gpxTrackPointToFeature);
     },
 

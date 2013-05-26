@@ -1,6 +1,6 @@
 define([], function() {
 
-   dspace.plugin({
+  dspace.plugin('hello', {
      name: "Hello",
      description: "Prints a nice greeting to the console.",
      authors: ['Niklas E. Cathor <nilclass@riseup.net>'],

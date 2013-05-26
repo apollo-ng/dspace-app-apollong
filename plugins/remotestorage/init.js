@@ -16,12 +16,12 @@ define([
       style: 'plugins/remotestorage/assets/style.css',
 
       load: function(world) {
-        world.addFeedType('remoteStorage', RemoteStorageFeed);
+        world.addFeedType('RemoteStorage', RemoteStorageFeed);
 
         dspace.ui.overlayManager.addSection(
           "Remote Storage",
           BrowseWidget,
-          'omc_private' //FIXME!
+          'private'
         );
       },
 

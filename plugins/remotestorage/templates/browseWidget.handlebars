@@ -1,5 +1,15 @@
 
 {{#isConnected}}
+
+<form id="remotestorage-new-collection">
+  <div class="uiOption">
+    <input type="text" name="name" placeholder="New Collection...">
+    <input type="submit" value="Create">
+  </div>
+</form>
+<h4>Collections:</h4>
+<div id="remotestorage-collections"></div>
+
 {{else}}
 <em>Please connect to your remotestorage first.</em>
 {{/isConnected}}

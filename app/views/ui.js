@@ -126,7 +126,10 @@ define([
       /**
        * Property: overlayManager
        */
-      this.overlayManager = new OverlayManager();
+      this.overlayManager = new OverlayManager({
+        world: this.world,
+        ui: this
+      });
 
       setTimeout(function() {
 

@@ -1,9 +1,15 @@
-
-<h1>{{feature.properties.title}}</h1>
-<div class="modalContainer">
- <div data-format="position" data-lat="{{lat}}" data-lon="{{lon}}"></div>
- <div id="featureDetailsMap">Insert a map here with a fairly low zoomlevel on the Feature to get rid of the Minimap</div>
- <div class='featureDetails'>
+<h1>FIXME: $overlayName: {{feature.properties.title}}</h1>
+<div class="featureLocation">
+ <div>FIXME: Position</div>
+ <div>FIXME: Sector</div>
+ <div>Feature: Distance to Feature / ETA in current travel mode</div>
+</div>
+<div class="modalContainer featureDetails">
+ <div id="featureDetailsMap">
+  FIXME: Insert a map here with a fairly high zoomlevel (15-18),
+  centered on the location of the current feature.
+ </div>
+ <div class='featureProperties'>
   {{#keyValue feature.properties}}
   <p>
    <span class='key'>{{key}}</span>
@@ -11,9 +17,14 @@
   </p>
   {{/keyValue}}
  </div>
- <div class="uiOption">
- <button class="first" data-command="featureLike">Like</button>
- <button data-command="featureDislike">Dislike</button>
- <button class="last" data-command="disconnect">Start Navigation</button>
+ <div class="uiOption" style="clear: both">
+  <button class="first" data-command="featureLike">Like</button>
+  <button data-command="featureDislike">Dislike</button>
+  <button data-command="featureEdit">Edit</button>
+  <button class="last" data-command="disconnect">Start Navigation</button>
+ </div>
+ <div class="uiOption" style="clear: both">
+  <button class="first" data-command="featureLike"> << Show previous feature in collection</button>
+  <button class="last" data-command="disconnect">Show next feature in collection >></button>
  </div>
 </div>

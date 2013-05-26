@@ -1035,17 +1035,20 @@ text-shadow: none;
  *  featureDetails (Modal)
  */
 
-.featureDetails {
+/**
+ *  featureDetails (Modal)
+ */
 
+.featureDetails {
+ height: 100%;
+ clear: both;
 }
 
 #featureDetailsMap {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  height: 400px;
+  height: 250px;
   background: #bbbbbb;
   border: 1px solid #444;
-
+  margin-bottom: 15px;
 }
 
 .featureDetails .key {
@@ -1067,21 +1070,46 @@ text-shadow: none;
   height: 24px;
   display: block;
   font-size:14px;
-  margin-top: 5px;
   color: #333;
   cursor: pointer;
   text-shadow: 1px 1px 0px #e0e0e0;
   border-bottom: 1px solid #555;
   background: rgb(244,241,235);
-  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
-  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
-  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+}
+
+.featureDetails .uiOption {
+  margin-top: 15px;
+  height: 48px;
+  line-height: 48px;
+  font-size: 14px;
+  color: #333;
+  text-shadow: 1px 1px 0px #e0e0e0;
+  border-bottom: 1px solid #555;
+  background: #ccc;
+  background: -moz-linear-gradient(top, #cccccc 35%, #f9f7f4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(35%,#cccccc), color-stop(100%,#f9f7f4));
+  background: -webkit-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -o-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: -ms-linear-gradient(top, #cccccc 35%,#f9f7f4 100%);
+  background: linear-gradient(to bottom, #cccccc 35%,#f9f7f4 100%);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.featureLocation {
+ height: 32px;
+}
+
+.featureLocation div {
+ float: left;
+ height: 32px;
+ font-size: 18px;
+ color: #e8e5de;
+ margin: 10px;
+ border: 1px solid red;
 }
 
 /*

@@ -1,3 +1,13 @@
 .remotestorage-icon.busy {
-    background: green;
+  -webkit-animation:remotestorage-loading .5s ease-in-out infinite alternate;
+  -moz-animation:remotestorage-loading .5s ease-in-out infinite alternate;
+  -o-animation:remotestorage-loading .5s ease-in-out infinite alternate;
+  -ms-animation:remotestorage-loading .5s ease-in-out infinite alternate;
+  animation:remotestorage-loading .5s ease-in-out infinite alternate;
 }
+@-webkit-keyframes remotestorage-loading { to{opacity:.7} }
+@-moz-keyframes remotestorage-loading { to{opacity:.7} }
+@-o-keyframes remotestorage-loading { to{opacity:.7} }
+@-ms-keyframes remotestorage-loading { to{opacity:.7} }
+@keyframes remotestorage-loading { to{opacity:.7} }
+

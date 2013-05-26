@@ -40,12 +40,22 @@ define([
      */
     loadPlugins: function() {
       var pluginNames = Array.prototype.slice.call(arguments);
-      console.debug("Loading plugins: " + pluginNames.join(', '));
-      require(pluginNames.map(function(pluginName) {
-        return 'plugins/' + pluginName + '/init';
-      }), function() {
-        console.debug("All plugins loaded.");
-      });
+      pluginNames.forEach(this.loadPlugin.bind(this));
+    },
+
+    /**
+     * Method: loadPlugin
+     *
+     * Takes the name of a single plugin and attempts to load it.
+     *
+     * Plugins are expected to be found in the directory "plugins/NAME/" and
+     * bring at least a "init.js" file.
+     */
+    loadPlugin: function(pluginName) {
+      console.log("Loading plugin: " + pluginName);
+      require(['plugins/' + pluginName + '/init'], function() {
+        console.log("Plugin loaded: " + pluginName);
+      }.bind(this));
     },
 
     /**

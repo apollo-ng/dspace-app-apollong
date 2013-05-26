@@ -54,7 +54,21 @@ define([
     },
 
     updateUserLocation: function() {
+      console.log('update user location');
       var loc = this.world.user.getLocation();
+      if(loc.accuracy > 0 && loc.accuracy <=15) {
+        $('#userGeoStatus').removeClass('lowAccuracy');
+        $('#userGeoStatus').removeClass('medAccuracy');
+        $('#userGeoStatus').addClass('highAccuracy');
+      } else if (loc.accuracy > 15 && loc.accuracy <50) {
+        $('#userGeoStatus').removeClass('lowAccuracy');
+        $('#userGeoStatus').removeClass('highAccuracy');
+        $('#userGeoStatus').addClass('medAccuracy');
+      } else {
+        $('#userGeoStatus').removeClass('highAccuracy');
+        $('#userGeoStatus').removeClass('medAccuracy');
+        $('#userGeoStatus').addClass('lowAccuracy');
+      }
       this.$('*[data-name="user-location"]').
         attr('data-lat', loc.lat).
         attr('data-lon', loc.lon);

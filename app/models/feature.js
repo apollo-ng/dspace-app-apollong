@@ -44,7 +44,8 @@ define([
       var coords = this.get('geometry').coordinates || [];
       return {
         lat: coords[1],
-        lon: coords[0]
+        lon: coords[0],
+        accuracy: this.accuracy
       };
     },
 	/**
@@ -52,11 +53,14 @@ define([
 	 * 
 	 * sets latitude and longitude
 	 */
-    setLatLon: function(lat, lon) {
+    setLatLon: function(lat, lon, accuracy) {
       var geometry = this.get('geometry') || {};
+      this.accuracy = accuracy;
       geometry.coordinates = [lon, lat];
       this.set('geometry', geometry);
-      this.trigger('position-changed', this.getLatLon());
+      setTimeout(function() {
+        this.trigger('position-changed', this.getLatLon());
+      }.bind(this), 0);
     },
     
     /**

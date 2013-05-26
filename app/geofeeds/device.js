@@ -34,26 +34,15 @@ define([
           function(position) {
             $('#userGeoStatus').addClass('enabled');
             var prevLatLon = this.avatar.getLatLon();
-            if(prevLatLon.lat !== position.coords.latitude ||
-               prevLatLon.lon !== position.coords.longitude) {
-              this.avatar.setLatLon(position.coords.latitude, position.coords.longitude);
-            }
-            if(this.collection.length === 0) {
-              this.collection.add(this.avatar);
+            if(prevLatLon.lat === position.coords.latitude &&
+               prevLatLon.lon === position.coords.longitude) {
+              return;
             }
 
-            if(position.coords.accuracy > 0 && position.coords.accuracy <=15) {
-              $('#userGeoStatus').removeClass('lowAccuracy');
-              $('#userGeoStatus').removeClass('medAccuracy');
-              $('#userGeoStatus').addClass('highAccuracy');
-            } else if (position.coords.accuracy > 15 && position.coords.accuracy <50) {
-              $('#userGeoStatus').removeClass('lowAccuracy');
-              $('#userGeoStatus').removeClass('highAccuracy');
-              $('#userGeoStatus').addClass('medAccuracy');
-            } else {
-              $('#userGeoStatus').removeClass('highAccuracy');
-              $('#userGeoStatus').removeClass('medAccuracy');
-              $('#userGeoStatus').addClass('lowAccuracy');
+            this.avatar.setLatLon(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+
+            if(this.collection.length === 0) {
+              this.collection.add(this.avatar);
             }
 
             this.position = position;

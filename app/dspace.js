@@ -149,6 +149,10 @@ define([
      */
     initPlugin: function(pluginName) {
       var definition = this._plugins[pluginName];
+
+      // object for the plugin to put global state in.
+      this[pluginName] = {};
+
       if(! definition) {
         console.error("Can't initialize undeclared plugin: " + pluginName);
         return;

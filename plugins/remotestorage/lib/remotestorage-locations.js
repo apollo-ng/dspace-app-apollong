@@ -12,12 +12,16 @@ define([
         init: function() {
           privClient.release('');
           pubClient.release('');
+
+          pubClient.use('collections/');
+          pubClient.use('features/', true);
+        },
+
+        listCollections: function() {
+          return pubClient.getListing('collections/');
         },
 
         getCollection: function(name) {
-          pubClient.use('collections/');
-          pubClient.use('features/', true);
-
           return pubClient.getObject('collections/' + name).
             then(function(collection) {
               if(! collection) {

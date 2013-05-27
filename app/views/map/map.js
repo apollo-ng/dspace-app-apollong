@@ -97,6 +97,22 @@ define([
       this.world.on('add-feed', this.addOverlay.bind(this));
       this.world.on('remove-feed', this.removeOverlay.bind(this));
 
+      setTimeout(function() {
+
+        dspace.declareHook('mapCommands', function(commands) {
+          for(var commandName in commands) {
+            this.addCommand(commandName, commands[commandName]);
+          }
+        }.bind(this));
+
+      }.bind(this), 0);
+
+    },
+
+    addCommand: function(commandName, action) {
+      this.mapContext.on('command:' + commandName, function(point) {
+        action(point, this.frame.pointLocation(point));
+      }.bind(this));
     },
 
     /**

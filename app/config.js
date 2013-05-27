@@ -17,7 +17,7 @@ define([], function() {
       { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'CORS'}
     ],
 
-    plugins: ['hello', 'remotestorage', 'search'],
+    plugins: ['hello', 'remotestorage', 'search', 'navigation'],
 
     /**
      * Property: map
@@ -53,7 +53,12 @@ define([], function() {
         highacc: 'true',
         maxage: 21600,
         timeout: 60
-	  }
+	    },
+      // Used for calculating routes.
+      // Expected to be a routino installation (http://www.routino.org/), with at
+      // least the "router.cgi" and "results.cgi" scripts accessible with CORS
+      // headers.
+      routinoURL: 'http://routing.heahdk.net/routino/'
     }
   };
 

@@ -26,7 +26,13 @@ define([
       });
       this.feed.set('visible', true);
 
+      var prevLatLon;
+
       this.feed.avatar.on('position-changed', function(latlon) {
+        if(prevLatLon && prevLatLon.lat === latlon.lat && prevLatLon.lon === latlon.lon) {
+          return;
+        }
+        prevLatLon = latlon;
         this.trigger('location-changed', latlon);
         this.feed.trigger('change');
       }.bind(this));

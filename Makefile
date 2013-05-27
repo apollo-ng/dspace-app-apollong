@@ -28,7 +28,7 @@ android-debugapk: android-clean android-deps build
 	@install -d build/apk
 	@cp android/bin/*-debug.apk build/apk
 
-android-deps: android/build.xml
+android-deps: android/build.xml ender
 android-clean:
 	-rm -r android
 android/build.xml:

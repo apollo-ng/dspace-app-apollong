@@ -94,15 +94,25 @@ define([
         this.world.user.feed.unwatch();
       }.bind(this));
 
-      this.mapContext.on('command:navigate-here', function(point) {
-        console.log('navigate-here!!!');
-        var loc = this.frame.pointLocation(point);
-        this.world.navigateTo(loc);
-      }.bind(this));
-
       this.world.on('add-feed', this.addOverlay.bind(this));
       this.world.on('remove-feed', this.removeOverlay.bind(this));
 
+      setTimeout(function() {
+
+        dspace.declareHook('mapCommands', function(commands) {
+          for(var commandName in commands) {
+            this.addCommand(commandName, commands[commandName]);
+          }
+        }.bind(this));
+
+      }.bind(this), 0);
+
+    },
+
+    addCommand: function(commandName, action) {
+      this.mapContext.on('command:' + commandName, function(point) {
+        action(point, this.frame.pointLocation(point));
+      }.bind(this));
     },
 
     /**

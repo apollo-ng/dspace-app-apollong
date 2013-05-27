@@ -71,7 +71,7 @@ define([
     // error callback for loading plugins
     _pluginFailed: function(pluginName, callback, index, error) {
       console.error("Plugin[" + index + "] failed to load: " + pluginName,
-                    error);
+                    ('stack' in error ? error.stack : error));
       callback(error, pluginName, index);
     },
 

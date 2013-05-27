@@ -3,12 +3,11 @@ define([
   'backbone',
   'geofeeds/geoJson',
   'geofeeds/spaceApi',
-  'geofeeds/gpxRoute',
   'collections/feature',
   'models/feature',
   'geofeeds/device',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, GPXRouteFeed, FeatureCollection,
+], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection,
             Feature, DeviceFeed, User ) {
 
   /*
@@ -208,17 +207,7 @@ define([
 
     feedConstructors: {
       CORS: GeoJSONFeed,
-      SpaceAPI: SpaceApiFeed,
-      GPXRoute: GPXRouteFeed
-    },
-
-    navigateTo: function(location) {
-      this.addFeed(this.createFeed({
-        type: 'GPXRoute',
-        from: this.user.feed.avatar.getLatLon(),
-        to: location,
-        url: this.config.user.routinoURL
-      }), true);
+      SpaceAPI: SpaceApiFeed
     },
 
     /**

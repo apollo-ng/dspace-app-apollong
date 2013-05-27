@@ -2,7 +2,7 @@ define([
   'reqwest',
   'models/feature',
   'collections/feature',
-  './base'
+  'geofeeds/base'
 ], function(Reqwest, Feature, FeatureCollection, Base) {
 
   "use strict";

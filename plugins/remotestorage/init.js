@@ -7,7 +7,7 @@ define([
 
   dspace.plugin('remotestorage', {
     name: 'remotestorage',
-    desc: 'Load and save features and feature collections from your remotestorage',
+    description: 'Load and save features and feature collections from your remotestorage',
     authors: ['Niklas E. Cathor <nilclass@riseup.net>'],
     version: '0.1',
 

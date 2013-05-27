@@ -1199,3 +1199,33 @@ text-shadow: none;
   min-height: 300px;
   background: #999;
 }
+
+
+/*
+ * "User Options" -> "Plugins"
+ */
+
+#userPlugins .plugin {
+    padding: 0 10px;
+    margin-bottom: 20px;
+
+    color: #DBD6CF;
+    text-shadow: none;
+}
+
+#userPlugins .plugin .version {
+    float: right;
+}
+
+#userPlugins .plugin .authors {
+    padding: 10px;
+}
+
+#userPlugins .plugin .authors strong {
+    font-weight: bold;
+}
+
+#userPlugins .plugin .authors ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}

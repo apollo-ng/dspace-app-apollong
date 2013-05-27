@@ -76,16 +76,16 @@
    {{#plugins}}
    <div class='plugin'>
      <h3>{{name}}</h3>
+     <label class='version'>Version: {{version}}</label>
      <p>{{description}}</p>
-     <label>Version: {{version}}</label>
-     <p>
+     <div class='authors'>
        <strong>Authors:</strong>
        <ul>
          {{#authors}}
          <li>{{.}}</li>
          {{/authors}}
        </ul>
-     </p>
+     </div>
    </div>
    {{/plugins}}
   </section>

@@ -1100,16 +1100,17 @@ text-shadow: none;
 }
 
 .featureLocation {
- height: 32px;
+  height: 32px;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #000;
 }
 
 .featureLocation div {
- float: left;
- height: 32px;
- font-size: 18px;
- color: #e8e5de;
- margin: 10px;
- border: 1px solid red;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  font-size: 18px;
+  color: #e8e5de;
 }
 
 /*
@@ -1200,31 +1201,31 @@ text-shadow: none;
   background: #999;
 }
 
-
 /*
  * "User Options" -> "Plugins"
  */
 
-#userPlugins .plugin {
-    padding: 0 10px;
-    margin-bottom: 20px;
 
-    color: #DBD6CF;
-    text-shadow: none;
+#userPlugins .plugin {
+  padding: 5px;
+  border: 1px solid #000;
+  margin: 15px;
+  color: #444;
+  background: rgb(244,241,235);
 }
 
 #userPlugins .plugin .version {
     float: right;
 }
-
+ 
 #userPlugins .plugin .authors {
     padding: 10px;
 }
-
+ 
 #userPlugins .plugin .authors strong {
     font-weight: bold;
 }
-
+ 
 #userPlugins .plugin .authors ul {
     padding-left: 20px;
     list-style-type: disc;

@@ -40,10 +40,9 @@ android/build.xml:
 
 build: deps
 	@echo -n "Cleaning up build/... "
-	@rm -r build/
+	rm -r build/
 	@echo "[OK]"
 	@echo -n "Build & minify dspace-client.js... "
-	@rm -r build/
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
 	@echo -n "Copying Assets... "

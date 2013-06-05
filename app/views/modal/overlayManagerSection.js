@@ -11,7 +11,8 @@ define([
     template: OverlayManagerSectionTemplate,
 
     events: {
-      'click *[data-command="open-collection"]': 'openCollection'
+      'click *[data-command="open-collection"]': 'openCollection',
+      'submit *[data-command="create-collection"]': 'createCollection'
     },
 
     render: function() {
@@ -32,6 +33,20 @@ define([
         this.options.manager.close();
       }.bind(this));
     },
+
+    createCollection: function(event) {
+      event.preventDefault();
+      var name = event.target.name.value;
+      alert('create ' + name);
+      this.options.typeDefinition.createCollection(
+        name, function(col) {
+          this.options.manager.createOverlay({
+            name: name,
+            type: 'RemoteStorage'
+          });
+          this.options.manager.close();
+        }.bind(this));
+    }
 
 
   });

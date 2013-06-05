@@ -18,6 +18,12 @@ define([
 
     getCollection: function(name, callback) {
       callback({ name: name, type: 'RemoteStorage' });
+    },
+
+    createCollection: function(name, callback) {
+      locations.getCollection(name).then(function(col) {
+        col.save(callback);
+      });
     }
 
   };

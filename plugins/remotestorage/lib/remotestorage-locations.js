@@ -4,6 +4,70 @@ define([
 
   remoteStorage.defineModule('locations', function(privClient, pubClient) {
 
+    // pubClient.declareType('feature', {
+    //   "name": "feature",
+    //   "type": "object",
+    //   "properties": {
+    //     "type": {
+    //       "type": "string",
+    //       "description": "GeoJSON type, for features always 'Feature'",
+    //       "required": true,
+    //       "pattern": "^Feature$"
+    //     },
+    //     "geometry": {
+    //       "type": "object",
+    //       "description": "A GeoJSON Geometry object",
+    //       "required": true,
+    //       "properties": {
+    //         "type": {
+    //           "type": "string",
+    //           "required": true,
+    //           "enum": ["Point", "MultiPoint", "LineString", "MultiLineString",
+    //                    "Polygon", "MultiPolygon"]
+    //         },
+    //         "coordinates": {
+    //           "type": "array",
+    //           "description": "Coordinates of this Geometry. Format varies with type.",
+    //           "required": true,
+    //           "items": {
+    //             "type": ["number", "array"]
+    //           }
+    //         }
+    //       }
+    //     },
+    //     "properties": {
+    //       "type": "object",
+    //       "description": "Opaque object of properties associated with this Feature.",
+    //       "required": true
+    //     },
+    //     "crs": {
+    //       "type": "object",
+    //       "description": "Coordinate System Reference",
+    //       "properties": {
+    //         "type": {
+    //           "type": "string",
+    //           "required": true,
+    //           "enum": ["name", "link"]
+    //         },
+    //         "properties": {
+    //           "type": "object",
+    //           "required": true
+    //         }
+    //       }
+    //     },
+    //     "bbox": {
+    //       "type": "array",
+    //       "description": "Bounding box that contains this feature",
+    //       "minItems": 4,
+    //       "maxItems": 4,
+    //       "items": {
+    //         "type": "number"
+    //       }
+    //     }
+    //   }
+    // }
+
+
     var watchers = {};
 
     return {
@@ -22,14 +86,14 @@ define([
         },
 
         getCollection: function(name) {
-          return pubClient.getObject('collections/' + name).
+          return pubClient.getObject('collections/' + encodeURIComponent(name)).
             then(function(collection) {
               if(! collection) {
                 collection = { name: name, features: [], type: 'FeatureCollection' };
               }
 
               function reload() {
-                return pubClient.getObject('collections/' + name).
+                return pubClient.getObject('collections/' + encodeURIComponent(name)).
                   then(function(c) {
                     if(typeof(c) === 'object') {
                       collection = c;
@@ -54,6 +118,15 @@ define([
                         }
                       });
                   });
+                },
+
+                save: function(callback) {
+                  var col = remoteStorage.util.extend({}, collection);
+                  col.features = collection.features.map(function(feature) {
+                    return feature.id;
+                  });
+                  pubClient.storeObject('collection', 'collections/' + encodeURIComponent(name), col).
+                    then(callback);
                 },
 
                 addFeature: function(feature) {

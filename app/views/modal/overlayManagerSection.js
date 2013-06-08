@@ -37,7 +37,6 @@ define([
     createCollection: function(event) {
       event.preventDefault();
       var name = event.target.name.value;
-      alert('create ' + name);
       this.options.typeDefinition.createCollection(
         name, function(col) {
           this.options.manager.createOverlay({

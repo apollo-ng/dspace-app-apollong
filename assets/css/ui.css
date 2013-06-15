@@ -6,19 +6,21 @@
 }
 
 .uiButton {
+  float: right;
+  width: 47px !important;
+  font-size: 25px;
   cursor: pointer;
   border: 1px solid #999;
   border-top: 1px solid #eee;
   border-right: 1px solid #ddd;
-  font: 12px/1.3 "Helvetica Neue",Arial,"Liberation Sans",FreeSans,sans-serif;
   text-shadow: 1px 1px 0px #e0e0e0;
-  background: rgb(244,241,235);
-  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8)));
-  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%);
-  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
-  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%);
+  background: rgb(244,241,235) !important;
+  background: -moz-linear-gradient(top, rgba(244,241,235,1) 0%, rgba(232,229,222,1) 47%, rgba(221,218,208,1) 100%) !important;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,241,235,0.9)), color-stop(47%,rgba(232,229,222,0.8)), color-stop(100%,rgba(221,218,208,0.8))) !important;
+  background: -webkit-linear-gradient(top, rgba(244,241,235,0.9) 0%,rgba(232,229,222,0.8) 47%,rgba(221,218,208,0.8) 100%) !important;
+  background: -o-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%) !important;
+  background: -ms-linear-gradient(top, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%) !important;
+  background: linear-gradient(to bottom, rgba(244,241,235,1) 0%,rgba(232,229,222,1) 47%,rgba(221,218,208,1) 100%) !important;
 }
 
 .uiButton:hover {
@@ -705,39 +707,10 @@ text-shadow: none;
   width: 246px;
 }
 
-#controlPanel div {
+#controlPanel i {
   height: 46px;
   line-height: 46px;
   text-align: center;
-}
-
-#toggleFullscreen {
-  float: right;
-  width: 47px;
-  font-size: 25px;
-}
-
-#toggleMiniMap {
-  float: right;
-  width: 47px;
-}
-
-#userMode {
-  float: right;
-  width: 47px;
-  font-size: 25px;
-}
-
-#userOptions {
-  float: right;
-  width: 47px;
-  font-size: 25px;
-}
-
-#toggleSideBar {
-  float: right;
-  width: 47px;
-  font-size: 21px;
 }
 
 /**

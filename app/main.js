@@ -1,12 +1,3 @@
-if(typeof(Function.prototype.bind) !== 'function') {
-  Function.prototype.bind = function(context) {
-    var f = this;
-    return function() {
-      return f.apply(context, arguments);
-    };
-  };
-}
-
 define(['ender', './dspace', './config'], function($, DSpace, config) {
 
   /**

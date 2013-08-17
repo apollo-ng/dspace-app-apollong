@@ -29,7 +29,7 @@ define([
       this.ui.render();
 
       if(config.plugins) {
-        this.loadPlugins.apply(this, config.plugins);
+        this.loadPlugins(config.plugins);
       }
     },
 
@@ -39,8 +39,7 @@ define([
      * Takes a list of plugin names and loads them asynchronously.
      *
      */
-    loadPlugins: function() {
-      var pluginNames = Array.prototype.slice.call(arguments);
+    loadPlugins: function(pluginNames) {
       var loaded = [];
       var loadedCount = 0;
       pluginNames.forEach(
@@ -71,7 +70,7 @@ define([
     // error callback for loading plugins
     _pluginFailed: function(pluginName, callback, index, error) {
       console.error("Plugin[" + index + "] failed to load: " + pluginName,
-                    ('stack' in error ? error.stack : error));
+                    (error && ('stack' in error) ? error.stack : error));
       callback(error, pluginName, index);
     },
 

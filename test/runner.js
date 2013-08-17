@@ -47,9 +47,7 @@ require(["ender", 'app/config'], function($, config){
           expect(dspace.world.featureIndex).to.be.ok;
         });
 
-        it("creates feeds", function(){
-          //expect(dspace.world.geoFeeds).to.have.length.above(1);
-        });
+        it("creates user feed");
 
         it("creates aether", function(){
           expect(dspace.world.aether).to.be.ok;
@@ -126,19 +124,19 @@ require(["ender", 'app/config'], function($, config){
         });
 
         it("toggles UserOptions", function(){
-          //var ui = dspace.ui;
-          //$('#userOptions').click();
-          //expect(ui.modal).to.be.ok;
-          //$('#modal-close').click();
-          //expect(ui.modal).to.not.be.ok;
+          var ui = dspace.ui;
+          $('#userOptions').click();
+          expect(ui.modal).to.be.ok;
+          $('#closeModal').click();
+          expect(ui.modal).to.not.be.ok;
         });
 
         it("toggles OverlayManager", function(){
-          //var ui = dspace.ui;
-          //$('#addOverlay').click();
-          //expect(ui.modal).to.be.ok;
-          //$('#modal-close').click();
-          //expect(ui.modal).to.not.be.ok;
+          var ui = dspace.ui;
+          $('#addOverlay').click();
+          expect(ui.modal).to.be.ok;
+          $('#closeModal').click();
+          expect(ui.modal).to.not.be.ok;
         });
 
         it("toggles FeatureDetails");

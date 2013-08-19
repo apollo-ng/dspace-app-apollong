@@ -86,12 +86,8 @@ define([
       }.bind(this));
 
       this.mapContext.on('command:set-my-location', function(point) {
-        // Stop the Geolocation watcher (device.js: unwatch)
-
-        var loc = this.frame.pointLocation(point);
-        // FIXME: Please refactor the avatar stuff back to user.marker
-        this.world.user.feed.avatar.setLatLon(loc.lat, loc.lon);
-        this.world.user.feed.unwatch();
+        var location = this.frame.pointLocation(point);
+        this.world.setStaticUserLocation(location);
       }.bind(this));
 
       this.world.on('add-feed', this.addOverlay.bind(this));
@@ -135,7 +131,6 @@ define([
        * when the usercollection changes pushes the
        * changed features to the markerlayer and redraw;
        */
-      //FIXME #27
       this.userLayer = this.addOverlay( this.world.user.feed );
 
       /**

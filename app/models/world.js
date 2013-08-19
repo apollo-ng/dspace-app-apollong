@@ -222,7 +222,14 @@ define([
       } else {
         console.log('WARNING: Feed type not implemented: ' + feed.type);
       }
+    },
+
+    // Stop the Geolocation watcher (device.js: unwatch)
+    setStaticUserLocation: function(location) {
+      this.user.feed.avatar.setLatLon(location.lat, location.lon);
+      this.user.feed.unwatch();
     }
+
   });
 
   return World;

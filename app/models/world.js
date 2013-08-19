@@ -158,8 +158,8 @@ define([
      * (start code)
      * config: {
      *   geoFeeds: [
-     *     { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'CORS'},
-     *     { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'CORS'},
+     *     { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'GeoJSON'},
+     *     { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'GeoJSON'},
      *     { hub: 'open-reseource.org', type: 'DSNP'}]}
      * (end code)
      */
@@ -206,7 +206,7 @@ define([
     },
 
     feedConstructors: {
-      CORS: GeoJSONFeed,
+      GeoJson: GeoJSONFeed,
       SpaceAPI: SpaceApiFeed
     },
 

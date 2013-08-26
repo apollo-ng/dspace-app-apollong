@@ -67,6 +67,8 @@ define([
      *  featureJson - <Feature.toJSON>
      */
     publish: function(featureJson){
+      delete featureJson.index // FIXME: where does it come from?
+      featureJson.published_at = new Date().getTime();
       this.bayeux.publish(this.chan, featureJson);
     }
   });

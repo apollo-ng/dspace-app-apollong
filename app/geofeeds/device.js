@@ -87,9 +87,7 @@ define([
         );
       } else {
         // This browser has no geolocation API
-        // set user marker to mapcenter as a fallback
         $('#userGeoStatus').addClass('disabled');
-        /* FIXME: this.world.user.feed.avatar.setLatLon(48, 11); */
       }
     },
 

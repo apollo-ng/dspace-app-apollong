@@ -56,6 +56,21 @@ define([
       }
     },
 
+    getStatusData: function() {
+      data = {}
+      geoJSON = this.feed.avatar.toJSON();
+      data.uuid = geoJSON.id;
+      data.lat = geoJSON.geometry.coordinates[1];
+      data.lon = geoJSON.geometry.coordinates[0];
+      var position = this.feed.position;
+      if(position){
+        data.accuracy = position.coords.accuracy;
+        data.timestamp = position.timestamp;
+        if(position.coords.speed) data.speed = position.coords.speed;
+      }
+      return data;
+    }
+
   });
 
   /**

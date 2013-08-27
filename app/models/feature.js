@@ -45,7 +45,7 @@ define([
       return {
         lat: coords[1],
         lon: coords[0],
-        accuracy: this.accuracy
+        accuracy: this.accuracy // FIXME: quite confusing for getLatLon
       };
     },
 	/**

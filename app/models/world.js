@@ -82,7 +82,7 @@ define([
         visible: true});
       this.buddyFeed.watch();
       this.user.on('location-changed', function(latLon) {
-        this.buddyFeed.publish(this.user.feed.avatar.toJSON());
+        this.buddyFeed.publish(this.user.getStatusData());
       }.bind(this));
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);

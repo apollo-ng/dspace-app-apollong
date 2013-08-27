@@ -218,7 +218,7 @@ define([
     },
 
     feedConstructors: {
-      GeoJson: GeoJSONFeed,
+      GeoJSON: GeoJSONFeed,
       SpaceAPI: SpaceApiFeed
     },
 

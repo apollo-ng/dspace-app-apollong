@@ -14,7 +14,7 @@ define([], function() {
      */
     geoFeeds: [
       { name: 'Hackerspaces (SpaceAPI)', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},
-      { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'GeoJson'}
+      { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'GeoJSON'}
     ],
 
     plugins: ['hello', 'remotestorage', 'search', 'navigation'],

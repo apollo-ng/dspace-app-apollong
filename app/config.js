@@ -30,12 +30,12 @@ define([], function() {
         osm: 'http://otile2.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png',
         osmTransport: 'http://b.tile2.opencyclemap.org/transport/{Z}/{X}/{Y}.png'
       },
-      geolat:  48.115293,
-      geolon:  11.60218,
+      geolat:  47.0667,
+      geolon:  15.4333,
       minZoom: 2,
       maxZoom: 18,
       miniMapZoom: 11,
-      defaultZoom: 12
+      defaultZoom: 13
     },
 
     /**

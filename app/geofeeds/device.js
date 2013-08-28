@@ -81,7 +81,7 @@ define([
           // FIXME: should be coming from the user model
           {
              enableHighAccuracy: true,
-             maximumAge: 86400, // in s
+             maximumAge: 1000, // in ms
              timeout: 300000 //in ms
           }
         );

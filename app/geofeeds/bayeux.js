@@ -55,15 +55,20 @@ define([
       var geoJSON = {
         id: uuid,
         geometry: {
-          coordinates: [statusData.lon, statusData.lat]
+          coordinates: [statusData.position.coords.longitude, statusData.position.coords.latitude]
         },
         properties: {
           type: "avatar",
-          time: statusData.timestamp,
-          accuracy: statusData.accuracy
+          time: statusData.position.timestamp,
+          accuracy: statusData.position.coords.accuracy
         },
       };
-      if(statusData.speed) geoJSON.properties.speed = statusData.speed;
+      // FIXME: extract into method since duplicated in <User>
+      var optional = ["altitude", "altitudeAccuracy", "heading", "speed"]
+      for(var i=0;i<optional.length;i++){
+        var key = optional[i];
+        if(statusData.position.coords[key]) geoJSON.properties[key] = statusData.position.coords[key]
+      };
 
       var feature = this.featureIndex[uuid];
       if(!feature){

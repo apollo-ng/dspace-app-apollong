@@ -56,18 +56,28 @@ define([
       }
     },
 
+    /*
+     *
+     * position seams like a special object
+     * one can't copy it by data.position = this.feed.position
+     *
+     */
     getStatusData: function() {
-      data = {}
-      geoJSON = this.feed.avatar.toJSON();
-      data.uuid = geoJSON.id;
-      data.lat = geoJSON.geometry.coordinates[1];
-      data.lon = geoJSON.geometry.coordinates[0];
+      data = { position: {} }
+      data.uuid = this.feed.avatar.id;
       var position = this.feed.position;
-      if(position){
-        data.accuracy = position.coords.accuracy;
-        data.timestamp = position.timestamp;
-        if(position.coords.speed) data.speed = position.coords.speed;
+      data.position.timestamp = position.timestamp
+      data.position.coords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy
       }
+      // FIXME: extract into method since duplicated in <BayeuxFeed>
+      var optional = ["altitude", "altitudeAccuracy", "heading", "speed"]
+      for(var i=0;i<optional.length;i++){
+        var key = optional[i];
+        if(position.coords[key]) data.position.coords[key] = position.coords[key]
+      };
       return data;
     }
 

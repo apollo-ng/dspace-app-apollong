@@ -17,10 +17,13 @@ define([
 
       this.setDefaults(this.get('config'));
 
+      var icons = ["agent", "coder", "priest", "scientist",  "villager"];
+      var icon = icons[Math.floor((Math.random()*5))];
       this.feed = new DeviceFeed({
         avatar: new Feature({
           properties: {
-            type: 'avatar'
+            type: 'avatar',
+            icon: icon
           }
         })
       });
@@ -65,6 +68,7 @@ define([
     getStatusData: function() {
       data = { position: {} }
       data.uuid = this.feed.avatar.id;
+      data.icon = this.feed.avatar.get('properties').icon;
       var position = this.feed.position;
       data.position.timestamp = position.timestamp
       data.position.coords = {

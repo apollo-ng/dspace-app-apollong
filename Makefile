@@ -26,6 +26,7 @@ build: deps
 	@node node_modules/.bin/r.js -o build.js > /dev/null
 	@echo "[OK]"
 	@echo -n "Copying Assets... "
+	@cp -r assets/avatars build/assets/
 	@cp -r assets/icons build/assets/
 	@cp -r assets/images build/assets/
 	@echo "[OK]"

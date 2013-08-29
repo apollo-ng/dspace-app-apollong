@@ -6,7 +6,7 @@ var enderRequire;
   * =============================================================
   * Ender: open module JavaScript framework (https://ender.no.de)
   * Build: ender build bonzo bean domready qwery morpheus --output ender.js
-  * Packages: ender-js@0.4.4-1 bonzo@1.3.4 bean@1.0.3 domready@0.2.11 qwery@3.4.1 morpheus@0.6.7
+  * Packages: ender-js@0.4.5 bonzo@1.3.5 bean@1.0.4 domready@0.2.11 qwery@3.4.1 morpheus@0.6.7
   * =============================================================
   */
 
@@ -94,12 +94,14 @@ function provide (name, what) {
 
   Ender.prototype.$ = ender // handy reference to self
 
+  // dev tools secret sauce
+  Ender.prototype.splice = function () { throw new Error('Not implemented') }
 
   function ender(s, r) {
     return new Ender(s, r)
   }
 
-  ender['_VERSION'] = '0.4.3-dev'
+  ender['_VERSION'] = '0.4.5'
 
   ender.fn = Ender.prototype // for easy compat to jQuery plugins
 
@@ -2152,6 +2154,7 @@ function provide (name, what) {
           , remove            : off
           , clone             : clone
           , fire              : fire
+          , Event             : Event
           , setSelectorEngine : setSelectorEngine
           , noConflict        : function () {
               context[name] = old

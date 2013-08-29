@@ -59,6 +59,7 @@ define([
         },
         properties: {
           type: "avatar",
+          icon: statusData.icon,
           time: statusData.position.timestamp,
           accuracy: statusData.position.coords.accuracy
         },

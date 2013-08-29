@@ -41,12 +41,11 @@ define([
      * FIXME: clean up after pruning UI
      */
     events: {
-        'click #toggleSideBar': 'toggleSideBar'
-      , 'click #toggleMiniMap': 'toggleMiniMap'
-      , 'click #toggleFullscreen': 'toggleFullscreen'
-      , 'click #addOverlay': 'showOverlaysManager'
-      , 'click #userOptions': 'showUserOptions'
-      , 'click #closeModal': 'closeModal'
+      //, 'click #toggleMiniMap': 'toggleMiniMap'
+      //, 'click #toggleFullscreen': 'toggleFullscreen'
+      //, 'click #addOverlay': 'showOverlaysManager'
+      //, 'click #userOptions': 'showUserOptions'
+      //, 'click #closeModal': 'closeModal'
     },
 
     /**
@@ -117,6 +116,10 @@ define([
         world: this.world,
         ui: this
       });
+
+      // FIXME: figure out why this.events doesn't work!!!
+      $('#zoomIn').on('click', this.zoomIn.bind(this));
+      $('#zoomOut').on('click', this.zoomOut.bind(this));
 
       setTimeout(function() {
 
@@ -279,6 +282,16 @@ define([
         this.sideBar.hide();
         this.fullScreen = true;
       }
+    },
+
+    zoomIn: function() {
+      var zoom = this.map.frame.zoom();
+      this.map.frame.zoom(zoom + 1);
+    },
+
+    zoomOut: function() {
+      var zoom = this.map.frame.zoom();
+      this.map.frame.zoom(zoom - 1);
     }
 
   });

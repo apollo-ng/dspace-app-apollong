@@ -302,3 +302,28 @@ h3	 { font-size: 18px; }
 .shield-o-25 { background-position: 2px -946px; }
 .shield-o-26 { background-position: 2px -981px; }
 
+
+#mapControl {
+  bottom: 20px;
+  left: 50%;
+  margin-left: -32px;
+  width: 64px;
+  height: 32px;
+}
+
+#mapControl div {
+  float: left;
+  background: white;
+  width: 30px;
+  height: 30px;
+  background-image: url(/assets/images/map-controls.png);
+  border: 1px solid black;
+}
+
+#mapControl #zoomIn {
+  background-position: -30px center;
+}
+
+#mapControl #zoomOut {
+  background-position: -60px center;
+}

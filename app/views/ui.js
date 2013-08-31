@@ -37,8 +37,6 @@ define([
      * Events: events
      *
      * delegting DOM events on UI
-     *
-     * FIXME: clean up after pruning UI
      */
     events: {
       //, 'click #toggleMiniMap': 'toggleMiniMap'
@@ -100,9 +98,24 @@ define([
       this.map = new Map({ world: this.world });
 
       /**
+       * Property: featureBox
+       */
+      this.featureBox = new FeatureBox({ world: this.world, feeds: this.world.geoFeeds});
+
+      /**
+       * Property: miniMap
+       */
+      this.miniMap = new MiniMap({world: this.world, map: this.map});
+
+      /**
        * Property: statusPanel
        */
       this.statusPanel = new StatusPanel({world: this.world, ui: this});
+
+      /**
+       * Property: sideBar
+       */
+      this.sideBar = new SideBar();
 
       /**
        * Property: widgetBar
@@ -141,6 +154,13 @@ define([
      */
     render: function() {
       this.map.render();
+
+      this.featureBox.render();
+      this.featureBox.visible = true;
+
+      this.miniMap.render();
+      this.miniMap.visible = true;
+
       this.statusPanel.render();
     },
 

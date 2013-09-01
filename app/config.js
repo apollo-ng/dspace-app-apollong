@@ -17,7 +17,7 @@ define([], function() {
       { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'GeoJSON'}
     ],
 
-    plugins: ['hello', 'remotestorage', 'search', 'navigation'],
+    plugins: ['hello', 'remotestorage', 'search', 'navigation', 'buddyradar'],
 
     /**
      * Property: map
@@ -59,7 +59,9 @@ define([], function() {
       // Expected to be a routino installation (http://www.routino.org/), with at
       // least the "router.cgi" and "results.cgi" scripts accessible with CORS
       // headers.
-      routinoURL: 'http://routing.heahdk.net/routino/'
+      routinoURL: 'http://routing.heahdk.net/routino/',
+      buddyradarURL: 'http://194.150.168.83:5000/dspace',
+      buddyradarChannel: 'dspace'
     }
   };
 

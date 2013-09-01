@@ -3,12 +3,11 @@ define([
   'backbone',
   'geofeeds/geoJson',
   'geofeeds/spaceApi',
-  'geofeeds/bayeux',
   'collections/feature',
   'models/feature',
   'geofeeds/device',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, BayeuxFeed, FeatureCollection,
+], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection,
             Feature, DeviceFeed, User ) {
 
   /*
@@ -73,17 +72,6 @@ define([
           }
         });
       }.bind(this), 0);
-
-      // #FIXME
-      this.buddyFeed = new BayeuxFeed({
-        url:'http://194.150.168.83:5000/dspace',
-        chan: 'dspace',
-        userId: this.user.feed.avatar.id,
-        visible: true});
-      this.buddyFeed.watch();
-      this.user.on('location-changed', function(latLon) {
-        this.buddyFeed.publish(this.user.getStatusData());
-      }.bind(this));
 
       this.aether = _.extend({ user: this.user }, Backbone.Events);
 

@@ -1,5 +1,5 @@
 define([
-  './base',
+  'geofeeds/base',
   'models/feature',
   'faye-client'
 ], function(BaseFeed, Feature, Faye) {

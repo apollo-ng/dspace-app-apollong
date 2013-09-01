@@ -39,11 +39,11 @@ define([
      * delegting DOM events on UI
      */
     events: {
-      //, 'click #toggleMiniMap': 'toggleMiniMap'
-      //, 'click #toggleFullscreen': 'toggleFullscreen'
-      //, 'click #addOverlay': 'showOverlaysManager'
-      //, 'click #userOptions': 'showUserOptions'
-      //, 'click #closeModal': 'closeModal'
+       'click #toggleMiniMap': 'toggleMiniMap'
+      , 'click #toggleFullscreen': 'toggleFullscreen'
+      , 'click #addOverlay': 'showOverlaysManager'
+      , 'click #userOptions': 'showUserOptions'
+      , 'click #closeModal': 'closeModal'
     },
 
     /**

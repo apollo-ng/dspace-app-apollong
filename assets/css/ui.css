@@ -1,3 +1,12 @@
+@media screen and (max-width:500px) {
+    .simple-mobile { display: block; }
+    .full-ui { display: none !important; }
+}
+
+@media screen and (min-width:501px) {
+    .simple-mobile { display: none; }
+}
+
 .uiPanel {
   position: absolute;
   z-index: 99;

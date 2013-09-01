@@ -1,17 +1,17 @@
 define([
-    'remotestorage'
+    './remotestorage'
 ], function(remoteStorage){
     
     
-    remoteStorage.defineModule('geotracks', function(pub, priv){
+    remoteStorage.defineModule('geotracks', function(priv, pub){
 	priv.declareType('geotrackNode', {
 	    type : 'object',
-	    prperties : {
+	    properties : {
 		coordinates : {
-		    type : 'array'
+		    type : 'array',
 		    minItems : 2,
 		    maxItems : 2,
-		    required : true;
+		    required : true,
 		    items : { 
 			type : 'number'
 		    }
@@ -64,15 +64,17 @@ define([
 	    get : function(name){
 		if(!name)
 		    name = current_track;
-		return priv.getAll(name).then( function(lisitng){
+		return priv.getAll(name+'/').then( function(listing){
 		    var coordinates = [];
+		    var altitude = [];
 		    var speed = [];
 		    var heading = [];
 		    var horizontal_accuracy = [];
 		    var vertical_accuracy = [];
 		    var time =  Object.keys(listing).sort();
-		    time.forEach(function(t){
+		    time.forEach(function(t, i){
 			var o = listing[t];
+			time[i] = parseInt(t); // tweak the current time (timestamps become strings in the listings)
 			//default values for not required fields
 			o.speed = o.speed ? o.speed : 0;
 			o.altitude = o.altitude ? o.altitude : 0;
@@ -87,7 +89,7 @@ define([
 			horizontal_accuracy.push(o.horizontal_accuracy);
 			vertical_accuracy.push(o.vertical_accuracy);
 		    })
-		    var mp = multipoint(coordinates,time, speed, altitude, heading, horizontal_accuracy, vertical_accuracy)
+		    var mp = multipoint(coordinates, time, speed, altitude, heading, horizontal_accuracy, vertical_accuracy)
 		    return mp;
 		    //handle raw and bbox
 		}
@@ -99,9 +101,16 @@ define([
 		    timestamp = (new Date).getTime();
 		if(!name)
 		    name = current_track;
+		//console.log('storing ', obj, timestamp, name);
 		return priv.storeObject('geotrackNode', name+'/'+timestamp, obj)
+	    },
+	    publish : function(name){
+		return this.get(name).then(function(mp){
+		    return pub.storeFile('application/json', name, JSON.stringify(mp)).then(function(){
+			return pub.getItemURL(name);
+		    })
+		})
 	    }
-	    
 	    
 	} }
     })

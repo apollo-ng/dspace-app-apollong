@@ -68,7 +68,12 @@ define([
     postInit: function() {
 
       remoteStorage.widget.setView(widgetView);
-      remoteStorage.claimAccess('locations', 'rw');
+      remoteStorage.claimAccess({
+	  'locations': 'rw',
+	  'geotracks' : 'rw',
+	  'profile' : 'r'
+      }
+      );
       remoteStorage.displayWidget();
 
       widgetView.on('state', function(state) {

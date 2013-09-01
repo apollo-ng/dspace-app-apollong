@@ -2,8 +2,9 @@
 define([
   './src/settingsModal',
   './src/geofeed',
+  './src/geotrack',
   './src/overlayType'
-], function(SettingsModal, RemoteStorageFeed, OverlayType) {
+], function(SettingsModal, RemoteStorageFeed, RemoteStorageGeotracker, OverlayType) {
 
   dspace.plugin('remotestorage', {
     name: 'remotestorage',
@@ -16,7 +17,15 @@ define([
       style: 'plugins/remotestorage/assets/style.css',
 
       load: function(world) {
-        world.addFeedType('RemoteStorage', RemoteStorageFeed);
+	  dspace.geotracker =  RemoteStorageGeotracker;
+	  function trackit(){
+	      var status = dspace.world.user.getStatusData()
+	      obj = { coordinates : [status.position.coords.latitude, status.position.coords.longitude]}
+	      dspace.geotracker.store(obj);
+	  }
+	  dspace.world.user.on('location-changed', trackit);
+	  trackit(); // initiali there is no location-changed event so we store the current location first
+	  world.addFeedType('RemoteStorage', RemoteStorageFeed);
 
         dspace.ui.overlayManager.registerType(OverlayType);
       },

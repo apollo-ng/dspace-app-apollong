@@ -72,6 +72,9 @@ local-deps:
 
 # wrapped deps:
 	@$(WRAP_DEFINE) node_modules/underscore/underscore.js deps/underscore.js _ > /dev/null
+
+	@$(WRAP_DEFINE) pkgs/js/faye-client.js deps/faye-client.js Faye > /dev/null
+
 # backbone-amd fork
 	@cp pkgs/js/backbone-amd/backbone.js deps/backbone.js
 

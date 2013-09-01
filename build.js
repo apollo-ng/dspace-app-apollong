@@ -34,7 +34,9 @@
     "easey": "deps/easey",
     "easey_handlers": "deps/easey_handlers",
     "domready": "deps/domready",
-    "markers": "deps/markers"
+    "markers": "deps/markers",
+
+    "faye-client": "deps/faye-client"
   },
 
   "hbs": {

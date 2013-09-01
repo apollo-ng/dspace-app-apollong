@@ -1,7 +1,8 @@
 define([
   './base',
-  'models/feature'
-], function(BaseFeed, Feature) {
+  'models/feature',
+  'faye-client'
+], function(BaseFeed, Feature, Faye) {
 
   /**
    * Class: BayeuxFeed
@@ -31,8 +32,7 @@ define([
       this.chan = '/'+ this.get('chan');
       this.userId = this.get('userId');
 
-      var faye = window.Faye; //FIXME require !!!
-      this.bayeux = new faye.Client(url);
+      this.bayeux = new Faye.Client(url);
       this.bayeux.subscribe(this.chan, this.onMessage.bind(this));
     },
 

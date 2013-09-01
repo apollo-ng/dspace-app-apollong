@@ -142,10 +142,6 @@ define([
         }
       }.bind(this));
 
-      this.buddyLayer = this.addOverlay( this.world.buddyFeed );
-      this.world.buddyFeed.collection.on('change', function( e ){
-        this.buddyLayer.render();
-      }.bind(this));
     },
 
     /**

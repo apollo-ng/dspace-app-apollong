@@ -7,46 +7,46 @@ define([
 	priv.declareType('geotrackNode', {
 	    type : 'object',
 	    properties : {
-		coordinates : {
-		    type : 'array',
-		    minItems : 2,
-		    maxItems : 2,
-		    required : true,
-		    items : { 
-			type : 'number'
-		    }
+		latitude : {
+		    type : 'number',
+		    required : 'true'
 		},
-		speed : {
-		    type : 'array'
+		longitude : {
+		    type : 'number',
+		    required : 'true'
 		},
 		altitude : {
-		    type : 'array'
+		    type : 'number'
+		},
+		accuracy : {
+		    type : 'number'
+		},
+		altitudeAccuracy : {
+		    type : 'number'
 		},
 		heading : {
-		    type : 'array'
+		    type : 'number'
 		},
-		horizontal_accuracy : {
-		    type : 'array'
-		},
-		vertical_accuracy : {
-		    type : 'array'
+		speed : {
+		    type : 'number'
 		}
 	    }
 	})
-	var current_track = 'me'
-	var multipoint = function(coordinates,time, speed, altitude, heading, horizontal_accuracy, vertical_accuracy) {
+	var optionals = ['altitude', 'accuracy', 'altitudeAccuracy', 'heading', 'speed'];
+	var current_track = 'me';
+	var multipoint = function(coordinates,time, altitude, accuracy, altitudeAccuracy, heading, speed ) {
 	    return { "type": "Feature",
 		     "geometry": {
 			 "type": "MultiPoint",
 			 "coordinates": coordinates ? coordinates : []
 		     },
 		     "properties" : {
-			 "time" : time ? time : [],
+			 "timestamp" : time ? time : [],
 			 "speed" : speed ? speed : [],
 			 "altitude" : altitude ? altitude : [],
 			 "heading" : heading ? heading : [],
-			 "horizontal_accuracy" : horizontal_accuracy ? horizontal_accuracy : [],
-			 "vertical_accuracy" : vertical_accuracy ? vertical_accuracy : [],
+			 "altitudeAccuracy" : altitudeAccuracy ? altitudeAccuracy : [],
+			 "accuracy" : accuracy ? accuracy : [],
 			 "raw" : []
 		     },
 		     "bbox" : []
@@ -66,30 +66,30 @@ define([
 		    name = current_track;
 		return priv.getAll(name+'/').then( function(listing){
 		    var coordinates = [];
-		    var altitude = [];
-		    var speed = [];
-		    var heading = [];
-		    var horizontal_accuracy = [];
-		    var vertical_accuracy = [];
+		    var altitudes = []
+		    var accuracys = []
+		    var altitudeAccuracys = []
+		    var headings = []
+		    var speeds = []
+
 		    var time =  Object.keys(listing).sort();
 		    time.forEach(function(t, i){
 			var o = listing[t];
 			time[i] = parseInt(t); // tweak the current time (timestamps become strings in the listings)
 			//default values for not required fields
-			o.speed = o.speed ? o.speed : 0;
-			o.altitude = o.altitude ? o.altitude : 0;
-			o.heading = o.heading ? o.heading : 0;
-			o.horizontal_accuracy = o.horizontal_accuracy ? o.horizontal_accuracy : 0;
-			o.vertical_accuracy = o.vertical_accuracy ? o.vertical_accuracy : 0;
-			
-			coordinates.push(o.coordinates);
-			speed.push(o.speed);
-			altitude.push(o.altitude);
-			heading.push(o.heading);
-			horizontal_accuracy.push(o.horizontal_accuracy);
-			vertical_accuracy.push(o.vertical_accuracy);
+			optionals.forEach(function(attr){
+			    var val = o[attr];
+			    if(!val)
+				o[attr] = 0;
+			})
+			coordinates.push([o.latitude, o.longitude]);
+			speeds.push(o.speed);
+			altitudes.push(o.altitude);
+			headings.push(o.heading);
+			altitudeAccuracys.push(o.altitudeAccuracy);
+			accuracys.push(o.accuracy);
 		    })
-		    var mp = multipoint(coordinates, time, speed, altitude, heading, horizontal_accuracy, vertical_accuracy)
+		    var mp = multipoint(coordinates, time, altitudes, accuracys, altitudeAccuracys, headings, speeds)
 		    return mp;
 		    //handle raw and bbox
 		}

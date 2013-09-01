@@ -19,6 +19,8 @@ define([
   return BaseFeed.extend({
 
     watch: function(){
+      this.onMessage = this.onMessage.bind(this);
+
       /**
        * Property: featureIndex
        *
@@ -33,7 +35,19 @@ define([
       this.userId = this.get('userId');
 
       this.bayeux = new Faye.Client(url);
-      this.bayeux.subscribe(this.chan, this.onMessage.bind(this));
+      this.bayeux.addExtension({
+        incoming: function(message, callback) {
+          if(message.channel == '/meta/subscribe' && message.successful) {
+            if(message.ext.initialState) {
+              message.ext.initialState.forEach(function(status) {
+                this.onMessage(status.data);
+              }.bind(this));
+            }
+          }
+          callback(message);
+        }.bind(this)
+      });
+      this.bayeux.subscribe(this.chan, this.onMessage);
     },
 
     /**
@@ -63,12 +77,6 @@ define([
           time: statusData.position.timestamp,
           accuracy: statusData.position.coords.accuracy
         },
-      };
-      // FIXME: extract into method since duplicated in <User>
-      var optional = ["altitude", "altitudeAccuracy", "heading", "speed"]
-      for(var i=0;i<optional.length;i++){
-        var key = optional[i];
-        if(statusData.position.coords[key]) geoJSON.properties[key] = statusData.position.coords[key]
       };
 
       var feature = this.featureIndex[uuid];

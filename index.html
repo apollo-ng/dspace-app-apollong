@@ -27,9 +27,6 @@
   <script src='test/deps/sinon.js'></script>
   <script src='deps/require.js'></script>
 
-  <!-- FIXME: implement Faye with AMD -->
-  <script type="text/javascript" src="http://194.150.168.83:5000/dspace/faye/client.js"></script>
-
   <script>
     requirejs.config({
       baseUrl: '.',
@@ -63,7 +60,9 @@
         "easey": "deps/easey",
         "easey_handlers": "deps/easey_handlers",
         "domready": "deps/domready",
-        "markers": "deps/markers"
+        "markers": "deps/markers",
+
+        "faye-client": "deps/faye-client"
       },
 
       "hbs": {

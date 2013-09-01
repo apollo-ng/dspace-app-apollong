@@ -2,8 +2,9 @@
 define([
   './src/settingsModal',
   './src/geofeed',
+  './src/geotrack',
   './src/overlayType'
-], function(SettingsModal, RemoteStorageFeed, OverlayType) {
+], function(SettingsModal, RemoteStorageFeed, RemoteStorageGeotracker, OverlayType) {
 
   dspace.plugin('remotestorage', {
     name: 'remotestorage',
@@ -16,7 +17,8 @@ define([
       style: 'plugins/remotestorage/assets/style.css',
 
       load: function(world) {
-        world.addFeedType('RemoteStorage', RemoteStorageFeed);
+	  dspace.geotracker =  RemoteStorageGeotracker;
+	  world.addFeedType('RemoteStorage', RemoteStorageFeed);
 
         dspace.ui.overlayManager.registerType(OverlayType);
       },

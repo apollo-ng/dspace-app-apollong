@@ -20,8 +20,7 @@ define([
 	  dspace.geotracker =  RemoteStorageGeotracker;
 	  function trackit(){
 	      var status = dspace.world.user.getStatusData()
-	      obj = { coordinates : [status.position.coords.latitude, status.position.coords.longitude]}
-	      dspace.geotracker.store(obj);
+	      dspace.geotracker.store(status.position.coords, status.position.timestamp);
 	  }
 	  dspace.world.user.on('location-changed', trackit);
 	  trackit(); // initiali there is no location-changed event so we store the current location first

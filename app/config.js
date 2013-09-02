@@ -13,11 +13,10 @@ define([], function() {
      * initial set for populating <FeatureCollection>s
      */
     geoFeeds: [
-      { name: 'Hackerspaces (SpaceAPI)', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'},
       { name: 'Pools Munich', url: '/examples/geodata/pools-munich.json', type: 'GeoJSON'}
     ],
 
-    plugins: ['hello', 'remotestorage', 'search', 'navigation', 'buddyradar'],
+    plugins: ['hello', 'spaceapi', 'remotestorage', 'search', 'navigation', 'buddyradar'],
 
     /**
      * Property: map
@@ -61,7 +60,10 @@ define([], function() {
       // headers.
       routinoURL: 'http://routing.heahdk.net/routino/',
       buddyradarURL: 'http://194.150.168.83:5000/dspace',
-      buddyradarChannel: 'dspace'
+      buddyradarChannel: 'dspace',
+      feeds: {
+        spaceAPI: { name: 'Hackerspaces (SpaceAPI)', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'}
+      }
     }
   };
 

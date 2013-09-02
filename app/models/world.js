@@ -2,12 +2,11 @@ define([
   'underscore',
   'backbone',
   'geofeeds/geoJson',
-  'geofeeds/spaceApi',
   'collections/feature',
   'models/feature',
   'geofeeds/device',
   'models/user'
-], function(_, Backbone, GeoJSONFeed, SpaceApiFeed, FeatureCollection,
+], function(_, Backbone, GeoJSONFeed, FeatureCollection,
             Feature, DeviceFeed, User ) {
 
   /*
@@ -160,7 +159,6 @@ define([
      *   geoFeeds: [
      *     { name: 'OpenWiFi Munich', url: '/test/openwifi-munich.json', type: 'GeoJSON'},
      *     { name: 'Hackerspaces Munich', url: '/test/hackerspaces-munich.json', type: 'GeoJSON'},
-     *     { hub: 'open-reseource.org', type: 'DSNP'}]}
      * (end code)
      */
     createFeeds: function( feedConfigs ){
@@ -206,19 +204,22 @@ define([
     },
 
     feedConstructors: {
-      GeoJSON: GeoJSONFeed,
-      SpaceAPI: SpaceApiFeed
+      GeoJSON: GeoJSONFeed
     },
 
     /**
      * Method: createFeed
      *
      * creates <GeoFeed> instances based on type from feed definition
+     *
+     * Receives
+     *
+     *   feedConfig - object with parameters for creating feeds
      */
-    createFeed: function(feed) {
-      var constructor = this.feedConstructors[feed.type];
+    createFeed: function(feedConfig) {
+      var constructor = this.feedConstructors[feedConfig.type];
       if(constructor) {
-        return new constructor(feed);
+        return new constructor(feedConfig);
       } else {
         console.log('WARNING: Feed type not implemented: ' + feed.type);
       }

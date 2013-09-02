@@ -6,7 +6,7 @@ define([
     name: 'Buddyradar',
     description: "Show buddies on the map. Something like that.",
     version: '0.1',
-    authors: [' ☮ elf pavlik ☮ <perpetual-tripper@wwelves.org>' ],
+    authors: [' ☮ elf Pavlik ☮ <perpetual-tripper@wwelves.org>' ],
 
     hooks: {
       load: function(dspace) {

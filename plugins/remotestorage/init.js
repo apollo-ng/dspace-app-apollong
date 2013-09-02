@@ -17,6 +17,9 @@ define([
       style: 'plugins/remotestorage/assets/style.css',
 
       load: function(dspace) {
+
+        //GeoTracker
+        // uses geotrackers and profile module
 	      dspace.geotracker =  RemoteStorageGeotracker;
 	      function trackit(){
 	        var status = dspace.world.user.getStatusData()
@@ -24,6 +27,9 @@ define([
 	      }
 	      dspace.world.user.on('location-changed', trackit);
 	      trackit(); // initiali there is no location-changed event so we store the current location first
+
+        //RemoteStorage collections as feeds
+        // uses locations
 	      dspace.world.addFeedType('RemoteStorage', RemoteStorageFeed);
 
         dspace.ui.overlayManager.registerType(OverlayType);

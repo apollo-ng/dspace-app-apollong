@@ -1,22 +1,24 @@
 define([
   'underscore',
   'reqwest',
-  './base',
-], function(_, Reqwest, Base) {
+  'geofeeds/base',
+], function(_, Reqwest, BaseFeed) {
 
   "use strict";
 
   /**
    * Class: GeoFeeds.SpaceAPI
    *
-   * initialized with
-   * { name: 'Hackerspaces', url: '/examples/spaceapi/hackerspaces.json', type: 'SpaceAPI'}
+   * Receives:
+   * url - address of spaces directory
+   * name - name for overlay
    *
    */
 
-  return Base.extend({
+  return BaseFeed.extend({
 
     type: 'SpaceAPI',
+    name: 'SpaceAPI',
 
     watch: function(){
       this.fetch();
@@ -44,19 +46,20 @@ define([
      *   directory - object with keys (hackerspace names) and values (api endpoints)
      */
     fetchSpaces: function(directory){
+      var fetchedSpace = function(space){
+        if(space.lat && space.lon){
+          this.addSpace(space);
+        }
+      }.bind(this);
+      var erroredFetch = function(e){ console.log('#FIXME');};
       for (var name in directory) {
         var url = directory[name];
         var request = new Reqwest({
           url: url,
           type: 'json',
           crossOrigin: true,
-          success: function(space){
-            if(space.lat && space.lon){
-              this.addSpace(space)
-            }
-          }.bind(this),
-          failure: function( e ) {
-            alert( '#FIXME' ); }
+          success: fetchedSpace,
+          failure: erroredFetch
         });
       }
     },
@@ -78,7 +81,7 @@ define([
         properties: {
           title: space.space,
         }
-      }
+      };
       this.collection.add(featureJson);
     }
   });

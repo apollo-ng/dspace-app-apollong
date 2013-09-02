@@ -75,7 +75,6 @@ define([
       data.nickname = this.get('nickname');
       var position = this.feed.position;
       data.position.timestamp = position.timestamp
-      console.log('getStatusData has pos', position, 'feed is', this.feed);
       data.position.coords = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,

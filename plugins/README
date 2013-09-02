@@ -23,8 +23,8 @@ HOOKS
 
 The following hooks are defined:
 
-* load  - Calls given function once app is loaded
-  (defined in: app/main.js
+* load  - Calls given function once app is loaded, passing in the global 'dspace' object.
+  (defined in: app/main.js)
 
 * style - Adds a stylesheet URL to the page
   (defined in: app/views/ui.js)

@@ -22,7 +22,7 @@ define(['backbone'], function(Backbone) {
     render: function( ) {
       if(this.featureJson.properties.type === 'avatar'){
         var icon = this.featureJson.properties.icon;
-        this.$el.html( '<img src="assets/avatars/' + icon + '.png" class="avatar" pointer-events="auto" />');
+        this.$el.html( '<img src="assets/avatars/' + icon + '.png" class="avatar" pointer-events="auto" title="' + (this.featureJson.properties.title||'') + '" />');
       } else {
         this.$el.addClass('shield-' + this.options.tabIndex);
         this.$el.addClass('shield-o-' + this.featureJson.index);

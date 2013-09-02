@@ -60,14 +60,14 @@ define([
      * statusData - <User.getStatusData>
      */
     onMessage: function(statusData){
-      var uuid = statusData.uuid;
+      var nickname = statusData.nickname;
 
       // ignore your own messages
-      if(uuid === this.userId) return;
+      if(nickname === this.get('nickname')) return;
 
       // FIXME: extract into function
       var geoJSON = {
-        id: uuid,
+        id: statusData.uuid,
         geometry: {
           coordinates: [statusData.position.coords.longitude, statusData.position.coords.latitude]
         },
@@ -75,14 +75,16 @@ define([
           type: "avatar",
           icon: statusData.icon,
           time: statusData.position.timestamp,
-          accuracy: statusData.position.coords.accuracy
+          accuracy: statusData.position.coords.accuracy,
+          nickname: nickname,
+          title: nickname
         },
       };
 
-      var feature = this.featureIndex[uuid];
+      var feature = this.featureIndex[nickname];
       if(!feature){
         var feature = new Feature(geoJSON);
-        this.featureIndex[uuid] = feature;
+        this.featureIndex[nickname] = feature;
         this.collection.add(feature);
         this.collection.trigger('feed'); //FIXME hack to avoid phantom first feature
       } else {

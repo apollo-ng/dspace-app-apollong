@@ -41,6 +41,9 @@ define([
       }.bind(this));
 
       this.feed.watch();
+
+      this.on('change:nickname', this._setAvatarNick.bind(this));
+      this._setAvatarNick();
     },
 
     getLocation: function() {
@@ -69,8 +72,10 @@ define([
       data = { position: {} }
       data.uuid = this.feed.avatar.id;
       data.icon = this.feed.avatar.get('properties').icon;
+      data.nickname = this.get('nickname');
       var position = this.feed.position;
       data.position.timestamp = position.timestamp
+      console.log('getStatusData has pos', position, 'feed is', this.feed);
       data.position.coords = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -83,6 +88,12 @@ define([
         if(position.coords[key]) data.position.coords[key] = position.coords[key]
       };
       return data;
+    },
+
+    _setAvatarNick: function() {
+      var props = this.feed.avatar.get('properties');
+      props.nickname = props.title = this.get('nickname');
+      this.feed.avatar.set('properties', props);
     }
 
   });

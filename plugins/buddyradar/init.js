@@ -15,6 +15,7 @@ define([
           url: dspace.world.config.user.buddyradarURL,
           chan: dspace.world.config.user.buddyradarChannel,
           userId: dspace.world.user.feed.avatar.id,
+          nickname: dspace.world.user.get('nickname'),
           visible: true
         });
         dspace.world.buddyFeed.watch();

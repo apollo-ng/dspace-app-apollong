@@ -30,9 +30,8 @@ build: deps
 	@cp -r assets/icons build/assets/
 	@cp -r assets/images build/assets/
 	@echo "[OK]"
-	@echo -n "Copying Plugin Assets... "
-	@for x in `ls plugins` ; do [ -d "plugins/$$x" ] && [ -d "plugins/$$x/assets" ] && mkdir -p "build/plugins/$$x" && cp -r "plugins/$$x/assets" "build/plugins/$$x" ; done
-	@echo  "[OK]"
+	@echo "Copying Plugin Assets:"
+	@for x in `ls plugins | grep -v README` ; do echo -n " - $$x " ; [ -d "plugins/$$x" ] && [ -d "plugins/$$x/assets" ] && mkdir -p "build/plugins/$$x" && cp -r "plugins/$$x/assets" "build/plugins/$$x" ; echo "[OK]" ; done
 	@echo -n "Merging and compressing dspace-client.css... "
 	@cat assets/css/main.css > .tmp.css
 	@cat assets/css/ui.css >> .tmp.css
@@ -43,7 +42,6 @@ build: deps
 	@cp index.tmpl build/index.html 
 	@sed -i 's/##HASHTAG##/$(MY_HASH)/g' build/index.html
 	@echo ">>> Client build complete"
-     
 
 deps: clean-deps ender local-deps
 

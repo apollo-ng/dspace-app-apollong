@@ -10,14 +10,14 @@ define(['./src/gpxRouteFeed'], function(GPXRouteFeed) {
     authors: ['Niklas E. Cathor <nilclass@riseup.net>'],
 
     hooks: {
-      load: function(world) {
-        routinoURL = world.config.user.routinoURL;
+      load: function(dspace) {
+        routinoURL = dspace.world.config.user.routinoURL;
         if(typeof(routinoURL) !== 'string') {
           throw new Error(
             "Expected configuration option 'user.routinoURL' to be set!"
           );
         }
-        world.addFeedType('GPXRoute', GPXRouteFeed);
+        dspace.world.addFeedType('GPXRoute', GPXRouteFeed);
       },
 
       mapCommands: {

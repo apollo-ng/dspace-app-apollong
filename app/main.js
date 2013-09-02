@@ -15,7 +15,6 @@ define(['ender', './dspace', './config', './views/nicknamePrompt'], function($, 
    */
   $.domReady(function () {
     window.dspace = new DSpace(config);
-    window.world = dspace.world;
     if(dspace.world.user.get('nickname')) {
       fadeSplash();
     } else {
@@ -27,7 +26,7 @@ define(['ender', './dspace', './config', './views/nicknamePrompt'], function($, 
     }
 
     dspace.declareHook('load', function(callback) {
-      setTimeout(callback, 0, world);
+      setTimeout(callback, 0, dspace);
     });
   });
 

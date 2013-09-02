@@ -9,7 +9,7 @@ define([
     authors: [' ☮ elf pavlik ☮ <perpetual-tripper@wwelves.org>' ],
 
     hooks: {
-      load: function() {
+      load: function(dspace) {
         // init feed
         dspace.world.buddyFeed = new BuddyradarFeed({
           url: dspace.world.config.user.buddyradarURL,

@@ -45,7 +45,17 @@ define([
             }
           }
           callback(message);
-        }.bind(this)
+        }.bind(this),
+
+        outgoing: function(message, callback) {
+          if(message.channel == '/meta/subscribe') {
+            if(! message.ext) {
+              message.ext = {};
+            }
+            message.ext.token = dspace.world.user.get('buddyradarToken');
+          }
+          callback(message);
+        }
       });
       this.bayeux.subscribe(this.chan, this.onMessage);
     },

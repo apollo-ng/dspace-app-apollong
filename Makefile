@@ -9,6 +9,9 @@ TEMPLATE_IN = assets/templates/
 #FIXME: Where is template_out used? 
 TEMPLATE_OUT = assets/templates/
 
+ANDROID_BIN=android
+ANDROID_API=android-13
+
 DOC_BIN=naturaldocs
 DOC_DIR=./doc/app
 DOC_CONFIG_DIR=./doc/config
@@ -18,9 +21,26 @@ MY_HASH:=$(shell git log | head -n1 | awk {'print $$2'})
 
 default: build
 
+
+android-debugapk: android-clean android-deps build
+	@cp -r build/* android/assets/www
+	@cd android && ant clean && ant debug
+	@install -d build/apk
+	@cp android/bin/*-debug.apk build/apk
+
+android-deps: android/build.xml ender
+android-clean:
+	-rm -r android
+android/build.xml:
+	@git submodule init pkgs/android/client
+	@git submodule update pkgs/android/client
+	@install -d android
+	cp -r pkgs/android/client/* android
+	$(ANDROID_BIN) update project -p android/ --subprojects -t $(ANDROID_API)
+
 build: deps
 	@echo -n "Cleaning up build/... "
-	@rm -r build/
+	rm -r build/
 	@echo "[OK]"
 	@echo -n "Build & minify dspace-client.js... "
 	@node node_modules/.bin/r.js -o build.js > /dev/null
